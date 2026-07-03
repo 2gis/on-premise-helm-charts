@@ -1,0 +1,244 @@
+{{- if .Values.rbac.create -}}
+---
+
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ include "generic-chart.fullname" . }}
+  labels:
+    {{- include "generic-chart.labels" . | nindent 4 }}
+    {{- with .Values.rbac.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- with .Values.rbac.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+rules:
+- apiGroups: [""]
+  # For navi-data-sync and helm install
+  resources:
+  - configmaps
+  - pods
+  - secrets
+  - services
+  - serviceaccounts
+  verbs:
+  - get
+  - list
+  - create
+  - update
+  - watch
+  - patch
+  - delete
+  - deletecollection
+- apiGroups: ["batch"]
+  # For navi-data-sync and helm install
+  resources:
+  - jobs
+  - cronjobs
+  verbs:
+  - get
+  - list
+  - create
+  - update
+  - watch
+  - patch
+  - delete
+  - deletecollection
+- apiGroups: ["batch"]
+  # For navi-data-sync and helm install
+  resources:
+  - jobs/status
+  - cronjobs/status
+  verbs:
+  - get
+  - list
+- apiGroups: ["apps"]
+  # For helm install
+  resources:
+  - replicasets
+  - deployments
+  verbs:
+  - get
+  - list
+  - create
+  - update
+  - watch
+  - patch
+  - delete
+  - deletecollection
+- apiGroups: ["policy"]
+  # For navi-data-sync and helm install
+  resources:
+  - poddisruptionbudgets
+  verbs:
+  - get
+  - list
+  - create
+  - update
+  - watch
+  - patch
+  - delete
+  - deletecollection
+- apiGroups: ["autoscaling"]
+  # For navi-data-sync and helm install
+  resources:
+  - horizontalpodautoscalers
+  verbs:
+  - get
+  - list
+  - create
+  - update
+  - watch
+  - patch
+  - delete
+  - deletecollection
+- apiGroups: ["autoscaling.k8s.io"]
+  # For navi-data-sync and helm install
+  resources:
+  - verticalpodautoscalers
+  verbs:
+  - get
+  - list
+  - create
+  - update
+  - watch
+  - patch
+  - delete
+- apiGroups: ["networking.k8s.io"]
+  # For navi-data-sync and helm install
+  resources:
+  - ingresses
+  verbs:
+  - get
+  - list
+  - create
+  - update
+  - watch
+  - patch
+  - delete
+- apiGroups: ["gateway.networking.k8s.io"]
+  # For helm install (HTTPRoute)
+  resources:
+  - httproutes
+  verbs:
+  - get
+  - list
+  - create
+  - update
+  - watch
+  - patch
+  - delete
+{{- end }}
+
+{{- if .Values.rbac.deleteHook.create }}
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ include "generic-chart.fullname" . }}-delete-hook
+  labels:
+    {{- include "generic-chart.labels" . | nindent 4 }}
+    {{- with .Values.rbac.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  annotations:
+  {{- with .Values.rbac.annotations }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+    helm.sh/hook: post-delete
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+rules:
+- apiGroups: [""]
+  # For navi-data-sync and helm uninstall
+  resources:
+  - configmaps
+  - pods
+  - secrets
+  - services
+  - serviceaccounts
+  verbs:
+  - get
+  - list
+  - watch
+  - delete
+  - deletecollection
+- apiGroups: ["batch"]
+  # For navi-data-sync and helm uninstall
+  resources:
+  - jobs
+  - cronjobs
+  verbs:
+  - get
+  - list
+  - watch
+  - delete
+  - deletecollection
+- apiGroups: ["batch"]
+  # For navi-data-sync and helm uninstall
+  resources:
+  - jobs/status
+  - cronjobs/status
+  verbs:
+  - get
+  - list
+- apiGroups: ["apps"]
+  # For helm uninstall
+  resources:
+  - replicasets
+  - deployments
+  verbs:
+  - get
+  - list
+  - watch
+  - delete
+  - deletecollection
+- apiGroups: ["policy"]
+  # For navi-data-sync and helm uninstall
+  resources:
+  - poddisruptionbudgets
+  verbs:
+  - get
+  - list
+  - watch
+  - delete
+  - deletecollection
+- apiGroups: ["autoscaling"]
+  # For navi-data-sync and helm uninstall
+  resources:
+  - horizontalpodautoscalers
+  verbs:
+  - get
+  - list
+  - watch
+  - delete
+  - deletecollection
+- apiGroups: ["autoscaling.k8s.io"]
+  # For navi-data-sync and helm uninstall
+  resources:
+  - verticalpodautoscalers
+  verbs:
+  - get
+  - list
+  - watch
+  - delete
+- apiGroups: ["networking.k8s.io"]
+  # For navi-data-sync and helm uninstall
+  resources:
+  - ingresses
+  verbs:
+  - get
+  - list
+  - watch
+  - delete
+- apiGroups: ["gateway.networking.k8s.io"]
+  # For helm uninstall (HTTPRoute)
+  resources:
+  - httproutes
+  verbs:
+  - get
+  - list
+  - watch
+  - delete
+{{- end }}
