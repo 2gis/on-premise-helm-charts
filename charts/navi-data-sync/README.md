@@ -190,6 +190,7 @@ helm upgrade --install test-navi-data-sync . --set dataGroup.prefix=test_group -
 | ------------- | ------------------------------------------------------------------------------------------------------------ | ----- |
 | `blobVersion` | Blob version string. When set, init container is disabled and this value is passed directly to NaviDataSync. | `""`  |
 
+## Maintainers
 
 | Name | Email | Url |
 | ---- | ------ | --- |
