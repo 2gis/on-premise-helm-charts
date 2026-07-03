@@ -6,7 +6,7 @@ keywords:
 - navi
 - data-sync
 version: 2.55.0
-appVersion: 7.58.0.5
+appVersion: 3.2.5
 dependencies:
 - name: generic-chart
   version: '*'
