@@ -134,7 +134,7 @@ spec:
                   name: {{ include "pro-api.secretName" . }}
 
             - name: Auth__Enabled
-              value: "true"
+              value: {{ .Values.permissions.settings.auth.enabled | quote }}
             - name: Auth__ApiKey
               valueFrom:
                 secretKeyRef:
@@ -239,12 +239,15 @@ spec:
 
             # AuthProvider
             - name: AuthProvider__Enabled
-              value: "true"
+              value: {{ .Values.authProvider.enabled | quote }}
+
+            {{- if .Values.authProvider.enabled }}
             - name: AuthProvider__Schema
-              value: {{ required "A valid .Values.authProvider.schema entry required. Supported values: Basic, Oidc" .Values.authProvider.schema | quote }}
+              value: {{ .Values.authProvider.schema | quote }}
             {{- range $hostIndex, $host := .Values.authProvider.allowedHosts }}
             - name: AuthProvider__AllowedHosts__{{ $hostIndex }}
               value: {{ $host | quote }}
+            {{- end }}
             {{- end }}
 
             # Basic Auth

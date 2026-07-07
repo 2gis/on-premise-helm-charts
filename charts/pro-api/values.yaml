@@ -16,7 +16,7 @@ api:
   # @param api.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-api
-    tag: 2.61.0
+    tag: 2.66.0
     pullPolicy: IfNotPresent
 
   # @param api.ingress.enabled If Ingress is enabled for the service.
@@ -202,7 +202,7 @@ permissions:
   # @param permissions.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-permissions-api
-    tag: 2.61.0
+    tag: 2.66.0
     pullPolicy: IfNotPresent
 
   # @param permissions.ingress.enabled If Ingress is enabled for the service
@@ -299,8 +299,9 @@ permissions:
   # @param permissions.settings.httpPort Http port for interaction via the rest api
   # @param permissions.settings.grpcPort Grpc port for interaction via the grpc api
   # @param permissions.settings.allowPermissionsToAnyAsset Allow using '*' resource in asset resource type in Permissions UI.
+  # @param permissions.settings.auth.enabled Enables or disables authentication **Required**
   # @param permissions.settings.auth.apiKey Api key for service to service calls. **Required**
-  # @param permissions.settings.auth.uiRequiredRoles Roles required to access Permission UI. The values must match the roles defined in the authProvider configuration. **Required **
+  # @param permissions.settings.auth.uiRequiredRoles Roles required to access Permission UI. The values must match the roles defined in the authProvider configuration. **Required if** `authProvider.enabled: true`
   settings:
     host: ''
     httpPort: 8091
@@ -312,6 +313,7 @@ permissions:
       enabled: true
       trackStatistics: false
     auth:
+      enabled: false
       apiKey: ''
       uiRequiredRoles: []
     backgroundJobs:
@@ -347,7 +349,7 @@ tasks:
   # @param tasks.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-tasks-api
-    tag: 2.61.0
+    tag: 2.66.0
     pullPolicy: IfNotPresent
 
   # @param tasks.ingress.enabled If Ingress is enabled for the service
@@ -512,11 +514,10 @@ pagerenderer:
   # @param pagerenderer.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-pagerenderer-api
-    tag: 2.61.0
+    tag: 2.66.0
     pullPolicy: IfNotPresent
 
   # @param pagerenderer.pod.replicaCount A replica count for the pod.
-  # @param pagerenderer.pod.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
   # @param pagerenderer.pod.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
   # @param pagerenderer.pod.priorityClassName Kubernetes [pod priority](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/).
   # @param pagerenderer.pod.terminationGracePeriodSeconds Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/). Should be at least 300 seconds
@@ -538,12 +539,15 @@ pagerenderer:
   # @skip pagerenderer.pod.imagePullSecrets
   pod:
     replicaCount: 1
-    nodeSelector: {}
     imagePullSecrets: []
     affinity: {}
     priorityClassName: ''
     terminationGracePeriodSeconds: 60
-    tolerations: []
+    tolerations:
+      - effect: NoSchedule
+        key: role
+        operator: Equal
+        value: worker.datascience
     podAnnotations: {}
     podLabels: {}
     podSecurityContext: {}
@@ -601,24 +605,19 @@ pagerenderer:
   # @param pagerenderer.settings.auth.apiKey Api key for service to service calls. **Required if** `pagerenderer.settings.auth.enabled: true`
   # @param pagerenderer.settings.httpPort Http port for interaction via the rest api
   # @param pagerenderer.settings.grpcPort Grpc port for interaction via the grpc api
+  # @param pagerenderer.settings.grpcRoutePort Port on which the GrpcRoute listens for incoming gRPC traffic
   # @extra pagerenderer.settings.logging Logging settings
   # @param pagerenderer.settings.logging.format Log message format, possible options: 'default' - compact json, 'renderedCompactJson' - rendered json format, 'simple' - plain text
   # @param pagerenderer.settings.logging.targets Collection of logging targets divided by comma. Currently only 'console' and 'database' are supported. Console is used by default (no need to specify).
-  # @param pagerenderer.settings.grpcRoute.hostname Hostname for GRPCRoute.
-  # @param pagerenderer.settings.grpcRoute.parentRefs List of parent references (gateways) for GRPCRoute. Defaults: canary and stable gateways in istio-gateways namespace.
+  # @param pagerenderer.settings.grpcRoute If set, use GRPCRoute. If empty, connect directly to service.
   settings:
     enabled: false
-    grpcRoute:
-      hostname: ''
-      parentRefs: []
-        # - group: gateway.networking.k8s.io
-        #   kind: Gateway
-        #   name: stable
-        #   namespace: istio-gateways
+    grpcRoute: ''
     auth:
       apiKey: ''
     httpPort: 8282
     grpcPort: 8283
+    grpcRoutePort: 443
     logging:
       format: simple
       targets: ''
@@ -657,7 +656,7 @@ pagerenderer:
 assetImporter:
   appName: asset-importer
   repository: 2gis-on-premise/pro-importer
-  tag: 2.61.0
+  tag: 2.66.0
   schedule: 0 18 * * *
   backoffLimit: 2
   successfulJobsHistoryLimit: 3
@@ -822,6 +821,7 @@ postgres:
 
 # @section Auth Provider Configuration
 # @title Auth Provider
+# @param authProvider.enabled Enables or disables the AuthProvider **Required**
 # @param authProvider.host Host address of the authentication provider. Must point to the pro-api-permissions URL. **Required**
 # @param authProvider.schema Authentication scheme to use. Supported values: `Basic`, `Oidc`. **Required**
 # @param authProvider.allowedHosts List of allowed hosts for accessing `authProvider`. For allowing all hosts use `['*']`. Example: ['pro-api-permissions.example.com','pro-api-tasks.example.com']
@@ -834,9 +834,10 @@ postgres:
 # @param authProvider.oidc.nameClaim Claim name that contains the user's name. The exact claim name depends on the OIDC provider configuration. **Required if** `authProvider.schema: Oidc`
 # @param authProvider.oidc.roleClaim Claim name that contains the user's roles. The exact claim name depends on the OIDC provider configuration. **Required if** `authProvider.schema: Oidc`
 authProvider:
+  enabled: false
   host: ''
   schema: ''
-  allowedHosts: []
+  allowedHosts : []
   basic:
     users:
       - username: ''
