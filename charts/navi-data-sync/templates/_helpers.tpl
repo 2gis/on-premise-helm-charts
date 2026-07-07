@@ -45,8 +45,8 @@ Decodes a string encoded YAML structure or a list of them
 Merges child values, returns the structure as a YAML text block
 */}}
 {{- define "navi-data-sync.mergedChildValues" -}}
-{{- include "navi-data-sync.mergeValuesStrings" .valuesString |
-    fromYaml |
-    mergeOverwrite .values |
-    toYaml }}
+{{- $valuesString := include "navi-data-sync.mergeValuesStrings" .valuesString | fromYaml | default dict }}
+{{- $values := .values | default dict }}
+{{- /* Keep Helm precedence: inline child values override common valuesString layers. */}}
+{{- mustMergeOverwrite $valuesString $values | toYaml }}
 {{- end }}
