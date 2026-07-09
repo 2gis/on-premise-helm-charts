@@ -116,7 +116,25 @@ This takes an array of three values:
   {{- $top := first . -}}
   {{- $overrides := fromYaml (include (index . 1) $top) | default (dict ) -}}
   {{- $tpl := fromYaml (include (index . 2) $top) | default (dict ) -}}
-  {{- toYaml (merge $overrides $tpl) -}}
+  {{- $merged := merge $overrides $tpl -}}
+  {{- include "generic-chart.applyVolumeDefaultMode" $merged -}}
+  {{- toYaml $merged -}}
+{{- end -}}
+
+{{/*
+Set defaultMode 0400 (decimal 256) for configMap and secret volumes when the
+consuming chart does not define defaultMode explicitly.
+*/}}
+{{- define "generic-chart.applyVolumeDefaultMode" -}}
+  {{- $podSpec := dig "spec" "template" "spec" (dict) . -}}
+  {{- range $volume := (get $podSpec "volumes" | default list) -}}
+    {{- range $volumeSource := list "configMap" "secret" -}}
+      {{- $source := get $volume $volumeSource -}}
+      {{- if and $source (not (hasKey $source "defaultMode")) -}}
+        {{- $_ := set $source "defaultMode" 256 -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
 {{- end -}}
 
 {{/*
@@ -235,15 +253,15 @@ Params:
 {{- end -}}
 
 {{/*
-Return parentRefs for HTTPRoute.
+Return default parentRefs for Gateway API routes.
 
-If .Values.httpRoute.parentRefs is provided by a consuming chart, use it.
+If .Values.routeParentRefs is provided by a consuming chart, use it.
 Otherwise return default canary/stable gateways.
 This keeps behavior stable for consumers that do not inherit library-chart values.
 */}}
-{{- define "generic-chart.httpRouteParentRefs" -}}
-{{- if and (hasKey .Values "httpRoute") (kindIs "map" .Values.httpRoute) (hasKey .Values.httpRoute "parentRefs") -}}
-{{- .Values.httpRoute.parentRefs | toYaml -}}
+{{- define "generic-chart.routeParentRefs" -}}
+{{- if hasKey .Values "routeParentRefs" -}}
+{{- .Values.routeParentRefs | toYaml -}}
 {{- else -}}
 - group: gateway.networking.k8s.io
   kind: Gateway
@@ -253,6 +271,34 @@ This keeps behavior stable for consumers that do not inherit library-chart value
   kind: Gateway
   name: stable
   namespace: istio-gateways
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return parentRefs for HTTPRoute.
+
+If .Values.httpRoute.parentRefs is provided by a consuming chart, use it.
+Otherwise use common routeParentRefs.
+*/}}
+{{- define "generic-chart.httpRouteParentRefs" -}}
+{{- if and (hasKey .Values "httpRoute") (kindIs "map" .Values.httpRoute) (hasKey .Values.httpRoute "parentRefs") -}}
+{{- .Values.httpRoute.parentRefs | toYaml -}}
+{{- else -}}
+{{- include "generic-chart.routeParentRefs" . -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return parentRefs for GRPCRoute.
+
+If .Values.grpcRoute.parentRefs is provided by a consuming chart, use it.
+Otherwise use common routeParentRefs.
+*/}}
+{{- define "generic-chart.grpcRouteParentRefs" -}}
+{{- if and (hasKey .Values "grpcRoute") (kindIs "map" .Values.grpcRoute) (hasKey .Values.grpcRoute "parentRefs") -}}
+{{- .Values.grpcRoute.parentRefs | toYaml -}}
+{{- else -}}
+{{- include "generic-chart.routeParentRefs" . -}}
 {{- end -}}
 {{- end -}}
 
