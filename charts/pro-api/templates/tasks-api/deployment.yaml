@@ -212,13 +212,13 @@ spec:
                   name: {{ include "pro-api.secretName" . }}
             {{- end }}
 
+            {{- if .Values.pagerenderer.settings.enabled }}
             - name: PageRendererApi__Url
-            {{- if .Values.pagerenderer.settings.grpcRouteHost }}
-              value: https://{{ .Values.pagerenderer.settings.grpcRouteHost }}:{{ .Values.pagerenderer.settings.grpcRoutePort }}
+            {{- if .Values.pagerenderer.settings.grpcRoute.enabled }}
+              value: https://{{ index .Values.pagerenderer.settings.grpcRoute.hostnames 0 | toString }}:{{ .Values.pagerenderer.settings.grpcRoute.port }}
             {{- else }}
               value: http://{{ include "pro-api.pagerenderer-name" . }}:{{ .Values.pagerenderer.settings.grpcPort }}
             {{- end }}
-            {{- if .Values.pagerenderer.settings.enabled }}
             - name: PageRendererApi__ApiKey
               valueFrom:
                 secretKeyRef:

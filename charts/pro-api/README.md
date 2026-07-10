@@ -212,10 +212,12 @@
 | `pagerenderer.image.tag`                                 | Tag                                                                                                                                              | `2.66.0`                               |
 | `pagerenderer.image.pullPolicy`                          | Pull Policy                                                                                                                                      | `IfNotPresent`                         |
 | `pagerenderer.pod.replicaCount`                          | A replica count for the pod.                                                                                                                     | `1`                                    |
+| `pagerenderer.pod.nodeSelector`                          | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                              | `{}`                                   |
+| `pagerenderer.pod.imagePullSecrets`                      | Kubernetes image pull secrets.                                                                                                                   | `[]`                                   |
 | `pagerenderer.pod.affinity`                              | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).                      | `{}`                                   |
 | `pagerenderer.pod.priorityClassName`                     | Kubernetes [pod priority](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/).                                     | `""`                                   |
 | `pagerenderer.pod.terminationGracePeriodSeconds`         | Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/). Should be at least 300 seconds | `60`                                   |
-| `pagerenderer.pod.tolerations`                           | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                | `undefined`                            |
+| `pagerenderer.pod.tolerations`                           | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                | `[]`                                   |
 | `pagerenderer.pod.podAnnotations`                        | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                    | `{}`                                   |
 | `pagerenderer.pod.podLabels`                             | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                              | `{}`                                   |
 | `pagerenderer.pod.podSecurityContext`                    | Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)                                    | `{}`                                   |
@@ -236,26 +238,28 @@
 
 ### Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
-| Name                                    | Description                                                                                                                                             | Value    |
-| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
-| `pagerenderer.pdb.enabled`              | If PDB is enabled for the service.                                                                                                                      | `false`  |
-| `pagerenderer.pdb.minAvailable`         | How many pods must be available after the eviction.                                                                                                     | `1`      |
-| `pagerenderer.pdb.maxUnavailable`       | How many pods can be unavailable after the eviction.                                                                                                    | `""`     |
-| `pagerenderer.vpa.enabled`              | If VPA is enabled for the service.                                                                                                                      | `false`  |
-| `pagerenderer.vpa.updateMode`           | VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start).                                            | `Auto`   |
-| `pagerenderer.vpa.minAllowed.cpu`       | Lower limit for the number of CPUs to which the autoscaler can scale down.                                                                              | `300m`   |
-| `pagerenderer.vpa.minAllowed.memory`    | Lower limit for the RAM size to which the autoscaler can scale down.                                                                                    | `256Mi`  |
-| `pagerenderer.vpa.maxAllowed.cpu`       | Upper limit for the number of CPUs to which the autoscaler can scale up.                                                                                | `1`      |
-| `pagerenderer.vpa.maxAllowed.memory`    | Upper limit for the RAM size to which the autoscaler can scale up.                                                                                      | `1024Mi` |
-| `pagerenderer.settings.enabled`         | If Page Renderer API is disabled it will not be deployed to k8s                                                                                         | `false`  |
-| `pagerenderer.settings.auth.apiKey`     | Api key for service to service calls. **Required if** `pagerenderer.settings.auth.enabled: true`                                                        | `""`     |
-| `pagerenderer.settings.httpPort`        | Http port for interaction via the rest api                                                                                                              | `8282`   |
-| `pagerenderer.settings.grpcPort`        | Grpc port for interaction via the grpc api                                                                                                              | `8283`   |
-| `pagerenderer.settings.grpcRoutePort`   | Port on which the GrpcRoute listens for incoming gRPC traffic                                                                                           | `443`    |
-| `pagerenderer.settings.logging`         | Logging settings                                                                                                                                        |          |
-| `pagerenderer.settings.logging.format`  | Log message format, possible options: 'default' - compact json, 'renderedCompactJson' - rendered json format, 'simple' - plain text                     | `simple` |
-| `pagerenderer.settings.logging.targets` | Collection of logging targets divided by comma. Currently only 'console' and 'database' are supported. Console is used by default (no need to specify). | `""`     |
-| `pagerenderer.settings.grpcRoute`       | If set, use GRPCRoute. If empty, connect directly to service.                                                                                           | `""`     |
+| Name                                         | Description                                                                                                                                             | Value    |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| `pagerenderer.pdb.enabled`                   | If PDB is enabled for the service.                                                                                                                      | `false`  |
+| `pagerenderer.pdb.minAvailable`              | How many pods must be available after the eviction.                                                                                                     | `1`      |
+| `pagerenderer.pdb.maxUnavailable`            | How many pods can be unavailable after the eviction.                                                                                                    | `""`     |
+| `pagerenderer.vpa.enabled`                   | If VPA is enabled for the service.                                                                                                                      | `false`  |
+| `pagerenderer.vpa.updateMode`                | VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start).                                            | `Auto`   |
+| `pagerenderer.vpa.minAllowed.cpu`            | Lower limit for the number of CPUs to which the autoscaler can scale down.                                                                              | `300m`   |
+| `pagerenderer.vpa.minAllowed.memory`         | Lower limit for the RAM size to which the autoscaler can scale down.                                                                                    | `256Mi`  |
+| `pagerenderer.vpa.maxAllowed.cpu`            | Upper limit for the number of CPUs to which the autoscaler can scale up.                                                                                | `1`      |
+| `pagerenderer.vpa.maxAllowed.memory`         | Upper limit for the RAM size to which the autoscaler can scale up.                                                                                      | `1024Mi` |
+| `pagerenderer.settings.enabled`              | If Page Renderer API is disabled it will not be deployed to k8s                                                                                         | `false`  |
+| `pagerenderer.settings.auth.apiKey`          | Api key for service to service calls. **Required if** `pagerenderer.settings.auth.enabled: true`                                                        | `""`     |
+| `pagerenderer.settings.httpPort`             | Http port for interaction via the rest api                                                                                                              | `8282`   |
+| `pagerenderer.settings.grpcPort`             | Grpc port for interaction via the grpc api                                                                                                              | `8283`   |
+| `pagerenderer.settings.logging`              | Logging settings                                                                                                                                        |          |
+| `pagerenderer.settings.logging.format`       | Log message format, possible options: 'default' - compact json, 'renderedCompactJson' - rendered json format, 'simple' - plain text                     | `simple` |
+| `pagerenderer.settings.logging.targets`      | Collection of logging targets divided by comma. Currently only 'console' and 'database' are supported. Console is used by default (no need to specify). | `""`     |
+| `pagerenderer.settings.grpcRoute.enabled`    | If GRPCRoute is enabled.                                                                                                                                | `false`  |
+| `pagerenderer.settings.grpcRoute.hostnames`  | List of hostnames served by route.                                                                                                                      | `[]`     |
+| `pagerenderer.settings.grpcRoute.port`       | Destination grpcroute.spec.rules.backendRefs.port number.                                                                                               | `443`    |
+| `pagerenderer.settings.grpcRoute.parentRefs` | List of parent references (gateways) for GRPCRoute.                                                                                                     | `[]`     |
 
 ### asset importer settings
 

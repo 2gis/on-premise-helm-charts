@@ -518,6 +518,8 @@ pagerenderer:
     pullPolicy: IfNotPresent
 
   # @param pagerenderer.pod.replicaCount A replica count for the pod.
+  # @param pagerenderer.pod.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+  # @param pagerenderer.pod.imagePullSecrets Kubernetes image pull secrets.
   # @param pagerenderer.pod.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
   # @param pagerenderer.pod.priorityClassName Kubernetes [pod priority](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/).
   # @param pagerenderer.pod.terminationGracePeriodSeconds Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/). Should be at least 300 seconds
@@ -535,19 +537,14 @@ pagerenderer:
   # @param pagerenderer.pod.resources.limits.cpu A CPU limit.
   # @param pagerenderer.pod.resources.limits.memory A memory limit.
   # @param pagerenderer.pod.resources.limits.aliyun.com/gpu-mem A GPU memory limit.
-  # @skip pagerenderer.pod.tolerations
-  # @skip pagerenderer.pod.imagePullSecrets
   pod:
     replicaCount: 1
+    nodeSelector: {}
     imagePullSecrets: []
     affinity: {}
     priorityClassName: ''
     terminationGracePeriodSeconds: 60
-    tolerations:
-      - effect: NoSchedule
-        key: role
-        operator: Equal
-        value: worker.datascience
+    tolerations: []
     podAnnotations: {}
     podLabels: {}
     podSecurityContext: {}
@@ -605,19 +602,24 @@ pagerenderer:
   # @param pagerenderer.settings.auth.apiKey Api key for service to service calls. **Required if** `pagerenderer.settings.auth.enabled: true`
   # @param pagerenderer.settings.httpPort Http port for interaction via the rest api
   # @param pagerenderer.settings.grpcPort Grpc port for interaction via the grpc api
-  # @param pagerenderer.settings.grpcRoutePort Port on which the GrpcRoute listens for incoming gRPC traffic
   # @extra pagerenderer.settings.logging Logging settings
   # @param pagerenderer.settings.logging.format Log message format, possible options: 'default' - compact json, 'renderedCompactJson' - rendered json format, 'simple' - plain text
   # @param pagerenderer.settings.logging.targets Collection of logging targets divided by comma. Currently only 'console' and 'database' are supported. Console is used by default (no need to specify).
-  # @param pagerenderer.settings.grpcRoute If set, use GRPCRoute. If empty, connect directly to service.
+  # @param pagerenderer.settings.grpcRoute.enabled If GRPCRoute is enabled.
+  # @param pagerenderer.settings.grpcRoute.hostnames List of hostnames served by route.
+  # @param pagerenderer.settings.grpcRoute.port Destination grpcroute.spec.rules.backendRefs.port number.
+  # @param pagerenderer.settings.grpcRoute.parentRefs List of parent references (gateways) for GRPCRoute.
   settings:
     enabled: false
-    grpcRoute: ''
+    grpcRoute:
+      enabled: false
+      hostnames: []
+      port: 443
+      parentRefs: []
     auth:
       apiKey: ''
     httpPort: 8282
     grpcPort: 8283
-    grpcRoutePort: 443
     logging:
       format: simple
       targets: ''
@@ -837,7 +839,7 @@ authProvider:
   enabled: false
   host: ''
   schema: ''
-  allowedHosts : []
+  allowedHosts: []
   basic:
     users:
       - username: ''
