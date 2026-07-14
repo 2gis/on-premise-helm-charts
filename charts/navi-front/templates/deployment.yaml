@@ -68,6 +68,11 @@ spec:
               value: {{ .Values.nginx.customConfigPath | quote }}
             - name: NGINX_ENVSUBST_OUTPUT_DIR
               value: {{ printf "%s" ( include "nginx.customConfigPath" .) | quote }}
+            {{- $runAsUser := .Values.podSecurityContext.runAsUser | default 0 | int }}
+            {{- if and .Values.nginx.mainConfig.omitUserWhenRunAsNonRoot (ne $runAsUser 0) }}
+            - name: NGINX_OMIT_USER_DIRECTIVE
+              value: "true"
+            {{- end }}
           {{- end }}
           {{- end }} {{/* end of if or .Values.nginx.opentracing.enabled .Values.nginx.customConfigPath */}}
           volumeMounts:

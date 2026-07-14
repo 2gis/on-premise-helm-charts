@@ -114,7 +114,7 @@ timezone: UTC
 image:
   repository: 2gis-on-premise/navi-back
   pullPolicy: IfNotPresent
-  tag: 7.58.0.2
+  tag: 7.58.0.5
 
 
 # @section Navi-Back application settings
@@ -812,6 +812,7 @@ stateTransmitter:
 # @param trafficLights.enabled If traffic lights processing enabled
 # @param trafficLights.projects List of projects, for which traffic lights are processed
 # @param trafficLights.kafka.topic Topic to use for traffic lights processing
+# @param trafficLights.kafka.enabled If traffic lights processing kafka used
 # @extra trafficLights.kafka.properties Properties as supported by librdkafka, see `kafka` section and comments
 # @skip trafficLights.kafka.properties.bootstrap.servers
 # @skip trafficLights.kafka.properties.security.protocol
@@ -821,6 +822,7 @@ trafficLights:
   enabled: false
   projects: []
   kafka:
+    enabled: false
     topic: ''
     properties:
       bootstrap.servers: ''

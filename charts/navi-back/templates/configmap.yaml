@@ -84,7 +84,7 @@ data:
         "type": {{ (index .Values (include "config.attractor" .) | default dict).type | quote }},
         "host": "127.0.0.1",
         "port": 9999,
-        "timeout_limit_ms": {{ default 1000 ((index .Values (include "config.attractor" .) | default dict).responseTimeoutMs) | quote }}
+        "timeout_limit_ms": {{ default 1000 ((index .Values (include "config.attractor" .) | default dict).responseTimeoutMs) | int }}
       },
       {{- end }}
       {{- if .Values.naviback.telemetry.enabled }}
@@ -669,6 +669,7 @@ data:
         {{- end }}{{- /* if .Values.naviback.etaScheduleIndex.enabled */}}
         {{- if .Values.trafficLights.enabled }}
         "traffic_lights_kafka": {
+          {{- if .Values.trafficLights.kafka.enabled }}
           {{- $kafkaProperties := dict -}}
           {{- range $key, $_ := .Values.trafficLights.kafka.fileProperties -}}
           {{- $_ := set $kafkaProperties $key (printf "%s/secret-trafficLights/%s" $.Values.naviback.configFilepath $key) -}}
@@ -677,6 +678,7 @@ data:
           "kafka_properties":
             {{- mustToPrettyJson $kafkaProperties | nindent 12 }},
           "topic": {{ .Values.trafficLights.kafka.topic | required "trafficLights.kafka.topic is not set" | quote }},
+          {{- end }}{{/* .Values.trafficLigths.kafka.enabled */}}
           {{- with .Values.trafficLights.projects }}
           "projects":
             {{ . | mustToPrettyJson | nindent 12 }},
