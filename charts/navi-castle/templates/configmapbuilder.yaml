@@ -18,8 +18,10 @@ data:
     work_dir: '{{ .Values.castle.castleDataPath }}'
     # path to store temporary configs
     tmp_dir: '{{ .Values.castle.castleDataPath }}/tmp/'
+    {{ if .Values.castle.onpremise.enabled -}}
     # path to store previous configs for navi-data-sync compatible listings
     backup_dir: '{{ .Values.castle.castleDataPath }}/backup/'
+    {{ end -}}
     templates:
     {
         # template file name in work_dir: 'full path to result destination'
@@ -98,7 +100,9 @@ data:
         meta: '%project%.json'
         content: '%project%-restriction.json',
         item: 'restriction',
-        routing: [ ctx, driving, bicycle, scooter, truck, pedestrian, taxi, motorcycle, emergency, public_transport ],
+        {{ if .Values.castle.onpremise.enabled -}}
+        routing: [ {{ .Values.castle.onpremise.routing | join ", " }} ],
+        {{ end -}}
         store_period: {{ .Values.castle.storePeriod.restrictionImport | squote }}
     }
     {{- end }}{{- /* or .Values.cron.enabled.restrictionImport .Values.init.enabled.restrictionImport */}}
@@ -115,7 +119,9 @@ data:
         meta: '%project%.json',
         content: '%project%.2gis',
         item: 'package',
-        routing: [ ctx, driving, bicycle, scooter, truck, pedestrian, taxi, motorcycle, emergency, public_transport ],
+        {{ if .Values.castle.onpremise.enabled -}}
+        routing: [ {{ .Values.castle.onpremise.routing | join ", " }} ],
+        {{ end -}}
         store_period: {{ .Values.castle.storePeriod.import | squote }}
     }
     {{- end }}{{- /* or .Values.cron.enabled.import .Values.init.enabled.import */}}
@@ -137,8 +143,10 @@ data:
     work_dir: '{{ .Values.castle.castleDataPath }}'
     # path to store temporary configs
     tmp_dir: '{{ .Values.castle.castleDataPath }}/tmp/'
+    {{ if .Values.castle.onpremise.enabled -}}
     # path to store previous configs for navi-data-sync compatible listings
     backup_dir: '{{ .Values.castle.castleDataPath }}/backup/'
+    {{ end -}}
     templates:
     {
         # template file name in work_dir: 'full path to result destination'
