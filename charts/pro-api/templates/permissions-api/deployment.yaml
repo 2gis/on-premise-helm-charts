@@ -141,12 +141,15 @@ spec:
             {{- end }}
             - name: Auth__Enabled
               value: {{ .Values.permissions.settings.auth.enabled | quote }}
+            {{- if .Values.permissions.settings.auth.apiKey }}
             - name: Auth__ApiKey
               valueFrom:
                 secretKeyRef:
                   key: permissionsApiKey
                   name: {{ include "pro-api.secretName" . }}
+            {{- end }}
 
+            {{- if .Values.authProvider.enabled }}
             - name: Auth__Authority
               value: {{ required "A valid .Values.authProvider.host entry required" .Values.authProvider.host | quote }}
 
@@ -156,6 +159,7 @@ spec:
             {{- range $i, $r := .Values.permissions.settings.auth.uiRequiredRoles }}
             - name: Auth__UiRequiredRoles__{{$i}}
               value: {{ $r | quote }}
+            {{- end }}
             {{- end }}
 
             - name: BackgroundJobs__InitOnStartupJob__Enabled
