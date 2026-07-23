@@ -143,9 +143,6 @@ spec:
               value: {{ .Values.permissions.settings.auth.enabled | quote }}
 
             {{- if .Values.permissions.settings.auth.enabled }}
-            {{- if not .Values.permissions.settings.auth.apiKey }}
-            {{- fail "A valid .Values.permissions.settings.auth.apiKey entry required when permissions.settings.auth.enabled is true" }}
-            {{- end }}
             - name: Auth__ApiKey
               valueFrom:
                 secretKeyRef:
@@ -155,7 +152,7 @@ spec:
 
             {{- if .Values.authProvider.enabled }}
             - name: Auth__Authority
-              value: {{ required "A valid .Values.authProvider.host entry required" .Values.authProvider.host | quote }}
+              value: {{ .Values.authProvider.host | quote }}
 
             {{- if not .Values.permissions.settings.auth.uiRequiredRoles }}
             {{- fail "A valid .Values.permissions.settings.auth.uiRequiredRoles entry required" }}
