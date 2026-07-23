@@ -133,6 +133,12 @@ spec:
                   key: apiKey
                   name: {{ include "pro-api.secretName" . }}
 
+            {{- if and .Values.permissions.settings.auth.enabled (not .Values.authProvider.enabled) }}
+            {{- fail ".Values.authProvider.enabled must be true when permissions.settings.auth.enabled is true" }}
+            {{- end }}
+            {{- if and .Values.authProvider.enabled (not .Values.permissions.settings.auth.enabled) }}
+            {{- fail ".Values.permissions.settings.auth.enabled must be true when authProvider.enabled is true" }}
+            {{- end }}
             - name: Auth__Enabled
               value: {{ .Values.permissions.settings.auth.enabled | quote }}
             - name: Auth__ApiKey
