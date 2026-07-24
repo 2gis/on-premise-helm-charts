@@ -160,6 +160,8 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: {{ .Values.featureFlags.enableStatRedis | quote }}
 - name: KEYS_FEATURE_FLAGS_SINGLE_VISIBILITY_MODE
   value: "true"
+- name: KEYS_FEATURE_FLAGS_ON_PREMISE
+  value: "true"
 {{- end }}
 
 {{- define "keys.env.api" -}}
