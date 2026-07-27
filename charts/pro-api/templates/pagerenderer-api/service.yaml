@@ -24,7 +24,7 @@ spec:
       targetPort: grpc
       protocol: TCP
       name: grpc
-      appProtocol: http
+      appProtocol: grpc
   selector:
     {{- include "pro-api.rendererSelectorLabels" . | nindent 4 }}
 {{- end }}
