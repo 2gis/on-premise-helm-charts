@@ -1,3 +1,26 @@
+## [2.5.0] (2026-07-27)
+#### [Breaking-Changes](PRO-Breaking-Changes.md#250)
+#### Images
+```
+pro-api
+	- pro-api:2.61.0
+	+ pro-api:2.66.0
+	- pro-importer:2.61.0
+	+ pro-importer:2.66.0
+	- pro-pagerenderer-api:2.61.0
+	+ pro-pagerenderer-api:2.66.0
+	- pro-permissions-api:2.61.0
+	+ pro-permissions-api:2.66.0
+	- pro-tasks-api:2.61.0
+	+ pro-tasks-api:2.66.0
+pro-ui
+	- pro-importer:2.61.0
+	+ pro-importer:2.66.0
+	- pro-ui:4.60.0
+	+ pro-ui:4.66.0
+```
+[Full list of image versions](https://github.com/2gis/on-premise-helm-charts/blob/PRO-2.5.0/changelogs/pro/pro_image_versions.txt)
+
 ## [2.4.0] (2026-06-08)
 #### [Breaking-Changes](PRO-Breaking-Changes.md#240)
 #### Images
