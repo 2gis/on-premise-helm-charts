@@ -4,27 +4,7 @@
 
 ### pro-api
 
-- If CityLens filter synchronization is used, the synchronization token must be granted the `edit` permission on the `asset` resource type. Run the following request against the Permissions API:
-
-  ```sh
-  curl -X 'PUT' \
-    'https://pro-permissions-api.example.com/api/user/permissions' \
-    -H 'accept: application/json' \
-    -H 'Authorization: ApiKey <PERMISSIONS_API_TOKEN>' \
-    -H 'Content-Type: application/json' \
-    -d '{
-    "org_account_id": "<TOKEN>",
-    "user_id": "<TOKEN>",
-    "permissions": [
-      {
-        "resource_type": "resource",
-        "resource": "asset",
-        "permission": "edit"
-      }
-    ]
-  }'
-  ```
-
+- If CityLens filter synchronization is used, the synchronization token must be granted the `edit` permission on the `asset` resource type.
 - `permissions.settings.auth.enabled` and `authProvider.enabled` can now be disabled. Both parameters must be set consistently: either both `true` or both `false`.
 
 ## [2.4.0]
