@@ -135,6 +135,7 @@ streams:
 kafka:
   servers: ''
   securityProtocol: PLAINTEXT
+  replicationFactor: 3
   truststore:
     enabled: false
     secretName: ''
