@@ -1,3 +1,16 @@
+## [2.9.0] (2026-07-28)
+
+#### Images
+```
+keys
+	- keys-backend:1.173.0
+	+ keys-backend:1.175.1
+license
+	- license:2.6.0
+	+ license:2.6.1
+```
+[Full list of image versions](https://github.com/2gis/on-premise-helm-charts/blob/Core-2.9.0/changelogs/core/core_image_versions.txt)
+
 ## [2.8.0] (2026-06-29)
 #### [Breaking-Changes](CORE-Breaking-Changes.md#280)
 #### Images
