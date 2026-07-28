@@ -69,6 +69,7 @@ spec:
           env:
             - name: KEYS_LOG_LEVEL
               value: {{ .Values.serviceApi.logLevel | quote }}
+            {{- include "keys.env.featureFlags" . | nindent 12 }}
             {{- include "keys.env.db.deploys" . | nindent 12 }}
             {{- include "keys.env.redis" . | nindent 12 }}
             {{- include "keys.env.auditEnvMetadata" . | nindent 12 }}
