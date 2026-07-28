@@ -48,7 +48,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/architecture/service
 ### StatefulSet settings
 
 | Name               | Description  | Value                     |
-| ------------------ | ------------ |---------------------------|
+| ------------------ | ------------ | ------------------------- |
 | `image.repository` | Repository.  | `2gis-on-premise/license` |
 | `image.tag`        | Tag.         | `2.6.1`                   |
 | `image.pullPolicy` | Pull Policy. | `IfNotPresent`            |
