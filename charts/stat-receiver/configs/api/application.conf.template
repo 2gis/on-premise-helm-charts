@@ -10,7 +10,7 @@ schema-loader = {
 
 initialize-topics = {{ required "A valid .Values.initializeTopics.enabled entry required" .Values.initializeTopics.enabled }}
 topics-manager.prefix = {{ required "A valid .Values.topicsPrefix entry required" .Values.topicsPrefix }}
-
+topics-manager.replica-factor = {{ .Values.kafka.replicationFactor | default 3 }}
 input-bss-topic = "{{ required "A valid .Values.topicsPrefix entry required" .Values.topicsPrefix }}input"
 
 kafka = {
@@ -30,6 +30,7 @@ kafka = {
     "ssl.keystore.location" = /run/kafka-keystore/{{ .Values.kafka.keystore.storeFieldName }}
     "ssl.keystore.password" = ${KEYSTORE_PASSWORD}
     {{- end }}
+    "replication.factor" = {{ .Values.kafka.replicationFactor | default 3 }}    
     "max.request.size" = "31457280"
     "compression.type" = "gzip"
   }

@@ -24,7 +24,7 @@ initializeTopics: true
 topicsPrefix: stat.env.
 ```
 
-App may initialize required topics on startup (`initilizeTopics` setting) however in cases when topics settings are explicitly managed you may initialize it manually using provided settings (see `topics-config.md`).
+App may initialize required topics on startup (`initializeTopics` setting) however in cases when topics settings are explicitly managed you may initialize it manually using provided settings (see `topics-config.md`).
 
 Then, call the `helm install` command and specify the name of the created file:
 
