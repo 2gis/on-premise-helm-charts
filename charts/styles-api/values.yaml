@@ -251,6 +251,19 @@ s3:
   requestTimeout: 5s
   responseTimeout: 5s
 
+  # @section API Keys service settings
+
+  # @param keys.endpoint Keys service endpoint URL.
+  # @param keys.serviceKey Service key for authentication with the Keys service. **Required**
+  # @param keys.clientTimeout HTTP client timeout for requests to the Keys service.
+  # @param keys.refreshInterval Interval for periodic refresh of API keys cache.
+
+keys:
+  endpoint: ''
+  serviceKey: ''
+  clientTimeout: 500ms
+  refreshInterval: 5m
+
 # @section customCAs **Custom Certificate Authority**
 
 # @param customCAs.bundle Custom CA [text representation of the X.509 PEM public-key certificate](https://www.rfc-editor.org/rfc/rfc7468#section-5.1)

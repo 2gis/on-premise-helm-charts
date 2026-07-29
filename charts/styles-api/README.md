@@ -137,6 +137,15 @@ Use this Helm chart to deploy API Styles service, which is a part of 2GIS's [On-
 | `s3.requestTimeout`  | S3 management client request timeout. If not specified, the default value is 30s.   | `5s`    |
 | `s3.responseTimeout` | S3 management client response timeout. If not specified, the default value is 3s.   | `5s`    |
 
+### API Keys service settings
+
+| Name                   | Description                                                        | Value   |
+| ---------------------- | ------------------------------------------------------------------ | ------- |
+| `keys.endpoint`        | Keys service endpoint URL.                                         | `""`    |
+| `keys.serviceKey`      | Service key for authentication with the Keys service. **Required** | `""`    |
+| `keys.clientTimeout`   | HTTP client timeout for requests to the Keys service.              | `500ms` |
+| `keys.refreshInterval` | Interval for periodic refresh of API keys cache.                   | `5m`    |
+
 ### customCAs **Custom Certificate Authority**
 
 | Name                  | Description                                                                                                                 | Value |
