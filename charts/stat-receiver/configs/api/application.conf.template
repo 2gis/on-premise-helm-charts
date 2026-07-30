@@ -30,7 +30,7 @@ kafka = {
     "ssl.keystore.location" = /run/kafka-keystore/{{ .Values.kafka.keystore.storeFieldName }}
     "ssl.keystore.password" = ${KEYSTORE_PASSWORD}
     {{- end }}
-    "replication.factor" = {{ .Values.kafka.replicationFactor | default 3 }}    
+    "replication.factor" = {{ .Values.kafka.replicationFactor | default 3 }}
     "max.request.size" = "31457280"
     "compression.type" = "gzip"
   }
