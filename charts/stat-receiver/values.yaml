@@ -104,6 +104,7 @@ streams:
 
 # @param kafka.servers Kafka bootstrap connection string
 # @param kafka.securityProtocol Protocol used to communicate with brokers. Valid values are: `PLAINTEXT`, `SSL`, `SASL_PLAINTEXT`, `SASL_SSL`
+# @param kafka.replicationFactor Replication factor for Kafka topics and streams. Must be <= number of available brokers. Default: 3.
 
 # @extra kafka.truststore **Trust store configuration for SSL connections**
 # @param kafka.truststore.enabled
@@ -135,6 +136,7 @@ streams:
 kafka:
   servers: ''
   securityProtocol: PLAINTEXT
+  replicationFactor: 3
   truststore:
     enabled: false
     secretName: ''
