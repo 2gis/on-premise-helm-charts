@@ -385,6 +385,7 @@ data:
     logger-format: {{ .Values.head.head.logFormat }}
     data-update-frequency-sec: 60
     big-search-mode-update-frequency-sec: 30
+    ignore-subtask-error: {{ .Values.head.head.ignoreSubtaskError }}
     search-default-timeout-ms: 5000
     search-worker-url: '127.0.0.1:{{ .Values.head.envoy.ports.grpc }}'
     search-worker-queries-count: {{ .Values.head.head.workerQueriesCount }}
@@ -736,6 +737,7 @@ data:
       secret_access_key: ${s3SecretKey}
       bucket: {{ .Values.dgctlStorage.bucket }}
       use_ssl: {{ .Values.dgctlStorage.secure }}
+      region: {{ .Values.s3.region | quote }}
   {{- end }}{{- /* .Values.onpremise */}}
   controller.yaml: |
     app:
@@ -784,6 +786,7 @@ data:
       secret_access_key: ${s3SecretKey}
       bucket: {{ .Values.dgctlStorage.bucket }}
       use_ssl: {{ .Values.dgctlStorage.secure }}
+      region: {{ .Values.s3.region | quote }}
     {{ else }}
       tasks_priorities:
         {{- toYaml .Values.controller.tasksPriorities | nindent 8 }}
@@ -977,6 +980,16 @@ data:
                               auto_host_rewrite: true
                             request_headers_to_remove:
                             - {{ .Values.ingressRouter.routeHeader }}
+                          - match:
+                              prefix: "/unisearch.proto.SearchService/"
+                              headers:
+                                - name: {{ .Values.ingressRouter.routeHeader | quote }}
+                                  exact_match: {{ .Values.ingressRouter.routing.micromirrorInternal.exactMatch | quote }}
+                            route:
+                              cluster: micromirror-internal
+                              auto_host_rewrite: true
+                            request_headers_to_remove:
+                            - {{ .Values.ingressRouter.routeHeader }}
                         {{- end -}}{{- /* not .Values.onpremise */}}
                         {{- if .Values.segmentDetector.enabled }}
                           - match:
@@ -1139,6 +1152,25 @@ data:
                         socket_address:
                           port_value: {{ .Values.ingressRouter.routing.micromirror.port }}
                           address: {{ .Values.ingressRouter.routing.micromirror.address }}
+        - name: micromirror-internal
+          connect_timeout: 1s
+          type: STRICT_DNS
+          dns_lookup_family: V4_ONLY
+          dns_refresh_rate: 1s
+          lb_policy: ROUND_ROBIN
+          http2_protocol_options:
+            connection_keepalive:
+              interval: 60s
+              timeout: 30s
+          load_assignment:
+            cluster_name: micromirror-internal
+            endpoints:
+              - lb_endpoints:
+                  - endpoint:
+                      address:
+                        socket_address:
+                          port_value: {{ .Values.ingressRouter.routing.micromirrorInternal.port }}
+                          address: {{ .Values.ingressRouter.routing.micromirrorInternal.address }}
       {{- end -}}{{- /* not .Values.onpremise */}}
         - name: segmentdetector
           connect_timeout: 1s
@@ -1207,12 +1239,10 @@ data:
     ingress-router-fs-threads: 2
     ingress-router-grpc-threads: 1
     ingress-router-mon-threads: 1
-    ingress-router-rate-limiting-threads: 1
     ingress-router-bg-threads: 2
     logger-level: {{ .Values.ingressRouter.logLevel }}
     logger-format: {{ .Values.ingressRouter.logFormat }}
     dispatcher-enabled: {{ .Values.ingressRouter.dispatcherComponent.enabled }}
-    rate-limit-enabled: {{ .Values.ingressRouter.rateLimitComponent.enabled }}
     data-update-frequency-sec: 60
     sentry-dsn: {{ .Values.sentry.ingressRouterDsn | quote }}
     {{- include "search-api-v8.sentry.vars.common" . | nindent 4 }}
@@ -1225,13 +1255,6 @@ data:
     sapphire-request-timeout-ms: {{ .Values.ingressRouter.searchRequestTimeoutMs }}
     segment-detector-enabled: {{ .Values.segmentDetector.enabled }}
     segment-detector-service-url: '127.0.0.1:{{ .Values.ingressRouter.envoy.ports.grpc }}'
-    {{- if not .Values.onpremise }}
-    prometheus-url: {{ .Values.ingressRouter.prometheusUrl }}
-    {{- else -}}{{- /* not .Values.onpremise */}}
-    prometheus-url: ''
-    {{- end -}}{{- /* not .Values.onpremise */}}
-    rate-limit-rules:
-      {{- toYaml .Values.ingressRouter.rateLimitRules | nindent 6 }}
     master-api-key: {{ .Values.ingressRouter.masterApiKey | quote }}
     allow-extended-params: {{ .Values.debugMode }}
     debug-mode-enabled: {{ .Values.debugMode }}

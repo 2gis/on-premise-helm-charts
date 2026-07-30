@@ -17,9 +17,21 @@ containerNameOverride: ''
 # @param strategy Deployment [strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy). Undergoes template rendering
 # @param podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
 # @param imagePullSecrets Kubernetes image pull secrets
-# @param podSecurityContext Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
+# @param podSecurityContext.runAsNonRoot Indicates that the container must run as a non-root user
+# @param podSecurityContext.runAsUser The User ID (UID) to run the entrypoint of the container process
+# @param podSecurityContext.runAsGroup The primary Group ID (GID) for all processes in the container
+# @param podSecurityContext.fsGroup A special supplemental group ID applied to all volumes mounted by the pod
+# @param containerSecurityContext.privileged Runs the container in privileged mode (processes are essentially equivalent to root on the host)
+# @param containerSecurityContext.runAsNonRoot Forces the container to run as a non-root user
+# @param containerSecurityContext.runAsUser The User ID (UID) to run the container process
+# @param containerSecurityContext.runAsGroup The primary Group ID (GID) for the container process
+# @param containerSecurityContext.allowPrivilegeEscalation Controls whether a process can gain more privileges than its parent process
+# @param containerSecurityContext.readOnlyRootFilesystem Whether this container has a read-only root filesystem
+# @param containerSecurityContext.capabilities.drop The Linux capabilities to drop from the container
+# @param containerSecurityContext.seccompProfile.type The type of seccomp profile to apply (e.g., RuntimeDefault)
 # @param priorityClassName Kubernetes [Pod Priority](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass) class name
 # @param terminationGracePeriodSeconds Maximum time allowed for graceful shutdown
+# @param hostAliases Kubernetes [host aliases](https://kubernetes.io/docs/tasks/network/customize-hosts-file-for-pods/)
 # @param nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
 # @param affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)
 # @param tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings
@@ -34,9 +46,26 @@ revisionHistoryLimit: 1
 strategy: {}
 podAnnotations: {}
 imagePullSecrets: []
-podSecurityContext: {}
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 10001
+  runAsGroup: 10002
+  fsGroup: 10001
+containerSecurityContext:
+  privileged: false
+  runAsNonRoot: true
+  runAsUser: 10001
+  runAsGroup: 10002
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop:
+      - ALL
+  seccompProfile:
+    type: RuntimeDefault
 priorityClassName: ''
 terminationGracePeriodSeconds: 60
+hostAliases: []
 nodeSelector: {}
 affinity: {}
 tolerations: []
@@ -143,11 +172,13 @@ ingress:
 # @param serviceAccount.create Specifies whether a service account should be created.
 # @param serviceAccount.annotations Annotations to add to the service account.
 # @param serviceAccount.name The name of the service account to use. If not set and create is true, a name is generated using the fullname template.
+# @param serviceAccount.automountServiceAccountToken Automount service account token.
 
 serviceAccount:
   create: true
   annotations: {}
   name: ''
+  automountServiceAccountToken: false
 
 
 # @section [CronJob](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/) settings
@@ -210,20 +241,24 @@ networkPolicy:
 
 # @section [HTTPRoute](https://gateway-api.sigs.k8s.io/api-types/httproute/) configuration
 
-# @param httpRoute.enabled If HTTPRoute is enabled for the service.
+# @param httpRoute.enabled If HTTPRoute is enabled for the service
+# @param httpRoute.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) for HTTPRoute.
+# @param httpRoute.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/) for HTTPRoute.
 # @param httpRoute.hostnames List of hostnames served by route
-# @extra httpRoute.parentRefs List of parent references (gateways) for HTTPRoute.
+# @extra httpRoute.parentRefs List of parent references (gateways) for HTTPRoute
 # @skip httpRoute.parentRefs[0].group
 # @skip httpRoute.parentRefs[0].kind
-# @param httpRoute.parentRefs[0].name Name for the first default parentRef
-# @param httpRoute.parentRefs[0].namespace Namespace for the first default parentRef
+# @param httpRoute.parentRefs[0].name Name for the first parentRef
+# @param httpRoute.parentRefs[0].namespace Namespace for the first parentRef
 # @skip httpRoute.parentRefs[1].group
 # @skip httpRoute.parentRefs[1].kind
-# @param httpRoute.parentRefs[1].name Name for the second default parentRef
-# @param httpRoute.parentRefs[1].namespace Namespace for the second default parentRef
+# @param httpRoute.parentRefs[1].name Name for the second parentRef
+# @param httpRoute.parentRefs[1].namespace Namespace for the second parentRef
 
 httpRoute:
   enabled: false
+  annotations: {}
+  labels: {}
   hostnames: []
   parentRefs:
     - group: gateway.networking.k8s.io
@@ -237,9 +272,33 @@ httpRoute:
 
 # @section [GRPCRoute](https://gateway-api.sigs.k8s.io/api-types/grpcroute/) configuration
 
+# @param grpcRoute.enabled If GRPCRoute is enabled for the service.
+# @param grpcRoute.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) for GRPCRoute.
+# @param grpcRoute.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/) for GRPCRoute.
 # @param grpcRoute.hostnames List of hostnames served by route
 # @param grpcRoute.port Destination grpcroute.spec.rules.backendRefs.port number, must be set if grpcRoute.enabled is true
+# @extra grpcRoute.parentRefs List of parent references (gateways) for GRPCRoute.
+# @skip grpcRoute.parentRefs[0].group
+# @skip grpcRoute.parentRefs[0].kind
+# @param grpcRoute.parentRefs[0].name Name for the first parentRef
+# @param grpcRoute.parentRefs[0].namespace Namespace for the first parentRef
+# @skip grpcRoute.parentRefs[1].group
+# @skip grpcRoute.parentRefs[1].kind
+# @param grpcRoute.parentRefs[1].name Name for the second parentRef
+# @param grpcRoute.parentRefs[1].namespace Namespace for the second parentRef
 
 grpcRoute:
+  enabled: false
+  annotations: {}
+  labels: {}
   hostnames: []
   port: null
+  parentRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: canary
+      namespace: istio-gateways
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: stable
+      namespace: istio-gateways

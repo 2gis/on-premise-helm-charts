@@ -117,7 +117,7 @@ worker:
   image:
     repository: 2gis-on-premise/search-api-v8-worker
     pullPolicy: IfNotPresent
-    tag: 8.25.1
+    tag: 8.26.0
   ports:
     http: 8092
     grpc: 8091
@@ -129,8 +129,8 @@ worker:
   rtw:
     lifeTime: 1800
   syncer:
-    includeProjectKeyRegexp: gis\.v4.*
-    excludeProjectKeyRegexp: ^$
+    includeProjectKeyRegexp: 'gis\.v4.*'
+    excludeProjectKeyRegexp: '^$'
   queueLimit: 30
   securityContext: {}
   resources:
@@ -288,6 +288,7 @@ head:
 # @param head.head.bigSearchSearchers List of searchers for which big search is enabled. If empty, the search will work as V7, despite the bigSearchMode being enabled.
 # @param head.head.segmentDetectorClientTimeoutMs Timeout (ms) for SegmentDetector client
 # @skip head.head.bigSearchExcludeSegments List of projects to exclude from indexing
+# @skip head.head.ignoreSubtaskError Enable to ignore worker subtask error
 # @param head.head.aiSuggestedQueries.enabled Enable or disable AI Suggested Queries
 
 # @param head.head.throttle.enabled Enable or disable big search throttling
@@ -305,7 +306,7 @@ head:
     image:
       repository: 2gis-on-premise/search-api-v8-head
       pullPolicy: IfNotPresent
-      tag: 8.25.1
+      tag: 8.26.0
     ports:
       grpc: 9010
       http: 9090
@@ -371,6 +372,7 @@ head:
 # For additional information look docs in docs.2gis.com
     segmentDetectorClientTimeoutMs: 500
     bigSearchExcludeSegments: []
+    ignoreSubtaskError: false
     aiSuggestedQueries:
       enabled: false
     throttle:
@@ -384,8 +386,8 @@ head:
         calculateForPeriods: 12
     gracefulShutdownInterval: 30s
   syncer:
-    includeProjectKeyRegexp: gis\.v4.*
-    excludeProjectKeyRegexp: ^$
+    includeProjectKeyRegexp: 'gis\.v4.*'
+    excludeProjectKeyRegexp: '^$'
 
 # @param head.envoy.image.repository Docker image repository
 # @param head.envoy.image.pullPolicy Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy)
@@ -679,7 +681,7 @@ filesStorage:
   image:
     repository: 2gis-on-premise/search-api-v8-files-storage
     pullPolicy: IfNotPresent
-    tag: 8.25.1
+    tag: 8.26.0
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -778,7 +780,7 @@ dataAdapter:
   image:
     repository: 2gis-on-premise/search-api-v8-data-adapter
     pullPolicy: IfNotPresent
-    tag: 8.25.1
+    tag: 8.26.0
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -871,7 +873,7 @@ portal:
   image:
     repository: 2gis-on-premise/search-api-v8-portal
     pullPolicy: IfNotPresent
-    tag: 8.25.1
+    tag: 8.26.0
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -973,7 +975,7 @@ controller:
   image:
     repository: 2gis-on-premise/search-api-v8-controller
     pullPolicy: IfNotPresent
-    tag: 8.25.1
+    tag: 8.26.0
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -1028,8 +1030,8 @@ controller:
   monthlyAdWeightsUrl: ''
   allowedProjectKeys: []
   notAllowedProjectKeys:
-  - gis.v4.65536.ru.ru
-  - gis.geo.65536.nolang.-
+    - 'gis.v4.65536.ru.ru'
+    - 'gis.geo.65536.nolang.-'
   tasksPriorities:
     default: 1
     overrides: {}
@@ -1105,7 +1107,7 @@ indexer:
   image:
     repository: 2gis-on-premise/search-api-v8-indexer
     pullPolicy: IfNotPresent
-    tag: 8.25.1
+    tag: 8.26.0
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -1210,7 +1212,7 @@ syncer:
   image:
     repository: 2gis-on-premise/search-api-v8-syncer
     pullPolicy: IfNotPresent
-    tag: 8.25.1
+    tag: 8.26.0
   securityContext: {}
   resources:
     requests:
@@ -1389,7 +1391,6 @@ service:
 
 # @param ingressRouter.imagePullSecrets Kubernetes image pull secrets
 # @param ingressRouter.dispatcherComponent.enabled Enable or disable request dispatching
-# @param ingressRouter.rateLimitComponent.enabled Enable or disable rate limiting
 # @param ingressRouter.prestopHook.enabled Enable or disable container lifecycle [preStop hook](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/)
 # @param ingressRouter.podSecurityContext Kubernetes [podSecurityContext](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
 # @param ingressRouter.envoy.securityContext Kubernetes [SecurityContext](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
@@ -1421,8 +1422,6 @@ service:
 
 # @param ingressRouter.searchServiceUrl Custom URL for the `head` service
 # @param ingressRouter.searchRequestTimeoutMs Timeout (in ms) for requests to the `head` service
-# @param ingressRouter.prometheusUrl Prometheus URL for rate limiting
-# @param ingressRouter.rateLimitRules Big Search usage quotas
 # @param ingressRouter.masterApiKey api key for advanced features
 
 # @param ingressRouter.ports.monitor TCP port for service endpoints such as `/metrics`
@@ -1543,22 +1542,18 @@ ingressRouter:
   image:
     repository: 2gis-on-premise/search-api-v8-ingress-router
     pullPolicy: IfNotPresent
-    tag: 8.25.1
+    tag: 8.26.0
   imagePullSecrets: []
   matchLabels: {}
   podLabels: {}
   searchServiceUrl: ''
   searchRequestTimeoutMs: 5000
-  prometheusUrl: ''
-  rateLimitRules: []
   masterApiKey: ''
   ports:
     monitor: 9093
     http: 9092
     grpc: 9001
   dispatcherComponent:
-    enabled: false
-  rateLimitComponent:
     enabled: false
   routeHeader: x-router-target-cluster
   routing:
@@ -1705,7 +1700,7 @@ segmentDetector:
   image:
     repository: 2gis-on-premise/search-api-v8-segment-detector
     pullPolicy: IfNotPresent
-    tag: 8.25.1
+    tag: 8.26.0
   imagePullSecrets: []
   segmentDetectorGrpcThreads: 2
   dataUpdateFrequencySec: 60
@@ -1715,8 +1710,8 @@ segmentDetector:
   logFormat: json
   segmentDetectorMonThreads: 2
   syncer:
-    includeProjectKeyRegexp: (gis\.geo.*|gis\.v4\.65536\.en\.ru)
-    excludeProjectKeyRegexp: gis\.geo\.65536\.nolang\.-
+    includeProjectKeyRegexp: '(gis\.geo.*|gis\.v4\.65536\.en\.ru)'
+    excludeProjectKeyRegexp: 'gis\.geo\.65536\.nolang\.-'
   matchLabels: {}
   podLabels: {}
   podAnnotations: {}
