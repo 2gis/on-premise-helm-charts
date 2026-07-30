@@ -179,19 +179,19 @@ worker:
     behavior:
       scaleDown:
         policies:
-          - periodSeconds: 180
-            type: Percent
-            value: 3
+        - periodSeconds: 180
+          type: Percent
+          value: 3
         stabilizationWindowSeconds: 1200
       scaleUp:
         selectPolicy: Min
         policies:
-          - periodSeconds: 15
-            type: Percent
-            value: 10
-          - type: Pods
-            value: 5
-            periodSeconds: 15
+        - periodSeconds: 15
+          type: Percent
+          value: 10
+        - type: Pods
+          value: 5
+          periodSeconds: 15
         stabilizationWindowSeconds: 30
   vpa:
     enabled: false
@@ -361,7 +361,7 @@ head:
     bigSearchMode:
       enabled: true
     bigSearchSearchers:
-      - ExpandingSearcher
+    - ExpandingSearcher
 # ExpandingSearcher is the default searcher, for additional serchers look docs in docs.2gis.com
 # possible values of searchers
 #      - ExpandingSearcher
@@ -475,15 +475,15 @@ head:
     behavior:
       scaleDown:
         policies:
-          - periodSeconds: 180
-            type: Percent
-            value: 3
+        - periodSeconds: 180
+          type: Percent
+          value: 3
         stabilizationWindowSeconds: 600
       scaleUp:
         policies:
-          - periodSeconds: 15
-            type: Percent
-            value: 10
+        - periodSeconds: 15
+          type: Percent
+          value: 10
         stabilizationWindowSeconds: 30
         selectPolicy: Max
   vpa:
@@ -1010,12 +1010,12 @@ controller:
   projectListUrl: ''
   s3ProjectPrefix: ''
   props:
-    - model: gis
-      domain: v4
-    - model: gis
-      domain: geo
-      language: nolang
-      location: '-'
+  - model: gis
+    domain: v4
+  - model: gis
+    domain: geo
+    language: nolang
+    location: '-'
   interval: 15s
   taskTimeout: 20m
   projectsApiRequestTimeout: 5s
@@ -1146,15 +1146,15 @@ indexer:
     behavior:
       scaleDown:
         policies:
-          - periodSeconds: 15
-            type: Percent
-            value: 100
+        - periodSeconds: 15
+          type: Percent
+          value: 100
         stabilizationWindowSeconds: 60
       scaleUp:
         policies:
-          - periodSeconds: 15
-            type: Percent
-            value: 100
+        - periodSeconds: 15
+          type: Percent
+          value: 100
         stabilizationWindowSeconds: 0
         selectPolicy: Max
   vpa:
@@ -1489,19 +1489,19 @@ ingressRouter:
     behavior:
       scaleDown:
         policies:
-          - periodSeconds: 180
-            type: Percent
-            value: 3
+        - periodSeconds: 180
+          type: Percent
+          value: 3
         stabilizationWindowSeconds: 1200
       scaleUp:
         selectPolicy: Min
         policies:
-          - periodSeconds: 15
-            type: Percent
-            value: 10
-          - periodSeconds: 15
-            type: Pods
-            value: 5
+        - periodSeconds: 15
+          type: Percent
+          value: 10
+        - periodSeconds: 15
+          type: Pods
+          value: 5
         stabilizationWindowSeconds: 30
   vpa:
     enabled: false
@@ -1521,7 +1521,7 @@ ingressRouter:
     image:
       repository: 2gis-on-premise/search-api-v8-envoy
       pullPolicy: IfNotPresent
-      tag: 1.36.2-tools
+      tag: 1.38.1-tools
     resources:
       limits:
         cpu: 800m
@@ -1725,19 +1725,19 @@ segmentDetector:
     behavior:
       scaleDown:
         policies:
-          - periodSeconds: 180
-            type: Percent
-            value: 3
+        - periodSeconds: 180
+          type: Percent
+          value: 3
         stabilizationWindowSeconds: 1200
       scaleUp:
         selectPolicy: Min
         policies:
-          - periodSeconds: 15
-            type: Percent
-            value: 10
-          - type: Pods
-            value: 5
-            periodSeconds: 15
+        - periodSeconds: 15
+          type: Percent
+          value: 10
+        - type: Pods
+          value: 5
+          periodSeconds: 15
         stabilizationWindowSeconds: 30
   vpa:
     enabled: false
@@ -1785,10 +1785,10 @@ ingress:
   className: nginx
   annotations: {}
   hosts:
-    - host: search-api-v8.example.com
-      paths:
-        - path: /
-          pathType: ImplementationSpecific
+  - host: search-api-v8.example.com
+    paths:
+    - path: /
+      pathType: ImplementationSpecific
   tls: []
 
 # @section customCAs **Custom Certificate Authority**

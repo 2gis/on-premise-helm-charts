@@ -1,3 +1,42 @@
+## [2.56.0] (2026-07-30)
+
+#### Images
+```
+mapgl-js-api
+	- mapgl:1.75.0
+	+ mapgl:1.76.0
+platform
+	- platform-ui:1.32.0
+	+ platform-ui:1.39.0
+search-api-v8
+	- search-api-v8-controller:8.25.1
+	+ search-api-v8-controller:8.26.0
+	- search-api-v8-data-adapter:8.25.1
+	+ search-api-v8-data-adapter:8.26.0
+	- search-api-v8-files-storage:8.25.1
+	+ search-api-v8-files-storage:8.26.0
+	- search-api-v8-head:8.25.1
+	+ search-api-v8-head:8.26.0
+	- search-api-v8-indexer:8.25.1
+	+ search-api-v8-indexer:8.26.0
+	- search-api-v8-ingress-router:8.25.1
+	+ search-api-v8-ingress-router:8.26.0
+	- search-api-v8-segment-detector:8.25.1
+	+ search-api-v8-segment-detector:8.26.0
+	- search-api-v8-syncer:8.25.1
+	+ search-api-v8-syncer:8.26.0
+	- search-api-v8-worker:8.25.1
+	+ search-api-v8-worker:8.26.0
+tiles-api
+	- tiles-api-importer:4.87.2
+	+ tiles-api-importer:4.88.6
+	- tiles-api-proxy:4.87.2
+	+ tiles-api-proxy:4.88.6
+	- tiles-api:4.87.2
+	+ tiles-api:4.88.6
+```
+[Full list of image versions](https://github.com/2gis/on-premise-helm-charts/blob/Platform-2.56.0/changelogs/platform/platform_image_versions.txt)
+
 ## [2.55.0] (2026-06-30)
 #### [Breaking-Changes](PLATFORM-Breaking-Changes.md#2550)
 #### Images
