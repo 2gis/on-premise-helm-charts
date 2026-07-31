@@ -9,11 +9,12 @@ When performing a code review, respond in **Russian**.
 
 ## Repository Structure
 
-- `charts/` — 31 application Helm charts + `generic-chart` (shared library)
+- `charts/` — 33 application Helm charts + `generic-chart` (shared library)
 - `changelogs/` — per-product-group changelogs (`core/`, `platform/`, `pro/`, `citylens/`, `evergis/`)
+  - Breaking changes are tracked in `changelogs/<group>/*-Breaking-Changes.md`
+  - `Breaking-Changes.md` at the repo root is an index that links to the group files
 - `.github/workflows/` — CI: `lint.yaml`, `check-readme.yaml`, `release.yaml`, `release-oci.yaml`
 - `CONTRIBUTING.md` — branching model (Gitflow, PRs target `develop`)
-- `Breaking-Changes.md` — index of breaking changes
 
 ## PR Checklist (mirrors `pull_request_template.md`)
 
@@ -22,7 +23,7 @@ When performing a code review, verify:
 - PR targets `develop` branch (except urgent hotfixes, which target `master`)
 - PR title starts with the service name, e.g. `navi-back: add X feature` or `[tiles-api] Upgraded version`
 - PR description includes a **Changelog** section and **Issues** references
-- Breaking changes are documented in `Breaking-Changes.md`
+- Breaking changes are documented in the group's `changelogs/<group>/*-Breaking-Changes.md`
 - If `values.yaml` was changed, `README.md` must be regenerated (`make prepare && make charts/<chart-name>`, Linux only)
 - If a new chart is added, it has `templates/NOTES.txt` and a generated `README.md`
 
@@ -53,7 +54,7 @@ When performing a code review, flag the following:
 - Missing `required` validation for mandatory settings that have empty defaults
 - Missing `required` validation for conditionally-mandatory parameters inside their guard block (e.g., a parameter marked `**Required** if schema is "Oidc"` must use `required` inside the `{{- if eq .Values.schema "Oidc" }}` block, not just be referenced bare)
 - `values.yaml` changed but `README.md` not regenerated
-- Breaking change not documented in `Breaking-Changes.md`
+- Breaking change not documented in `changelogs/<group>/*-Breaking-Changes.md`
 - PR targets `master` without being a documented hotfix
 - Missing checksum annotations on ConfigMap/Secret
 - `replicas` field present in Deployment when `hpa.enabled: true`
@@ -69,6 +70,7 @@ When performing a code review, flag the following:
 - Parameters that never change in typical use not marked with `@skip`
 - Non-empty string default written with quotes (should be without)
 - Empty string default written without quotes (should be `''`)
+- Integer default written as a quoted string (e.g., `port: '5432'` should be `port: 5432`)
 - Service URL parameter description missing the recommended URL format hint (`http://{service-name}.svc`, etc.)
 - Template file name uses camelCase instead of dashed notation
 - Named template not namespaced with chart name
@@ -76,3 +78,10 @@ When performing a code review, flag the following:
 - Standard `app.kubernetes.io/*` labels missing from a resource
 - `namespace:` hardcoded in template metadata
 - Floating image tag used (`latest`, `head`, `canary`)
+- Feature toggle parameter not named `enabled` (e.g., `pdb.create`, `serviceAccount.create`)
+- `db` used instead of `postgres` for PostgreSQL settings block
+- `user` used instead of `username` in postgres block
+- `database` used instead of `name` in postgres block
+- `endpoint` or `url` used instead of `host` in s3 block
+- `servers` or `bootstrapServer` used instead of `bootstrapServers` in kafka block
+- Data import service block not named `importer`

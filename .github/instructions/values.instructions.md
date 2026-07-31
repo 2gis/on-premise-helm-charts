@@ -89,7 +89,9 @@ catalog:
 - `hpa` — HorizontalPodAutoscaler (not `autoscaling`, not `horizontalPodAutoscaler`)
 - `vpa` — VerticalPodAutoscaler
 - `pdb` — PodDisruptionBudget
-- `serviceAccount` — ServiceAccount
-- `importer` — data import jobs
+- `serviceAccount` — ServiceAccount (use `serviceAccount.enabled`, not `serviceAccount.create`)
+- `importer` — data import jobs (not `import`)
 - `logLevel` — log level: `trace`, `debug`, `info`, `warning`, `error`, `fatal`
 - `logFormat` — log format: `json`, `plaintext`
+
+> **Note:** Some existing services use non-standard enum values for `logLevel`/`logFormat` (e.g. `warn`, `text`, `CRITICAL`) because the application accepts only those values. Do not change the documented enum without confirming the application accepts the new value — the value is passed directly to the app config without transformation.
