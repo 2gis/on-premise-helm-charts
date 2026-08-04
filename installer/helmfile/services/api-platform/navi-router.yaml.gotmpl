@@ -1,0 +1,33 @@
+---
+bases:
+- {{ env "HELMFILE_BASE" | default (printf "%s/installer/helmfile" (env "PWD")) }}/common.yaml.gotmpl
+
+---
+releases:
+  - name: navi-router
+    chart: {{ .Values.chartLocation }}/navi-router
+    namespace: {{ .Values.namespace  }}
+    version: {{ .Values.versionPlatform }}
+    kubeContext: {{ .Values.kubeContext }}
+    labels:
+      group: api-platform
+      service: navi-router
+    values:
+      - {{ .Values.basePath }}/values/dgctl.yaml.gotmpl
+      - {{ .Values.basePath }}/values/api-platform/navi-router.yaml.gotmpl
+      - {{ .Values.valuesPath }}/values/api-platform/navi-router/{{ .Environment.Name }}.yaml.gotmpl
+      - {{ .Values.valuesPath }}/values/api-platform/navi-rules/{{ $.Environment.Name }}-rules.yaml.gotmpl
+    hooks:
+    - events: ["postsync"]
+      showlogs: true
+      command: "bash"
+      args:
+        - "{{ .Values.basePath }}/../scripts/k8s-show-logs.sh"
+        - "{{ .Values.kubeContext }}"
+        - "{{ .Values.namespace }}"
+        - "{{`{{ .Release.Name }}`}}"
+        - '{{`{{ if .Event.Error }}failure{{ end }}`}}'
+{{- $hooksPath := printf "%s/hooks/api-platform/navi-router/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $hooksPath }}
+{{- readFile $hooksPath | fromYaml | toYaml | nindent 4 }}
+{{- end }}

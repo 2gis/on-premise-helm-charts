@@ -1,0 +1,23 @@
+environments:
+  sandbox:
+    values:
+    - kubeContext: kind-2gis-on-premise
+    - chartLocation: oci://ghcr.io/2gis/charts
+    - chartLocationGrafana: oci://ghcr.io/grafana/helm-charts
+    - chartLocationVector: oci://ghcr.io/vectordotdev/helm-charts
+    - chartLocationPrometheus: oci://ghcr.io/prometheus-community/charts
+    - chartLocationBitnami: oci://registry-1.docker.io/bitnamicharts
+    - domain: sandbox
+    - namespace: sandbox
+    - ingressController: nginx
+    - ingressTls: false
+    - dgctlDockerRegistry: 'registry.example.com'
+    - dgctlStorage:
+        host: 's3.sandbox'
+        bucket: 'dgctl'
+        accessKey: 'admin'
+        secretKey: 'on-premise'
+        secure: false
+    - key: 'example-key-123456789'
+    - license:
+        key: "00000000-0000-0000-0000-000000000000"

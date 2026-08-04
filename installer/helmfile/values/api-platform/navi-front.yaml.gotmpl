@@ -1,0 +1,24 @@
+navigroup: {{ .Environment.Name }}
+
+resources:
+  limits:
+    cpu: 250m
+    memory: 256Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+ingress:
+  enabled: true
+  className: {{ .Values.ingressClassName }}
+  hosts:
+    - host: {{ .Values.naviFrontIngress }}
+      paths:
+        - path: /
+          pathType: Prefix
+  {{- if .Values.ingressTls }}
+  tls:
+    - hosts:
+        - {{ .Values.naviFrontIngress }}
+      secretName: {{ .Values.tlsSecret }}
+  {{- end }}

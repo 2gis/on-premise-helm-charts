@@ -1,0 +1,27 @@
+---
+bases:
+- {{ env "HELMFILE_BASE" | default (printf "%s/installer/helmfile" (env "PWD")) }}/common.yaml.gotmpl
+
+---
+releases:
+  - name: cassandra
+    chart: {{ .Values.chartLocationBitnami }}/cassandra
+    version: 11.4.2
+    namespace: {{ .Values.namespace }}
+    kubeContext: {{ .Values.kubeContext }}
+    createNamespace: false
+    atomic: false
+    wait: true
+    waitForJobs: true
+    timeout: 600
+    labels:
+      group: infra
+      service: cassandra
+    values:
+      - {{ .Values.basePath }}/values/infra/cassandra.yaml.gotmpl
+      - {{ .Values.valuesPath }}/values/infra/cassandra/{{ .Environment.Name }}.yaml.gotmpl
+    hooks:
+{{- $hooksPath := printf "%s/hooks/infra/cassandra/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $hooksPath }}
+{{- readFile $hooksPath | fromYaml | toYaml | nindent 4 }}
+{{- end }}

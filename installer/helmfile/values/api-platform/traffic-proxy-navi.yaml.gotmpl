@@ -1,0 +1,32 @@
+replicaCount: 1
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 256Mi
+  requests:
+    cpu: 50m
+    memory: 32Mi
+
+proxy:
+  host: https://datagateway.api.2gis.com
+  locationDG: true
+  licenseKey: {{ .Values.license.key }}
+  log:
+    errorLog:
+      level: error # Allowed values: `debug`, `info`, `notice`, `warn`, `error`, `crit`, `alert`, `emerg`.
+
+ingress:
+  enabled: false
+  className: {{ .Values.ingressClassName }}
+  hosts:
+  - host: {{ .Values.trafficProxyNaviIngress }}
+    paths:
+    - path: /
+      pathType: Prefix
+  {{- if .Values.ingressTls }}
+  tls:
+  - hosts:
+    - {{ .Values.trafficProxyNaviIngress }}
+    secretName: {{ .Values.tlsSecret }}
+  {{- end }}

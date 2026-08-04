@@ -1,0 +1,30 @@
+key: # TODO
+log-format: text
+storage:
+  type: s3
+  host: # TODO
+  bucket: onpremise-artifacts-staging # TODO
+  access-key: # TODO
+  secret-key: # TODO
+docker:
+  registry:
+    username: ''
+    password: ''
+    server-address: "" # TODO
+    image-prefix: /
+components:
+  core:
+    version: 2.9.0
+  api-platform:
+    version: 2.56.0
+  pro:
+    version: 2.5.0
+  citylens:
+    version: 2.3.0
+
+# Не для dgctl! Для скрипта проверки свободного места в БД из pull.sh
+script:
+  postgres:
+    - postgres_host # TODO
+  cassandra:
+    - cassandra_host # TODO

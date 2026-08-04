@@ -1,0 +1,63 @@
+livenessProbeDelay: 10
+readinessProbeDelay: 10
+
+navigroup: {{ .Environment.Name }}
+
+naviback:
+  castleUrl: http://navi-castle
+  {{- if has (lower .Values.proxyMode) (list "navi" "full") }}
+  castleUrlProxy: http://traffic-proxy-navi/navi-castle
+  ecaUrl: http://traffic-proxy-navi/eca
+  forecastUrl: http://traffic-proxy-navi/forecast
+  longForecastUrl: http://traffic-proxy-navi/long-forecast
+  indices:
+    etaCorrectionCores:
+      enabled: true
+      proxy: true
+    forecastedLongSpeeds:
+      enabled: true
+    forecastedLongSpeedsIndex:
+      enabled: true
+    forecastedSpeeds:
+      enabled: true
+    forecastedSpeedsIndex:
+      enabled: true
+    onlineSpeeds:
+      enabled: true
+    speedIndex:
+      enabled: true
+  restrictions:
+    enabled: true
+  {{- end }}
+  handlersNumber: 20
+  maxProcessTime: 600
+  dump:
+    query: true
+    result: true
+    answer: true
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 1024Mi
+  limits:
+    cpu: 500m
+    memory: 4000Mi
+
+license:
+  url: https://license
+
+ingress:
+  enabled: true
+  className: {{ .Values.ingressClassName }}
+  hosts:
+  - host: {{ .Release.Name }}.{{ .Values.domain }}
+    paths:
+    - path: /
+      pathType: Prefix
+  {{- if .Values.ingressTls }}
+  tls:
+  - hosts:
+    - {{ .Release.Name }}.{{ .Values.domain }}
+    secretName: {{ .Values.tlsSecret }}
+  {{- end }}

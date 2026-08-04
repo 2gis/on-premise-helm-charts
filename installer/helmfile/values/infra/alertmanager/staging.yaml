@@ -1,0 +1,90 @@
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    nginx.ingress.kubernetes.io/auth-type: basic
+    nginx.ingress.kubernetes.io/auth-secret: alertmanager-basic-auth # TODO
+    nginx.ingress.kubernetes.io/auth-realm: "Restricted area"
+  hosts:
+    - host: alertmanager.host # TODO
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+    - secretName: "" # TODO
+      hosts:
+        - alertmanager.host # TODO
+
+persistence:
+  enabled: true # TODO set to false if cluster does not provide storage class
+  storageClass: "" # TODO
+  size: 1Gi
+
+  emptyDir: {} # TODO if .persistence.enabled is false
+  #  sizeLimit: 1Gi
+
+config:
+
+# TODO configure telegram or slack as notifications receiver
+    - name: telegram-receiver
+      telegram_configs:
+        - bot_token: '' # TODO
+          chat_id: '' # TODO
+          message: '{{ template "common_message" .}}'
+
+    - name: slack-receiver
+      slack_configs:
+        - api_url: '' # TODO
+          channel: '' # TODO
+          send_resolved: true
+          text: '{{ template "common_message" .}}'
+
+  route:
+    receiver: '' # TODO set configured receiver name
+
+  # General rule for all alerts https://prometheus.io/docs/alerting/latest/configuration/#inhibit_rule
+  # Алерты WARNING подавляются, если для того же алерта (job/instance/alertname) существует алерт CRITICAL
+  inhibit_rules:
+    - source_matchers:
+        - severity = "critical"
+      target_matchers:
+        - severity = "warning"
+      equal: ['job', 'instance', 'alertname']
+
+    # Rules for kube-state-metrics alerts
+    - source_matchers:
+        - severity = "critical"
+        - alertname = "KubernetesNodesNotReady"
+      target_matchers:
+        - severity = "critical"
+        - alertname = "KubernetesNodeNotReady"
+      equal: []
+
+templates:
+  common.tmpl: |-
+    {{ define "alert_details" }}
+    {{ if eq .Labels.severity "critical" }}
+    🚨 *CRITICAL* 🚨 {{ end }}
+    {{- if eq .Labels.severity "warning" }}
+    ⚠️ *WARNING* ⚠️{{ end }}
+    _Summary:_ {{ .Annotations.summary }}
+    _Description:_ {{ .Annotations.description }}
+    _Details:_
+        {{ range .Labels.SortedPairs }} • *{{ .Name }}:* `{{ .Value }}`
+        {{ end }}
+    {{ end }}
+
+    {{ define "common_message" }}
+    {{ if gt (len .Alerts.Firing) 0 }}
+    🔥 *Alerts Firing* 🔥: {{ .Alerts.Firing | len }}
+    {{- range .Alerts.Firing }}
+    {{ template "alert_details" . }}
+    {{ end }}
+    {{ end}}
+    {{ if gt (len .Alerts.Resolved) 0 }}
+    ✅ *Alerts Resolved* ✅: {{ .Alerts.Resolved | len }}
+    {{- range .Alerts.Resolved }}
+    {{ template "alert_details" . }}
+    {{ end }}
+    {{ end }}
+    {{ end }}

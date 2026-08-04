@@ -1,0 +1,47 @@
+navigroup: {{ .Environment.Name }}
+
+splitter:
+  ctxUrl: http://navi-back-distance-matrix-ctx/ctx/2.0/?source=distance_matrix
+  ctxBaseUrl: http://navi-back-distance-matrix-ctx/ctx/2.0
+  ctxV3BaseUrl: http://navi-back-distance-matrix-ctx/ctx/3.0
+  findPlatformUrl: http://navi-back-distance-matrix-ctx/find_platforms
+  statHost: '-'
+
+attractor:
+  enabled: true
+oneToMany:
+  enabled: true
+passThrough:
+  enabled: true
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  limits:
+    cpu: 100m
+    memory: 1Gi
+
+envoy:
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 100m
+      memory: 128Mi
+
+ingress:
+  enabled: true
+  className: {{ .Values.ingressClassName }}
+  hosts:
+  - host: {{ .Release.Name }}.{{ .Values.domain }}
+    paths:
+    - path: /
+      pathType: Prefix
+  {{- if .Values.ingressTls }}
+  tls:
+  - hosts:
+    - {{ .Release.Name }}.{{ .Values.domain }}
+    secretName: {{ .Values.tlsSecret }}
+  {{- end }}

@@ -1,0 +1,61 @@
+{{- $protocol := ternary "https" "http" .Values.ingressTls }}
+ui:
+  appLocale: ru_RU
+  api:
+    url: '{{ $protocol }}://{{ .Values.proApiIngress }}/'
+  auth:
+    brand: 2gis
+    sso: true
+    secure: {{ .Values.ingressTls }}
+    codeUrl: {{ $protocol }}://{{ .Values.proUiIngress }}/api/auth/code/
+    identityProviderUrl: {{ $protocol }}://{{ .Values.keycloakIngress }}/realms/Pro/protocol/openid-connect/auth/
+    oAuthApiUrl: {{ $protocol }}://{{ .Values.keycloakIngress }}/realms/Pro/protocol/openid-connect/
+  logLevel: error # possible options error, info, debug
+
+  extraEnvVars:
+    MAILER_API_TOKEN: '1'
+
+  mapgl:
+    host: '{{ .Values.mapglIngress }}'
+    key: '{{ .Values.key }}'
+    styleUrl: '{{ $protocol }}://{{ .Values.s3ProxyStylesIngress }}/{{ .Environment.Name }}-pro-ui-styles/styles/default/'
+
+  externalStyleManager:
+    enabled: true
+  publicS3Url: {{ $protocol }}://{{ .Values.s3ProxyStylesIngress }}
+  styles:
+    # бакет делаем публичным и разрешаем CORS
+    s3Bucket: '{{ .Environment.Name }}-pro-ui-styles'
+    configUrl: '{{ $protocol }}://{{ .Values.s3ProxyStylesIngress }}/{{ .Environment.Name }}-pro-ui-styles/config/production/styleConfig.json'
+
+  supportDocumentationLink: https://docs.2gis.com/pro/start
+
+ingress:
+  enabled: true
+  className: {{ .Values.ingressClassName }}
+  annotations:
+  {{- if eq .Values.ingressController "nginx" }}
+    {{- $annotations := pick .Values.ingressAnnotations.nginx "cors" "proxy" -}}
+    {{- $result := dict -}}
+    {{- range $_, $value := $annotations }}
+      {{- $result = merge $result $value -}}
+    {{- end }}
+    {{- $result | toYaml | nindent 4 }}
+  {{- else if eq .Values.ingressController "traefik" }}
+    {{- $annotations := pick .Values.ingressAnnotations.traefik "cors" "proxy" -}}
+    {{- $middlewares := join "," (sortAlpha (values $annotations)) -}}
+    {{- dict "traefik.ingress.kubernetes.io/router.middlewares" $middlewares | toYaml | nindent 4 }}
+  {{- else }}
+    {}
+  {{- end }}
+  hosts:
+  - host: {{ .Values.proUiIngress }}
+    paths:
+    - path: /
+      pathType: Prefix
+  {{- if .Values.ingressTls }}
+  tls:
+  - hosts:
+    - {{ .Values.proUiIngress }}
+    secretName: {{ .Values.tlsSecret }}
+  {{- end }}

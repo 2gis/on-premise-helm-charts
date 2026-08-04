@@ -1,0 +1,10 @@
+<LifecycleConfiguration>
+    <Rule>
+        <ID>lifecycle-multipart</ID>
+        <Prefix></Prefix>
+        <Status>Enabled</Status>
+        <AbortIncompleteMultipartUpload>
+          <DaysAfterInitiation>1</DaysAfterInitiation>
+        </AbortIncompleteMultipartUpload>
+    </Rule>
+</LifecycleConfiguration>

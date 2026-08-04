@@ -1,0 +1,49 @@
+ingress:
+  enabled: true
+  className: {{ .Values.ingressClassName }}
+  annotations:
+  {{- if eq .Values.ingressController "nginx" }}
+    {{- $annotations := pick .Values.ingressAnnotations.nginx "cors" "proxy" -}}
+    {{- $result := dict -}}
+    {{- range $_, $value := $annotations }}
+      {{- $result = merge $result $value -}}
+    {{- end }}
+    {{- $result | toYaml | nindent 4 }}
+  {{- else if eq .Values.ingressController "traefik" }}
+    {{- $annotations := pick .Values.ingressAnnotations.traefik "cors" "proxy" -}}
+    {{- $middlewares := join "," (sortAlpha (values $annotations)) -}}
+    {{- dict "traefik.ingress.kubernetes.io/router.middlewares" $middlewares | toYaml | nindent 4 }}
+  {{- else }}
+    {}
+  {{- end }}
+  hosts:
+  - host: {{ .Values.staticmapsIngress }}
+    paths:
+    - path: /
+      pathType: Prefix
+  {{- if .Values.ingressTls }}
+  tls:
+  - hosts:
+    - {{ .Values.staticmapsIngress }}
+    secretName: {{ .Values.tlsSecret }}
+  {{- end }}
+
+tiles:
+  url: http://tiles-api-raster
+  key: {{ .Values.key }}
+
+license:
+  url: https://license
+
+keys:
+  url: http://keys-service-api
+
+app:
+  log:
+    level: info
+    format: json
+  access:
+    enabled: true
+    stat:
+      enabled: false
+      url: 'http://stat-receiver-api/bss/3'

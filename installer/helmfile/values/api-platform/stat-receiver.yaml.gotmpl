@@ -1,0 +1,28 @@
+initializeTopics:
+  enabled: true
+
+topicsPrefix: "stat.{{ .Environment.Name }}."
+
+streams:
+  resources:
+    requests:
+      cpu: 500m
+      memory: 1024Mi
+    limits:
+      cpu: 1
+      memory: 2048Mi
+
+ingress:
+  className: {{ .Values.ingressClassName }}
+  enabled: true
+  hosts:
+  - host: {{ .Values.statReceiverIngress }}
+    paths:
+    - path: /
+      pathType: Prefix
+  {{- if .Values.ingressTls }}
+  tls:
+  - hosts:
+    - {{ .Values.statReceiverIngress }}
+    secretName: {{ .Values.tlsSecret }}
+  {{- end }}

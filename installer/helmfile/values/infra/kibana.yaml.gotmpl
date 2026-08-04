@@ -1,0 +1,65 @@
+# https://github.com/bitnami/charts/blob/kibana/11.5.2/bitnami/kibana/values.yaml
+
+fullnameOverride: kibana
+
+global:
+  security:
+    allowInsecureImages: true
+
+image:
+  registry: {{ .Values.dgctlDockerRegistry }}
+  repository: bitnami/kibana  # TODO: adjust repository path for your registry mirror
+  tag: 8.17.3
+
+elasticsearch:
+  hosts:
+    - haproxy
+  port: 9200
+  security:
+    auth:
+      enabled: true
+    tls:
+      enabled: false
+
+# https://www.elastic.co/guide/en/kibana/current/Security-production-considerations.html
+extraConfiguration:
+  server.securityResponseHeaders.strictTransportSecurity: "max-age=31536000"
+
+persistence:
+  enabled: false
+
+networkPolicy:
+  enabled: false
+
+pdb:
+  create: false
+
+ingress:
+  enabled: true
+  hostname: {{ .Values.kibanaIngress }}
+  pathType: Prefix
+  ingressClassName: {{ .Values.ingressClassName }}
+  {{- if .Values.ingressTls }}
+  extraTls:
+    - hosts:
+        - {{ .Values.kibanaIngress }}
+      secretName: {{ .Values.tlsSecret }}
+  {{- end }}
+
+podSecurityContext:
+  fsGroup: 100000001
+
+containerSecurityContext:
+  runAsUser: 100000001
+  runAsGroup: 100000001
+
+resources:
+  limits:
+    cpu: 3
+    memory: 1024Mi
+  requests:
+    cpu: 500m
+    memory: 512Mi
+
+startupProbe:
+  enabled: true

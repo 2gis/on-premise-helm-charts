@@ -1,0 +1,5 @@
+license:
+  key: {{ .Values.license.key }}
+
+dgctlStorage:
+  {{ .Values.dgctlStorage | toYaml | nindent 2 }}

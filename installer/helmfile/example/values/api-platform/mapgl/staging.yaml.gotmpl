@@ -1,0 +1,14 @@
+{{- $protocol := ternary "https" "http" .Values.ingressTls }}
+replicaCount: 1
+
+env:
+  MAPGL_ICONS_URL: "{{ $protocol }}://{{ .Values.s3ProxyStylesIngress }}/styles/icons" # TODO styles bucket
+  MAPGL_MODELS_URL: "{{ $protocol }}://{{ .Values.s3ProxyStylesIngress }}/styles/models" # TODO styles bucket
+
+resources:
+  requests:
+    cpu: 500m
+    memory: 64M
+  limits:
+    cpu: 500m
+    memory: 128M

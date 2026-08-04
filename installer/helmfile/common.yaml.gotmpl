@@ -1,0 +1,93 @@
+helmDefaults:
+  createNamespace: false
+  atomic: true
+  wait: true
+  historyMax: 3
+
+# repositories:
+# - name: 2gis-on-premise
+#   url: https://2gis.github.io/on-premise-helm-charts
+
+---
+{{- $valuesPath := env "HELMFILE_VALUES" | default (printf "%s/installer/helmfile/example" (env "PWD")) }}
+{{- $basePath := env "HELMFILE_BASE" | default (printf "%s/installer/helmfile" (env "PWD")) }}
+values:
+  - valuesPath: {{ $valuesPath }}
+  - basePath: {{ $basePath }}
+
+# здесь вставятся специфичные для окружения переменные
+# также можно переопределить helmDefaults, repositories и тд
+{{ $environmentPath := printf "%s/environments/%s.yaml.gotmpl" $valuesPath .Environment.Name }}
+{{ tpl (readFile $environmentPath) . }}
+
+---
+# значения по умолчанию ниже приоритетом, чем переменные environment
+values:
+  - valuesPath: {{ .Values.valuesPath }}
+    basePath: {{ .Values.basePath }}
+  - versionCore: 2.9.0
+    versionPlatform: 2.56.0
+    versionPro: 2.5.0
+    versionCitylens: 2.3.0
+    # versionEvergis: 2.0.0
+    kubeContext: default
+    # chartLocation: ../../../on-premise-helm-charts/charts
+    chartLocation: oci://ghcr.io/2gis/charts
+
+    ingressController: nginx # TODO nginx/traefik
+    ingressClassName: {{ .Values.ingressController }}
+
+    ingressTls: true
+
+  - licenseIngress: license.{{ .Values.domain }}
+    keysApiIngress: keys-api.{{ .Values.domain }}
+    keysAdminIngress: keys-admin.{{ .Values.domain }}
+    catalogIngress: catalog-api.{{ .Values.domain }}
+    searchIngress: search-api.{{ .Values.domain }}
+    searchIngressV8: search-api-v8.{{ .Values.domain }}
+    tilesMultiIngress: tiles-api.{{ .Values.domain }}
+    tilesRasterIngress: tiles-api-raster.{{ .Values.domain }}
+    mapglIngress: mapgl-js-api.{{ .Values.domain }}
+    stylesIngress: styles-api.{{ .Values.domain }}
+    platformIngress: platform.{{ .Values.domain }}
+    naviFrontIngress: navi-front.{{ .Values.domain }}
+    naviAsyncIngress: navi-async.{{ .Values.domain }}
+    naviVrpIngress: navi-vrp.{{ .Values.domain }}
+    naviRestrictionsIngress: navi-restrictions.{{ .Values.domain }}
+    naviAsyncMatrixIngress: navi-async-matrix.{{ .Values.domain }}
+    naviCastleIngress: navi-castle.{{ .Values.domain }}
+    naviRouterIngress: navi-router.{{ .Values.domain }}
+    naviVrpSolverIngress: navi-vrp-solver.{{ .Values.domain }}
+    naviVrpTaskManagerIngress: navi-vrp-task-manager.{{ .Values.domain }}
+    keycloakIngress: keycloak.{{ .Values.domain }}
+    proPermissionsIngress: pro-api-permissions.{{ .Values.domain }}
+    proApiIngress: pro-api.{{ .Values.domain }}
+    proUiIngress: pro-ui.{{ .Values.domain }}
+    trafficProxyMapIngress: traffic-proxy-map.{{ .Values.domain }} # Прокси для online-пробок (map). Не используется если значение proxyMode `none` или `navi`
+    trafficProxyNaviIngress: traffic-proxy-navi.{{ .Values.domain }} # Прокси для online-пробок (navi). По умолчанию не используется
+    gisPlatformIngress: gis-platform.{{ .Values.domain }}
+    gisPortalIngress: gis-platform-portal.{{ .Values.domain }}
+    s3ProxyStylesIngress: s3-proxy-styles.{{ .Values.domain }}
+    staticmapsIngress: staticmaps.{{ .Values.domain }}
+    statApiIngress: stat-api.{{ .Values.domain }}
+    statReceiverIngress: stat-receiver-api.{{ .Values.domain }}
+    citylensIngress: citylens.{{ .Values.domain }}
+    citylensApiIngress: citylens-api.{{ .Values.domain }}
+    citylensRoutesApiIngress: citylens-routes-api.{{ .Values.domain }}
+    citylensRoutesUiIngress: citylens-routes-ui.{{ .Values.domain }}
+    kibanaIngress: kibana.{{ .Values.domain }}
+
+    projectCity: null
+    proxyMode: "none"  # none, full, map, navi
+
+    timeoutCatalog: 7200
+    timeoutKeys: 600
+    timeoutNaviCastle: 3600
+    timeoutNaviAsyncMatrix: 3600
+    timeoutNaviRestrictions: 600
+    timeoutNaviBack: 600
+    timeoutProApi: 3600
+    timeoutSearch: 600
+    timeoutStyles: 600
+    timeoutTiles: 7200
+    timeoutTrafficProxy: 300

@@ -1,0 +1,31 @@
+---
+bases:
+- {{ env "HELMFILE_BASE" | default (printf "%s/installer/helmfile" (env "PWD")) }}/common.yaml.gotmpl
+
+---
+releases:
+  - name: data-updater
+    chart: {{ .Values.chartLocation }}/data-updater
+    version: 0.3.4
+    namespace: {{ .Values.namespace }}
+    kubeContext: {{ .Values.kubeContext }}
+    labels:
+      group: monitoring
+      service: data-updater
+    values:
+      - {{ .Values.basePath }}/values/data-updater.yaml.gotmpl
+      - {{ .Values.valuesPath }}/values/data-updater/{{ .Environment.Name }}.yaml.gotmpl
+    hooks:
+    - events: ["postsync"]
+      showlogs: true
+      command: "bash"
+      args:
+        - "{{ .Values.basePath }}/../scripts/k8s-show-logs.sh"
+        - "{{ .Values.kubeContext }}"
+        - "{{ .Values.namespace }}"
+        - "{{`{{ .Release.Name }}`}}"
+        - '{{`{{ if .Event.Error }}failure{{ end }}`}}'
+{{- $hooksPath := printf "%s/hooks/data-updater/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $hooksPath }}
+{{- readFile $hooksPath | fromYaml | toYaml | nindent 4 }}
+{{- end }}

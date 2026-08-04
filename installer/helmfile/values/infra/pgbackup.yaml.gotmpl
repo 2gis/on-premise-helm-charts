@@ -1,0 +1,5 @@
+config:
+  s3:
+    {{ .Values.dgctlStorage | toYaml | nindent 4 }}
+image:
+  registry: {{ .Values.dgctlDockerRegistry }}

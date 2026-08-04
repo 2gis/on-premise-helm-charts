@@ -1,0 +1,46 @@
+resources:
+  limits:
+    cpu: 250m
+    memory: 256Mi
+  requests:
+    cpu: 50m
+    memory: 128Mi
+
+cron:
+  enabled:
+    import: false
+    restriction: false # enable if navi-restrictions service deployed
+    restrictionImport: false
+  schedule:
+    import: "*/10 * * * *"
+    restriction: "*/5 * * * *"
+
+# enable if navi-restrictions service deployed
+# castle:
+#   restrictions:
+#     url: http://navi-restrictions
+#     key: {{ .Values.key }}
+
+init:
+  enabled:
+    import: true
+    restriction: false # enable if navi-restrictions service deployed
+    restrictionImport: false
+
+dgctlStorage:
+  manifest: manifests/api-platform/latest.json
+
+ingress:
+  enabled: true
+  className: {{ .Values.ingressClassName }}
+  hosts:
+  - host: {{ .Values.naviCastleIngress }}
+    paths:
+    - path: /
+      pathType: Prefix
+  {{- if .Values.ingressTls }}
+  tls:
+  - hosts:
+    - {{ .Values.naviCastleIngress }}
+    secretName: {{ .Values.tlsSecret }}
+  {{- end }}

@@ -1,0 +1,53 @@
+config:
+  application:
+    token: admin # TODO
+  metrics:
+    enabled: false # TODO
+  serviceMonitor:
+    enabled: false
+  rotation:
+    dailyCount: 1 # TODO
+    totalCount: 1 # TODO
+    daysToKeep: 1 # TODO
+  s3:
+    tls: false # TODO
+    bucket: stg-2gis-pgbackup  # TODO
+  postgres:
+    commonSettings:
+      host:   # TODO
+      port:   # TODO
+      user:   # TODO
+      password:   # TODO
+      sslmode: disable #disable(default)/require/verify-ca/verify-full   # TODO
+    databases:
+      keys:  # TODO
+        dbname:   # TODO
+        host:   # TODO
+        port:   # TODO
+        user:   # TODO
+        password:   # TODO
+        sslmode: disable #disable(default)/require/verify-ca/verify-full
+
+ingress:
+  enabled: false
+  className: nginx
+  hosts:
+  - host: pgbackup.on-premise.2gis.dev # TODO
+    paths:
+    - path: /
+      pathType: Prefix
+      portName: http
+  tls:
+  - hosts:
+    - pgbackup.on-premise.2gis.dev # TODO
+    secretName: on-prem.2gis.dev-tls # TODO
+
+backupCronJob:
+  enabled: false   # TODO
+  databases:
+    - name: keys  # TODO
+      schedule: "0 2 * * SAT"
+
+rotationCronJob:
+  enabled: true  # TODO
+  schedule: "0 4 25 * *"  # TODO

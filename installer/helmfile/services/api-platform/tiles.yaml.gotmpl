@@ -1,0 +1,71 @@
+---
+bases:
+- {{ env "HELMFILE_BASE" | default (printf "%s/installer/helmfile" (env "PWD")) }}/common.yaml.gotmpl
+
+---
+releases:
+  - name: tiles-api
+    chart: {{ .Values.chartLocation }}/tiles-api
+    namespace: {{ .Values.namespace  }}
+    version: {{ .Values.versionPlatform }}
+    timeout: {{ .Values.timeoutTiles }}
+    kubeContext: {{ .Values.kubeContext }}
+    labels:
+      group: api-platform
+      service: tiles-multi
+    values:
+      - {{ .Values.basePath }}/../dgctl/auto_values/api-platform/general.yaml
+      - {{ .Values.basePath }}/values/dgctl.yaml.gotmpl
+      - {{ .Values.basePath }}/values/ingressAnnotations.yaml.gotmpl
+      - {{ .Values.valuesPath }}/values/ingressAnnotations/{{ .Environment.Name }}.yaml.gotmpl
+      - {{ .Values.basePath }}/values/api-platform/tiles.yaml.gotmpl
+      - {{ .Values.valuesPath }}/values/api-platform/tiles/{{ .Environment.Name }}.yaml.gotmpl
+      - {{ .Values.basePath }}/values/api-platform/tiles-multi.yaml.gotmpl
+      - {{ .Values.valuesPath }}/values/api-platform/tiles/multi/{{ .Environment.Name }}.yaml.gotmpl
+    hooks:
+    - events: ["postsync"]
+      showlogs: true
+      command: "bash"
+      args:
+        - "{{ .Values.basePath }}/../scripts/k8s-show-logs.sh"
+        - "{{ .Values.kubeContext }}"
+        - "{{ .Values.namespace }}"
+        - "{{`{{ .Release.Name }}`}}"
+        - '{{`{{ if .Event.Error }}failure{{ end }}`}}'
+{{- $hooksPathMulti := printf "%s/hooks/api-platform/tiles/multi/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $hooksPathMulti }}
+{{- readFile $hooksPathMulti | fromYaml | toYaml | nindent 4 }}
+{{- end }}
+
+  - name: tiles-api-raster
+    chart: {{ .Values.chartLocation }}/tiles-api
+    namespace: {{ .Values.namespace  }}
+    version: {{ .Values.versionPlatform }}
+    timeout: {{ .Values.timeoutTiles }}
+    kubeContext: {{ .Values.kubeContext }}
+    labels:
+      group: api-platform
+      service: tiles-raster
+    values:
+      - {{ .Values.basePath }}/../dgctl/auto_values/api-platform/general.yaml
+      - {{ .Values.basePath }}/values/dgctl.yaml.gotmpl
+      - {{ .Values.basePath }}/values/ingressAnnotations.yaml.gotmpl
+      - {{ .Values.valuesPath }}/values/ingressAnnotations/{{ .Environment.Name }}.yaml.gotmpl
+      - {{ .Values.basePath }}/values/api-platform/tiles.yaml.gotmpl
+      - {{ .Values.valuesPath }}/values/api-platform/tiles/{{ .Environment.Name }}.yaml.gotmpl
+      - {{ .Values.basePath }}/values/api-platform/tiles-raster.yaml.gotmpl
+      - {{ .Values.valuesPath }}/values/api-platform/tiles/raster/{{ .Environment.Name }}.yaml.gotmpl
+    hooks:
+    - events: ["postsync"]
+      showlogs: true
+      command: "bash"
+      args:
+        - "{{ .Values.basePath }}/../scripts/k8s-show-logs.sh"
+        - "{{ .Values.kubeContext }}"
+        - "{{ .Values.namespace }}"
+        - "{{`{{ .Release.Name }}`}}"
+        - '{{`{{ if .Event.Error }}failure{{ end }}`}}'
+{{- $hooksPathRaster := printf "%s/hooks/api-platform/tiles/raster/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $hooksPathRaster }}
+{{- readFile $hooksPathRaster | fromYaml | toYaml | nindent 4 }}
+{{- end }}

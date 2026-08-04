@@ -1,0 +1,30 @@
+key: 00000000-0000-0000-0000-000000000000 # TODO licence key
+log-format: json
+
+storage:
+  type: s3
+
+  # S3 storage settings
+  host: s3.example.com # TODO s3 host name
+  secure: true # TODO true for https, false for http
+  bucket: onprem-dgctl # TODO s3 bucket name
+  access-key: # TODO s3 access key
+  secret-key: # TODO s3 secret key
+
+docker:
+  registry:
+    username: 'username' # TODO docker-registry username
+    password: 'password' # TODO docker-registry password
+    server-address: "docker-registry.host.com" # TODO docker-registry server address
+    image-prefix: /
+
+# Для утилиты версии 3
+components:
+  core:
+    version: 2.9.0
+  api-platform:
+    version: 2.56.0
+  pro:
+    version: 2.5.0
+  citylens:
+    version: 2.3.0

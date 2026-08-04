@@ -1,0 +1,121 @@
+dm:
+  citiesUrl: "http://navi-castle/cities.conf"
+  compositeTaskTimeoutSec: 3600
+  taskSplitSize: 100
+  merger:
+    fetchLogs: true
+    enabled: true
+    resources:
+      requests:
+        cpu: 100m
+        memory: 128Mi
+      limits:
+        cpu: 300m
+        memory: 512Mi
+
+keys:
+  url: 'http://keys-service-api/service/v1/keys'
+
+kafka:
+  enabled: true
+  groupId: navi_{{ .Environment.Name }}_async
+  mergerGroupId: navi_{{ .Environment.Name }}_matrix_merger
+  handlersNumber: 2
+  fileProperties: {}
+
+  mergerStatusTopic: navi.{{ .Environment.Name }}.merger.status.topic
+  mergerTaskTopic: navi.{{ .Environment.Name }}.merger.task.topic
+  cancelTopic: navi.{{ .Environment.Name }}.cancel.topic
+  vrpStatusTopic: navi.{{ .Environment.Name }}.vrp.dm.status.topic
+  attractTopic: navi.{{ .Environment.Name }}.attract.topic
+  oneToManyTopic: navi.{{ .Environment.Name }}.one.to.many.topic
+  findPlatformTopic: navi.{{ .Environment.Name }}.find.platform.status.topic
+
+{{- $dmaPath := printf "%s/values/api-platform/navi-rules/%s-rules-dma.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- $asyncRules := list -}}
+{{- if isFile $dmaPath -}}
+{{- $dmaVals := tpl (readFile $dmaPath) . | fromYaml -}}
+{{- range $rule := $dmaVals.rules -}}
+  {{- $asyncRules = append $asyncRules $rule -}}
+{{- end -}}
+{{- end }}
+  taskTopicRules:
+  {{- range $rule := $asyncRules }}
+  {{- range $route := $rule.routing }}
+  - topic: navi.{{ $.Environment.Name }}.{{ $rule.name | replace "-" "_" | replace "async_" "" | replace "_" "." }}.task.topic
+    default: true
+    {{- if eq $route "driving" }}
+    type: car
+    {{- else if eq $route "pedestrian" }}
+    type: walking
+    {{- else if eq $route "ctx" }}
+    type: public-transport
+    {{- else }}
+    type: {{ $route }}
+    {{- end }}
+  {{- end }}
+  {{- end }}
+  attractTopicRules:
+  {{- range $rule := $asyncRules }}
+  {{- range $route := $rule.routing }}
+  {{- if not (or (eq $route "public_transport") (eq $route "ctx")) }}
+  - topic: navi.{{ $.Environment.Name }}.attract.{{ $rule.name | replace "-" "_" | replace "async_" "" | replace "_" "." }}.task.topic
+    default: true
+    {{- if eq $route "driving" }}
+    type: car
+    {{- else if eq $route "pedestrian" }}
+    type: walking
+    {{- else }}
+    type: {{ $route }}
+    {{- end }}
+  {{- end }}
+  {{- end }}
+  {{- end }}
+  {{- range $rule := $asyncRules }}
+  {{- range $route := $rule.routing }}
+  {{- if eq $route "ctx" }}
+  findPlatformTopicRules:
+  - topic: navi.{{ $.Environment.Name }}.find.platform.task.topic
+    default: true
+    type: public-transport
+  {{- end }}
+  {{- end }}
+  {{- end }}
+
+db:
+  expirationSec: 259200 # 3 суток How many seconds to store results. (0 - disable)
+
+cronjob:
+  cleanup:
+    enabled: true
+    schedule: "0 0 * * *"
+    resources:
+      requests:
+        cpu: 100m
+        memory: 512Mi
+      limits:
+        cpu: 1000m
+        memory: 1Gi
+
+resources:
+  requests:
+    cpu: 200m
+    memory: 1Gi
+  limits:
+    cpu: 500m
+    memory: 1Gi
+
+ingress:
+  enabled: true
+  className: {{ .Values.ingressClassName }}
+  hosts:
+  - host: {{ .Values.naviAsyncMatrixIngress }}
+    paths:
+    - path: /
+      pathType: Prefix
+  {{- if .Values.ingressTls }}
+  tls:
+  - hosts:
+    - {{ .Values.naviAsyncMatrixIngress }}
+    secretName: {{ .Values.tlsSecret }}
+  {{- end }}

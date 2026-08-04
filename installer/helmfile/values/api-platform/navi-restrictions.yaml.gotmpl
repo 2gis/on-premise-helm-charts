@@ -1,0 +1,44 @@
+replicaCount: 1
+
+naviCastleHost: navi-castle
+
+api:
+  key: {{ .Values.key }}
+  debug: false
+  isInitDb: true
+  ingress:
+    enabled: true
+    className: {{ .Values.ingressClassName }}
+    hosts:
+      - host: {{ .Values.naviRestrictionsIngress }}
+        paths:
+          - path: /
+            pathType: Prefix
+    {{- if .Values.ingressTls }}
+    tls:
+      - hosts:
+          - {{ .Values.naviRestrictionsIngress }}
+        secretName: {{ .Values.tlsSecret }}
+    {{- end }}
+
+# Syncer
+cron:
+  enabled: true
+  schedule: '1 * * * *'
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  resources:
+    limits:
+      cpu: 250m
+      memory: 256Mi
+    requests:
+      cpu: 50m
+      memory: 64Mi
+
+resources:
+  limits:
+    cpu: 250m
+    memory: 256Mi
+  requests:
+    cpu: 50m
+    memory: 64Mi

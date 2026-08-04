@@ -1,0 +1,48 @@
+name: Lint Installer
+
+on:
+  pull_request:
+    branches:
+      - develop
+      - master
+    paths:
+      - 'installer/**'
+  workflow_dispatch:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    container: ghcr.io/helmfile/helmfile:v1.7.0
+    steps:
+      - name: Checkout
+        run: |
+          git init
+          git remote add origin "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}.git"
+          git fetch --depth 1 origin "$GITHUB_REF"
+          git checkout FETCH_HEAD
+
+      - name: Helmfile lint (staging)
+        run: |
+          HELMFILE_BASE="$GITHUB_WORKSPACE/installer/helmfile" \
+          helmfile -e staging -f installer/helmfile/example/deploy/staging.yaml.gotmpl lint
+
+      - name: Helmfile template (staging)
+        run: |
+          HELMFILE_BASE="$GITHUB_WORKSPACE/installer/helmfile" \
+          helmfile -e staging -f installer/helmfile/example/deploy/staging.yaml.gotmpl \
+            template --concurrency=1 > installer_artifact
+
+      - name: Install kubeconform
+        run: |
+          curl -LO https://github.com/yannh/kubeconform/releases/download/v0.6.7/kubeconform-linux-amd64.tar.gz
+          tar xzf kubeconform-linux-amd64.tar.gz
+          chmod +x kubeconform
+
+      - name: Validate manifests
+        run: |
+          for v in 1.33.0 1.32.1 1.31.1 1.30.0 1.29.0; do
+            echo "=== Kubernetes $v ==="
+            cat installer_artifact | ./kubeconform -summary \
+              -kubernetes-version "$v" \
+              -ignore-missing-schemas
+          done

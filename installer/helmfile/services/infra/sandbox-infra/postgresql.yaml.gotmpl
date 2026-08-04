@@ -1,0 +1,27 @@
+---
+bases:
+- {{ env "HELMFILE_BASE" | default (printf "%s/installer/helmfile" (env "PWD")) }}/common.yaml.gotmpl
+
+---
+releases:
+  - name: postgresql
+    chart: {{ .Values.chartLocationBitnami }}/postgresql
+    version: 18.1.13
+    namespace: {{ .Values.namespace  }}
+    kubeContext: {{ .Values.kubeContext }}
+    createNamespace: false
+    atomic: true
+    wait: true
+    waitForJobs: true
+    timeout: 600
+    labels:
+      group: infra
+      service: postgresql
+    values:
+      - {{ .Values.basePath }}/values/infra/postgresql.yaml.gotmpl
+      - {{ .Values.valuesPath }}/values/infra/postgresql/{{ .Environment.Name }}.yaml.gotmpl
+    hooks:
+{{- $hooksPath := printf "%s/hooks/infra/postgresql/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $hooksPath }}
+{{- readFile $hooksPath | fromYaml | toYaml | nindent 4 }}
+{{- end }}

@@ -1,0 +1,34 @@
+navigroup: {{ .Environment.Name }}
+
+replicaCount: 1
+
+router:
+  castleUrl: http://navi-castle
+  logLevel: Warning
+
+keys:
+  enabled: true
+  url: http://keys-service-api/service/v1/keys
+
+resources:
+  limits:
+    cpu: 2000m
+    memory: 1024Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+ingress:
+  enabled: true
+  className: {{ .Values.ingressClassName }}
+  hosts:
+  - host: {{ .Values.naviRouterIngress }}
+    paths:
+    - path: /
+      pathType: Prefix
+  {{- if .Values.ingressTls }}
+  tls:
+  - hosts:
+    - {{ .Values.naviRouterIngress }}
+    secretName: {{ .Values.tlsSecret }}
+  {{- end }}

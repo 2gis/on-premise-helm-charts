@@ -1,0 +1,59 @@
+---
+bases:
+- {{ env "HELMFILE_BASE" | default (printf "%s/installer/helmfile" (env "PWD")) }}/common.yaml.gotmpl
+
+---
+releases:
+  - name: navi-vrp-solver
+    chart: {{ .Values.chartLocation }}/navi-vrp-solver
+    namespace: {{ .Values.namespace  }}
+    version: {{ .Values.versionPlatform }}
+    kubeContext: {{ .Values.kubeContext }}
+    labels:
+      group: api-platform
+      service: navi-vrp-solver
+    values:
+      - {{ .Values.basePath }}/values/dgctl.yaml.gotmpl
+      - {{ .Values.basePath }}/values/api-platform/navi-vrp-solver.yaml.gotmpl
+      - {{ .Values.valuesPath }}/values/api-platform/navi-vrp-solver/{{ .Environment.Name }}.yaml.gotmpl
+    hooks:
+    - events: ["postsync"]
+      showlogs: true
+      command: "bash"
+      args:
+        - "{{ .Values.basePath }}/../scripts/k8s-show-logs.sh"
+        - "{{ .Values.kubeContext }}"
+        - "{{ .Values.namespace }}"
+        - "{{`{{ .Release.Name }}`}}"
+        - '{{`{{ if .Event.Error }}failure{{ end }}`}}'
+{{- $hooksPath := printf "%s/hooks/api-platform/navi-vrp-solver/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $hooksPath }}
+{{- readFile $hooksPath | fromYaml | toYaml | nindent 4 }}
+{{- end }}
+
+  - name: navi-vrp-task-manager
+    chart: {{ .Values.chartLocation }}/navi-vrp-task-manager
+    namespace: {{ .Values.namespace  }}
+    version: {{ .Values.versionPlatform }}
+    kubeContext: {{ .Values.kubeContext }}
+    labels:
+      group: api-platform
+      service: navi-vrp-task-manager
+    values:
+      - {{ .Values.basePath }}/values/dgctl.yaml.gotmpl
+      - {{ .Values.basePath }}/values/api-platform/navi-vrp-task-manager.yaml.gotmpl
+      - {{ .Values.valuesPath }}/values/api-platform/navi-vrp-task-manager/{{ .Environment.Name }}.yaml.gotmpl
+    hooks:
+    - events: ["postsync"]
+      showlogs: true
+      command: "bash"
+      args:
+        - "{{ .Values.basePath }}/../scripts/k8s-show-logs.sh"
+        - "{{ .Values.kubeContext }}"
+        - "{{ .Values.namespace }}"
+        - "{{`{{ .Release.Name }}`}}"
+        - '{{`{{ if .Event.Error }}failure{{ end }}`}}'
+{{- $hooksPath := printf "%s/hooks/api-platform/navi-vrp-task-manager/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $hooksPath }}
+{{- readFile $hooksPath | fromYaml | toYaml | nindent 4 }}
+{{- end }}

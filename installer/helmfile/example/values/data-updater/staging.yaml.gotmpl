@@ -1,0 +1,61 @@
+replicaCount: 1
+
+dgctl:
+  cronjob:
+    enabled: false
+    schedule: "0 * * * *"
+    successfulJobsHistoryLimit: 3
+    failedJobsHistoryLimit: 3
+    services:
+      - navi
+    components:
+      api-platform:
+        version: 2.45.0
+
+config:
+  dryRun: true # TODO
+  parallel: false
+  dgctlTimeout: 1800
+  timeout: "3h" # helm timeout
+  repository: oci://ghcr.io/2gis/charts
+  namespace: {{ .Values.namespace }}
+  components: # TODO перечислить компоненты, которые требуют обновления
+    core:
+      version: 2.0.0
+#    api-platform:
+#      version: ""
+#      manifest: ""
+#    pro:
+#      version: ""
+#      manifest: ""
+#    citylens:
+#      version: ""
+#      manifest: ""
+  environment: ""
+  pull:
+    parallelWorkers: 1
+    attempt: 10
+  services:
+  # TODO перечислить сервисы которые стоят и требуют обновления через data-updater
+    - keys
+    # - catalog
+    # - search
+    # - navi
+    # - tiles-api-raster
+    # - tiles-api-mobile-sdk
+    # - tiles-api-vector
+    # - citylens
+    # - pro
+    # - pro-ui
+    # - twins
+  # TODO перечислить сервисы, где нестандартные имена релизов
+  # override:
+  #  tiles-api-raster: raster
+
+updater:
+  job:
+    enabled: false
+      # Если true, то создается Job, при этом можно создать только один объект: job или cronjob
+  cronjob:
+    enabled: true
+      # Если true, то создается cronjob для вызова из нее job, job деплоя отключается.

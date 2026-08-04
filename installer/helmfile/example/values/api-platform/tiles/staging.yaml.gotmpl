@@ -1,0 +1,24 @@
+cassandra:
+  environment: 'stg' # TODO
+  hosts:
+    - 'cassandra-1' # TODO
+  replicaFactor: 1
+  credentials:
+    user: cassandra
+    password: 'cassandra' # TODO
+    jmxUser: cassandra
+    jmxPassword: 'cassandra' # TODO
+
+proxy:
+  access:
+    enabled: true
+    vector:
+      token: '' # TODO Tiles API token
+    raster:
+      token: '' # TODO Tiles Raster API token
+    syncPeriod: 2m
+
+importer:
+  enabled: true
+  workerNum: 3
+  writerNum: 3

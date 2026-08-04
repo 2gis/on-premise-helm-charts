@@ -1,0 +1,26 @@
+---
+bases:
+- {{ env "HELMFILE_BASE" | default (printf "%s/installer/helmfile" (env "PWD")) }}/common.yaml.gotmpl
+
+---
+releases:
+  - name: elasticsearch
+    chart: {{ .Values.chartLocationBitnami }}/elasticsearch
+    version: 21.6.3
+    namespace: {{ .Values.namespace  }}
+    kubeContext: {{ .Values.kubeContext }}
+    atomic: true
+    wait: true
+    waitForJobs: true
+    timeout: 600
+    labels:
+      group: infra
+      service: elasticsearch
+    values:
+      - {{ .Values.basePath }}/values/infra/elasticsearch.yaml.gotmpl
+      - {{ .Values.valuesPath }}/values/infra/elasticsearch/{{ .Environment.Name }}.yaml.gotmpl
+    hooks:
+{{- $hooksPath := printf "%s/hooks/infra/elasticsearch/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $hooksPath }}
+{{- readFile $hooksPath | fromYaml | toYaml | nindent 4 }}
+{{- end }}

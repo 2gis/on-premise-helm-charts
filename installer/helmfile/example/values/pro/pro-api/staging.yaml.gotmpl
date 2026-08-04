@@ -1,0 +1,98 @@
+elastic:
+  nodes:
+  - host: host # TODO
+    port: 9200
+  username: user # TODO
+  password: pass # TODO
+  indexPrefix: 'stg' # TODO
+  secure: false
+  enableHttpCompression: false
+
+kafka:
+  bootstrapServers: server:9092 # TODO
+  securityProtocol: SaslPlaintext # TODO
+  sasl:
+    mechanism: ScramSha512 # TODO
+    username: admin # TODO
+    password: pass # TODO
+  assetTopicsReaderGroupId: pro.asset.gr
+  importTasksTopic:
+    name: pro.tasks # создавать руками
+    readerGroupId: pro.import.gr
+  assetDataTopic:
+    name: pro.assetdata
+  permissionsTopic:
+    name: pro.permissions
+    readerGroupId: pro.permissions.gr
+  eventsTopic:
+    name: pro.events
+    readerGroupId: pro.events.gr
+  refreshAssetsIntervalMinutes: 60
+
+api:
+  pod:
+    replicaCount: 1
+  settings:
+    licenseKey: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJ2YWxpZGF0ZV9jZXJ0aWZpY2F0ZSI6dHJ1ZSwibGljZW5zaW5nX21vZGUiOjEsIm5iZiI6MTcxMzI1MDUwNywiZXhwIjoxNzE0MTE0NTA3LCJpYXQiOjE3MTMxNjQxMDcsImlzcyI6IjJnaXMtcHJvIn0.Nrzie5ImVhj3GwWXgVA9XjW4hJrjCKwcCTqbhBr1Osn3wJydEIzCI4kCx7TEfhxcZSQZm6KFuGm4vaobS1xwJHyLnkJlfnV_B9iSuCwkdjWwKmjUPC1fvbZuTjU8vZpzqNDA6qeoLgIfj6cJzeHHPbl1zUZ9Z8nSAhdZg5S2tU3rjdVbsSAUSLiq4oMTDhlwOx_jU9fqFJzH_65RO-TLAT00y76E9sxNOaHlHLbM55-iWR8VYcKDHZVm4n58AVrqCMonGY-rvCRXtPsPgAbYDgRBQLSPzhrPVXVutgTa46ioDT9b7oAIfUyu_eSYz2jgxE6PSAkAC0njFGJPT9UEpbPB-nnemZzPB0k5eguVqPVdKcL3lz7pBZPHGSFwTT366zMqgBDB_MegzhL2StFVu0SWTy4kydCLehP_WTltbyr-gnBELOyd5iojBbWkPjMp9M63XpdmZC1De0GZ3mvcqN5qIoERWqr75VEuRSgpOws2BB6Ea4NBS1UAExENq3wj39p6SRjPefR-U8-BTjJyyPgmigf8i4ORCLs_F4bwL6rw0fHn7W5zGXTOYVXUb5-_5sQ3xURn5xAPU-_dsLicrcTtp3wdwZuBPBZnq6mHjIkoVievJUGMaK-2LuCfE7lzw3XrDAPAUAvWO-U-52yUjt_v1LSs06QgpRe7V-E3_oI # TODO
+    auth:
+      shareKeys:
+        - 52de56f3f9ca36e51ca631822f423a4decf7e49a87c8e045ae6f925eb8511d1e # TODO
+
+postgres:
+  api:
+    rw:
+      name: pro
+      host: host # TODO
+      username: pro # TODO
+      password: pass # TODO
+      port: 5000
+      timeout: 15
+      poolSize:
+        min: 1
+        max: 10
+    ro:
+      host: host # TODO
+      port: 5001
+      name: pro
+      username: pro
+      password: pass # TODO
+  tasks:
+    rw:
+      host: host # TODO
+      port: 5000
+      name: 'pro_tasks'
+      username: pro # TODO
+      password: pass # TODO
+    ro:
+      host: host # TODO
+      port: 5001
+      name: 'pro_tasks'
+      username: pro # TODO
+      password: pass # TODO
+  permissions:
+    rw:
+      host: host # TODO
+      port: 5000
+      name: pro
+      username: pro # TODO
+      password: pass # TODO
+    ro:
+      host: host # TODO
+      port: 5001
+      name: pro
+      username: pro # TODO
+      password: pass # TODO
+
+assetPreparer:
+  enabled: false
+
+redis:
+  host: host # TODO
+  port: 6379
+  enabled: true
+  username: default
+  password: pass # TODO
+
+resource:
+  requests:
+    memory: 2000Mi

@@ -1,0 +1,22 @@
+{{- $protocol := ternary "https" "http" .Values.ingressTls }}
+env:
+  CATALOG_API_URL: {{ $protocol }}://{{ .Values.catalogIngress }}
+  CATALOG_API_KEY: {{ .Values.key }}
+  MAPGL_API_URL: {{ $protocol }}://{{ .Values.mapglIngress }}
+  MAPGL_KEY: {{ .Values.key }}
+  ROUTES_API_URL: {{ $protocol }}://{{ .Values.citylensRoutesApiIngress }}
+
+ingress:
+  enabled: true
+  className: {{ .Values.ingressClassName }}
+  hosts:
+  - host: {{ .Values.citylensRoutesUiIngress }}
+    paths:
+    - path: /
+      pathType: Prefix
+  {{- if .Values.ingressTls }}
+  tls:
+  - hosts:
+    - {{ .Values.citylensRoutesUiIngress }}
+    secretName: {{ .Values.tlsSecret }}
+  {{- end }}

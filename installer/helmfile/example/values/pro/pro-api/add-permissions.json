@@ -1,0 +1,47 @@
+[
+{
+  "resource_type": "territory",
+  "resource": "*",
+  "permission": "read"
+},
+{
+  "resource_type": "asset",
+  "resource": "*",
+  "permission": "read"
+},
+{
+  "resource_type": "resource",
+  "resource": "data_file",
+  "permission": "read"
+},
+{
+  "resource_type": "resource",
+  "resource": "data_file",
+  "permission": "edit"
+},
+{
+  "resource_type": "quantity",
+  "resource": "data_file",
+  "permission": "100"
+},
+{
+  "resource_type": "max_quantity",
+  "resource": "file_size",
+  "permission": "100"
+},
+{
+  "resource_type": "quantity",
+  "resource": "isochrone_op",
+  "permission": "1000"
+},
+{
+  "resource_type": "resource",
+  "resource": "mapbox_layout",
+  "permission": "true"
+},
+{
+  "resource_type": "quantity",
+  "resource": "asset_objects",
+  "permission": "100"
+}
+]

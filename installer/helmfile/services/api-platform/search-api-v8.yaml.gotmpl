@@ -1,0 +1,34 @@
+---
+bases:
+- {{ env "HELMFILE_BASE" | default (printf "%s/installer/helmfile" (env "PWD")) }}/common.yaml.gotmpl
+
+---
+releases:
+  - name: search-api-v8
+    chart: {{ .Values.chartLocation }}/search-api-v8
+    namespace: {{ .Values.namespace }}
+    version: {{ .Values.versionPlatform }}
+    timeout: {{ .Values.timeoutSearch }}
+    kubeContext: {{ .Values.kubeContext }}
+    labels:
+      group: api-platform
+      service: search-v8
+    values:
+      - {{ .Values.basePath }}/../dgctl/auto_values/api-platform/general.yaml
+      - {{ .Values.basePath }}/values/dgctl.yaml.gotmpl
+      - {{ .Values.basePath }}/values/api-platform/search-api-v8.yaml.gotmpl
+      - {{ .Values.valuesPath }}/values/api-platform/search-api-v8/{{ .Environment.Name }}.yaml.gotmpl
+    hooks:
+    - events: ["postsync"]
+      showlogs: true
+      command: "bash"
+      args:
+        - "{{ .Values.basePath }}/../scripts/k8s-show-logs.sh"
+        - "{{ .Values.kubeContext }}"
+        - "{{ .Values.namespace }}"
+        - "{{`{{ .Release.Name }}`}}"
+        - '{{`{{ if .Event.Error }}failure{{ end }}`}}'
+{{- $hooksPath := printf "%s/hooks/api-platform/search-api-v8/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $hooksPath }}
+{{- readFile $hooksPath | fromYaml | toYaml | nindent 4 }}
+{{- end }}
