@@ -56,7 +56,7 @@ When performing a code review, flag the following:
 - `values.yaml` changed but `README.md` not regenerated
 - Breaking change not documented in `changelogs/<group>/*-Breaking-Changes.md`
 - PR targets `master` without being a documented hotfix
-- Missing checksum annotations on ConfigMap/Secret
+- Missing checksum annotations for ConfigMap/Secret and other mounted/generated resources whose changes must restart pods (for example custom CA, extra env Secret, component-specific ConfigMap)
 - `replicas` field present in Deployment when `hpa.enabled: true`
 - Non-camelCase parameter names or inconsistent naming (e.g., `serviceAccount.create` instead of `serviceAccount.enabled`)
 - `NOTES.txt` missing from a new chart
@@ -71,6 +71,7 @@ When performing a code review, flag the following:
 - Non-empty string default written with quotes (should be without)
 - Empty string default written without quotes (should be `''`)
 - Integer default written as a quoted string (e.g., `port: '5432'` should be `port: 5432`)
+- Information size units are written inconsistently (use consistent Kubernetes-style units such as `Ki`, `Mi`, `Gi`, `Ti`)
 - Service URL parameter description missing the recommended URL format hint (`http://{service-name}.svc`, etc.)
 - Template file name uses camelCase instead of dashed notation
 - Named template not namespaced with chart name

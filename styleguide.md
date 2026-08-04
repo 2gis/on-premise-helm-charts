@@ -44,7 +44,7 @@ make charts/navi-back
 
 ## Обновление Deployment при обновлении configmap/secret
 
-Для того, чтобы deployment триггерился на обновление configmap и/или secret, обязательно добавить в аннотации хешсумму configmap и/или secret.
+Для того, чтобы deployment/statefulset/job/cronjob триггерился на обновление configmap, secret и других подключаемых данных, обязательно добавить в аннотации checksum для каждого такого ресурса, изменение которого должно приводить к перезапуску pod template.
 
 Пример:
 
@@ -55,6 +55,8 @@ template:
       checksum/config: {{ (include (print $.Template.BasePath "/configmap.yaml") . | fromYaml).data | toYaml | sha256sum }}
       checksum/secret: {{ (include (print $.Template.BasePath "/secret.yml") . | fromYaml).data | toYaml | sha256sum }}
 ```
+
+Если чарт использует дополнительные configmap/secret (например, custom CA, отдельные configmap для разных компонентов, extra env secret и т.п.), для них также должны быть добавлены отдельные checksum-аннотации.
 
 ## Описание настроек
 
@@ -306,6 +308,8 @@ db:
   ```yaml
   name: ''
   ```
+
+- Для единиц измерения информации и ресурсов используем общепринятые двоичные сокращения Kubernetes и пишем однотипные значения единообразно: `Ki`, `Mi`, `Gi`, `Ti`. Не смешиваем разные формы записи для одного и того же типа значений.
 
 ## Примеры типовых шаблонов yaml
 
