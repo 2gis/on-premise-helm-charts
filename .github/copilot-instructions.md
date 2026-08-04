@@ -3,6 +3,8 @@
 This repository contains Helm charts for deploying 2GIS On-Premise products on Kubernetes.
 Charts share a common library chart (`generic-chart`) and follow internal coding standards.
 
+Use `/home/runner/work/on-premise-helm-charts/on-premise-helm-charts/styleguide.md` as the primary source of chart authoring rules. Treat this file as a review checklist and summary, not as a replacement for the styleguide.
+
 ## Review Language
 
 When performing a code review, respond in **Russian**.
