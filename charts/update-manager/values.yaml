@@ -1,0 +1,252 @@
+# @section Docker Registry settings
+
+# @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
+
+dgctlDockerRegistry: ''
+
+
+# @section Common settings
+
+# @param imagePullSecrets Kubernetes image pull secrets.
+# @param imagePullPolicy Pull policy.
+# @param image.repository Service image repository.
+# @param image.tag Service image tag.
+
+imagePullSecrets: []
+imagePullPolicy: IfNotPresent
+
+image:
+  repository: 2gis-on-premise/update-manager
+  tag: 1.0.0
+
+# @section API service settings
+
+api:
+
+  # @param api.logLevel Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.
+  # @param api.logFormat Log format for the service. Can be: `json, text`.
+
+  logLevel: warning
+  logFormat: json
+
+  # @param api.oidc.url URL of the OIDC provider. **Required**
+  # @param api.oidc.issuerUrl Allows discovery to work when the issuer_url reported by upstream is mismatched with the discovery URL.
+
+  oidc:
+    url: ''
+    issuerUrl: ''
+
+  # @param api.dgctl.datagatewayURL URL of the DataGateway instance. **Required**
+  # @param api.dgctl.apiKey API key for the DataGateway instance. **Required**
+  # @param api.dgctl.image.registry DGCTL image registry.
+  # @param api.dgctl.image.repository DGCTL image repository. **Required**
+  # @param api.dgctl.image.tag DGCTL image tag.
+
+  dgctl:
+    datagatewayURL: https://datagateway.api.2gis.com
+    apiKey: ''
+    image:
+      registry: ''
+      repository: 2gis/dgctl
+      tag: 3
+
+  # @param api.job.activeDeadline Active deadline fot the created jobs.
+  # @param api.job.backoffLimit Backoff limit for the created jobs.
+  # @param api.job.syncInterval Interval for syncing jobs.
+
+  job:
+    activeDeadline: 2h
+    backoffLimit: 3
+    syncInterval: 10s
+
+  # @param api.manifest.syncInterval Interval for syncing manifests.
+
+  manifest:
+    syncInterval: 60s
+
+  # @param api.helmTimeout Timeout for helm operations.
+
+  helmTimeout: 10m
+
+  # @param api.rollbackHistoryLimit Installation history limit for rollback.
+  # @param api.installVersionsLimit Number of install versions to show.
+  # @param api.completedTaskOffset Duration to show completed tasks.
+  # @param api.manifestUpdateOffset Duration to show manifest updates.
+
+  rollbackHistoryLimit: 2
+  installVersionsLimit: 3
+  completedTaskOffset: 12h
+  manifestUpdateOffset: 8h
+
+  # @param api.components List of installed Helm releases grouped by component name.
+
+  components:
+  # - name: component-name
+  #   version: "1.0.0"
+  #   releases:
+  #     - name: My App
+  #       release_name: my-app-production
+  #       chart_ref: oci://registry.example.com/charts/my-app
+  #       services:
+  #         - service-app
+
+  # @param api.replicas A replica count for the pod.
+
+  replicas: 1
+
+  # @param api.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+
+  revisionHistoryLimit: 3
+
+  # @param api.strategy.type Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.
+  # @param api.strategy.rollingUpdate.maxUnavailable Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment).
+  # @param api.strategy.rollingUpdate.maxSurge Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.
+
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 1
+      memory: 256Mi
+
+  # @param api.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param api.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+  annotations: {}
+  labels: {}
+
+  # @param api.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param api.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+  podAnnotations: {}
+  podLabels: {}
+
+  # @param api.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+  # @param api.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
+  # @param api.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+
+  nodeSelector: {}
+  affinity: {}
+  tolerations: []
+
+  # @param api.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param api.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+  # @param api.service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
+  # @param api.service.port Service port.
+
+  service:
+    annotations: {}
+    labels: {}
+    type: ClusterIP
+    port: 80
+
+  # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
+
+  # @param api.ingress.enabled If Ingress is enabled for the service.
+  # @param api.ingress.hosts[0].host Hostname for the Ingress service.
+
+  ingress:
+    enabled: false
+    hosts:
+      - host: update-manager.host
+
+# @section Migrate job settings
+
+migrate:
+
+  # @param migrate.initialDelaySeconds Delay in seconds at the service startup.
+
+  initialDelaySeconds: 0
+
+  resources:
+    requests:
+      cpu: 10m
+      memory: 32Mi
+    limits:
+      cpu: 100m
+      memory: 64Mi
+
+  # @param migrate.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+
+  nodeSelector: {}
+
+  # @param migrate.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+  tolerations: []
+
+# @section Database access settings
+
+postgres:
+
+  # @param postgres.host PostgreSQL hostname or IP.  **Required**
+  # @param postgres.port PostgreSQL port.
+  # @param postgres.timeout PostgreSQL client connection timeout.
+  # @param postgres.name PostgreSQL database name. **Required**
+  # @param postgres.username PostgreSQL username. **Required**
+  # @param postgres.password PostgreSQL password. **Required**
+  # @param postgres.tls.mode PostgreSQL ssl [connection mode](https://www.postgresql.org/docs/current/libpq-ssl.html#LIBPQ-SSL-PROTECTION). Available modes: `disable`, `require`, `verify-ca` and `verify-full`.
+  # @param postgres.tls.rootCert PostgreSQL CA certificate for server CA verify. **Required for mode `verify-ca` or `verify-full`**.
+  # @param postgres.tls.cert client certificate. **Required for mode `verify-full`**.
+  # @param postgres.tls.key client private key. **Required for mode `verify-full`**.
+
+  host: ''
+  port: 5432
+  timeout: 3s
+  name: ''
+  username: ''
+  password: ''
+  tls:
+    mode: disable
+    rootCert: ''
+    cert: ''
+    key: ''
+
+# @section Deployment Artifacts Storage settings
+
+# @param dgctlStorage.host S3 endpoint. Format: `host:port`. **Required**
+# @param dgctlStorage.region S3 region name.
+# @param dgctlStorage.secure Set to `true` if dgctlStorage.host must be accessed via https. **Required**
+# @param dgctlStorage.bucket S3 bucket name. **Required**
+# @param dgctlStorage.accessKey S3 access key for accessing the bucket. **Required**
+# @param dgctlStorage.secretKey S3 secret key for accessing the bucket. **Required**
+
+dgctlStorage:
+  host: ''
+  region: ''
+  secure: false
+  bucket: ''
+  accessKey: ''
+  secretKey: ''
+
+# @section Limits
+
+# @extra api.resources **Limits for the API service**
+# @param api.resources.requests.cpu A CPU request.
+# @param api.resources.requests.memory A memory request.
+# @param api.resources.limits.cpu A CPU limit.
+# @param api.resources.limits.memory A memory limit.
+
+# @extra migrate.resources **Limits for the Migrate job**
+# @param migrate.resources.requests.cpu A CPU request.
+# @param migrate.resources.requests.memory A memory request.
+# @param migrate.resources.limits.cpu A CPU limit.
+# @param migrate.resources.limits.memory A memory limit.
+
+# @section customCAs **Custom Certificate Authority**
+
+# @param customCAs.bundle Custom CA [text representation of the X.509 PEM public-key certificate](https://www.rfc-editor.org/rfc/rfc7468#section-5.1)
+# @param customCAs.certsPath Custom CA bundle mount directory in the container.
+
+customCAs:
+  bundle: ''
+    # bundle: |
+    # -----BEGIN CERTIFICATE-----
+  # ...
+  # -----END CERTIFICATE-----
+  certsPath: ''

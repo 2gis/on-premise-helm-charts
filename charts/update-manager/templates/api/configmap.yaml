@@ -1,0 +1,65 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "update-manager.name" . }}
+  {{- with .Values.api.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "update-manager.labels" . | nindent 4 }}
+data:
+  api.yaml: |
+    log-level: {{ .Values.api.logLevel }}
+    log-format: {{ .Values.api.logFormat }}
+
+    api:
+      addr: "0.0.0.0:8080"
+
+    metrics:
+      addr: "0.0.0.0:9090"
+
+    db:
+      endpoint: {{ required "Valid .Values.postgres.host required!" .Values.postgres.host }}:{{ .Values.postgres.port }}
+      db-name: {{ required "Valid .Values.postgres.name required!" .Values.postgres.name }}
+      user: {{ required "Valid .Values.postgres.username required!" .Values.postgres.username }}
+      params:
+        {{ include "update-manager.psql.params" . }}
+
+    storage:
+      host: {{ required "Valid .Values.dgctlStorage.host required!" .Values.dgctlStorage.host }}
+      bucket: {{ required "Valid .Values.dgctlStorage.bucket required!" .Values.dgctlStorage.bucket }}
+      secure: {{ .Values.dgctlStorage.secure }}
+      region: {{ .Values.dgctlStorage.region | quote }}
+
+    oidc:
+      issuer: {{ required "Valid .Values.api.oidc.issuerUrl required!" .Values.api.oidc.issuerUrl }}
+      provider: {{ .Values.api.oidc.url | quote }}
+
+    datagateway-url: {{ .Values.api.dgctl.datagatewayURL }}
+
+    dgctl:
+      image: {{ include "update-manager.dgctlImage" . }}
+      configmap: {{ include "update-manager.name" . }}
+      secret: {{ include "update-manager.name" . }}
+      {{- if .Values.customCAs.bundle }}
+      configmap-ca: {{ include "update-manager.name" . }}-ca
+      {{- end }}
+
+    job:
+      active-deadline: "{{ .Values.api.job.activeDeadline }}"
+      backoff-limit: {{ .Values.api.job.backoffLimit }}
+      sync-interval: "{{ .Values.api.job.syncInterval }}"
+
+    manifest-sync-interval: "{{ .Values.api.manifest.syncInterval }}"
+
+    helm-timeout: "{{ .Values.api.helmTimeout }}"
+
+    rollback-history-limit: {{ .Values.api.rollbackHistoryLimit }}
+    install-versions-limit: {{ .Values.api.installVersionsLimit }}
+    completed-task-offset: "{{ .Values.api.completedTaskOffset }}"
+    manifest-update-offset: "{{ .Values.api.manifestUpdateOffset }}"
+
+    components:
+      {{- toYaml (required "Valid .Values.api.components required!" .Values.api.components) | nindent 6 }}
