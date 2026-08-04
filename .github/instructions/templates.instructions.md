@@ -51,13 +51,12 @@ excludeAgent: ["coding-agent"]
   ```
   Referencing the value bare inside the block (without `required`) means a user who sets `schema: Oidc` but forgets the field will get an empty env-var instead of a clear error.
 - CronJobs must include `successfulJobsHistoryLimit` and `failedJobsHistoryLimit` (default `3`)
-- ConfigMaps, Secrets, and other mounted/generated resources that affect runtime configuration must have checksum annotations to trigger pod restarts on config changes:
+- ConfigMaps and Secrets must have checksum annotations to trigger pod restarts on config changes:
   ```yaml
   annotations:
     checksum/config: {{ (include (print $.Template.BasePath "/configmap.yaml") . | fromYaml).data | toYaml | sha256sum }}
     checksum/secret: {{ (include (print $.Template.BasePath "/secret.yaml") . | fromYaml).data | toYaml | sha256sum }}
   ```
-- If a chart uses additional resources such as custom CA ConfigMaps, extra env Secrets, or component-specific ConfigMaps, add dedicated checksum annotations for them too.
 - Use consistent Kubernetes-style information size units in values and examples: `Ki`, `Mi`, `Gi`, `Ti`.
 - Services using DataGateway manifests must add the `manifest` label using the `<svc_name>.manifestCode` helper
 - Add a deprecation notice in `NOTES.txt` for renamed/removed parameters instead of silently dropping them

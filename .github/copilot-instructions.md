@@ -56,7 +56,7 @@ When performing a code review, flag the following:
 - `values.yaml` changed but `README.md` not regenerated
 - Breaking change not documented in `changelogs/<group>/*-Breaking-Changes.md`
 - PR targets `master` without being a documented hotfix
-- Missing checksum annotations for ConfigMap/Secret and other mounted/generated resources whose changes must restart pods (for example custom CA, extra env Secret, component-specific ConfigMap)
+- Missing checksum annotations on ConfigMap/Secret
 - `replicas` field present in Deployment when `hpa.enabled: true`
 - Non-camelCase parameter names or inconsistent naming (e.g., `serviceAccount.create` instead of `serviceAccount.enabled`)
 - `NOTES.txt` missing from a new chart
