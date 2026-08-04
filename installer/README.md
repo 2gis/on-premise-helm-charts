@@ -250,5 +250,135 @@ helmfile -e <env> -f $HELMFILE_VALUES/deploy/<env>.yaml.gotmpl apply --selector 
 которые выполняются до или после развёртывания. Это позволяет автоматизировать
 ручные действия — создание топиков Kafka, генерацию токенов, импорт данных.
 
-**Ingress-аннотации.** Настройка CORS, прокси и ограничений доступа через
-`ingressAnnotations` для Traefik или NGINX.
+---
+
+## Values для сервисов navi-back
+
+### `services/api-platform/navi-back.yaml.gotmpl`
+
+- По умолчанию все сервисы navi-back берут значения из файла `values/api-platform/navi-back/{{ $.Environment.Name }}.yaml`
+- Чтобы параметризовать конкретный сервис, необходимо добавить values с именем `values/api-platform/navi-back/{{ $.Environment.Name }}-{{ $service.name }}.yaml`
+
+### Асинхронный деплой (DMA — Distance Matrix Async)
+
+Асинхронные сервисы управляются через тот же `services/api-platform/navi-back.yaml.gotmpl`.
+Если присутствует файл `values/api-platform/navi-rules/{{ $.Environment.Name }}-rules-dma.yaml.gotmpl`,
+для каждого rule из него автоматически создаётся пара navi-back + navi-attractor с Kafka-транспортом.
+
+Параметры (топики Kafka, `navigroup`, `rules`) генерируются динамически из имени сервиса — отдельные dma-файлы values не нужны.
+
+**navi-back** (async-релизы) берут values из:
+- `values/api-platform/navi-back/{{ $.Environment.Name }}.yaml` — общие параметры (ресурсы и т.д.)
+- `values/api-platform/navi-back/{{ $.Environment.Name }}-async.yaml` — настройки подключения к Kafka и S3
+
+**navi-attractor** (async-релизы) берут values из:
+- `values/api-platform/navi-attractor/{{ $.Environment.Name }}.yaml` — общие параметры (ресурсы и т.д.)
+- `values/api-platform/navi-attractor/{{ $.Environment.Name }}-async.yaml` — настройки подключения к Kafka и S3
+
+Настройки Kafka для сервиса navi-async-matrix задаются отдельно в `values/api-platform/navi-async-matrix/{{ $.Environment.Name }}.yaml`
+
+---
+
+## Конфигурация Traefik
+
+### Структура
+
+- `installer/helmfile/values/infra/traefik.yaml.gotmpl` — глобальные настройки по умолчанию (ports, deployment, providers, logs, metrics, middleware definitions)
+- `installer/helmfile/example/values/infra/traefik/<env>.yaml.gotmpl` — переопределения для конкретного окружения (dashboard, trustedIPs, TLS certificates)
+
+**Пример:** `installer/helmfile/example/values/infra/traefik/staging.yaml.gotmpl`
+
+### Порядок загрузки values
+
+В `installer/helmfile/services/infra/traefik.yaml.gotmpl`:
+
+```yaml
+values:
+  - {{ .Values.basePath }}/values/infra/traefik.yaml.gotmpl
+  - {{ .Values.valuesPath }}/values/infra/traefik/{{ .Environment.Name }}.yaml.gotmpl
+```
+
+1. **Дефолты** (`traefik.yaml.gotmpl`) — базовая конфигурация, middleware определения
+2. **Environment-specific** (`<env>.yaml.gotmpl`) — переопределения с более высоким приоритетом
+
+**Важно:** Helmfile делает shallow merge. Если в `<env>.yaml.gotmpl` указать `extraObjects`, он **полностью заменит** дефолтный `extraObjects`. Поэтому:
+- Либо не указывайте `extraObjects` в environment файле (используются дефолты)
+- Либо скопируйте **ВСЕ** middleware definitions из дефолтов и измените нужные
+
+**Важно:** Middleware имена в `extraObjects` становятся Kubernetes CRD с префиксом namespace:
+
+```
+<name> → <namespace>-<name>@kubernetescrd
+```
+
+Пример: middleware `cors-headers` в namespace `partner` становится `partner-cors-headers@kubernetescrd`.
+
+### Выбор IngressController
+
+Установите `ingressController: traefik` или `ingressController: nginx` в файле окружения:
+
+```yaml
+# HELMFILE_VALUES/environments/<env>.yaml.gotmpl
+environments:
+  <env>:
+    values:
+    - ingressController: traefik
+```
+
+---
+
+## Ingress аннотации
+
+Поддержаны два типа `Ingress Controller`: `nginx` и `traefik`.
+Выбор осуществляется через переопределение переменной `ingressController`.
+
+Для управления аннотациями создан шаблон `installer/helmfile/values/ingressAnnotations.yaml.gotmpl`, который содержит:
+
+- `cors` — настройки политик кросс-доменных запросов (Cross-Origin Resource Sharing)
+- `proxy` — настройки проксирования (таймауты, лимиты тела запроса)
+- `corsGet` — настройка, выделенная под s3 (где разрешён только `GET`)
+- `vpn` — настройка, разрешающая доступ только из указанных IP-диапазонов
+
+Для изменения состава навешиваемых аннотаций переопределите в шаблоне сервиса:
+
+```yaml
+{{- $annotations := pick .Values.ingressAnnotations.nginx "cors" "vpn" "proxy" -}}
+```
+
+Для `nginx` получим список аннотаций:
+```
+  annotations:
+    nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
+    nginx.ingress.kubernetes.io/cors-allow-headers: DNT,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization,x-share-token,X-Company-Id
+    nginx.ingress.kubernetes.io/cors-allow-methods: GET, PUT, POST, DELETE, PATCH, OPTIONS
+    nginx.ingress.kubernetes.io/cors-allow-origin: '*'
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+    nginx.ingress.kubernetes.io/proxy-body-size: 100m
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "120"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "120"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "120"
+    nginx.ingress.kubernetes.io/whitelist-source-range: 10.0.0.0/8
+```
+
+Для `traefik` получаем помержанную строку со списком необходимых `middlewares`, в том порядке, который указан для `pick`:
+
+```yaml
+  annotations:
+    traefik.ingress.kubernetes.io/router.middlewares: partner-cors-headers@kubernetescrd,partner-buffering-limit@kubernetescrd,partner-allow-vpn-office@kubernetescrd
+```
+
+**Важно:**
+- Имена middleware должны совпадать с теми, что определены в `extraObjects` вашего `infra/traefik/<env>.yaml.gotmpl`
+- Middleware становится доступен как `<namespace>-<name>@kubernetescrd`
+
+Для каждого сервиса можно выбрать нужный набор middleware через `pick`:
+
+| Сервис | Middleware (traefik) | Назначение |
+|---|---|---|
+| `keys-admin` | `cors + proxy + vpn` | Полный доступ с VPN-ограничением |
+| `platform` | `vpn` | Только VPN (публичный доступ не нужен) |
+| `catalog` | `cors + proxy + vpn` | Полный доступ |
+| `styles` | `cors + proxy` | CORS + proxy, без VPN |
+| `tiles` | `cors` | Только CORS (минимальные настройки) |
+| `pro-ui`, `pro-api` | `cors + proxy` | CORS + proxy, без VPN |
+| `haproxy` | `corsGet` | Только GET для S3 |
