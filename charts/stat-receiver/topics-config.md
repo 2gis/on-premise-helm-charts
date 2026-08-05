@@ -20,6 +20,13 @@
     retention.ms: {{ retention }}
     cleanup.policy: delete
 
+- topic: "{{ topic-name-prefix }}type.16"
+  partitions: {{ partitions }}
+  replica-factor: {{ replica-factor }}
+  options:
+    retention.ms: {{ retention }}
+    cleanup.policy: delete
+
 - topic: "{{ topic-name-prefix }}type.401"
   partitions: {{ partitions }}
   replica-factor: {{ replica-factor }}
