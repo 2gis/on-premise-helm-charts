@@ -89,6 +89,14 @@ Elasticsearch, ClickHouse, Cassandra.
 
    **Изолированный контур.** Если хост не имеет одновременного доступа к публичной сети, реестру Docker и S3-хранилищу, используйте двуххостовую схему: загрузите артефакты через `dgctl pull` на хосте с доступом в интернет (с `storage.type: fs`), перенесите директорию на внутренний хост и выполните `dgctl restore`. Подробнее: [Fetch Installation Artifacts](https://docs.2gis.com/on-premise-api-platform/preparation#fetch-artifacts).
 
+   Готовые скрипты для этого сценария (pull/restore данных и образа, обмен лицензией) находятся в `installer/dgctl-fs/`, пошаговая инструкция — в `installer/dgctl-fs/README.md`.
+
+**Вспомогательные скрипты.** Для стандартного контура доступны дополнительные утилиты в `installer/dgctl/` (README: `installer/dgctl/README.md`):
+- `pull.sh` — загрузка артефактов через `dgctl pull` (генерация values с ключом `-l` для запроса лицензии) и проверка свободного места на хостах БД;
+- `manifest_cleanup.sh` — очистка старых manifest-файлов из S3 после обновления всех данных.
+
+   Требования: SSH-доступ к хостам БД и утилита `yq`.
+
 5. Создайте секрет Kubernetes для доступа к реестру Docker (если реестр требует аутентификации):
    ```bash
    kubectl create secret docker-registry onpremise-registry-creds \
