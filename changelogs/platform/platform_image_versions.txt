@@ -32,7 +32,7 @@ navi-vrp-solver
 navi-vrp-task-manager
 	navi-vrp-task-manager:1.16.3
 platform
-	platform-ui:1.39.0
+	platform-ui:1.44.0
 search-api
 	nginx:1.30.2
 	search-api:7.107.0
