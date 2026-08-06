@@ -3,7 +3,7 @@ name: update-manager
 type: application
 description: A Helm chart for Kubernetes to deploy Update Manager
 
-version: 2.56.0
+version: 2.57.0
 appVersion: 1.0.0
 
 maintainers:

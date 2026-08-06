@@ -62,4 +62,40 @@ data:
     manifest-update-offset: "{{ .Values.api.manifestUpdateOffset }}"
 
     components:
-      {{- toYaml (required "Valid .Values.api.components required!" .Values.api.components) | nindent 6 }}
+      {{- $components := dict }}
+      {{- range $componentName, $componentValues := .Values.api.components }}
+        {{- $component := dict "version" $componentValues.version }}
+        {{- $releases := list }}
+        {{- range $chartName, $chartValues := $componentValues.charts }}
+          {{- if $chartValues.enabled }}
+            {{ $chartReleases := list }}}
+            {{- range $i, $releaseValues := $chartValues.releases }}
+              {{- $path := print ".Values.api.components." $componentName ".charts." $chartName ".releases[" $i "]"}}
+
+              {{- $chartRef := print "oci://ghcr.io/2gis/charts/" $chartName ":" $componentValues.version }}
+              {{- if $chartValues.refOverride }}
+                {{- $chartRef = $chartValues.refOverride }}
+              {{- end }}
+
+              {{- $release := dict "name"         (required (print "Valid " $path ".name required!") $releaseValues.name)
+                                   "release-name" (required (print "Valid " $path ".releaseName required!") $releaseValues.releaseName)
+                                   "services"     $releaseValues.services
+                                   "chart-ref"    $chartRef
+              }}
+              {{- $chartReleases = append $chartReleases $release }}
+              {{- $releases = append $releases $release }}
+            {{- end }}
+          {{- if empty $chartReleases }}
+            {{- required (print "You should specify at least one release in the enabled chart .Values.api.components." $chartName) "" }}
+          {{- end }}
+          {{- end }}
+        {{- end }}
+        {{- if not (empty $releases) }}
+          {{- $component = set $component "releases" $releases }}
+          {{- $components = set $components $componentName $component }}
+        {{- end }}
+      {{- end }}
+      {{- if empty $components }}
+        {{- required "You should enable at least one chart in .Values.api.components" "" }}
+      {{- end }}
+      {{- toYaml $components | nindent 6 }}
