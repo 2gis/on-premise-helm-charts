@@ -28,6 +28,7 @@ data:
         {{ include "update-manager.psql.params" . }}
 
     storage:
+      type: s3
       host: {{ required "Valid .Values.dgctlStorage.host required!" .Values.dgctlStorage.host }}
       bucket: {{ required "Valid .Values.dgctlStorage.bucket required!" .Values.dgctlStorage.bucket }}
       secure: {{ .Values.dgctlStorage.secure }}
@@ -73,7 +74,7 @@ data:
         {{- $releases := list }}
         {{- range $chartName, $chartValues := $componentValues.charts }}
           {{- if $chartValues.enabled }}
-            {{ $chartReleases := list }}}
+            {{ $chartReleases := list }}
             {{- range $i, $releaseValues := $chartValues.releases }}
               {{- $path := print ".Values.api.components." $componentName ".charts." $chartName ".releases[" $i "]"}}
 

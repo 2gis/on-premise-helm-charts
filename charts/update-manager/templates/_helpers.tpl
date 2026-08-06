@@ -128,8 +128,8 @@ DGCTL params
 */}}
 
 {{- define "update-manager.dgctlImage" -}}
-{{- if .Values.dgctlDockerRegistry }}
-{{- print .Values.dgctlDockerRegistry "/" -}}
+{{- if .Values.api.dgctl.image.registry }}
+{{- print .Values.api.dgctl.image.registry "/" -}}
 {{- end }}
 {{- required "Valid .Values.api.dgctl.image.repository required!" .Values.api.dgctl.image.repository -}}
 {{- if .Values.api.dgctl.image.tag }}
