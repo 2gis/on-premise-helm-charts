@@ -30,6 +30,14 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{ include "update-manager.name" . }}-migrate
 {{- end }}
 
+{{- define "update-manager.serviceAccount" -}}
+{{- if empty .Values.api.serviceAccountOverride -}}
+{{- include "update-manager.name" . -}}
+{{- else -}}
+{{- .Values.api.serviceAccountOverride | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}
+
 {{/*
 PostgreSQL tls params
 */}}
@@ -160,4 +168,116 @@ Custom CA helpers
   configMap:
     name: {{ include "update-manager.migrate.name" . }}-ca
 {{- end -}}
+{{- end -}}
+
+{{/*
+RBAC rule helpers.
+
+Each helper below renders a single RBAC rule (a list item under `rules:`) for a
+specific resource kind. They are reused from `role.yaml` inside per-chart `if`
+blocks so that enabling a chart in `.Values.managedCharts` grants only the rights
+for the resource kinds that chart actually renders.
+
+`update-manager.rbac.manageVerbs` is the common verb set required by
+`helm upgrade` to reconcile a resource (create/read/update/delete).
+*/}}
+
+{{- define "update-manager.rbac.manageVerbs" -}}
+["create", "get", "list", "watch", "update", "patch", "delete"]
+{{- end -}}
+
+{{- define "update-manager.rbac.rule.appsDeployment" -}}
+- apiGroups: ["apps"]
+  resources: ["deployments"]
+  verbs: {{ include "update-manager.rbac.manageVerbs" . }}
+{{- end -}}
+
+{{- define "update-manager.rbac.rule.appsStatefulSet" -}}
+- apiGroups: ["apps"]
+  resources: ["statefulsets"]
+  verbs: {{ include "update-manager.rbac.manageVerbs" . }}
+{{- end -}}
+
+{{- define "update-manager.rbac.rule.coreService" -}}
+- apiGroups: [""]
+  resources: ["services"]
+  verbs: {{ include "update-manager.rbac.manageVerbs" . }}
+{{- end -}}
+
+{{- define "update-manager.rbac.rule.coreServiceAccount" -}}
+- apiGroups: [""]
+  resources: ["serviceaccounts"]
+  verbs: {{ include "update-manager.rbac.manageVerbs" . }}
+{{- end -}}
+
+{{- define "update-manager.rbac.rule.corePVC" -}}
+- apiGroups: [""]
+  resources: ["persistentvolumeclaims"]
+  verbs: {{ include "update-manager.rbac.manageVerbs" . }}
+{{- end -}}
+
+{{- define "update-manager.rbac.rule.networkingIngress" -}}
+- apiGroups: ["networking.k8s.io"]
+  resources: ["ingresses"]
+  verbs: {{ include "update-manager.rbac.manageVerbs" . }}
+{{- end -}}
+
+{{- define "update-manager.rbac.rule.networkingNetworkPolicy" -}}
+- apiGroups: ["networking.k8s.io"]
+  resources: ["networkpolicies"]
+  verbs: {{ include "update-manager.rbac.manageVerbs" . }}
+{{- end -}}
+
+{{- define "update-manager.rbac.rule.autoscalingHPA" -}}
+- apiGroups: ["autoscaling"]
+  resources: ["horizontalpodautoscalers"]
+  verbs: {{ include "update-manager.rbac.manageVerbs" . }}
+{{- end -}}
+
+{{- define "update-manager.rbac.rule.autoscalingVPA" -}}
+- apiGroups: ["autoscaling.k8s.io"]
+  resources: ["verticalpodautoscalers"]
+  verbs: {{ include "update-manager.rbac.manageVerbs" . }}
+{{- end -}}
+
+{{- define "update-manager.rbac.rule.policyPDB" -}}
+- apiGroups: ["policy"]
+  resources: ["poddisruptionbudgets"]
+  verbs: {{ include "update-manager.rbac.manageVerbs" . }}
+{{- end -}}
+
+{{- define "update-manager.rbac.rule.batchCronJob" -}}
+- apiGroups: ["batch"]
+  resources: ["cronjobs"]
+  verbs: {{ include "update-manager.rbac.manageVerbs" . }}
+{{- end -}}
+
+{{- define "update-manager.rbac.rule.rbac" -}}
+- apiGroups: ["rbac.authorization.k8s.io"]
+  resources: ["roles", "rolebindings"]
+  verbs: {{ include "update-manager.rbac.manageVerbs" . }}
+{{- end -}}
+
+{{- define "update-manager.rbac.rule.gatewayHTTPRoute" -}}
+- apiGroups: ["gateway.networking.k8s.io"]
+  resources: ["httproutes"]
+  verbs: {{ include "update-manager.rbac.manageVerbs" . }}
+{{- end -}}
+
+{{- define "update-manager.rbac.rule.gatewayGRPCRoute" -}}
+- apiGroups: ["gateway.networking.k8s.io"]
+  resources: ["grpcroutes"]
+  verbs: {{ include "update-manager.rbac.manageVerbs" . }}
+{{- end -}}
+
+{{- define "update-manager.rbac.rule.certManager" -}}
+- apiGroups: ["cert-manager.io"]
+  resources: ["certificates", "issuers"]
+  verbs: {{ include "update-manager.rbac.manageVerbs" . }}
+{{- end -}}
+
+{{- define "update-manager.rbac.rule.monitoring" -}}
+- apiGroups: ["monitoring.coreos.com"]
+  resources: ["prometheusrules", "servicemonitors"]
+  verbs: {{ include "update-manager.rbac.manageVerbs" . }}
 {{- end -}}
