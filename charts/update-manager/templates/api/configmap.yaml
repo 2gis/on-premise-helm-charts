@@ -34,8 +34,13 @@ data:
       region: {{ .Values.dgctlStorage.region | quote }}
 
     oidc:
-      issuer: {{ required "Valid .Values.api.oidc.issuerUrl required!" .Values.api.oidc.issuerUrl }}
-      provider: {{ .Values.api.oidc.url | quote }}
+      {{- $provider := required "Valid .Values.api.oidc.url required!" .Values.api.oidc.url }}
+      {{- if .Values.api.oidc.issuerUrl }}
+      issuer: {{ .Values.api.oidc.issuerUrl | quote }}
+      provider: {{ $provider | quote }}
+      {{- else }}
+      issuer: {{ $provider | quote }}
+      {{- end }}
 
     datagateway-url: {{ .Values.api.dgctl.datagatewayURL }}
 
