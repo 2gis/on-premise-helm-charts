@@ -12,10 +12,7 @@ rules:
 # Manage worker jobs (create, watch their status, terminate when needed)
 - apiGroups: ["batch"]
   resources: ["jobs"]
-  verbs: ["create", "get", "list", "watch", "update", "patch", "delete", "deletecollection"]
-- apiGroups: [""]
-  resources: ["pods", "pods/log"]
-  verbs: ["get", "list", "watch", "delete", "deletecollection"]
+  verbs: ["create", "get", "list", "watch", "update", "patch", "delete"]
 # Mount ConfigMaps/Secrets into the jobs and read/write Helm 3 release state
 # (Helm keeps release data and `helm get values` output in Secrets/ConfigMaps).
 - apiGroups: [""]
