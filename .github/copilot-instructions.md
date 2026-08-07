@@ -15,6 +15,7 @@ When performing a code review, respond in **Russian**.
 - `changelogs/` — per-product-group changelogs (`core/`, `platform/`, `pro/`, `citylens/`, `evergis/`)
   - Breaking changes are tracked in `changelogs/<group>/*-Breaking-Changes.md`
   - `Breaking-Changes.md` at the repo root is an index that links to the group files
+  - `.txt` files in this directory (for example, `platform_image_versions.txt`) are updated only by release scripts and must not be edited manually
 - `.github/workflows/` — CI: `lint.yaml`, `check-readme.yaml`, `release.yaml`, `release-oci.yaml`
 - `CONTRIBUTING.md` — branching model (Gitflow, PRs target `develop`)
 
