@@ -18,5 +18,4 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- define "platform.ui.labels" -}}
 {{ include "platform.ui.selectorLabels" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
-date: "{{ now | unixEpoch }}"
 {{- end }}
