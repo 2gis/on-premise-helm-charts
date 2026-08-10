@@ -82,7 +82,7 @@ streams:
 
   image:
     repository: 2gis-on-premise/stat-receiver-streams
-    tag: 1.16.10
+    tag: 1.16.12
     pullPolicy: IfNotPresent
 
   # @extra streams.resources **Limits for the Streams service**
