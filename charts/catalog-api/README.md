@@ -224,7 +224,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | Name                        | Description                                                                                   | Value                              |
 | --------------------------- | --------------------------------------------------------------------------------------------- | ---------------------------------- |
 | `importer.image.repository` | Repository                                                                                    | `2gis-on-premise/catalog-importer` |
-| `importer.image.tag`        | Tag                                                                                           | `1.22.0`                           |
+| `importer.image.tag`        | Tag                                                                                           | `1.22.1`                           |
 | `importer.image.pullPolicy` | Image [Pull Policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) | `IfNotPresent`                     |
 
 ### importer.postgres **Database settings**
