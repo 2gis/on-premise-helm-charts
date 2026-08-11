@@ -54,14 +54,14 @@ See the [documentation]() to learn about:
 
 ### Resources settings
 
-| Name                            | Description                                                                                                                                    | Value   |
-| ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `api.replicas`                  | A replica count for the pod.                                                                                                                   | `4`     |
-| `api.revisionHistoryLimit`      | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`     |
-| `api.resources.requests.cpu`    | A CPU request.                                                                                                                                 | `1000m` |
-| `api.resources.requests.memory` | A memory request.                                                                                                                              | `1Gi`   |
-| `api.resources.limits.cpu`      | A CPU limit.                                                                                                                                   | `2000m` |
-| `api.resources.limits.memory`   | A memory limit.                                                                                                                                | `2Gi`   |
+| Name                            | Description                                                                                                                                                               | Value   |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `api.replicas`                  | A replica count for the pod.                                                                                                                                              | `4`     |
+| `api.revisionHistoryLimit`      | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment). | `3`     |
+| `api.resources.requests.cpu`    | A CPU request.                                                                                                                                                            | `1000m` |
+| `api.resources.requests.memory` | A memory request.                                                                                                                                                         | `1Gi`   |
+| `api.resources.limits.cpu`      | A CPU limit.                                                                                                                                                              | `2000m` |
+| `api.resources.limits.memory`   | A memory limit.                                                                                                                                                           | `2Gi`   |
 
 ### Service settings
 
@@ -147,14 +147,14 @@ See the [documentation]() to learn about:
 
 ### Resources settings
 
-| Name                            | Description                                                                                                                                    | Value   |
-| ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `web.replicas`                  | A replica count for the pod.                                                                                                                   | `1`     |
-| `web.revisionHistoryLimit`      | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`     |
-| `web.resources.requests.cpu`    | A CPU request.                                                                                                                                 | `1000m` |
-| `web.resources.requests.memory` | A memory request.                                                                                                                              | `1Gi`   |
-| `web.resources.limits.cpu`      | A CPU limit.                                                                                                                                   | `2000m` |
-| `web.resources.limits.memory`   | A memory limit.                                                                                                                                | `2Gi`   |
+| Name                            | Description                                                                                                                                                               | Value   |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `web.replicas`                  | A replica count for the pod.                                                                                                                                              | `1`     |
+| `web.revisionHistoryLimit`      | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment). | `3`     |
+| `web.resources.requests.cpu`    | A CPU request.                                                                                                                                                            | `1000m` |
+| `web.resources.requests.memory` | A memory request.                                                                                                                                                         | `1Gi`   |
+| `web.resources.limits.cpu`      | A CPU limit.                                                                                                                                                              | `2000m` |
+| `web.resources.limits.memory`   | A memory limit.                                                                                                                                                           | `2Gi`   |
 
 ### Service settings
 
@@ -227,181 +227,181 @@ See the [documentation]() to learn about:
 
 ### Citylens Frames Saver worker's settings
 
-| Name                                      | Description                                                                                                                                    | Value |
-| ----------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| `worker.framesSaver.replicas`             | A replica count for the pod.                                                                                                                   | `4`   |
-| `worker.framesSaver.revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`   |
-| `worker.framesSaver.annotations`          | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`  |
-| `worker.framesSaver.labels`               | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`  |
-| `worker.framesSaver.podAnnotations`       | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`  |
-| `worker.framesSaver.podLabels`            | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`  |
-| `worker.framesSaver.nodeSelector`         | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                        | `{}`  |
-| `worker.framesSaver.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `[]`  |
-| `worker.framesSaver.affinity`             | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                    | `{}`  |
+| Name                                      | Description                                                                                                                                                               | Value |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `worker.framesSaver.replicas`             | A replica count for the pod.                                                                                                                                              | `4`   |
+| `worker.framesSaver.revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment). | `3`   |
+| `worker.framesSaver.annotations`          | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                 | `{}`  |
+| `worker.framesSaver.labels`               | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                           | `{}`  |
+| `worker.framesSaver.podAnnotations`       | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                 | `{}`  |
+| `worker.framesSaver.podLabels`            | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                           | `{}`  |
+| `worker.framesSaver.nodeSelector`         | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                                   | `{}`  |
+| `worker.framesSaver.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                     | `[]`  |
+| `worker.framesSaver.affinity`             | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                                               | `{}`  |
 
 ### Citylens Camcom sender worker's settings
 
-| Name                                          | Description                                                                                                                                    | Value   |
-| --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `worker.camcomSender.enabled`                 | If Camcom Sender worker is enabled for the service.                                                                                            | `false` |
-| `worker.camcomSender.replicas`                | A replica count for the pod.                                                                                                                   | `1`     |
-| `worker.camcomSender.revisionHistoryLimit`    | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`     |
-| `worker.camcomSender.apiKey`                  | A key for Camcom's API access                                                                                                                  | `""`    |
-| `worker.camcomSender.endpointUrl`             | Camcom endpoint URL                                                                                                                            | `""`    |
-| `worker.camcomSender.requestTimeout`          | Camcom request timeout                                                                                                                         | `1`     |
-| `worker.camcomSender.requestRateLimit.calls`  | Camcom calls rate limit                                                                                                                        | `1000`  |
-| `worker.camcomSender.requestRateLimit.period` | Camcom period rate limit                                                                                                                       | `60`    |
-| `worker.camcomSender.requestRetries`          | Camcom request retries                                                                                                                         | `3`     |
-| `worker.camcomSender.requestRetriesBackoff`   | request retries backoff                                                                                                                        | `1`     |
-| `worker.camcomSender.sourceEnv`               | Environment name to send to CamCam (source_env field in request), ignored if empty.                                                            | `""`    |
-| `worker.camcomSender.annotations`             | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`    |
-| `worker.camcomSender.labels`                  | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`    |
-| `worker.camcomSender.podAnnotations`          | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`    |
-| `worker.camcomSender.podLabels`               | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`    |
-| `worker.camcomSender.nodeSelector`            | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                        | `{}`    |
-| `worker.camcomSender.tolerations`             | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `[]`    |
-| `worker.camcomSender.affinity`                | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                    | `{}`    |
+| Name                                          | Description                                                                                                                                                               | Value   |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `worker.camcomSender.enabled`                 | If Camcom Sender worker is enabled for the service.                                                                                                                       | `false` |
+| `worker.camcomSender.replicas`                | A replica count for the pod.                                                                                                                                              | `1`     |
+| `worker.camcomSender.revisionHistoryLimit`    | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment). | `3`     |
+| `worker.camcomSender.apiKey`                  | A key for Camcom's API access                                                                                                                                             | `""`    |
+| `worker.camcomSender.endpointUrl`             | Camcom endpoint URL                                                                                                                                                       | `""`    |
+| `worker.camcomSender.requestTimeout`          | Camcom request timeout                                                                                                                                                    | `1`     |
+| `worker.camcomSender.requestRateLimit.calls`  | Camcom calls rate limit                                                                                                                                                   | `1000`  |
+| `worker.camcomSender.requestRateLimit.period` | Camcom period rate limit                                                                                                                                                  | `60`    |
+| `worker.camcomSender.requestRetries`          | Camcom request retries                                                                                                                                                    | `3`     |
+| `worker.camcomSender.requestRetriesBackoff`   | request retries backoff                                                                                                                                                   | `1`     |
+| `worker.camcomSender.sourceEnv`               | Environment name to send to CamCam (source_env field in request), ignored if empty.                                                                                       | `""`    |
+| `worker.camcomSender.annotations`             | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                 | `{}`    |
+| `worker.camcomSender.labels`                  | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                           | `{}`    |
+| `worker.camcomSender.podAnnotations`          | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                 | `{}`    |
+| `worker.camcomSender.podLabels`               | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                           | `{}`    |
+| `worker.camcomSender.nodeSelector`            | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                                   | `{}`    |
+| `worker.camcomSender.tolerations`             | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                     | `[]`    |
+| `worker.camcomSender.affinity`                | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                                               | `{}`    |
 
 ### Citylens Predictions Saver worker's settings
 
-| Name                                           | Description                                                                                                                                    | Value |
-| ---------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| `worker.predictionsSaver.replicas`             | A replica count for the pod.                                                                                                                   | `1`   |
-| `worker.predictionsSaver.revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`   |
-| `worker.predictionsSaver.annotations`          | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`  |
-| `worker.predictionsSaver.labels`               | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`  |
-| `worker.predictionsSaver.podAnnotations`       | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`  |
-| `worker.predictionsSaver.podLabels`            | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`  |
-| `worker.predictionsSaver.nodeSelector`         | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                        | `{}`  |
-| `worker.predictionsSaver.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `[]`  |
-| `worker.predictionsSaver.affinity`             | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                    | `{}`  |
+| Name                                           | Description                                                                                                                                                               | Value |
+| ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `worker.predictionsSaver.replicas`             | A replica count for the pod.                                                                                                                                              | `1`   |
+| `worker.predictionsSaver.revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment). | `3`   |
+| `worker.predictionsSaver.annotations`          | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                 | `{}`  |
+| `worker.predictionsSaver.labels`               | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                           | `{}`  |
+| `worker.predictionsSaver.podAnnotations`       | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                 | `{}`  |
+| `worker.predictionsSaver.podLabels`            | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                           | `{}`  |
+| `worker.predictionsSaver.nodeSelector`         | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                                   | `{}`  |
+| `worker.predictionsSaver.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                     | `[]`  |
+| `worker.predictionsSaver.affinity`             | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                                               | `{}`  |
 
 ### Citylens Logs Saver worker's settings
 
-| Name                                    | Description                                                                                                                                    | Value |
-| --------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| `worker.logsSaver.replicas`             | A replica count for the pod.                                                                                                                   | `1`   |
-| `worker.logsSaver.revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`   |
-| `worker.logsSaver.annotations`          | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`  |
-| `worker.logsSaver.labels`               | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`  |
-| `worker.logsSaver.podAnnotations`       | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`  |
-| `worker.logsSaver.podLabels`            | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`  |
-| `worker.logsSaver.nodeSelector`         | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                        | `{}`  |
-| `worker.logsSaver.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `[]`  |
-| `worker.logsSaver.affinity`             | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                    | `{}`  |
+| Name                                    | Description                                                                                                                                                               | Value |
+| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `worker.logsSaver.replicas`             | A replica count for the pod.                                                                                                                                              | `1`   |
+| `worker.logsSaver.revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment). | `3`   |
+| `worker.logsSaver.annotations`          | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                 | `{}`  |
+| `worker.logsSaver.labels`               | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                           | `{}`  |
+| `worker.logsSaver.podAnnotations`       | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                 | `{}`  |
+| `worker.logsSaver.podLabels`            | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                           | `{}`  |
+| `worker.logsSaver.nodeSelector`         | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                                   | `{}`  |
+| `worker.logsSaver.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                     | `[]`  |
+| `worker.logsSaver.affinity`             | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                                               | `{}`  |
 
 ### Citylens Reporter Pro worker's settings (synchronization with Pro)
 
-| Name                                      | Description                                                                                                                                    | Value        |
-| ----------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------------ |
-| `worker.reporterPro.enabled`              | If integration with Pro is enabled for the service.                                                                                            | `true`       |
-| `worker.reporterPro.predictors`           | From what sources detections should be localized.                                                                                              | `["camcom"]` |
-| `worker.reporterPro.trackTimeoutDays`     | Timeout in days for track to be considered being uploading.                                                                                    | `1`          |
-| `worker.reporterPro.replicas`             | A replica count for the pod.                                                                                                                   | `1`          |
-| `worker.reporterPro.revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`          |
-| `worker.reporterPro.annotations`          | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`         |
-| `worker.reporterPro.labels`               | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`         |
-| `worker.reporterPro.podAnnotations`       | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`         |
-| `worker.reporterPro.podLabels`            | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`         |
-| `worker.reporterPro.nodeSelector`         | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                        | `{}`         |
-| `worker.reporterPro.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `[]`         |
-| `worker.reporterPro.affinity`             | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                    | `{}`         |
+| Name                                      | Description                                                                                                                                                               | Value        |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ |
+| `worker.reporterPro.enabled`              | If integration with Pro is enabled for the service.                                                                                                                       | `true`       |
+| `worker.reporterPro.predictors`           | From what sources detections should be localized.                                                                                                                         | `["camcom"]` |
+| `worker.reporterPro.trackTimeoutDays`     | Timeout in days for track to be considered being uploading.                                                                                                               | `1`          |
+| `worker.reporterPro.replicas`             | A replica count for the pod.                                                                                                                                              | `1`          |
+| `worker.reporterPro.revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment). | `3`          |
+| `worker.reporterPro.annotations`          | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                 | `{}`         |
+| `worker.reporterPro.labels`               | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                           | `{}`         |
+| `worker.reporterPro.podAnnotations`       | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                 | `{}`         |
+| `worker.reporterPro.podLabels`            | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                           | `{}`         |
+| `worker.reporterPro.nodeSelector`         | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                                   | `{}`         |
+| `worker.reporterPro.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                     | `[]`         |
+| `worker.reporterPro.affinity`             | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                                               | `{}`         |
 
 ### Citylens Reporter Pro Tracks worker's settings (track status actualization, requires Reporter Pro)
 
-| Name                                            | Description                                                                                                                                    | Value |
-| ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| `worker.reporterProTracks.revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`   |
-| `worker.reporterProTracks.annotations`          | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`  |
-| `worker.reporterProTracks.labels`               | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`  |
-| `worker.reporterProTracks.podAnnotations`       | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`  |
-| `worker.reporterProTracks.podLabels`            | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`  |
-| `worker.reporterProTracks.nodeSelector`         | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                        | `{}`  |
-| `worker.reporterProTracks.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `[]`  |
-| `worker.reporterProTracks.affinity`             | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                    | `{}`  |
+| Name                                            | Description                                                                                                                                                               | Value |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `worker.reporterProTracks.revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment). | `3`   |
+| `worker.reporterProTracks.annotations`          | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                 | `{}`  |
+| `worker.reporterProTracks.labels`               | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                           | `{}`  |
+| `worker.reporterProTracks.podAnnotations`       | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                 | `{}`  |
+| `worker.reporterProTracks.podLabels`            | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                           | `{}`  |
+| `worker.reporterProTracks.nodeSelector`         | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                                   | `{}`  |
+| `worker.reporterProTracks.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                     | `[]`  |
+| `worker.reporterProTracks.affinity`             | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                                               | `{}`  |
 
 ### Citylens Track Metadata Saver worker's settings
 
-| Name                                             | Description                                                                                                                                    | Value |
-| ------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| `worker.trackMetadataSaver.replicas`             | A replica count for the pod.                                                                                                                   | `1`   |
-| `worker.trackMetadataSaver.revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`   |
-| `worker.trackMetadataSaver.annotations`          | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`  |
-| `worker.trackMetadataSaver.labels`               | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`  |
-| `worker.trackMetadataSaver.podAnnotations`       | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`  |
-| `worker.trackMetadataSaver.podLabels`            | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`  |
-| `worker.trackMetadataSaver.nodeSelector`         | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                        | `{}`  |
-| `worker.trackMetadataSaver.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `[]`  |
-| `worker.trackMetadataSaver.affinity`             | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                    | `{}`  |
+| Name                                             | Description                                                                                                                                                               | Value |
+| ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `worker.trackMetadataSaver.replicas`             | A replica count for the pod.                                                                                                                                              | `1`   |
+| `worker.trackMetadataSaver.revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment). | `3`   |
+| `worker.trackMetadataSaver.annotations`          | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                 | `{}`  |
+| `worker.trackMetadataSaver.labels`               | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                           | `{}`  |
+| `worker.trackMetadataSaver.podAnnotations`       | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                 | `{}`  |
+| `worker.trackMetadataSaver.podLabels`            | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                           | `{}`  |
+| `worker.trackMetadataSaver.nodeSelector`         | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                                   | `{}`  |
+| `worker.trackMetadataSaver.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                     | `[]`  |
+| `worker.trackMetadataSaver.affinity`             | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                                               | `{}`  |
 
 ### Citylens Tracks Uploader worker's settings
 
-| Name                                              | Description                                                                                                                                    | Value   |
-| ------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `worker.tracksUploader.enabled`                   | If Tracks Uploader worker is enabled for the service.                                                                                          | `false` |
-| `worker.tracksUploader.replicas`                  | A replica count for the pod.                                                                                                                   | `1`     |
-| `worker.tracksUploader.revisionHistoryLimit`      | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`     |
-| `worker.tracksUploader.api`                       | Destination API address citylens. Ex.: http(s)://citylens-api.host/                                                                            | `""`    |
-| `worker.tracksUploader.source`                    | Source address citylens-web. Ex.: http(s)://citylens-web.host                                                                                  | `""`    |
-| `worker.tracksUploader.verifySsl`                 | Set to `false` if tracksUploader.api or tracksUploader.source must be accessed via https without certificate validation **Required**           | `true`  |
-| `worker.tracksUploader.reloadTrackTimeoutSeconds` | Track reload timeout, seconds.                                                                                                                 | `900`   |
-| `worker.tracksUploader.annotations`               | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`    |
-| `worker.tracksUploader.labels`                    | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`    |
-| `worker.tracksUploader.podAnnotations`            | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`    |
-| `worker.tracksUploader.podLabels`                 | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`    |
-| `worker.tracksUploader.nodeSelector`              | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                        | `{}`    |
-| `worker.tracksUploader.tolerations`               | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `[]`    |
-| `worker.tracksUploader.affinity`                  | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                    | `{}`    |
+| Name                                              | Description                                                                                                                                                               | Value   |
+| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `worker.tracksUploader.enabled`                   | If Tracks Uploader worker is enabled for the service.                                                                                                                     | `false` |
+| `worker.tracksUploader.replicas`                  | A replica count for the pod.                                                                                                                                              | `1`     |
+| `worker.tracksUploader.revisionHistoryLimit`      | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment). | `3`     |
+| `worker.tracksUploader.api`                       | Destination API address citylens. Ex.: http(s)://citylens-api.host/                                                                                                       | `""`    |
+| `worker.tracksUploader.source`                    | Source address citylens-web. Ex.: http(s)://citylens-web.host                                                                                                             | `""`    |
+| `worker.tracksUploader.verifySsl`                 | Set to `false` if tracksUploader.api or tracksUploader.source must be accessed via https without certificate validation **Required**                                      | `true`  |
+| `worker.tracksUploader.reloadTrackTimeoutSeconds` | Track reload timeout, seconds.                                                                                                                                            | `900`   |
+| `worker.tracksUploader.annotations`               | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                 | `{}`    |
+| `worker.tracksUploader.labels`                    | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                           | `{}`    |
+| `worker.tracksUploader.podAnnotations`            | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                 | `{}`    |
+| `worker.tracksUploader.podLabels`                 | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                           | `{}`    |
+| `worker.tracksUploader.nodeSelector`              | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                                   | `{}`    |
+| `worker.tracksUploader.tolerations`               | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                     | `[]`    |
+| `worker.tracksUploader.affinity`                  | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                                               | `{}`    |
 
 ### Citylens Map Matcher worker's settings
 
-| Name                                     | Description                                                                                                                                            | Value   |
-| ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | ------- |
-| `worker.mapMatcher.enabled`              | If Map Matcher worker is enabled for the service.                                                                                                      | `false` |
-| `worker.mapMatcher.replicas`             | A replica count for the pod.                                                                                                                           | `1`     |
-| `worker.mapMatcher.revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).         | `3`     |
-| `worker.mapMatcher.baseUrl`              | Map Matching API address. Ex.: http://navi-front.svc **Required**                                                                                      | `""`    |
-| `worker.mapMatcher.key`                  | Map Matching API key. **Required**                                                                                                                     | `""`    |
-| `worker.mapMatcher.interpolation`        | Set to `true` for compatibility with Map Matching API which requires gps points timestamps in seconds as integers (w/o millisecond precision support). | `true`  |
-| `worker.mapMatcher.retries`              | Total number of retries in case of Map Matching API unavailability/errors.                                                                             | `3`     |
-| `worker.mapMatcher.timeoutSeconds`       | Map Matching API timeout, seconds.                                                                                                                     | `30`    |
-| `worker.mapMatcher.annotations`          | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                              | `{}`    |
-| `worker.mapMatcher.labels`               | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                        | `{}`    |
-| `worker.mapMatcher.podAnnotations`       | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                              | `{}`    |
-| `worker.mapMatcher.podLabels`            | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                        | `{}`    |
-| `worker.mapMatcher.nodeSelector`         | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                | `{}`    |
-| `worker.mapMatcher.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                  | `[]`    |
-| `worker.mapMatcher.affinity`             | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                            | `{}`    |
+| Name                                     | Description                                                                                                                                                               | Value   |
+| ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `worker.mapMatcher.enabled`              | If Map Matcher worker is enabled for the service.                                                                                                                         | `false` |
+| `worker.mapMatcher.replicas`             | A replica count for the pod.                                                                                                                                              | `1`     |
+| `worker.mapMatcher.revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment). | `3`     |
+| `worker.mapMatcher.baseUrl`              | Map Matching API address. Ex.: http://navi-front.svc **Required**                                                                                                         | `""`    |
+| `worker.mapMatcher.key`                  | Map Matching API key. **Required**                                                                                                                                        | `""`    |
+| `worker.mapMatcher.interpolation`        | Set to `true` for compatibility with Map Matching API which requires gps points timestamps in seconds as integers (w/o millisecond precision support).                    | `true`  |
+| `worker.mapMatcher.retries`              | Total number of retries in case of Map Matching API unavailability/errors.                                                                                                | `3`     |
+| `worker.mapMatcher.timeoutSeconds`       | Map Matching API timeout, seconds.                                                                                                                                        | `30`    |
+| `worker.mapMatcher.annotations`          | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                 | `{}`    |
+| `worker.mapMatcher.labels`               | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                           | `{}`    |
+| `worker.mapMatcher.podAnnotations`       | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                 | `{}`    |
+| `worker.mapMatcher.podLabels`            | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                           | `{}`    |
+| `worker.mapMatcher.nodeSelector`         | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                                   | `{}`    |
+| `worker.mapMatcher.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                     | `[]`    |
+| `worker.mapMatcher.affinity`             | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                                               | `{}`    |
 
 ### Citylens Detections Localizer worker's settings
 
-| Name                                              | Description                                                                                                                                    | Value        |
-| ------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------------ |
-| `worker.detectionsLocalizer.enabled`              | If Detections Localizer worker is enabled for the service.                                                                                     | `false`      |
-| `worker.detectionsLocalizer.predictors`           | From what sources detections should be localized.                                                                                              | `["camcom"]` |
-| `worker.detectionsLocalizer.revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`          |
-| `worker.detectionsLocalizer.annotations`          | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`         |
-| `worker.detectionsLocalizer.labels`               | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`         |
-| `worker.detectionsLocalizer.podAnnotations`       | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`         |
-| `worker.detectionsLocalizer.podLabels`            | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`         |
-| `worker.detectionsLocalizer.nodeSelector`         | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                        | `{}`         |
-| `worker.detectionsLocalizer.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `[]`         |
-| `worker.detectionsLocalizer.affinity`             | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                    | `{}`         |
+| Name                                              | Description                                                                                                                                                               | Value        |
+| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------ |
+| `worker.detectionsLocalizer.enabled`              | If Detections Localizer worker is enabled for the service.                                                                                                                | `false`      |
+| `worker.detectionsLocalizer.predictors`           | From what sources detections should be localized.                                                                                                                         | `["camcom"]` |
+| `worker.detectionsLocalizer.revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment). | `3`          |
+| `worker.detectionsLocalizer.annotations`          | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                 | `{}`         |
+| `worker.detectionsLocalizer.labels`               | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                           | `{}`         |
+| `worker.detectionsLocalizer.podAnnotations`       | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                 | `{}`         |
+| `worker.detectionsLocalizer.podLabels`            | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                           | `{}`         |
+| `worker.detectionsLocalizer.nodeSelector`         | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                                   | `{}`         |
+| `worker.detectionsLocalizer.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                     | `[]`         |
+| `worker.detectionsLocalizer.affinity`             | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                                               | `{}`         |
 
 ### Citylens Lifecycle Controller worker's settings (depends on Detections Localizer worker)
 
-| Name                                                             | Description                                                                                                                                    | Value  |
-| ---------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `worker.lifecycleController.scheduledLocalizationTimeoutMinutes` | Timeout in minutes after that track localization will be rescheduled if it was scheduled and not done.                                         | `1380` |
-| `worker.lifecycleController.minTrackLocalizationIntervalMinutes` | Interval in minutes between scheduling track detections localization again.                                                                    | `10`   |
-| `worker.lifecycleController.revisionHistoryLimit`                | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`    |
-| `worker.lifecycleController.annotations`                         | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`   |
-| `worker.lifecycleController.labels`                              | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`   |
-| `worker.lifecycleController.podAnnotations`                      | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`   |
-| `worker.lifecycleController.podLabels`                           | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`   |
-| `worker.lifecycleController.nodeSelector`                        | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                        | `{}`   |
-| `worker.lifecycleController.tolerations`                         | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `[]`   |
-| `worker.lifecycleController.affinity`                            | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                    | `{}`   |
+| Name                                                             | Description                                                                                                                                                               | Value  |
+| ---------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `worker.lifecycleController.scheduledLocalizationTimeoutMinutes` | Timeout in minutes after that track localization will be rescheduled if it was scheduled and not done.                                                                    | `1380` |
+| `worker.lifecycleController.minTrackLocalizationIntervalMinutes` | Interval in minutes between scheduling track detections localization again.                                                                                               | `10`   |
+| `worker.lifecycleController.revisionHistoryLimit`                | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment). | `3`    |
+| `worker.lifecycleController.annotations`                         | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                 | `{}`   |
+| `worker.lifecycleController.labels`                              | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                           | `{}`   |
+| `worker.lifecycleController.podAnnotations`                      | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                 | `{}`   |
+| `worker.lifecycleController.podLabels`                           | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                           | `{}`   |
+| `worker.lifecycleController.nodeSelector`                        | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                                   | `{}`   |
+| `worker.lifecycleController.tolerations`                         | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                     | `[]`   |
+| `worker.lifecycleController.affinity`                            | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                                               | `{}`   |
 
 ### Citylens Dashboard batch events worker's settings
 
@@ -411,20 +411,20 @@ See the [documentation]() to learn about:
 
 ### Citylens Dashboard batch events worker's Image settings
 
-| Name                                               | Description                                                                                                                                    | Value                              |
-| -------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
-| `worker.dashboardBatchEvents.image.repository`     | Repository.                                                                                                                                    | `2gis-on-premise/citylens-workers` |
-| `worker.dashboardBatchEvents.image.tag`            | Tag.                                                                                                                                           | `1.18.3`                           |
-| `worker.dashboardBatchEvents.image.pullPolicy`     | Pull Policy.                                                                                                                                   | `IfNotPresent`                     |
-| `worker.dashboardBatchEvents.logLevel`             | Worker's log level: 'DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'.                                                                           | `INFO`                             |
-| `worker.dashboardBatchEvents.revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`                                |
-| `worker.dashboardBatchEvents.annotations`          | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`                               |
-| `worker.dashboardBatchEvents.labels`               | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`                               |
-| `worker.dashboardBatchEvents.podAnnotations`       | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`                               |
-| `worker.dashboardBatchEvents.podLabels`            | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`                               |
-| `worker.dashboardBatchEvents.nodeSelector`         | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                        | `{}`                               |
-| `worker.dashboardBatchEvents.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                          | `[]`                               |
-| `worker.dashboardBatchEvents.affinity`             | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                    | `{}`                               |
+| Name                                               | Description                                                                                                                                                               | Value                              |
+| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
+| `worker.dashboardBatchEvents.image.repository`     | Repository.                                                                                                                                                               | `2gis-on-premise/citylens-workers` |
+| `worker.dashboardBatchEvents.image.tag`            | Tag.                                                                                                                                                                      | `1.18.3`                           |
+| `worker.dashboardBatchEvents.image.pullPolicy`     | Pull Policy.                                                                                                                                                              | `IfNotPresent`                     |
+| `worker.dashboardBatchEvents.logLevel`             | Worker's log level: 'DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'.                                                                                                      | `INFO`                             |
+| `worker.dashboardBatchEvents.revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment). | `3`                                |
+| `worker.dashboardBatchEvents.annotations`          | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                 | `{}`                               |
+| `worker.dashboardBatchEvents.labels`               | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                           | `{}`                               |
+| `worker.dashboardBatchEvents.podAnnotations`       | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                 | `{}`                               |
+| `worker.dashboardBatchEvents.podLabels`            | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                           | `{}`                               |
+| `worker.dashboardBatchEvents.nodeSelector`         | Kubernetes pod [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                                   | `{}`                               |
+| `worker.dashboardBatchEvents.tolerations`          | Kubernetes pod [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                     | `[]`                               |
+| `worker.dashboardBatchEvents.affinity`             | Kubernetes pod [affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity) settings.                                               | `{}`                               |
 
 ### Migration job settings
 
@@ -586,14 +586,14 @@ See the [documentation]() to learn about:
 
 ### Resources settings
 
-| Name                                   | Description                                                                                                                                    | Value    |
-| -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
-| `routes.api.replicaCount`              | A replica count for the pod.                                                                                                                   | `1`      |
-| `routes.api.revisionHistoryLimit`      | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`      |
-| `routes.api.resources.requests.cpu`    | A CPU request.                                                                                                                                 | `400m`   |
-| `routes.api.resources.requests.memory` | A memory request.                                                                                                                              | `256Mi`  |
-| `routes.api.resources.limits.cpu`      | A CPU limit.                                                                                                                                   | `1`      |
-| `routes.api.resources.limits.memory`   | A memory limit.                                                                                                                                | `1024Mi` |
+| Name                                   | Description                                                                                                                                                               | Value    |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| `routes.api.replicaCount`              | A replica count for the pod.                                                                                                                                              | `1`      |
+| `routes.api.revisionHistoryLimit`      | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment). | `3`      |
+| `routes.api.resources.requests.cpu`    | A CPU request.                                                                                                                                                            | `400m`   |
+| `routes.api.resources.requests.memory` | A memory request.                                                                                                                                                         | `256Mi`  |
+| `routes.api.resources.limits.cpu`      | A CPU limit.                                                                                                                                                              | `1`      |
+| `routes.api.resources.limits.memory`   | A memory limit.                                                                                                                                                           | `1024Mi` |
 
 ### Service settings
 
@@ -681,14 +681,14 @@ See the [documentation]() to learn about:
 
 ### Resources settings
 
-| Name                                      | Description                                                                                                                                    | Value    |
-| ----------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
-| `routes.worker.replicaCount`              | A replica count for the pod.                                                                                                                   | `1`      |
-| `routes.worker.revisionHistoryLimit`      | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`      |
-| `routes.worker.resources.requests.cpu`    | A CPU request.                                                                                                                                 | `400m`   |
-| `routes.worker.resources.requests.memory` | A memory request.                                                                                                                              | `256Mi`  |
-| `routes.worker.resources.limits.cpu`      | A CPU limit.                                                                                                                                   | `1`      |
-| `routes.worker.resources.limits.memory`   | A memory limit.                                                                                                                                | `1024Mi` |
+| Name                                      | Description                                                                                                                                                               | Value    |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| `routes.worker.replicaCount`              | A replica count for the pod.                                                                                                                                              | `1`      |
+| `routes.worker.revisionHistoryLimit`      | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment). | `3`      |
+| `routes.worker.resources.requests.cpu`    | A CPU request.                                                                                                                                                            | `400m`   |
+| `routes.worker.resources.requests.memory` | A memory request.                                                                                                                                                         | `256Mi`  |
+| `routes.worker.resources.limits.cpu`      | A CPU limit.                                                                                                                                                              | `1`      |
+| `routes.worker.resources.limits.memory`   | A memory limit.                                                                                                                                                           | `1024Mi` |
 
 ### Kubernetes [pod disruption budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
@@ -747,14 +747,14 @@ See the [documentation]() to learn about:
 
 ### Resources settings
 
-| Name                                               | Description                                                                                                                                    | Value    |
-| -------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
-| `routes.realtimeDataApi.replicaCount`              | A replica count for the pod.                                                                                                                   | `1`      |
-| `routes.realtimeDataApi.revisionHistoryLimit`      | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`      |
-| `routes.realtimeDataApi.resources.requests.cpu`    | A CPU request.                                                                                                                                 | `400m`   |
-| `routes.realtimeDataApi.resources.requests.memory` | A memory request.                                                                                                                              | `256Mi`  |
-| `routes.realtimeDataApi.resources.limits.cpu`      | A CPU limit.                                                                                                                                   | `1`      |
-| `routes.realtimeDataApi.resources.limits.memory`   | A memory limit.                                                                                                                                | `1024Mi` |
+| Name                                               | Description                                                                                                                                                               | Value    |
+| -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| `routes.realtimeDataApi.replicaCount`              | A replica count for the pod.                                                                                                                                              | `1`      |
+| `routes.realtimeDataApi.revisionHistoryLimit`      | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment). | `3`      |
+| `routes.realtimeDataApi.resources.requests.cpu`    | A CPU request.                                                                                                                                                            | `400m`   |
+| `routes.realtimeDataApi.resources.requests.memory` | A memory request.                                                                                                                                                         | `256Mi`  |
+| `routes.realtimeDataApi.resources.limits.cpu`      | A CPU limit.                                                                                                                                                              | `1`      |
+| `routes.realtimeDataApi.resources.limits.memory`   | A memory limit.                                                                                                                                                           | `1024Mi` |
 
 ### Service settings
 

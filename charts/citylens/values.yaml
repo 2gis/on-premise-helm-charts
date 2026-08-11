@@ -43,7 +43,7 @@ dgctlStorage:
 
 # @param api.replicas A replica count for the pod.
 
-# @param api.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+# @param api.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment).
 
 # @param api.resources.requests.cpu A CPU request.
 # @param api.resources.requests.memory A memory request.
@@ -187,7 +187,7 @@ api:
 
 # @param web.replicas A replica count for the pod.
 
-# @param web.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+# @param web.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment).
 
 # @param web.resources.requests.cpu A CPU request.
 # @param web.resources.requests.memory A memory request.
@@ -330,7 +330,7 @@ worker:
 
 # @param worker.framesSaver.replicas A replica count for the pod.
 
-# @param worker.framesSaver.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+# @param worker.framesSaver.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment).
 
 # @param worker.framesSaver.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
 # @param worker.framesSaver.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
@@ -361,7 +361,7 @@ worker:
 
 # @param worker.camcomSender.replicas A replica count for the pod.
 
-# @param worker.camcomSender.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+# @param worker.camcomSender.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment).
 
 # @param worker.camcomSender.apiKey A key for Camcom's API access
 # @param worker.camcomSender.endpointUrl Camcom endpoint URL
@@ -414,7 +414,7 @@ worker:
 
 # @param worker.predictionsSaver.replicas A replica count for the pod.
 
-# @param worker.predictionsSaver.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+# @param worker.predictionsSaver.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment).
 
 # @param worker.predictionsSaver.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
 # @param worker.predictionsSaver.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
@@ -443,7 +443,7 @@ worker:
 
 # @param worker.logsSaver.replicas A replica count for the pod.
 
-# @param worker.logsSaver.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+# @param worker.logsSaver.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment).
 
 # @param worker.logsSaver.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
 # @param worker.logsSaver.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
@@ -476,7 +476,7 @@ worker:
 
 # @param worker.reporterPro.replicas A replica count for the pod.
 
-# @param worker.reporterPro.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+# @param worker.reporterPro.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment).
 
 # @param worker.reporterPro.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
 # @param worker.reporterPro.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
@@ -508,7 +508,7 @@ worker:
 
 # @section Citylens Reporter Pro Tracks worker's settings (track status actualization, requires Reporter Pro)
 
-# @param worker.reporterProTracks.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+# @param worker.reporterProTracks.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment).
 
 # @param worker.reporterProTracks.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
 # @param worker.reporterProTracks.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
@@ -535,7 +535,7 @@ worker:
 
 # @param worker.trackMetadataSaver.replicas A replica count for the pod.
 
-# @param worker.trackMetadataSaver.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+# @param worker.trackMetadataSaver.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment).
 
 # @param worker.trackMetadataSaver.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
 # @param worker.trackMetadataSaver.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
@@ -567,7 +567,7 @@ worker:
 
 # @param worker.tracksUploader.replicas A replica count for the pod.
 
-# @param worker.tracksUploader.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+# @param worker.tracksUploader.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment).
 
 # @param worker.tracksUploader.api Destination API address citylens. Ex.: http(s)://citylens-api.host/
 # @param worker.tracksUploader.source Source address citylens-web. Ex.: http(s)://citylens-web.host
@@ -611,7 +611,7 @@ worker:
 
 # @param worker.mapMatcher.replicas A replica count for the pod.
 
-# @param worker.mapMatcher.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+# @param worker.mapMatcher.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment).
 
 # @param worker.mapMatcher.baseUrl Map Matching API address. Ex.: http://navi-front.svc **Required**
 # @param worker.mapMatcher.key Map Matching API key. **Required**
@@ -656,7 +656,7 @@ worker:
 # @param worker.detectionsLocalizer.enabled If Detections Localizer worker is enabled for the service.
 # @param worker.detectionsLocalizer.predictors From what sources detections should be localized.
 
-# @param worker.detectionsLocalizer.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+# @param worker.detectionsLocalizer.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment).
 
 # @param worker.detectionsLocalizer.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
 # @param worker.detectionsLocalizer.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
@@ -689,7 +689,7 @@ worker:
 # @param worker.lifecycleController.scheduledLocalizationTimeoutMinutes Timeout in minutes after that track localization will be rescheduled if it was scheduled and not done.
 # @param worker.lifecycleController.minTrackLocalizationIntervalMinutes Interval in minutes between scheduling track detections localization again.
 
-# @param worker.lifecycleController.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+# @param worker.lifecycleController.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment).
 
 # @param worker.lifecycleController.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
 # @param worker.lifecycleController.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
@@ -728,7 +728,7 @@ worker:
 
 # @param worker.dashboardBatchEvents.logLevel Worker's log level: 'DEBUG', 'INFO', 'WARNING', 'ERROR', 'CRITICAL'.
 
-# @param worker.dashboardBatchEvents.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+# @param worker.dashboardBatchEvents.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment).
 
 # @param worker.dashboardBatchEvents.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
 # @param worker.dashboardBatchEvents.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
@@ -1065,7 +1065,7 @@ routes:
 
 # @section Resources settings
 # @param routes.api.replicaCount A replica count for the pod.
-# @param routes.api.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+# @param routes.api.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment).
 # @param routes.api.resources.requests.cpu A CPU request.
 # @param routes.api.resources.requests.memory A memory request.
 # @param routes.api.resources.limits.cpu A CPU limit.
@@ -1208,7 +1208,7 @@ routes:
 
 # @section Resources settings
 # @param routes.worker.replicaCount A replica count for the pod.
-# @param routes.worker.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+# @param routes.worker.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment).
 # @param routes.worker.resources.requests.cpu A CPU request.
 # @param routes.worker.resources.requests.memory A memory request.
 # @param routes.worker.resources.limits.cpu A CPU limit.
@@ -1304,7 +1304,7 @@ routes:
 
 # @section Resources settings
 # @param routes.realtimeDataApi.replicaCount A replica count for the pod.
-# @param routes.realtimeDataApi.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+# @param routes.realtimeDataApi.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment).
 # @param routes.realtimeDataApi.resources.requests.cpu A CPU request.
 # @param routes.realtimeDataApi.resources.requests.memory A memory request.
 # @param routes.realtimeDataApi.resources.limits.cpu A CPU limit.

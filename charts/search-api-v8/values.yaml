@@ -101,7 +101,7 @@ dgctlDockerRegistry: ''
 # @param worker.strategy.type Kubernetes deployment strategy. Can be `Recreate` or `RollingUpdate`. See [Strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy)
 # @param worker.strategy.rollingUpdate.maxUnavailable Maximum number of pods that can be unavailable during a [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment)
 # @param worker.strategy.rollingUpdate.maxSurge Maximum number of extra pods that can be created during a [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment)
-# @param worker.revisionHistoryLimit Number of old ReplicaSets to retain for [rollback](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)
+# @param worker.revisionHistoryLimit Number of old ReplicaSets to retain for [rollback](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision)
 # @param worker.gracefulShutdownInterval Interval (in seconds) used by the application to finish processing current requests before shutting down
 # @param worker.syncer.includeProjectKeyRegexp A regular expression that the project keys must match to be included in the synchronization
 # @param worker.syncer.excludeProjectKeyRegexp A regular expression that the project keys must match to be excluded from the synchronization
@@ -617,7 +617,7 @@ head:
       maxUnavailable: 5%
       maxSurge: 5%
 
-# @param head.revisionHistoryLimit Number of old ReplicaSets to retain for [rollback](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) purposes
+# @param head.revisionHistoryLimit Number of old ReplicaSets to retain for [rollback](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) purposes
   revisionHistoryLimit: 10
 
 # @param indexerServices.externalFilesStorageUrl Enable and define the external index storage URL; if empty, a custom indexing and storage system will be deployed
