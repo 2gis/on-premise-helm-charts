@@ -417,7 +417,7 @@ head:
     image:
       repository: 2gis-on-premise/search-api-v8-envoy
       pullPolicy: IfNotPresent
-      tag: 1.38.1-tools
+      tag: 1.38.3
     ports:
       admin: 9901
       grpc: 8091
@@ -1517,7 +1517,7 @@ ingressRouter:
     image:
       repository: 2gis-on-premise/search-api-v8-envoy
       pullPolicy: IfNotPresent
-      tag: 1.36.2-tools
+      tag: 1.38.3
     resources:
       limits:
         cpu: 800m
