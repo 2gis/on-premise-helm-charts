@@ -1,7 +1,7 @@
 # 2GIS On-Premise Helm Charts — Code Review Instructions
 
 This repository contains Helm charts for deploying 2GIS On-Premise products on Kubernetes.
-Charts share a common library chart (`generic-chart`) and follow internal coding standards.
+Charts may optionally share a common library chart (`generic-chart`) and follow internal coding standards.
 
 Use `/home/runner/work/on-premise-helm-charts/on-premise-helm-charts/styleguide.md` as the primary source of chart authoring rules. Treat this file as a review checklist and summary, not as a replacement for the styleguide.
 
@@ -89,3 +89,5 @@ When performing a code review, flag the following:
 - `endpoint` or `url` used instead of `host` in s3 block
 - `servers` or `bootstrapServer` used instead of `bootstrapServers` in kafka block
 - Data import service block not named `importer`
+- Chart declares a `generic-chart` dependency but manually implements standard resources (Deployment, Service, Ingress, HPA, VPA, PDB, ServiceAccount) instead of using `generic-chart.*.tpl` templates
+- Chart without a `generic-chart` dependency flagged for missing the dependency — `generic-chart` is optional; manual template implementation is acceptable

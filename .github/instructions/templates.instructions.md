@@ -18,7 +18,7 @@ excludeAgent: ["coding-agent"]
 - Do not hardcode `namespace:` in template `metadata` — namespace is set by the caller via `--namespace`
 - Do not use floating image tags (`latest`, `head`, `canary`); always use a fixed tag or SHA
 - PodTemplate selectors must be explicitly declared in `selector.matchLabels`
-- Use `generic-chart` library templates for standard resources (Deployment, Service, Ingress, HPA, VPA, PDB) instead of duplicating them
+- `generic-chart` library templates for standard resources (Deployment, Service, Ingress, HPA, VPA, PDB) are **optional**; charts may implement templates manually
 - Every chart must have a `templates/NOTES.txt` with post-install instructions. Recommended template:
   ```
   {{ .Chart.Name }} is installed by release "{{ .Release.Name }}" at "{{ .Release.Namespace }}" namespace
