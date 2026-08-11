@@ -44,14 +44,14 @@ data:
                           domains: [ "*" ]
                           routes:
                             - match:
-                                prefix: "/"
-                              route:
-                                cluster: workers
-                                auto_host_rewrite: true
-                            - match:
                                 prefix: "/segmentdetector.SegmentDetectorService/"
                               route:
                                 cluster: segmentdetector
+                                auto_host_rewrite: true
+                            - match:
+                                prefix: "/"
+                              route:
+                                cluster: workers
                                 auto_host_rewrite: true
                       {{- else }}
                         - name: local_service
