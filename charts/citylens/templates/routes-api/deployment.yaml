@@ -25,6 +25,7 @@ spec:
     metadata:
       annotations:
         checksum/secret: {{ include (print $.Template.BasePath "/secrets.routes.yaml") . | sha256sum }}
+        checksum/secret-api-key: {{ include "citylens.checksum" (merge (dict "path" "/secrets.api-key.yaml") $) }}
       {{- with .Values.routes.api.podAnnotations }}
         {{- toYaml . | nindent 8 }}
       {{- end }}

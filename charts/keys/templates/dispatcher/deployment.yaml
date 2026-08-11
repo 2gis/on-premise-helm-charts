@@ -8,6 +8,7 @@ metadata:
     {{- if .Values.customCAs.bundle }}
     checksum/config: {{ include (print $.Template.BasePath "/configmap-deploys.yaml") . | sha256sum }}
     {{- end }}
+    checksum/secret: {{ (include (print $.Template.BasePath "/secret-deploys.yaml") . | fromYaml).data | toYaml | sha256sum }}
     {{- with .Values.dispatcher.annotations }}
     {{- toYaml . | nindent 4 }}
     {{- end }}

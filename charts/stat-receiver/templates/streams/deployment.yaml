@@ -31,7 +31,9 @@ spec:
         {{- end }}
       annotations:
         checksum/config: {{ (include (print $.Template.BasePath "/streams/configmap.yaml") . | fromYaml).data | toYaml | sha256sum }}
-        checksum/secret: {{ (include (print $.Template.BasePath "/secret.yaml") . | fromYaml).data | toYaml | sha256sum }}
+        {{- if or .Values.kafka.truststore.enabled .Values.kafka.keystore.enabled .Values.kafka.sasl.enabled }}
+        checksum/secret: {{ include "stat-receiver-secret.checksum" . }}
+        {{- end }}
     spec:
       containers:
       - name: streams

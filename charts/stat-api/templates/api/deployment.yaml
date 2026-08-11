@@ -7,6 +7,7 @@ metadata:
     {{- if .Values.customCAs.bundle }}
     checksum/config: {{ include (print $.Template.BasePath "/configmap-custom-ca.yaml") . | sha256sum }}
     {{- end }}
+    checksum/secret: {{ (include (print $.Template.BasePath "/secret-clickhouse.yaml") . | fromYaml).data | toYaml | sha256sum }}
     {{- if .Values.clickhouse.tls.enabled }}
     checksum/secret-tls: {{ include (print $.Template.BasePath "/secret-clickhouse-tls.yaml") . | sha256sum }}
     {{- end }}
