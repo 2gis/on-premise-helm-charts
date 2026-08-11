@@ -3,15 +3,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "keys.dispatcher.name" . }}
-  {{- if or .Values.dispatcher.annotations .Values.customCAs.bundle }}
+  {{- with .Values.dispatcher.annotations }}
   annotations:
-    {{- if .Values.customCAs.bundle }}
-    checksum/config: {{ include (print $.Template.BasePath "/configmap-deploys.yaml") . | sha256sum }}
-    {{- end }}
-    checksum/secret: {{ (include (print $.Template.BasePath "/secret-deploys.yaml") . | fromYaml).data | toYaml | sha256sum }}
-    {{- with .Values.dispatcher.annotations }}
     {{- toYaml . | nindent 4 }}
-    {{- end }}
   {{- end }}
   labels:
     {{- include "keys.dispatcher.labels" . | nindent 4 }}
@@ -27,10 +21,14 @@ spec:
       {{- include "keys.dispatcher.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.dispatcher.podAnnotations }}
       annotations:
+        {{- if .Values.customCAs.bundle }}
+        checksum/config: {{ include (print $.Template.BasePath "/configmap-deploys.yaml") . | sha256sum }}
+        {{- end }}
+        checksum/secret: {{ (include (print $.Template.BasePath "/secret-deploys.yaml") . | fromYaml).data | toYaml | sha256sum }}
+        {{- with .Values.dispatcher.podAnnotations }}
         {{- toYaml . | nindent 8 }}
-      {{- end }}
+        {{- end }}
       labels:
         {{- include "keys.dispatcher.labels" . | nindent 8 }}
         {{- with .Values.dispatcher.podLabels }}

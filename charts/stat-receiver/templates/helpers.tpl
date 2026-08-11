@@ -42,7 +42,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- $data = set $data (printf "keystore.%s" .Values.kafka.keystore.storeFieldName) .Values.kafka.keystore.storeData }}
 {{- $data = set $data (printf "keystore.%s" .Values.kafka.keystore.storePasswordFieldName) (.Values.kafka.keystore.storePassword | b64enc) }}
 {{- end }}
-{{- if .Values.kafka.sasl.enabled }}
+{{- if and .Values.kafka.sasl.enabled (eq (.Values.kafka.sasl.secretName | len) 0) }}
 {{- $jaas := printf "%s required username=\"%s\" password=\"%s\";" .Values.kafka.sasl.jaasLoginModule (required "A valid .Values.kafka.sasl.username entry required" .Values.kafka.sasl.username) (required "A valid .Values.kafka.sasl.password entry required" .Values.kafka.sasl.password) }}
 {{- $data = set $data (printf "sasl.%s" .Values.kafka.sasl.jaasFieldName) ($jaas | b64enc) }}
 {{- end }}

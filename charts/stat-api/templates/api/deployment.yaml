@@ -2,18 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "stat-api.componentname" (dict "global" $ "component" "api") }}
-  {{- if or .Values.api.annotations .Values.customCAs.bundle }}
+  {{- with .Values.api.annotations }}
   annotations:
-    {{- if .Values.customCAs.bundle }}
-    checksum/config: {{ include (print $.Template.BasePath "/configmap-custom-ca.yaml") . | sha256sum }}
-    {{- end }}
-    checksum/secret: {{ (include (print $.Template.BasePath "/secret-clickhouse.yaml") . | fromYaml).data | toYaml | sha256sum }}
-    {{- if .Values.clickhouse.tls.enabled }}
-    checksum/secret-tls: {{ include (print $.Template.BasePath "/secret-clickhouse-tls.yaml") . | sha256sum }}
-    {{- end }}
-    {{- with .Values.api.annotations }}
     {{- toYaml . | nindent 4 }}
-    {{- end }}
   {{- end }}
   labels:
     {{- include "stat-api.labels" (dict "global" $ "component" "api") | nindent 4 }}
@@ -32,10 +23,17 @@ spec:
       {{- include "stat-api.selectorLabels" (dict "global" $ "component" "api") | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.api.podAnnotations }}
       annotations:
+        {{- if .Values.customCAs.bundle }}
+        checksum/config: {{ include (print $.Template.BasePath "/configmap-custom-ca.yaml") . | sha256sum }}
+        {{- end }}
+        checksum/secret: {{ (include (print $.Template.BasePath "/secret-clickhouse.yaml") . | fromYaml).data | toYaml | sha256sum }}
+        {{- if .Values.clickhouse.tls.enabled }}
+        checksum/secret-tls: {{ include (print $.Template.BasePath "/secret-clickhouse-tls.yaml") . | sha256sum }}
+        {{- end }}
+        {{- with .Values.api.podAnnotations }}
         {{- toYaml . | nindent 8 }}
-      {{- end }}
+        {{- end }}
       labels:
         {{- include "stat-api.labels" (dict "global" $ "component" "api") | nindent 8 }}
         {{- with .Values.api.podLabels }}

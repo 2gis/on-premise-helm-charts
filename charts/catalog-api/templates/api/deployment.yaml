@@ -36,7 +36,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/secret: {{ (include (print $.Template.BasePath "/secret-deploys.yaml") . | fromYaml).data | toYaml | sha256sum }}
+        checksum/secret: {{ include (print $.Template.BasePath "/secret-deploys.yaml") . | sha256sum }}
         {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
