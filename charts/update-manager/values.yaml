@@ -178,7 +178,7 @@ api:
 
   replicas: 1
 
-  # @param api.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+  # @param api.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment).
 
   revisionHistoryLimit: 3
 
