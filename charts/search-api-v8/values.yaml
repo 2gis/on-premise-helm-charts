@@ -117,7 +117,7 @@ worker:
   image:
     repository: 2gis-on-premise/search-api-v8-worker
     pullPolicy: IfNotPresent
-    tag: 8.26.0
+    tag: 8.30.0
   ports:
     http: 8092
     grpc: 8091
@@ -179,19 +179,19 @@ worker:
     behavior:
       scaleDown:
         policies:
-        - periodSeconds: 180
-          type: Percent
-          value: 3
+          - periodSeconds: 180
+            type: Percent
+            value: 3
         stabilizationWindowSeconds: 1200
       scaleUp:
         selectPolicy: Min
         policies:
-        - periodSeconds: 15
-          type: Percent
-          value: 10
-        - type: Pods
-          value: 5
-          periodSeconds: 15
+          - periodSeconds: 15
+            type: Percent
+            value: 10
+          - type: Pods
+            value: 5
+            periodSeconds: 15
         stabilizationWindowSeconds: 30
   vpa:
     enabled: false
@@ -306,7 +306,7 @@ head:
     image:
       repository: 2gis-on-premise/search-api-v8-head
       pullPolicy: IfNotPresent
-      tag: 8.26.0
+      tag: 8.30.0
     ports:
       grpc: 9010
       http: 9090
@@ -361,7 +361,7 @@ head:
     bigSearchMode:
       enabled: true
     bigSearchSearchers:
-    - ExpandingSearcher
+      - ExpandingSearcher
 # ExpandingSearcher is the default searcher, for additional serchers look docs in docs.2gis.com
 # possible values of searchers
 #      - ExpandingSearcher
@@ -475,15 +475,15 @@ head:
     behavior:
       scaleDown:
         policies:
-        - periodSeconds: 180
-          type: Percent
-          value: 3
+          - periodSeconds: 180
+            type: Percent
+            value: 3
         stabilizationWindowSeconds: 600
       scaleUp:
         policies:
-        - periodSeconds: 15
-          type: Percent
-          value: 10
+          - periodSeconds: 15
+            type: Percent
+            value: 10
         stabilizationWindowSeconds: 30
         selectPolicy: Max
   vpa:
@@ -495,7 +495,6 @@ head:
 # @skip head.queryTransformer.endpoint.address Address of the queryTransformer service
 # @skip head.queryTransformer.endpoint.port Port of the queryTransformer service
 # @skip head.queryTransformer.endpoint.ssl Enable or disable TLS encryption for the queryTransformer service
-# @skip head.queryTransformer.timeoutMs Connection timeout (in milliseconds) for the queryTransformer service
 
   queryTransformer:
     enabled: false
@@ -504,14 +503,12 @@ head:
       address: ''
       port: 6767
       ssl: false
-    timeoutMs: 20
 
 # @skip head.aiVectorSearch.enabled Enable or disable aiVectorSearch
 # @skip head.aiVectorSearch.endpoint.address Address of the aiVectorSearch service
 # @skip head.aiVectorSearch.endpoint.port Port of the aiVectorSearch service
 # @skip head.aiVectorSearch.endpoint.ssl Enable or disable TLS encryption for the aiVectorSearch service
 # @skip head.aiVectorSearch.clientFactoryName Client factory name for the aiVectorSearch client (used to enable/disable SSL when debugging locally)
-# @skip head.aiVectorSearch.timeoutMs Connection timeout (in milliseconds) for the aiVectorSearch service
 # @skip head.aiVectorSearch.searchers List of searchers for which aiVectorSearch will be enabled
 
   aiVectorSearch:
@@ -521,7 +518,6 @@ head:
       port: 50051
       ssl: false
     clientFactoryName: grpc-client-factory
-    timeoutMs: 600
     searchers: []
 
   # @skip head.autocompleteChips.enabled Enable or disable autocompleteChips
@@ -529,7 +525,6 @@ head:
   # @skip head.autocompleteChips.endpoint.port Port of the autocompleteChips service
   # @skip head.autocompleteChips.endpoint.ssl Enable or disable TLS encryption for the autocompleteChips service
   # @skip head.autocompleteChips.clientFactoryName Client factory name for the autocompleteChips client (used to enable/disable SSL when debugging locally)
-  # @skip head.autocompleteChips.timeoutMs Connection timeout (in milliseconds) for the autocompleteChips service
   # @skip head.autocompleteChips.searchers List of searchers for which autocompleteChips will be enabled
 
   autocompleteChips:
@@ -539,7 +534,6 @@ head:
       port: 50051
       ssl: false
     clientFactoryName: grpc-client-factory
-    timeoutMs: 200
     searchers: []
 
 # @skip head.recsysRanker.enabled Enable or disable recsysRanker
@@ -565,7 +559,6 @@ head:
   # @skip head.friendsService.endpoint.credentials.username Username to connect to the friendsService service
   # @skip head.friendsService.endpoint.credentials.password Password to connect to the friendsService service
   # @skip head.friendsService.clientFactoryName Client factory name for the friendsService client (used to enable/disable SSL when debugging locally)
-  # @skip head.friendsService.timeoutMs Connection timeout (in milliseconds) for the friendsService service
   # @skip head.friendsService.searchers List of searchers for which friendsService will be enabled
 
   friendsService:
@@ -578,7 +571,6 @@ head:
         username: ''
         password: ''
     clientFactoryName: grpc-client-factory
-    timeoutMs: 150
     searchers: []
 
 # @param head.grpcClientCircuitBreaker.clients List of gRPC client circuit breaker configurations, each defining thresholds and behavior per client.
@@ -681,7 +673,7 @@ filesStorage:
   image:
     repository: 2gis-on-premise/search-api-v8-files-storage
     pullPolicy: IfNotPresent
-    tag: 8.26.0
+    tag: 8.30.0
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -780,7 +772,7 @@ dataAdapter:
   image:
     repository: 2gis-on-premise/search-api-v8-data-adapter
     pullPolicy: IfNotPresent
-    tag: 8.26.0
+    tag: 8.30.0
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -873,7 +865,7 @@ portal:
   image:
     repository: 2gis-on-premise/search-api-v8-portal
     pullPolicy: IfNotPresent
-    tag: 8.26.0
+    tag: 8.30.0
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -975,7 +967,7 @@ controller:
   image:
     repository: 2gis-on-premise/search-api-v8-controller
     pullPolicy: IfNotPresent
-    tag: 8.26.0
+    tag: 8.30.0
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -1010,12 +1002,12 @@ controller:
   projectListUrl: ''
   s3ProjectPrefix: ''
   props:
-  - model: gis
-    domain: v4
-  - model: gis
-    domain: geo
-    language: nolang
-    location: '-'
+    - model: gis
+      domain: v4
+    - model: gis
+      domain: geo
+      language: nolang
+      location: '-'
   interval: 15s
   taskTimeout: 20m
   projectsApiRequestTimeout: 5s
@@ -1107,7 +1099,7 @@ indexer:
   image:
     repository: 2gis-on-premise/search-api-v8-indexer
     pullPolicy: IfNotPresent
-    tag: 8.26.0
+    tag: 8.30.0
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -1146,15 +1138,15 @@ indexer:
     behavior:
       scaleDown:
         policies:
-        - periodSeconds: 15
-          type: Percent
-          value: 100
+          - periodSeconds: 15
+            type: Percent
+            value: 100
         stabilizationWindowSeconds: 60
       scaleUp:
         policies:
-        - periodSeconds: 15
-          type: Percent
-          value: 100
+          - periodSeconds: 15
+            type: Percent
+            value: 100
         stabilizationWindowSeconds: 0
         selectPolicy: Max
   vpa:
@@ -1212,7 +1204,7 @@ syncer:
   image:
     repository: 2gis-on-premise/search-api-v8-syncer
     pullPolicy: IfNotPresent
-    tag: 8.26.0
+    tag: 8.30.0
   securityContext: {}
   resources:
     requests:
@@ -1421,7 +1413,11 @@ service:
 # @param ingressRouter.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
 
 # @param ingressRouter.searchServiceUrl Custom URL for the `head` service
+# @param ingressRouter.searchHttpServiceUrl Custom http URL for the `ingress-router` service
 # @param ingressRouter.searchRequestTimeoutMs Timeout (in ms) for requests to the `head` service
+# @param ingressRouter.segmentDetector.timeoutMs Timeout (ms) for SegmentDetector client
+# @param ingressRouter.prometheusUrl Prometheus URL for rate limiting
+# @param ingressRouter.rateLimitRules Big Search usage quotas
 # @param ingressRouter.masterApiKey api key for advanced features
 
 # @param ingressRouter.ports.monitor TCP port for service endpoints such as `/metrics`
@@ -1489,19 +1485,19 @@ ingressRouter:
     behavior:
       scaleDown:
         policies:
-        - periodSeconds: 180
-          type: Percent
-          value: 3
+          - periodSeconds: 180
+            type: Percent
+            value: 3
         stabilizationWindowSeconds: 1200
       scaleUp:
         selectPolicy: Min
         policies:
-        - periodSeconds: 15
-          type: Percent
-          value: 10
-        - periodSeconds: 15
-          type: Pods
-          value: 5
+          - periodSeconds: 15
+            type: Percent
+            value: 10
+          - periodSeconds: 15
+            type: Pods
+            value: 5
         stabilizationWindowSeconds: 30
   vpa:
     enabled: false
@@ -1521,7 +1517,7 @@ ingressRouter:
     image:
       repository: 2gis-on-premise/search-api-v8-envoy
       pullPolicy: IfNotPresent
-      tag: 1.38.1-tools
+      tag: 1.36.2-tools
     resources:
       limits:
         cpu: 800m
@@ -1542,12 +1538,17 @@ ingressRouter:
   image:
     repository: 2gis-on-premise/search-api-v8-ingress-router
     pullPolicy: IfNotPresent
-    tag: 8.26.0
+    tag: 8.30.0
   imagePullSecrets: []
   matchLabels: {}
   podLabels: {}
   searchServiceUrl: ''
+  searchHttpServiceUrl: ''
   searchRequestTimeoutMs: 5000
+  segmentDetector:
+    timeoutMs: 500
+  prometheusUrl: ''
+  rateLimitRules: []
   masterApiKey: ''
   ports:
     monitor: 9093
@@ -1700,7 +1701,7 @@ segmentDetector:
   image:
     repository: 2gis-on-premise/search-api-v8-segment-detector
     pullPolicy: IfNotPresent
-    tag: 8.26.0
+    tag: 8.30.0
   imagePullSecrets: []
   segmentDetectorGrpcThreads: 2
   dataUpdateFrequencySec: 60
@@ -1725,19 +1726,19 @@ segmentDetector:
     behavior:
       scaleDown:
         policies:
-        - periodSeconds: 180
-          type: Percent
-          value: 3
+          - periodSeconds: 180
+            type: Percent
+            value: 3
         stabilizationWindowSeconds: 1200
       scaleUp:
         selectPolicy: Min
         policies:
-        - periodSeconds: 15
-          type: Percent
-          value: 10
-        - type: Pods
-          value: 5
-          periodSeconds: 15
+          - periodSeconds: 15
+            type: Percent
+            value: 10
+          - type: Pods
+            value: 5
+            periodSeconds: 15
         stabilizationWindowSeconds: 30
   vpa:
     enabled: false
@@ -1770,6 +1771,8 @@ segmentDetector:
   affinity: {}
   gracefulShutdownInterval: 30s
 
+# @section configDistributor
+
 # @section Ingress settings
 
 # @param ingress.enabled Enable or disable Ingress for the service
@@ -1785,10 +1788,10 @@ ingress:
   className: nginx
   annotations: {}
   hosts:
-  - host: search-api-v8.example.com
-    paths:
-    - path: /
-      pathType: ImplementationSpecific
+    - host: search-api-v8.example.com
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
   tls: []
 
 # @section customCAs **Custom Certificate Authority**

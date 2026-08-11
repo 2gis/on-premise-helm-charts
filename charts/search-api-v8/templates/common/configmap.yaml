@@ -404,7 +404,6 @@ data:
     search-exclude-segments: []
     search-query-transformer-enabled: false
     search-query-transformer-searchers: []
-    search-query-transformer-timeout-ms: 20
     search-query-transformer-url: "mock"
     throttle-enabled: false
     throttle-engage-factor: {{ .Values.head.head.throttle.engageFactor }}
@@ -415,7 +414,6 @@ data:
     throttle-update-interval-seconds: {{ .Values.head.head.throttle.updateIntervalSeconds }}
     ai-vector-search-enabled: false
     ai-vector-search-url: '127.0.0.1:1234'
-    ai-vector-search-timeout-ms: 2
     ai-vector-search-searchers: []
     ai-vector-search-grpc-client-factory-name:  'grpc-client-factory'
     search-recsys-ranker-enabled: false
@@ -424,7 +422,6 @@ data:
     search-recsys-ranker-grpc-client-factory-name: 'grpc-client-factory'
     friends-service-enabled: false
     friends-service-url: '127.0.0.1:1234'
-    friends-service-timeout-ms: 2
     friends-service-grpc-client-factory-name: 'grpc-client-factory'
     friends-service-searchers: []
     ads-enable: false
@@ -433,7 +430,6 @@ data:
     dynamic-config-enabled: false
     autocomplete-chips-enabled: false
     autocomplete-chips-url: '127.0.0.1:1234'
-    autocomplete-chips-timeout-ms: 2
     autocomplete-chips-grpc-client-factory-name: 'grpc-client-factory'
     autocomplete-chips-searchers: []
   {{- else }}
@@ -450,13 +446,11 @@ data:
     throttle-update-interval-seconds: {{ .Values.head.head.throttle.updateIntervalSeconds }}
     ai-vector-search-enabled: {{ .Values.head.aiVectorSearch.enabled }}
     ai-vector-search-url: '127.0.0.1:{{ .Values.head.envoy.ports.grpc }}'
-    ai-vector-search-timeout-ms: {{ .Values.head.aiVectorSearch.timeoutMs }}
     ai-vector-search-searchers:
       {{- toYaml .Values.head.aiVectorSearch.searchers | nindent 6 }}
     ai-vector-search-grpc-client-factory-name:  'grpc-client-factory'
     friends-service-enabled: {{ .Values.head.friendsService.enabled }}
     friends-service-url: '127.0.0.1:{{ .Values.head.envoy.ports.grpc }}'
-    friends-service-timeout-ms: {{ .Values.head.friendsService.timeoutMs }}
     friends-service-grpc-client-factory-name: 'grpc-client-factory'
     friends-service-searchers:
       {{- toYaml .Values.head.friendsService.searchers | nindent 6 }}
@@ -465,7 +459,6 @@ data:
 
     autocomplete-chips-enabled: {{ .Values.head.autocompleteChips.enabled }}
     autocomplete-chips-url: '127.0.0.1:{{ .Values.head.envoy.ports.grpc }}'
-    autocomplete-chips-timeout-ms: {{ .Values.head.autocompleteChips.timeoutMs }}
     autocomplete-chips-grpc-client-factory-name: 'grpc-client-factory'
     autocomplete-chips-searchers:
       {{- toYaml .Values.head.autocompleteChips.searchers | nindent 6 }}
@@ -473,7 +466,6 @@ data:
     search-query-transformer-searchers:
       {{- toYaml .Values.head.queryTransformer.searchersList | nindent 6 }}
     search-query-transformer-url: '127.0.0.1:{{ .Values.head.envoy.ports.grpc }}'
-    search-query-transformer-timeout-ms: {{ .Values.head.queryTransformer.timeoutMs }}
 
     search-recsys-ranker-enabled: {{ .Values.head.recsysRanker.enabled }}
     search-recsys-ranker-url: '127.0.0.1:{{ .Values.head.envoy.ports.grpc }}'
@@ -505,8 +497,12 @@ data:
     {{- include "search-api-v8.sentry.vars.common" . | nindent 4 }}
   {{- if .Values.onpremise }}
     rtw-lifetime-sec: 0
+    dynamic-config-url: '127.0.0.1:1234'
+    dynamic-config-enabled: false
   {{- else }}
     rtw-lifetime-sec: {{ .Values.worker.rtw.lifeTime }}
+    dynamic-config-url: 'http://{{ include "search-api-v8.fullname" . }}-config-distributor.search.svc.cluster.local:{{ .Values.service.configDistributor.port }}'
+    dynamic-config-enabled: {{ .Values.configDistributor.enabled }}
   {{- end }}{{- /* .Values.onpremise */}}
     queue-limit: {{ .Values.worker.queueLimit }}
     graceful-shutdown-interval: {{ .Values.worker.gracefulShutdownInterval }}
@@ -929,68 +925,6 @@ data:
                             route:
                               cluster: search_base_cluster
                               auto_host_rewrite: true
-                        {{- if not .Values.onpremise }}
-                          - match:
-                              prefix: "/unisearch.proto.SearchService/"
-                              headers:
-                                - name: {{ .Values.ingressRouter.routeHeader | quote }}
-                                  exact_match: {{ .Values.ingressRouter.routing.cluster1.exactMatch | quote }}
-                            route:
-                              cluster: cluster-1
-                              auto_host_rewrite: true
-                            request_headers_to_remove:
-                            - {{ .Values.ingressRouter.routeHeader }}
-                          - match:
-                              prefix: "/unisearch.proto.SearchService/"
-                              headers:
-                                - name: {{ .Values.ingressRouter.routeHeader | quote }}
-                                  exact_match: {{ .Values.ingressRouter.routing.cluster2.exactMatch | quote }}
-                            route:
-                              cluster: cluster-2
-                              auto_host_rewrite: true
-                            request_headers_to_remove:
-                            - {{ .Values.ingressRouter.routeHeader }}
-                          - match:
-                              prefix: "/unisearch.proto.SearchService/"
-                              headers:
-                                - name: {{ .Values.ingressRouter.routeHeader | quote }}
-                                  exact_match: {{ .Values.ingressRouter.routing.cluster3.exactMatch | quote }}
-                            route:
-                              cluster: cluster-3
-                              auto_host_rewrite: true
-                            request_headers_to_remove:
-                            - {{ .Values.ingressRouter.routeHeader }}
-                          - match:
-                              prefix: "/unisearch.proto.SearchService/"
-                              headers:
-                                - name: {{ .Values.ingressRouter.routeHeader | quote }}
-                                  exact_match: {{ .Values.ingressRouter.routing.sanitized.exactMatch | quote }}
-                            route:
-                              cluster: sanitized
-                              auto_host_rewrite: true
-                            request_headers_to_remove:
-                            - {{ .Values.ingressRouter.routeHeader }}
-                          - match:
-                              prefix: "/unisearch.proto.SearchService/"
-                              headers:
-                                - name: {{ .Values.ingressRouter.routeHeader | quote }}
-                                  exact_match: {{ .Values.ingressRouter.routing.micromirror.exactMatch | quote }}
-                            route:
-                              cluster: micromirror
-                              auto_host_rewrite: true
-                            request_headers_to_remove:
-                            - {{ .Values.ingressRouter.routeHeader }}
-                          - match:
-                              prefix: "/unisearch.proto.SearchService/"
-                              headers:
-                                - name: {{ .Values.ingressRouter.routeHeader | quote }}
-                                  exact_match: {{ .Values.ingressRouter.routing.micromirrorInternal.exactMatch | quote }}
-                            route:
-                              cluster: micromirror-internal
-                              auto_host_rewrite: true
-                            request_headers_to_remove:
-                            - {{ .Values.ingressRouter.routeHeader }}
-                        {{- end -}}{{- /* not .Values.onpremise */}}
                         {{- if .Values.segmentDetector.enabled }}
                           - match:
                               prefix: "/segmentdetector.SegmentDetectorService/"
@@ -998,238 +932,47 @@ data:
                               cluster: segmentdetector
                               auto_host_rewrite: true
                         {{- end }}{{- /* Values.segmentDetector.enabled */}}
+                        {{- if not .Values.onpremise }}
+                          {{- range $name, $cluster := .Values.ingressRouter.routing }}
+                          {{- if not (has $name (list "searchBase" "ab")) }}
+                          {{- include "envoy.routesForCluster" (dict "root" $ "name" $name "cluster" $cluster) | nindent 26 }}
+                          {{- end }}
+                          {{- end }}
+                          {{- range $name, $cluster := .Values.ingressRouter.routing.ab }}
+                          {{- include "envoy.routesForCluster" (dict "root" $ "name" $name "cluster" $cluster) | nindent 26 }}
+                          {{- end }}
+                        {{- end -}}{{- /* not .Values.onpremise */}}
                         {{- if and .Values.debugMode (not .Values.onpremise) }}
+                          {{- include "envoy.routeDebug" (dict "prefix" "/debug.proto.DebugService/" "headerName" .Values.ingressRouter.debugHeaders "exactMatch" .Values.ingressRouter.debugRouting.ingressRouter.exactMatch "cluster" "self-ingress-router") | nindent 26 }}
+                          {{- include "envoy.routeDebug" (dict "prefix" "/debug.proto.DebugService/" "headerName" .Values.ingressRouter.debugHeaders "exactMatch" .Values.ingressRouter.debugRouting.head.exactMatch "cluster" "search_base_cluster") | nindent 26 }}
+                          {{- include "envoy.routeDebug" (dict "prefix" "/debug.proto.DebugService/" "headerName" .Values.ingressRouter.debugHeaders "exactMatch" .Values.ingressRouter.debugRouting.segmentDetector.exactMatch "cluster" "segmentdetector") | nindent 26 }}
+                          {{- include "envoy.routeDebug" (dict "prefix" "/debug.proto.DebugService/" "headerName" .Values.ingressRouter.debugHeaders "exactMatch" .Values.ingressRouter.debugRouting.worker.exactMatch "cluster" "workers") | nindent 26 }}
+                        {{- end -}}{{- /* and .Values.debugMode (not .Values.onpremise) */}}
                           - match:
-                                prefix: "/debug.proto.DebugService/"
-                                headers:
-                                  - name: {{ .Values.ingressRouter.debugHeaders | quote }}
-                                    exact_match: {{ .Values.ingressRouter.debugRouting.ingressRouter.exactMatch | quote }}
-                            route:
-                              cluster: self-ingress-router
-                              auto_host_rewrite: true
-                          - match:
-                              prefix: "/debug.proto.DebugService/"
-                              headers:
-                                - name: {{ .Values.ingressRouter.debugHeaders | quote }}
-                                  exact_match: {{ .Values.ingressRouter.debugRouting.head.exactMatch | quote }}
+                              prefix: "/unisearch.proto.SearchService/"
                             route:
                               cluster: search_base_cluster
                               auto_host_rewrite: true
-                          - match:
-                              prefix: "/debug.proto.DebugService/"
-                              headers:
-                                - name: {{ .Values.ingressRouter.debugHeaders | quote }}
-                                  exact_match: {{ .Values.ingressRouter.debugRouting.segmentDetector.exactMatch | quote }}
-                            route:
-                              cluster: segmentdetector
-                              auto_host_rewrite: true
-                          - match:
-                              prefix: "/debug.proto.DebugService/"
-                              headers:
-                                - name: {{ .Values.ingressRouter.debugHeaders | quote }}
-                                  exact_match: {{ .Values.ingressRouter.debugRouting.worker.exactMatch | quote }}
-                            route:
-                              cluster: workers
-                              auto_host_rewrite: true
-                        {{- end -}}{{- /* and .Values.debugMode (not .Values.onpremise) */}}
                     http_filters:
                       - name: envoy.filters.http.router
                         typed_config:
                           "@type": type.googleapis.com/envoy.extensions.filters.http.router.v3.Router
       clusters:
-        - name: search_base_cluster
-          connect_timeout: 1s
-          type: STRICT_DNS
-          dns_lookup_family: V4_ONLY
-          dns_refresh_rate: 1s
-          lb_policy: ROUND_ROBIN
-          http2_protocol_options:
-            connection_keepalive:
-              interval: 15s
-              timeout: 5s
-          load_assignment:
-            cluster_name: search_base_cluster
-            endpoints:
-              - lb_endpoints:
-                  - endpoint:
-                      address:
-                        socket_address:
-                         port_value: {{ .Values.ingressRouter.routing.searchBase.port }}
-                         address: {{ include "search-api-v8.fullname" . }}-head
+        {{- include "envoy.clusterBackendSimple" (dict "root" $ "clusterName" "search_base_cluster" "port" .Values.ingressRouter.routing.searchBase.port "addressSuffix" "head") | nindent 8 }}
       {{- if not .Values.onpremise }}
-        - name: cluster-1
-          connect_timeout: 1s
-          type: STRICT_DNS
-          dns_lookup_family: V4_ONLY
-          dns_refresh_rate: 1s
-          lb_policy: ROUND_ROBIN
-          http2_protocol_options:
-            connection_keepalive:
-              interval: 15s
-              timeout: 5s
-          load_assignment:
-            cluster_name: cluster-1
-            endpoints:
-              - lb_endpoints:
-                  - endpoint:
-                      address:
-                        socket_address:
-                          port_value: {{ .Values.ingressRouter.routing.cluster1.port }}
-                          address: {{ .Values.ingressRouter.routing.cluster1.address }}
-        - name: cluster-2
-          connect_timeout: 1s
-          type: STRICT_DNS
-          dns_lookup_family: V4_ONLY
-          dns_refresh_rate: 1s
-          lb_policy: ROUND_ROBIN
-          http2_protocol_options:
-            connection_keepalive:
-              interval: 15s
-              timeout: 5s
-          load_assignment:
-            cluster_name: cluster-2
-            endpoints:
-              - lb_endpoints:
-                  - endpoint:
-                      address:
-                        socket_address:
-                          port_value: {{ .Values.ingressRouter.routing.cluster2.port }}
-                          address: {{ .Values.ingressRouter.routing.cluster2.address }}
-        - name: cluster-3
-          connect_timeout: 1s
-          type: STRICT_DNS
-          dns_lookup_family: V4_ONLY
-          dns_refresh_rate: 1s
-          lb_policy: ROUND_ROBIN
-          http2_protocol_options:
-            connection_keepalive:
-              interval: 15s
-              timeout: 5s
-          load_assignment:
-            cluster_name: cluster-3
-            endpoints:
-              - lb_endpoints:
-                  - endpoint:
-                      address:
-                        socket_address:
-                          port_value: {{ .Values.ingressRouter.routing.cluster3.port }}
-                          address: {{ .Values.ingressRouter.routing.cluster3.address }}
-        - name: sanitized
-          connect_timeout: 1s
-          type: STRICT_DNS
-          dns_lookup_family: V4_ONLY
-          dns_refresh_rate: 1s
-          lb_policy: ROUND_ROBIN
-          http2_protocol_options:
-            connection_keepalive:
-              interval: 60s
-              timeout: 30s
-          load_assignment:
-            cluster_name: sanitized
-            endpoints:
-              - lb_endpoints:
-                  - endpoint:
-                      address:
-                        socket_address:
-                          port_value: {{ .Values.ingressRouter.routing.sanitized.port }}
-                          address: {{ .Values.ingressRouter.routing.sanitized.address }}
-        - name: micromirror
-          connect_timeout: 1s
-          type: STRICT_DNS
-          dns_lookup_family: V4_ONLY
-          dns_refresh_rate: 1s
-          lb_policy: ROUND_ROBIN
-          http2_protocol_options:
-            connection_keepalive:
-              interval: 60s
-              timeout: 30s
-          load_assignment:
-            cluster_name: micromirror
-            endpoints:
-              - lb_endpoints:
-                  - endpoint:
-                      address:
-                        socket_address:
-                          port_value: {{ .Values.ingressRouter.routing.micromirror.port }}
-                          address: {{ .Values.ingressRouter.routing.micromirror.address }}
-        - name: micromirror-internal
-          connect_timeout: 1s
-          type: STRICT_DNS
-          dns_lookup_family: V4_ONLY
-          dns_refresh_rate: 1s
-          lb_policy: ROUND_ROBIN
-          http2_protocol_options:
-            connection_keepalive:
-              interval: 60s
-              timeout: 30s
-          load_assignment:
-            cluster_name: micromirror-internal
-            endpoints:
-              - lb_endpoints:
-                  - endpoint:
-                      address:
-                        socket_address:
-                          port_value: {{ .Values.ingressRouter.routing.micromirrorInternal.port }}
-                          address: {{ .Values.ingressRouter.routing.micromirrorInternal.address }}
+      {{- range $name, $cluster := .Values.ingressRouter.routing }}
+      {{- if not (has $name (list "searchBase" "ab")) }}
+      {{- include "envoy.clusterBackendCustom" (dict "root" $ "name" $name "cluster" $cluster) | nindent 8 }}
+      {{- end }}
+      {{- end }}
+      {{- range $name, $cluster := .Values.ingressRouter.routing.ab }}
+      {{- include "envoy.clusterBackendAB" (dict "root" $ "name" $name "cluster" $cluster) | nindent 8 }}
+      {{- end }}
       {{- end -}}{{- /* not .Values.onpremise */}}
-        - name: segmentdetector
-          connect_timeout: 1s
-          type: STRICT_DNS
-          dns_lookup_family: V4_ONLY
-          dns_refresh_rate: 1s
-          lb_policy: {{ .Values.head.envoy.policy }}
-          http2_protocol_options:
-            connection_keepalive:
-              interval: 15s
-              timeout: 5s
-          load_assignment:
-            cluster_name: segmentdetector
-            endpoints:
-              - lb_endpoints:
-                  - endpoint:
-                      address:
-                        socket_address:
-                          port_value: {{ .Values.segmentDetector.ports.grpc }}
-                          address: {{ include "search-api-v8.fullname" . }}-segment-detector
+        {{- include "envoy.clusterBackendSimple" (dict "root" $ "clusterName" "segmentdetector" "port" .Values.segmentDetector.ports.grpc "addressSuffix" "segment-detector") | nindent 8 }}
       {{- if and .Values.debugMode (not .Values.onpremise) }}
-        - name: self-ingress-router
-          connect_timeout: 1s
-          type: STRICT_DNS
-          dns_lookup_family: V4_ONLY
-          dns_refresh_rate: 1s
-          lb_policy: ROUND_ROBIN
-          http2_protocol_options:
-            connection_keepalive:
-              interval: 15s
-              timeout: 5s
-          load_assignment:
-            cluster_name: self-ingress-router
-            endpoints:
-              - lb_endpoints:
-                  - endpoint:
-                      address:
-                        socket_address:
-                          port_value: {{ .Values.ingressRouter.debugRouting.ingressRouter.port }}
-                          address: {{ include "search-api-v8.fullname" . }}-ingress-router
-        - name: workers
-          connect_timeout: 1s
-          type: STRICT_DNS
-          dns_lookup_family: V4_ONLY
-          dns_refresh_rate: 1s
-          lb_policy: ROUND_ROBIN
-          http2_protocol_options:
-            connection_keepalive:
-              interval: 15s
-              timeout: 5s
-          load_assignment:
-            cluster_name: workers
-            endpoints:
-              - lb_endpoints:
-                  - endpoint:
-                      address:
-                        socket_address:
-                          port_value: {{ .Values.ingressRouter.debugRouting.worker.port }}
-                          address: {{ include "search-api-v8.fullname" . }}-worker
+        {{- include "envoy.clusterBackendSimple" (dict "root" $ "clusterName" "self-ingress-router" "port" .Values.ingressRouter.debugRouting.ingressRouter.port "addressSuffix" "ingress-router") | nindent 8 }}
+        {{- include "envoy.clusterBackendSimple" (dict "root" $ "clusterName" "workers" "port" .Values.ingressRouter.debugRouting.worker.port "addressSuffix" "worker") | nindent 8 }}
       {{- end -}}{{- /* and .Values.debugMode (not .Values.onpremise) */}}
   ingress_router_vars.yaml: |
     server-grpc-port: {{ .Values.ingressRouter.ports.grpc }}
@@ -1251,10 +994,23 @@ data:
     {{- else }}
     search-service-url: {{ .Values.ingressRouter.searchServiceUrl }}
     {{ end }}{{- /* empty .Values.ingressRouter.searchServiceUrl */}}
+    {{- if empty .Values.ingressRouter.searchHttpServiceUrl }}
+    search-http-service-url: 'http://127.0.0.1:{{ .Values.ingressRouter.envoy.ports.grpc }}'
+    {{- else }}
+    search-http-service-url: {{ .Values.ingressRouter.searchHttpServiceUrl }}
+    {{ end }}{{- /* empty .Values.ingressRouter.searchHttpServiceUrl */}}
     search-request-timeout-ms: {{ .Values.ingressRouter.searchRequestTimeoutMs }}
     sapphire-request-timeout-ms: {{ .Values.ingressRouter.searchRequestTimeoutMs }}
     segment-detector-enabled: {{ .Values.segmentDetector.enabled }}
     segment-detector-service-url: '127.0.0.1:{{ .Values.ingressRouter.envoy.ports.grpc }}'
+    segment-detector-client-timeout-ms: {{ .Values.ingressRouter.segmentDetector.timeoutMs }}
+    {{- if not .Values.onpremise }}
+    prometheus-url: {{ .Values.ingressRouter.prometheusUrl }}
+    {{- else -}}{{- /* not .Values.onpremise */}}
+    prometheus-url: ''
+    {{- end -}}{{- /* not .Values.onpremise */}}
+    rate-limit-rules:
+      {{- toYaml .Values.ingressRouter.rateLimitRules | nindent 6 }}
     master-api-key: {{ .Values.ingressRouter.masterApiKey | quote }}
     allow-extended-params: {{ .Values.debugMode }}
     debug-mode-enabled: {{ .Values.debugMode }}
