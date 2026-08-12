@@ -34,7 +34,7 @@ docker save -o dgctl_3.tar 2gis/dgctl:3
 scp dgctl_3.tar host_without_internet:/tmp
 ```
 
-На хосту `host_without_internet` загружаем docker-образ
+На хосте `host_without_internet` загружаем docker-образ
 
 ```sh
 docker load -i /tmp/dgctl_3.tar
