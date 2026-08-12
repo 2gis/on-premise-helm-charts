@@ -253,12 +253,14 @@ s3:
 
   # @section API Keys service settings
 
+  # @param keys.enabled Enable API key validation for import methods.
   # @param keys.endpoint Keys service endpoint URL.
-  # @param keys.serviceKey Service key for authentication with the Keys service. **Required**
+  # @param keys.serviceKey Service key for authentication with the Keys service. **Required** when `keys.enabled` is `true`.
   # @param keys.clientTimeout HTTP client timeout for requests to the Keys service.
   # @param keys.refreshInterval Interval for periodic refresh of API keys cache.
 
 keys:
+  enabled: false
   endpoint: ''
   serviceKey: ''
   clientTimeout: 500ms

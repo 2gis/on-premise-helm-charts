@@ -144,6 +144,8 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
 {{- define "styles.env.keys" -}}
+- name: MGS_KEYS_ENABLED
+  value: {{ .Values.keys.enabled | quote }}
 - name: MGS_KEYS_ENDPOINT
   value: {{ .Values.keys.endpoint | quote }}
 - name: MGS_KEYS_CLIENT_TIMEOUT
