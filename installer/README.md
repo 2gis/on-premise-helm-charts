@@ -226,8 +226,7 @@ helmfile -e <env> -f $HELMFILE_VALUES/deploy/<env>.yaml.gotmpl apply --selector 
 - [Navi-Front](https://docs.2gis.com/on-premise-api-platform/installation#test-navi-front)
 - [Distance Matrix Async API](https://docs.2gis.com/on-premise-api-platform/installation#test-distance-matrix-async-api)
 - [Restrictions API](https://docs.2gis.com/on-premise-api-platform/installation#test-restrictions-api)
-- [VRP Solver](https://docs.2gis.com/on-premise-api-platform/installation#install-vrp-solver)
-- [VRP Task Manager](https://docs.2gis.com/on-premise-api-platform/installation#install-vrp-task-manager)
+- [VRP Solver + VRP Task Manager (TSP API)](https://docs.2gis.com/api/navigation/tsp/overview)
 
 **Сервис статистики:**
 - [Stat Receiver](https://docs.2gis.com/on-premise-api-platform/installation#test-stat-collection-service)
