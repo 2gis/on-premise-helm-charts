@@ -29,7 +29,6 @@ values:
     versionPlatform: 2.56.0
     versionPro: 2.5.0
     versionCitylens: 2.3.0
-    # versionEvergis: 2.0.0
     kubeContext: default
     # chartLocation: ../../../on-premise-helm-charts/charts
     chartLocation: oci://ghcr.io/2gis/charts
@@ -65,8 +64,6 @@ values:
     proUiIngress: pro-ui.{{ .Values.domain }}
     trafficProxyMapIngress: traffic-proxy-map.{{ .Values.domain }} # Прокси для online-пробок (map). Не используется если значение proxyMode `none` или `navi`
     trafficProxyNaviIngress: traffic-proxy-navi.{{ .Values.domain }} # Прокси для online-пробок (navi). По умолчанию не используется
-    gisPlatformIngress: gis-platform.{{ .Values.domain }}
-    gisPortalIngress: gis-platform-portal.{{ .Values.domain }}
     s3ProxyStylesIngress: s3-proxy-styles.{{ .Values.domain }}
     staticmapsIngress: staticmaps.{{ .Values.domain }}
     statApiIngress: stat-api.{{ .Values.domain }}
