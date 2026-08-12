@@ -30,7 +30,7 @@ Elasticsearch, ClickHouse, Cassandra.
 - **Внешней** — развёрнута на отдельных ВМ (рекомендуется для production-окружений)
 - **Развёрнута через helmfile** — встроенные чарты в `services/infra/` (для тестовых окружений)
 
-Подробнее: [Preparation](https://docs.2gis.com/on-premise-api-platform/preparation)
+Подробнее: [Preparation](https://docs.2gis.com/on-premise-api-platform/installation#preparation)
 
 ---
 
@@ -63,7 +63,7 @@ Elasticsearch, ClickHouse, Cassandra.
 3. Заполните все значения с комментарием `# TODO` в скопированных файлах.
 4. Создайте `dgctl-config.yaml` и выполните загрузку артефактов:
 
-   Пример конфигурации см. в документации: [Fetch Installation Artifacts](https://docs.2gis.com/on-premise-api-platform/preparation#fetch-artifacts).
+   Пример конфигурации см. в документации: [Fetch Installation Artifacts](https://docs.2gis.com/on-premise-api-platform/installation#fetch-artifacts).
 
    **Примечание:** в примере документации нет секций `pro` и `citylens`, так как они опциональны. Добавьте их при необходимости:
    ```yaml
@@ -83,11 +83,11 @@ Elasticsearch, ClickHouse, Cassandra.
      2gis/dgctl:3 \
      pull --config=/dgctl-config.yaml --apps-to-registry --generate-values
    ```
-   Подробнее: [Fetch Installation Artifacts](https://docs.2gis.com/on-premise-api-platform/preparation#artifacts)
+   Подробнее: [Fetch Installation Artifacts](https://docs.2gis.com/on-premise-api-platform/installation#artifacts)
 
    **Примечание:** для утилиты dgctl версии 3.6+ аргумент `-v /var/run/docker.sock:/var/run/docker.sock` не требуется.
 
-   **Изолированный контур.** Если хост не имеет одновременного доступа к публичной сети, реестру Docker и S3-хранилищу, используйте двуххостовую схему: загрузите артефакты через `dgctl pull` на хосте с доступом в интернет (с `storage.type: fs`), перенесите директорию на внутренний хост и выполните `dgctl restore`. Подробнее: [Fetch Installation Artifacts](https://docs.2gis.com/on-premise-api-platform/preparation#fetch-artifacts).
+   **Изолированный контур.** Если хост не имеет одновременного доступа к публичной сети, реестру Docker и S3-хранилищу, используйте двуххостовую схему: загрузите артефакты через `dgctl pull` на хосте с доступом в интернет (с `storage.type: fs`), перенесите директорию на внутренний хост и выполните `dgctl restore`. Подробнее: [Fetch Installation Artifacts](https://docs.2gis.com/on-premise-api-platform/installation#fetch-artifacts).
 
    Готовые скрипты для этого сценария (pull/restore данных и образа, обмен лицензией) находятся в `installer/dgctl-fs/`, пошаговая инструкция — в `installer/dgctl-fs/README.md`.
 
@@ -151,7 +151,7 @@ docker run --rm \
 helmfile -e <env> -f $HELMFILE_VALUES/deploy/<env>.yaml.gotmpl apply --selector service=license
 ```
 
-Проверьте статус лицензии: [License](https://docs.2gis.com/on-premise-api-platform/core/install/license#check-license-status).
+Проверьте статус лицензии: [License](https://docs.2gis.com/on-premise-api-platform/installation#check-license-status).
 
 После успешной активации лицензии установите остальные компоненты Core (keys, keycloak):
 
@@ -159,9 +159,17 @@ helmfile -e <env> -f $HELMFILE_VALUES/deploy/<env>.yaml.gotmpl apply --selector 
 helmfile -e <env> -f $HELMFILE_VALUES/deploy/<env>.yaml.gotmpl apply --selector group=core
 ```
 
-**API-ключи.** После установки добавьте администратора и создайте API-ключ. Следуйте документации: [Keys](https://docs.2gis.com/on-premise-api-platform/core/install/keys#test).
+**API-ключи.** После установки добавьте администратора и создайте API-ключ. Следуйте документации: [Keys](https://docs.2gis.com/on-premise-api-platform/installation#fetch-service-keys).
 
 **Keycloak.** Войдите в Keycloak admin console и перегенерируйте client secrets для каждого realm. Обновите их в env-specific values сервисов.
+
+Состав группы `core`:
+
+| Сервис | Описание | Инфраструктура | Сервисы |
+|---|---|---|---|
+| License | Управление лицензиями 2GIS | S3 | — |
+| Keys | Управление API-ключами | PostgreSQL, S3, Redis (опц.), Kafka (опц.) | Keycloak (опц.) |
+| Keycloak | Аутентификация пользователей (OIDC) | PostgreSQL | — |
 
 ### 2. API-платформа
 
@@ -173,37 +181,37 @@ helmfile -e <env> -f $HELMFILE_VALUES/deploy/<env>.yaml.gotmpl apply --selector 
 
 Состав группы `api-platform`:
 
-| Сервис | Описание | Зависимости |
-|---|---|---|
-| Stat Receiver + Stat API | Сбор статистики вызовов API | ClickHouse |
-| Traffic Proxy | Прокси для API пробок | — |
-| MapGL JS API | API картографических движков | — |
-| Tiles API | Тайловый сервер | S3 |
-| Static API | Статические изображения карт | Tiles API |
-| Styles API | Управление стилями карт | S3 |
-| Search API | Поиск мест, геокодирование, подсказки | PostgreSQL, Elasticsearch |
-| Search API v8 (опционально) | Новая версия Search API | PostgreSQL, Elasticsearch |
-| Catalog API | Каталог данных | PostgreSQL + PostGIS |
-| Navi-Castle | Валидация маршрутов | — |
-| Navi-Back | Построение маршрутов | PostgreSQL |
-| Navi-Attractor | Привязка точек к графику (генерируется из navi-rules) | Navi-Back |
-| Navi-Splitter | Разделение маршрутов (генерируется из navi-rules) | Navi-Back |
-| Navi-Router | Проксирование запросов навигации | Navi-Back |
-| Navi-Front | Frontend для API навигации | Navi-Router |
-| Navi Async Matrix | Асинхронная матрица расстояний | PostgreSQL |
-| Navi VRP Solver + VRP Task Manager | Решение задачи маршрутизации транспорта | PostgreSQL |
-| Navi Restrictions | Ограничения проезда | PostgreSQL |
-| Platform Manager | Веб-интерфейс управления платформой | Keycloak (OIDC) |
+| Сервис | Описание | Инфраструктура | Сервисы |
+|---|---|---|---|
+| Stat Receiver + Stat API | Сбор статистики вызовов API | ClickHouse, Kafka | — |
+| Traffic Proxy | Прокси для API пробок | — | — |
+| MapGL JS API | API картографических движков | — | Keys API, Traffic Proxy (опц.) |
+| Tiles API | Тайловый сервер | S3, Cassandra | License, Keys API, Stat Receiver (опц.) |
+| Static API | Статические изображения карт | — | Tiles API, License, Keys API (опц.) |
+| Styles API | Управление стилями карт | PostgreSQL, S3 | — |
+| Search API | Поиск мест, геокодирование, подсказки | S3 | — |
+| Search API v8 (опционально) | Новая версия Search API | S3 | — |
+| Catalog API | Каталог данных | PostgreSQL + PostGIS, S3 | License |
+| Navi-Castle | Распределение данных для маршрутизации | S3, Kafka (опц.) | — |
+| Navi-Back | Построение маршрутов | Kafka (опц.), S3 (опц.) | Navi-Castle, License, Traffic Proxy (опц.) |
+| Navi-Attractor | Привязка точек к графику (генерируется из navi-rules) | Kafka (опц.), S3 (опц.) | Navi-Back |
+| Navi-Splitter | Разделение маршрутов (генерируется из navi-rules) | — | Navi-Back |
+| Navi-Router | Проксирование запросов навигации | — | Navi-Back, Keys API |
+| Navi-Front | Frontend для API навигации | — | Navi-Router |
+| Navi Async Matrix | Асинхронная матрица расстояний | PostgreSQL, Kafka, S3 | Navi-Castle, Keys API |
+| Navi VRP Solver + VRP Task Manager | Решение задачи маршрутизации транспорта | PostgreSQL, Kafka, S3 | Navi-Castle, Navi-Front, Keys API |
+| Navi Restrictions | Ограничения проезда | PostgreSQL | Navi-Castle, Navi-Back |
+| Platform Manager | Веб-интерфейс управления платформой | — | Keycloak (OIDC), Keys API, License |
 
 Проверьте работоспособность:
 
 **API карт:**
-- [MapGL JS API](https://docs.2gis.com/on-premise-api-platform/api-platform/install/maps#test-mapgl-js-api)
-- [Tiles API](https://docs.2gis.com/on-premise-api-platform/api-platform/install/maps#test-tiles-api)
-- [Static API](https://docs.2gis.com/on-premise-api-platform/api-platform/install/maps#test-static-api)
-- [Styles API](https://docs.2gis.com/on-premise-api-platform/api-platform/install/maps#test-styles-api)
+- [MapGL JS API](https://docs.2gis.com/on-premise-api-platform/installation#test-mapgl-js-api)
+- [Tiles API](https://docs.2gis.com/on-premise-api-platform/installation#test-tiles-api)
+- [Static API](https://docs.2gis.com/on-premise-api-platform/installation#test-static-api)
+- [Styles API](https://docs.2gis.com/on-premise-api-platform/installation#test-styles-api)
 
-**API поиска:** [общая проверка](https://docs.2gis.com/on-premise-api-platform/api-platform/install/search#test)
+**API поиска:** [общая проверка](https://docs.2gis.com/on-premise-api-platform/installation#test-search)
 - Places API
 - Geocoder API
 - Suggest API
@@ -211,22 +219,24 @@ helmfile -e <env> -f $HELMFILE_VALUES/deploy/<env>.yaml.gotmpl apply --selector 
 - Regions API
 
 **API навигации:**
-- [Navi-Castle](https://docs.2gis.com/on-premise-api-platform/api-platform/install/navigation#test-navi-castle)
-- [Navi-Back](https://docs.2gis.com/on-premise-api-platform/api-platform/install/navigation#test-navi-back)
-- [Navi-Splitter](https://docs.2gis.com/on-premise-api-platform/api-platform/install/navigation#test-navi-splitter)
-- [Navi-Router](https://docs.2gis.com/on-premise-api-platform/api-platform/install/navigation#test-navi-router)
-- [Navi-Front](https://docs.2gis.com/on-premise-api-platform/api-platform/install/navigation#test-navi-front)
-- [Distance Matrix Async API](https://docs.2gis.com/on-premise-api-platform/api-platform/install/navigation#test-distance-matrix-async-api)
-- [Restrictions API](https://docs.2gis.com/on-premise-api-platform/api-platform/install/navigation#test-restrictions-api)
+- [Navi-Castle](https://docs.2gis.com/on-premise-api-platform/installation#test-navi-castle)
+- [Navi-Back](https://docs.2gis.com/on-premise-api-platform/installation#test-navi-back)
+- [Navi-Splitter](https://docs.2gis.com/on-premise-api-platform/installation#test-navi-splitter)
+- [Navi-Router](https://docs.2gis.com/on-premise-api-platform/installation#test-navi-router)
+- [Navi-Front](https://docs.2gis.com/on-premise-api-platform/installation#test-navi-front)
+- [Distance Matrix Async API](https://docs.2gis.com/on-premise-api-platform/installation#test-distance-matrix-async-api)
+- [Restrictions API](https://docs.2gis.com/on-premise-api-platform/installation#test-restrictions-api)
+- [VRP Solver](https://docs.2gis.com/on-premise-api-platform/installation#install-vrp-solver)
+- [VRP Task Manager](https://docs.2gis.com/on-premise-api-platform/installation#install-vrp-task-manager)
 
 **Сервис статистики:**
-- [Stat Receiver](https://docs.2gis.com/on-premise-api-platform/api-platform/install/statreceiver#test)
+- [Stat Receiver](https://docs.2gis.com/on-premise-api-platform/installation#test-stat-collection-service)
 
 **Другие сервисы:**
-- [Traffic Proxy](https://docs.2gis.com/on-premise-api-platform/api-platform/install/trafficproxy#test)
-- [Менеджер Платформы](https://docs.2gis.com/on-premise-api-platform/api-platform/install/platform#test)
+- [Traffic Proxy](https://docs.2gis.com/on-premise-api-platform/installation#test-traffic-proxy)
+- [Менеджер Платформы](https://docs.2gis.com/on-premise-api-platform/installation#test-pm)
 
-**Менеджер Платформы.** После установки настройте аутентификацию пользователей через Keycloak (OIDC). В Keycloak создайте client для Platform Manager и укажите client secret в env-specific values. Подробнее: [настройка аутентификации](https://docs.2gis.com/on-premise-api-platform/api-platform/install/platform#test).
+**Менеджер Платформы.** После установки настройте аутентификацию пользователей через Keycloak (OIDC). В Keycloak создайте client для Platform Manager и укажите client secret в env-specific values. Подробнее: [настройка аутентификации](https://docs.2gis.com/on-premise-api-platform/installation#install-pm).
 
 **Мобильный SDK.** Мобильные SDK (iOS, Android, Flutter) являются клиентскими библиотеками и не развёртываются в Kubernetes. Для их подключения используйте `vendor-config.json` с адресами ваших On-Premise сервисов.
 
@@ -235,6 +245,13 @@ helmfile -e <env> -f $HELMFILE_VALUES/deploy/<env>.yaml.gotmpl apply --selector 
 ```bash
 helmfile -e <env> -f $HELMFILE_VALUES/deploy/<env>.yaml.gotmpl apply --selector group=pro
 ```
+
+Состав группы `pro`:
+
+| Сервис | Описание | Инфраструктура | Сервисы |
+|---|---|---|---|
+| Pro API | Бэкенд 2ГИС Про (API, Permissions, Tasks) | PostgreSQL, S3, Elasticsearch, Kafka, Redis | Catalog API, Navi-Front, Search API, License, Keycloak (опц.) |
+| Pro UI | Веб-интерфейс 2ГИС Про | S3 | Pro API, MapGL JS API |
 
 Настройка и проверка работоспособности:
 - [Проверка](https://docs.2gis.com/on-premise-pro/install/installation#test)
@@ -245,6 +262,13 @@ helmfile -e <env> -f $HELMFILE_VALUES/deploy/<env>.yaml.gotmpl apply --selector 
 ```bash
 helmfile -e <env> -f $HELMFILE_VALUES/deploy/<env>.yaml.gotmpl apply --selector group=citylens
 ```
+
+Состав группы `citylens`:
+
+| Сервис | Описание | Инфраструктура | Сервисы |
+|---|---|---|---|
+| CityLens API + Routes API | API Ситискан (съёмка, треки, планирование маршрутов) | PostgreSQL + PostGIS, S3, Kafka | MapGL JS API, Tiles API, Pro API, Navi-Front, Keys API, Keycloak (опц.) |
+| CityLens Routes UI | Веб-интерфейс планирования маршрутов Ситискан | — | CityLens Routes API, Catalog API, MapGL JS API, Keycloak (OIDC) |
 
 Настройка и проверка работоспособности:
 - [Проверка](https://docs.2gis.com/on-premise-citylens/install/installation#test)
