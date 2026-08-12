@@ -7,7 +7,6 @@ ui:
     search: "Catalog API={{ $protocol }}://{{ .Values.catalogIngress }},Search API={{ $protocol }}://{{ .Values.searchIngress }}/v2/status"
     navi: "Castle={{ $protocol }}://{{ .Values.naviCastleIngress }}/cities.conf,Routing={{ $protocol }}://{{ .Values.naviFrontIngress }}/healthcheck"
     pro: "PRO UI={{ $protocol }}://{{ .Values.proUiIngress }}/api/healthcheck/app,PRO API={{ $protocol }}://{{ .Values.proApiIngress }}/health/live,PRO Permissions API={{ $protocol }}://{{ .Values.proPermissionsIngress }}"
-    gisPlatform: "{{ $protocol }}://{{ .Values.gisPortalIngress }}"
     keys: "Keys UI={{ $protocol }}://{{ .Values.keysAdminIngress }},Keys API=http://keys-api/healthcheck,Keys Service API=http://keys-service-api/healthcheck"
     mapStyles: "{{ $protocol }}://{{ .Values.stylesIngress }}/healthcheck"
 
