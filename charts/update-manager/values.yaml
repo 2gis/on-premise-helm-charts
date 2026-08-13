@@ -23,7 +23,7 @@ image:
 api:
 
   # @param api.logLevel Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.
-  # @param api.logFormat Log format for the service. Can be: `json, text`.
+  # @param api.logFormat Log format for the service. Can be: `json`, `text`.
 
   logLevel: warning
   logFormat: json
@@ -49,7 +49,7 @@ api:
       repository: 2gis/dgctl
       tag: 3
 
-  # @param api.job.activeDeadline Active deadline fot the created jobs.
+  # @param api.job.activeDeadline Active deadline for the created jobs.
   # @param api.job.backoffLimit Backoff limit for the created jobs.
   # @param api.job.syncInterval Interval for syncing jobs.
 

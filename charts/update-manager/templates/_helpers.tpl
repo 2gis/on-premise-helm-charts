@@ -44,11 +44,11 @@ PostgreSQL tls params
 
 {{- define "update-manager.psql.checks" -}}
 {{- if has .Values.postgres.tls.mode (list "verify-ca" "verify-full") }}
-{{ $testVar := required "You should set .Values.postgres.tls.serverCA for selected mode" .Values.postgres.tls.rootCert }}
+{{ $testVar := required "You should set .Values.postgres.tls.rootCert for selected mode" .Values.postgres.tls.rootCert }}
 {{- end }}
 {{- if eq .Values.postgres.tls.mode "verify-full" }}
-{{ $testVar := required "You should set .Values.postgres.tls.clientCert for selected mode" .Values.postgres.tls.cert }}
-{{ $testVar = required "You should set .Values.postgres.tls.clientKey for selected mode" .Values.postgres.tls.key }}
+{{ $testVar := required "You should set .Values.postgres.tls.cert for selected mode" .Values.postgres.tls.cert }}
+{{ $testVar = required "You should set .Values.postgres.tls.key for selected mode" .Values.postgres.tls.key }}
 {{- end }}
 {{- end -}}
 
@@ -106,8 +106,9 @@ PostgreSQL tls params
     - -c
     - |-
       cp /tls/* /etc/ssl/psql/
-      chmod 0400 /etc/ssl/psql/psql-ro-client.key
-      chmod 0400 /etc/ssl/psql/psql-rw-client.key
+      if [ -f /etc/ssl/psql/psql-client.key ]; then
+        chmod 0400 /etc/ssl/psql/psql-client.key
+      fi
   resources:
     requests:
       cpu: 20m

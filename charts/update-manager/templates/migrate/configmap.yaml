@@ -16,4 +16,4 @@ data:
       db-name: {{ required "Valid .Values.postgres.name required!" .Values.postgres.name }}
       user: {{ required "Valid .Values.postgres.username required!" .Values.postgres.username }}
       params:
-        {{ include "update-manager.psql.params" . }}
+        {{- include "update-manager.psql.params" . | nindent 8 }}
