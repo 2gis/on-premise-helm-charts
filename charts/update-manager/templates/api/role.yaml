@@ -13,6 +13,12 @@ rules:
 - apiGroups: ["batch"]
   resources: ["jobs"]
   verbs: ["create", "get", "list", "watch", "update", "patch", "delete"]
+- apiGroups: [""]
+  resources: ["pods", "events"]
+  verbs: ["list"]
+- apiGroups: [""]
+  resources: ["pods/log"]
+  verbs: ["get"]
 # Mount ConfigMaps/Secrets into the jobs and read/write Helm 3 release state
 # (Helm keeps release data and `helm get values` output in Secrets/ConfigMaps).
 - apiGroups: [""]
