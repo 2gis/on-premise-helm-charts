@@ -23,8 +23,8 @@ rules:
 # Each block grants rights only for the resource kinds that chart renders.
 # ConfigMaps, Secrets, Jobs and Pods are already covered by the base rules.
 # =====================================================================
-{{- if .Values.api.rulesOverride }}}
-{{ toYaml .Values.api.rulesOverride }}}
+{{- if .Values.api.rulesOverride }}
+{{ toYaml .Values.api.rulesOverride }}
 {{- else }}
 
 {{- $enabledCharts := list }}

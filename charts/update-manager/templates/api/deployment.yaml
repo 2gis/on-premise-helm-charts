@@ -30,6 +30,7 @@ spec:
         checksum/config: {{ include "update-manager.checksum" (merge (dict "path" "/api/configmap.yaml") .) }}
         checksum/config-ca: {{ include "update-manager.checksum" (merge (dict "path" "/api/configmap-ca.yaml") .) }}
         checksum/secret: {{ include "update-manager.checksum" (merge (dict "path" "/api/secret.yaml") .) }}
+        checksum/psql-secret: {{ include "update-manager.checksum" (merge (dict "path" "/secret-psql-tls.yaml") .) }}
         {{- with .Values.api.podAnnotations }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
@@ -41,6 +42,10 @@ spec:
     spec:
       serviceAccountName: {{ include "update-manager.serviceAccount" . }}
       terminationGracePeriodSeconds: 30
+      {{- with include "update-manager.psql.initTLS" . }}
+      initContainers:
+      {{- . | nindent 8 }}
+      {{- end }}
       containers:
         - name: updatemanager
           image: {{ include "update-manager.image" . }}
