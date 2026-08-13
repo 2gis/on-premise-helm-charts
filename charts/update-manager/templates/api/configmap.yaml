@@ -43,10 +43,11 @@ data:
       issuer: {{ $provider | quote }}
       {{- end }}
 
-    datagateway-url: {{ .Values.api.dgctl.datagatewayURL }}
+    datagateway-url: {{ .Values.api.datagateway.url }}
 
     dgctl:
       image: {{ include "update-manager.dgctlImage" . }}
+      pull-policy: {{ .Values.api.dgctl.image.pullPolicy }}
       configmap: {{ include "update-manager.name" . }}
       secret: {{ include "update-manager.name" . }}
       {{- if .Values.customCAs.bundle }}
@@ -57,6 +58,10 @@ data:
       active-deadline: "{{ .Values.api.job.activeDeadline }}"
       backoff-limit: {{ .Values.api.job.backoffLimit }}
       sync-interval: "{{ .Values.api.job.syncInterval }}"
+      start-timeout: "{{ .Values.api.job.startTimeout }}"
+      log-head: {{ .Values.api.job.logHead }}
+      log-tail: {{ .Values.api.job.logTail }}
+      log-pattern: {{ .Values.api.job.logPattern | quote }}
 
     manifest-sync-interval: "{{ .Values.api.manifest.syncInterval }}"
 

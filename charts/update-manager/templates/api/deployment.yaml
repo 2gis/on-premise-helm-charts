@@ -72,10 +72,10 @@ spec:
                 secretKeyRef:
                   key: DATABASE_PASSWORD
                   name: {{ include "update-manager.name" . }}
-            - name: DATAGATEWAY_API_KEY
+            - name: API_KEY
               valueFrom:
                 secretKeyRef:
-                  key: DATAGATEWAY_API_KEY
+                  key: API_KEY
                   name: {{ include "update-manager.name" . }}
             - name: STORAGE_ACCESS_KEY
               valueFrom:

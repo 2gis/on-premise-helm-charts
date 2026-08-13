@@ -35,28 +35,41 @@ api:
     url: ''
     issuerUrl: ''
 
-  # @param api.dgctl.datagatewayURL URL of the DataGateway instance. **Required**
-  # @param api.dgctl.apiKey API key for the DataGateway instance. **Required**
+  # @param api.datagateway.url URL of the DataGateway instance.
+  # @param api.datagateway.apiKey API key for the DataGateway instance. **Required**
+
+  datagateway:
+    url: https://datagateway.api.2gis.com
+    apiKey: ''
+
   # @param api.dgctl.image.registry DGCTL image registry.
   # @param api.dgctl.image.repository DGCTL image repository. **Required**
   # @param api.dgctl.image.tag DGCTL image tag.
+  # @param api.dgctl.image.pullPolicy Pull policy for the DGCTL image used in download jobs.
 
   dgctl:
-    datagatewayURL: https://datagateway.api.2gis.com
-    apiKey: ''
     image:
       registry: ''
       repository: 2gis/dgctl
       tag: 3
+      pullPolicy: IfNotPresent
 
   # @param api.job.activeDeadline Active deadline for the created jobs.
   # @param api.job.backoffLimit Backoff limit for the created jobs.
   # @param api.job.syncInterval Interval for syncing jobs.
+  # @param api.job.startTimeout Timeout for a job pod to start before the task is marked failed.
+  # @param api.job.logHead Number of first lines of the job log taken unconditionally when trimming.
+  # @param api.job.logTail Number of last lines of the job log taken unconditionally when trimming.
+  # @param api.job.logPattern Regexp used to filter the rest of the job log. Empty means no filtering.
 
   job:
     activeDeadline: 2h
     backoffLimit: 3
     syncInterval: 10s
+    startTimeout: 5m
+    logHead: 10
+    logTail: 50
+    logPattern: ''
 
   # @param api.manifest.syncInterval Interval for syncing manifests.
 
