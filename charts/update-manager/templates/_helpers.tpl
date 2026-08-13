@@ -23,7 +23,7 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
 {{- define "update-manager.image" -}}
-{{ required "Valid .Values.dgctlDockerRegistry required!" .Values.dgctlDockerRegistry }}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}
+{{ required "Valid .Values.dgctlDockerRegistry required!" .Values.dgctlDockerRegistry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
 {{- end }}
 
 {{- define "update-manager.migrate.name" -}}
@@ -132,7 +132,7 @@ DGCTL params
 {{- if .Values.api.dgctl.image.registry }}
 {{- print .Values.api.dgctl.image.registry "/" -}}
 {{- end }}
-{{- required "Valid .Values.api.dgctl.image.repository required!" .Values.api.dgctl.image.repository -}}
+{{- .Values.api.dgctl.image.repository -}}
 {{- if .Values.api.dgctl.image.tag }}
 {{- print ":" .Values.api.dgctl.image.tag -}}
 {{- end }}
