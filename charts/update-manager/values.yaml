@@ -1,6 +1,6 @@
 # @section Docker Registry settings
 
-# @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
+# @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`. **Required**
 
 dgctlDockerRegistry: ''
 
@@ -43,7 +43,7 @@ api:
     apiKey: ''
 
   # @param api.dgctl.image.registry DGCTL image registry.
-  # @param api.dgctl.image.repository DGCTL image repository. **Required**
+  # @param api.dgctl.image.repository DGCTL image repository.
   # @param api.dgctl.image.tag DGCTL image tag.
   # @param api.dgctl.image.pullPolicy Pull policy for the DGCTL image used in download jobs.
 
@@ -174,7 +174,7 @@ api:
             - name: ''
               releaseName: ''
               services:
-                - pro
+                - pro-api
     citylens:
       version: 2.3.0
       charts:
@@ -202,8 +202,8 @@ api:
   rulesOverride: []
 
   # @param api.strategy.type Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.
-  # @param api.strategy.rollingUpdate.maxUnavailable Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment).
-  # @param api.strategy.rollingUpdate.maxSurge Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.
+  # @param api.strategy.rollingUpdate.maxUnavailable Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.
+  # @param api.strategy.rollingUpdate.maxSurge Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment).
 
   strategy:
     type: RollingUpdate
@@ -312,7 +312,7 @@ postgres:
 
 # @param dgctlStorage.host S3 endpoint. Format: `host:port`. **Required**
 # @param dgctlStorage.region S3 region name.
-# @param dgctlStorage.secure Set to `true` if dgctlStorage.host must be accessed via https. **Required**
+# @param dgctlStorage.secure Set to `true` if dgctlStorage.host must be accessed via https.
 # @param dgctlStorage.bucket S3 bucket name. **Required**
 # @param dgctlStorage.accessKey S3 access key for accessing the bucket. **Required**
 # @param dgctlStorage.secretKey S3 secret key for accessing the bucket. **Required**
@@ -327,82 +327,82 @@ dgctlStorage:
 
 # @section Managed helm releases settings
 
-# @extra api.components.core [`core` component](https://docs.2gis.com/en/on-premise-api-platform/core/releases) services helm releases.
+# @extra api.components.core Services helm releases of the [`core` component](https://docs.2gis.com/en/on-premise-api-platform/core/releases).
 # @param api.components.core.version Version of the `core` component services releases.
 
-# @extra api.components.core.charts.keys `keys` chart settings for [API Keys service](https://docs.2gis.com/en/on-premise-api-platform/core/install/keys).
+# @extra api.components.core.charts.keys Settings for the `keys` chart of the [API Keys service](https://docs.2gis.com/en/on-premise-api-platform/core/install/keys).
 # @param api.components.core.charts.keys.enabled Enable release management for the `keys` chart.
 # @param api.components.core.charts.keys.refOverride Override the `keys` chart reference.
 # @param api.components.core.charts.keys.releases[0].name Public name of the managed release to be shown in the UI. **Required if chart is enabled**
 # @param api.components.core.charts.keys.releases[0].releaseName Name of the managed release in the cluster. **Required if chart is enabled**
 # @param api.components.core.charts.keys.releases[0].services List of DGCTL services attached to the release. Allowed values: "keys".
 
-# @extra api.components.api-platform [`api-platform` component](https://docs.2gis.com/en/on-premise-api-platform/api-platform/releases) services releases.
+# @extra api.components.api-platform Services helm releases of the [`api-platform` component](https://docs.2gis.com/en/on-premise-api-platform/api-platform/releases).
 # @param api.components.api-platform.version Version of the `api-platform` component services releases.
 
-# @extra api.components.api-platform.charts.tiles-api `tiles-api` chart settings for [Maps API](https://docs.2gis.com/en/on-premise-api-platform/api-platform/install/maps).
+# @extra api.components.api-platform.charts.tiles-api Settings for the `tiles-api` chart of the [Maps API](https://docs.2gis.com/en/on-premise-api-platform/api-platform/install/maps).
 # @param api.components.api-platform.charts.tiles-api.enabled Enable release management for the `tiles-api` chart.
 # @param api.components.api-platform.charts.tiles-api.refOverride Override the `tiles-api` chart reference.
 # @param api.components.api-platform.charts.tiles-api.releases[0].name Public name of the managed release to be shown in the UI. **Required if chart is enabled**
 # @param api.components.api-platform.charts.tiles-api.releases[0].releaseName Name of the managed release in the cluster. **Required if chart is enabled**
 # @param api.components.api-platform.charts.tiles-api.releases[0].services List of DGCTL services attached to the release. Allowed values: "tiles-api-mapbox", "tiles-api-mobile-sdk", "tiles-api-raster", "tiles-api-vector".
 
-# @extra api.components.api-platform.charts.search-api `search-api` chart settings for [Search API (search)](https://docs.2gis.com/en/on-premise-api-platform/api-platform/install/search).
+# @extra api.components.api-platform.charts.search-api Settings for the `search-api` chart of the [Search API (search)](https://docs.2gis.com/en/on-premise-api-platform/api-platform/install/search).
 # @param api.components.api-platform.charts.search-api.enabled Enable release management for the `search-api` chart.
 # @param api.components.api-platform.charts.search-api.refOverride Override the `search-api` chart reference.
 # @param api.components.api-platform.charts.search-api.releases[0].name Public name of the managed release to be shown in the UI. **Required if chart is enabled**
 # @param api.components.api-platform.charts.search-api.releases[0].releaseName Name of the managed release in the cluster. **Required if chart is enabled**
 # @param api.components.api-platform.charts.search-api.releases[0].services List of DGCTL services attached to the release. Allowed values: "search".
 
-# @extra api.components.api-platform.charts.catalog-api `catalog-api` chart settings for [Search API (catalog)](https://docs.2gis.com/en/on-premise-api-platform/api-platform/install/search).
+# @extra api.components.api-platform.charts.catalog-api Settings for the `catalog-api` chart of the [Search API (catalog)](https://docs.2gis.com/en/on-premise-api-platform/api-platform/install/search).
 # @param api.components.api-platform.charts.catalog-api.enabled Enable release management for the `catalog-api` chart.
 # @param api.components.api-platform.charts.catalog-api.refOverride Override the `catalog-api` chart reference.
 # @param api.components.api-platform.charts.catalog-api.releases[0].name Public name of the managed release to be shown in the UI. **Required if chart is enabled**
 # @param api.components.api-platform.charts.catalog-api.releases[0].releaseName Name of the managed release in the cluster. **Required if chart is enabled**
 # @param api.components.api-platform.charts.catalog-api.releases[0].services List of DGCTL services attached to the release. Allowed values: "catalog".
 
-# @extra api.components.api-platform.charts.search-api-v8 `search-api-v8` chart settings for [Search API (new version)](https://docs.2gis.com/en/on-premise-api-platform/api-platform/install/search-v8).
+# @extra api.components.api-platform.charts.search-api-v8 Settings for the `search-api-v8` chart of the [Search API (new version)](https://docs.2gis.com/en/on-premise-api-platform/api-platform/install/search-v8).
 # @param api.components.api-platform.charts.search-api-v8.enabled Enable release management for the `search-api-v8` chart.
 # @param api.components.api-platform.charts.search-api-v8.refOverride Override the `search-api-v8` chart reference.
 # @param api.components.api-platform.charts.search-api-v8.releases[0].name Public name of the managed release to be shown in the UI. **Required if chart is enabled**
 # @param api.components.api-platform.charts.search-api-v8.releases[0].releaseName Name of the managed release in the cluster. **Required if chart is enabled**
 # @param api.components.api-platform.charts.search-api-v8.releases[0].services List of DGCTL services attached to the release. Allowed values: "search-api-v8".
 
-# @extra api.components.api-platform.charts.navi-castle `navi-castle` chart settings for [Navigation API](https://docs.2gis.com/en/on-premise-api-platform/api-platform/install/navigation).
+# @extra api.components.api-platform.charts.navi-castle Settings for the `navi-castle` chart of the [Navigation API](https://docs.2gis.com/en/on-premise-api-platform/api-platform/install/navigation).
 # @param api.components.api-platform.charts.navi-castle.enabled Enable release management for the `navi-castle` chart.
 # @param api.components.api-platform.charts.navi-castle.refOverride Override the `navi-castle` chart reference.
 # @param api.components.api-platform.charts.navi-castle.releases[0].name Public name of the managed release to be shown in the UI. **Required if chart is enabled**
 # @param api.components.api-platform.charts.navi-castle.releases[0].releaseName Name of the managed release in the cluster. **Required if chart is enabled**
 # @param api.components.api-platform.charts.navi-castle.releases[0].services List of DGCTL services attached to the release. Allowed values: "navi".
 
-# @extra api.components.api-platform.charts.twins-api `twins-api` chart settings.
+# @extra api.components.api-platform.charts.twins-api Settings for the `twins-api` chart.
 # @param api.components.api-platform.charts.twins-api.enabled Enable release management for the `twins-api` chart.
 # @param api.components.api-platform.charts.twins-api.refOverride Override the `twins-api` chart reference.
 # @param api.components.api-platform.charts.twins-api.releases[0].name Public name of the managed release to be shown in the UI. **Required if chart is enabled**
 # @param api.components.api-platform.charts.twins-api.releases[0].releaseName Name of the managed release in the cluster. **Required if chart is enabled**
 # @param api.components.api-platform.charts.twins-api.releases[0].services List of DGCTL services attached to the release. Allowed values: "twins".
 
-# @extra api.components.pro [`pro` component](https://docs.2gis.com/en/on-premise-pro/releases) services releases.
+# @extra api.components.pro Services helm releases of the [`pro` component](https://docs.2gis.com/en/on-premise-pro/releases).
 # @param api.components.pro.version Version of the `pro` component services releases.
 
-# @extra api.components.pro.charts.pro-ui `pro-ui` chart settings for [2GIS Pro (ui)](https://docs.2gis.com/en/on-premise-pro/install/installation).
+# @extra api.components.pro.charts.pro-ui Settings for the `pro-ui` chart of the [2GIS Pro (ui)](https://docs.2gis.com/en/on-premise-pro/install/installation).
 # @param api.components.pro.charts.pro-ui.enabled Enable release management for the `pro-ui` chart.
 # @param api.components.pro.charts.pro-ui.refOverride Override the `pro-ui` chart reference.
 # @param api.components.pro.charts.pro-ui.releases[0].name Public name of the managed release to be shown in the UI. **Required if chart is enabled**
 # @param api.components.pro.charts.pro-ui.releases[0].releaseName Name of the managed release in the cluster. **Required if chart is enabled**
 # @param api.components.pro.charts.pro-ui.releases[0].services List of DGCTL services attached to the release. Allowed values: "pro-ui".
 
-# @extra api.components.pro.charts.pro-api `pro-api` chart settings for [2GIS Pro (api)](https://docs.2gis.com/en/on-premise-pro/install/installation).
+# @extra api.components.pro.charts.pro-api Settings for the `pro-api` chart of the [2GIS Pro (api)](https://docs.2gis.com/en/on-premise-pro/install/installation).
 # @param api.components.pro.charts.pro-api.enabled Enable release management for the `pro-api` chart.
 # @param api.components.pro.charts.pro-api.refOverride Override the `pro-api` chart reference.
 # @param api.components.pro.charts.pro-api.releases[0].name Public name of the managed release to be shown in the UI. **Required if chart is enabled**
 # @param api.components.pro.charts.pro-api.releases[0].releaseName Name of the managed release in the cluster. **Required if chart is enabled**
 # @param api.components.pro.charts.pro-api.releases[0].services List of DGCTL services attached to the release. Allowed values: "pro-api".
 
-# @extra api.components.citylens [`citylens` component](https://docs.2gis.com/en/on-premise-citylens/releases) services releases.
+# @extra api.components.citylens Services helm releases of the [`citylens` component](https://docs.2gis.com/en/on-premise-citylens/releases).
 # @param api.components.citylens.version Version of the `citylens` component services releases.
 
-# @extra api.components.citylens.charts.citylens `citylens` chart settings for [CityLens](https://docs.2gis.com/en/on-premise-citylens/install/installation).
+# @extra api.components.citylens.charts.citylens Settings for the `citylens` chart of the [CityLens](https://docs.2gis.com/en/on-premise-citylens/install/installation).
 # @param api.components.citylens.charts.citylens.enabled Enable release management for the `citylens` chart.
 # @param api.components.citylens.charts.citylens.refOverride Override the `citylens` chart reference.
 # @param api.components.citylens.charts.citylens.releases[0].name Public name of the managed release to be shown in the UI. **Required if chart is enabled**
@@ -432,6 +432,6 @@ customCAs:
   bundle: ''
     # bundle: |
     # -----BEGIN CERTIFICATE-----
-  # ...
-  # -----END CERTIFICATE-----
+    # ...
+    # -----END CERTIFICATE-----
   certsPath: ''

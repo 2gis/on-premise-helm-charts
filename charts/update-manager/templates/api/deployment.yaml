@@ -47,7 +47,7 @@ spec:
       {{- . | nindent 8 }}
       {{- end }}
       containers:
-        - name: updatemanager
+        - name: update-manager
           image: {{ include "update-manager.image" . }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
           command: ["updatemanager", "server"]
