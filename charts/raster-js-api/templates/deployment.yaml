@@ -1,0 +1,171 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "generic-chart.fullname" . }}
+  {{- with .Values.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "generic-chart.labels" . | nindent 4 }}
+    {{- with .Values.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  {{- if not .Values.hpa.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  {{- if .Values.strategy }}
+  strategy:
+    {{- include "tplvalues.render" ( dict "value" .Values.strategy "context" $) | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "generic-chart.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+        {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      labels:
+        {{- include "generic-chart.selectorLabels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      enableServiceLinks: {{ .Values.enableServiceLinks }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "generic-chart.serviceAccountName" . }}
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.customCAs.bundle }}
+      volumes:
+        - name: {{ include "generic-chart.fullname" . }}-configmap-ca
+          configMap:
+            name: {{ include "generic-chart.fullname" . }}-configmap-ca
+      {{- end }}
+      {{- with .Values.priorityClassName }}
+      priorityClassName: {{ . }}
+      {{- end }}
+      {{- with .Values.initContainers }}
+      initContainers:
+        {{- include "tplvalues.render" (dict "value" . "context" $) | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ include "generic-chart.containerName" . }}
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          {{- with .Values.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          env:
+            - name: PUBLIC_HOST
+              value: {{ required "A valid .Values.api.publicHost entry required" .Values.api.publicHost | quote }}
+            - name: MAPSAPI2_PROTOCOL
+              value: {{ .Values.api.protocol | quote }}
+            {{- if .Values.api.tileServerUrl }}
+            - name: MAPSAPI2_TILE_SERVER
+              value: {{ .Values.api.tileServerUrl | quote }}
+            {{- end }}
+            {{- if .Values.api.retinaTileServerUrl }}
+            - name: MAPSAPI2_RETINA_TILE_SERVER
+              value: {{ .Values.api.retinaTileServerUrl | quote }}
+            {{- end }}
+            {{- if .Values.api.trafficTileServerUrl }}
+            - name: MAPSAPI2_TRAFFIC_TILE_SERVER
+              value: {{ .Values.api.trafficTileServerUrl | quote }}
+            {{- end }}
+            {{- if .Values.api.trafficTimestampServerUrl }}
+            - name: MAPSAPI2_TRAFFIC_TIMESTAMP_SERVER
+              value: {{ .Values.api.trafficTimestampServerUrl | quote }}
+            {{- end }}
+            {{- if .Values.api.trafficScoreServerUrl }}
+            - name: MAPSAPI2_TRAFFIC_SCORE_SERVER
+              value: {{ .Values.api.trafficScoreServerUrl | quote }}
+            {{- end }}
+            {{- if .Values.api.webApiServerUrl }}
+            - name: MAPSAPI2_WEB_API_SERVER
+              value: {{ .Values.api.webApiServerUrl | quote }}
+            {{- end }}
+            {{- if .Values.api.webApiKey }}
+            - name: MAPSAPI2_WEB_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "generic-chart.fullname" . }}
+                  key: webApiKey
+            {{- end }}
+            {{- if .Values.api.key }}
+            - name: MAPSAPI2_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "generic-chart.fullname" . }}
+                  key: key
+            {{- end }}
+            {{- if .Values.api.key }}
+            - name: MAPSAPI2_KEY_SERVER
+              value: {{ .Values.api.keyServerUrl | quote }}
+            {{- end }}
+            {{- if .Values.customCAs.bundle }}
+            - name: SSL_CERT_FILE
+              value: {{ include "custom.ca.mountPath" . }}/custom-ca.crt
+            {{- end }}
+          ports:
+            - name: http
+              containerPort: 3000
+              protocol: TCP
+          {{- if .Values.customCAs.bundle }}
+          volumeMounts:
+            - name: {{ include "generic-chart.fullname" . }}-configmap-ca
+              mountPath: {{ include "custom.ca.mountPath" . }}/custom-ca.crt
+              subPath: custom-ca.crt
+          {{- end }}
+          livenessProbe:
+            httpGet:
+              path: /healthcheck
+              port: http
+            failureThreshold: 5
+            initialDelaySeconds: 5
+            periodSeconds: 15
+            successThreshold: 1
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /healthcheck
+              port: http
+            failureThreshold: 3
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            successThreshold: 1
+            timeoutSeconds: 5
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          lifecycle:
+            preStop:
+              exec:
+                command: ["/bin/sh", "-c", "sleep 5"]
+        {{- with .Values.sidecars }}
+        {{- include "tplvalues.render" (dict "value" . "context" $) | nindent 8 }}
+        {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- include "tplvalues.render" ( dict "value" . "context" $) | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
