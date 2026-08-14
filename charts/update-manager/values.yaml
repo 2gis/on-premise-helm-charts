@@ -16,7 +16,7 @@ imagePullPolicy: IfNotPresent
 
 image:
   repository: 2gis-on-premise/update-manager
-  tag: 1.0.0
+  tag: 1.0.0  # TODO: точная версия
 
 # @section API service settings
 
@@ -51,7 +51,7 @@ api:
     image:
       registry: ''
       repository: 2gis/dgctl
-      tag: 3
+      tag: 3  # TODO: точная версия
       pullPolicy: IfNotPresent
 
   # @param api.job.activeDeadline Active deadline for the created jobs.
