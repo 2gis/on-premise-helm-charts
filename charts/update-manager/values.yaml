@@ -174,7 +174,7 @@ api:
             - name: ''
               releaseName: ''
               services:
-                - pro-api
+                - pro
     citylens:
       version: 2.3.0
       charts:
@@ -397,7 +397,7 @@ dgctlStorage:
 # @param api.components.pro.charts.pro-api.refOverride Override the `pro-api` chart reference.
 # @param api.components.pro.charts.pro-api.releases[0].name Public name of the managed release to be shown in the UI. **Required if chart is enabled**
 # @param api.components.pro.charts.pro-api.releases[0].releaseName Name of the managed release in the cluster. **Required if chart is enabled**
-# @param api.components.pro.charts.pro-api.releases[0].services List of DGCTL services attached to the release. Allowed values: "pro-api".
+# @param api.components.pro.charts.pro-api.releases[0].services List of DGCTL services attached to the release. Allowed values: "pro".
 
 # @extra api.components.citylens Services helm releases of the [`citylens` component](https://docs.2gis.com/en/on-premise-citylens/releases).
 # @param api.components.citylens.version Version of the `citylens` component services releases.
