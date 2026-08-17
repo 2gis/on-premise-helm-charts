@@ -75,7 +75,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | Name               | Description | Value                       |
 | ------------------ | ----------- | --------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-back` |
-| `image.tag`        | Tag         | `7.58.0.5`                  |
+| `image.tag`        | Tag         | `7.60.0.4`                  |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`              |
 
 ### Navi-Back application settings
@@ -207,7 +207,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | Name                              | Description                                                                                  | Value                        |
 | --------------------------------- | -------------------------------------------------------------------------------------------- | ---------------------------- |
 | `envoy.image.repository`          | Repository                                                                                   | `2gis-on-premise/navi-envoy` |
-| `envoy.image.tag`                 | Tag                                                                                          | `1.38.1-tools`               |
+| `envoy.image.tag`                 | Tag                                                                                          | `1.38.3`                     |
 | `envoy.image.pullPolicy`          | Pull Policy                                                                                  | `IfNotPresent`               |
 | `envoy.concurrency`               | The number of worker threads to run. Use `max(1, floor(resources.limits.cpu))` if set to `0` | `""`                         |
 | `envoy.resources`                 | Container resources requirements structure                                                   | `{}`                         |
@@ -404,6 +404,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `trafficLights.enabled`              | If traffic lights processing enabled                                    | `false` |
 | `trafficLights.projects`             | List of projects, for which traffic lights are processed                | `[]`    |
 | `trafficLights.kafka.topic`          | Topic to use for traffic lights processing                              | `""`    |
+| `trafficLights.kafka.enabled`        | If traffic lights processing kafka used                                 | `false` |
 | `trafficLights.kafka.properties`     | Properties as supported by librdkafka, see `kafka` section and comments |         |
 | `trafficLights.kafka.fileProperties` | Properties stored in file, see `kafka` section and comments             | `{}`    |
 
