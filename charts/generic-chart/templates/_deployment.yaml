@@ -13,6 +13,9 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}{{- /* annotations */}}
 spec:
+  {{- with .Values.progressDeadlineSeconds }}
+  progressDeadlineSeconds: {{ . }}
+  {{- end }}
   {{- if not (.Values.hpa).enabled }}
   {{- with .Values.replicaCount }}
   replicas: {{ . }}

@@ -39,6 +39,7 @@ containerNameOverride: ''
 # @param restartPolicy Kubernetes pod [restart policy](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy)
 # @param updateStrategy Kubernetes StatefulSet [update strategy](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies)
 # @param volumeClaimTemplates Kubernetes StatefulSet [volue claim template](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#volume-claim-templates)
+# @param progressDeadlineSeconds dployment [progress deadline seconds](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#progress-deadline-seconds)
 labels: {}
 annotations: {}
 replicaCount: 1
@@ -73,6 +74,7 @@ enableServiceLinks: false
 restartPolicy: ''
 updateStrategy: {}
 volumeClaimTemplates: []
+progressDeadlineSeconds: null
 
 
 # @section Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings

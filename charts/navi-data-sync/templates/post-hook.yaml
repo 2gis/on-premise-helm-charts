@@ -1,0 +1,183 @@
+---
+
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "generic-chart.fullname" . }}-post-hook
+  annotations:
+  {{- with .Values.annotations }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+    helm.sh/hook: post-install,post-upgrade,post-rollback
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+  labels:
+    {{- include "generic-chart.labels" . | nindent 4 }}
+  {{- with .Values.labels }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  activeDeadlineSeconds: {{ .Values.activeDeadlineSeconds }}
+  # 24h
+  ttlSecondsAfterFinished: 86400
+  backoffLimit: {{ .Values.backoffLimit }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 10 }}
+      {{- end }}
+      labels:
+        {{- include "generic-chart.labels" . | nindent 8 }}
+      {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.affinity }}
+      affinity:
+        {{- include "tplvalues.render" ( dict "value" .Values.affinity "context" . ) | nindent 8 }}
+      {{- end }}{{- /* affinity */}}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName }}
+      {{- end }}
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+      serviceAccount: {{ include "generic-chart.serviceAccountName" . }}
+      # failures managed by Job, not Pod
+      restartPolicy: Never
+      {{- if not .Values.blobVersion }}
+      initContainers:
+        - name: {{ .Chart.Name }}-metadata-back
+          {{- $backValues := "" }}
+          {{- $bin := "" }}
+          {{- if eq .Values.type "attr" }}
+            {{- $backValues = include "navi-data-sync.mergedChildValues" .Values.naviAttractor | fromYaml }}
+            {{- $bin = "/usr/sbin/2gis/mosesd/attractord" }}
+          {{- else }}
+            {{- $backValues = include "navi-data-sync.mergedChildValues" .Values.naviBack | fromYaml }}
+            {{- $bin = "/usr/sbin/2gis/mosesd/mosesd" }}
+          {{- end }}{{- /* .Values.type == "attr" */}}
+          {{- $backImage := "" }}
+          {{- $backImage := print $backImage ( $backValues.dgctlDockerRegistry |
+              default .Values.dgctlDockerRegistry |
+              required "naviBack.values.dgctlDockerRegistry missed" ) }}
+          {{- $backImage := print $backImage "/" ( $backValues.image.repository |
+              required "naviBack.values.image.repository missed" ) }}
+          {{- $backImage := print $backImage ":" ( $backValues.image.tag |
+              required "naviBack.values.image.tag missed" ) }}
+          image: {{ $backImage | quote }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          resources:
+            limits:
+              cpu: 10m
+              memory: 10Mi
+          command: [ "/bin/sh" ]
+          args:
+            - "-c"
+            - {{ $bin }} --version-as-json >| /opt/2gis/tmp/metadata-back.json
+          volumeMounts:
+            - name: workdir
+              mountPath: /opt/2gis/tmp
+      {{- end }}{{/* not .Values.blobVersion */}}
+      containers:
+        - name: {{ .Chart.Name }}-post-hook
+          image: "{{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- with .Values.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          args:
+            - "/usr/local/bin/navi-data-sync"
+            - "--no-dry-run"
+            - "--action=initialize"
+            - "--type={{ .Values.type }}"
+            - "--data-group-prefix={{ .Values.dataGroup.prefix }}"
+            - "--navi-group={{ .Values.navigroup }}"
+            - "--chart-values-back=./resources/navi-back.values.yaml"
+            - "--chart-values-attr=./resources/navi-attractor.values.yaml"
+            - "--chart-file-back=./resources/navi-back.tgz"
+            - "--chart-file-attr=./resources/navi-attractor.tgz"
+            - "--chart-name-back={{ .Values.naviBack.releaseName }}"
+            - "--chart-name-attr={{ .Values.naviAttractor.releaseName }}"
+            - "--castle-url={{ .Values.castleUrl }}"
+            {{- if .Values.citiesPb3Conf }}
+            - "--cities-conf-pb3"
+            {{- end }}
+            {{- if .Values.sns.enabled }}
+            - "--enable-sns"
+            - "--sns-id-prefix={{ .Values.sns.rulesId.prefix }}"
+            - "--sns-id-projects={{ .Values.sns.rulesId.projects }}"
+            - "--sns-id-routing={{ .Values.sns.rulesId.routing }}"
+            {{- else }}
+            - "--no-enable-sns"
+            {{- end }}{{- /* if .Values.sns.enabled */}}
+            - '--chart-fullname-self={{ include "navi-data-sync.cronjobName" . }}'
+            - "--helm-timeout={{ .Values.helmTimeout }}"
+            {{- if .Values.blobVersion }}
+            - "--blob-version={{ .Values.blobVersion }}"
+            {{- else }}
+            - "--metadata-back=/opt/2gis/tmp/metadata-back.json"
+            {{- end }}
+            {{- if .Values.metrics.enabled }}
+            - "--metrics-gateway-url={{ .Values.metrics.gateway }}"
+            {{- range $labelName, $labelValue := .Values.metrics.labels }}
+            - "--metrics-labels"
+            - {{ printf "%s=%s" $labelName $labelValue | quote }}
+            {{- end }}{{- /* range */}}
+            {{- end }}{{- /* if */}}
+            {{- with .Values.projects }}
+            - "--projects"
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+            {{- with .Values.routing }}
+            - "--routing"
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+            {{- with .Values.fixedTimestamp }}
+            - "--fixed-timestamp={{ . }}"
+            {{- end }}
+          workingDir: /opt/2gis
+          volumeMounts:
+            - name: {{ include "generic-chart.name" . }}-secret
+              mountPath: /opt/2gis/resources
+            {{- if not .Values.blobVersion }}
+            - name: workdir
+              mountPath: /opt/2gis/tmp
+            {{- end }}
+          env:
+            - name: HELM_MAX_HISTORY
+              value: "{{ .Values.helmMaxHistory | default 10 | int }}"
+      volumes:
+        - name: {{ include "generic-chart.name" . }}-secret
+          secret:
+            secretName: {{ include "generic-chart.fullname" . }}-{{ .Release.Revision }}
+            items:
+              - key: navi-attractor.tgz
+                path: navi-attractor.tgz
+              - key: navi-back.tgz
+                path: navi-back.tgz
+              - key: navi-attractor.values.yaml
+                path: navi-attractor.values.yaml
+              - key: navi-back.values.yaml
+                path: navi-back.values.yaml
+        {{- if not .Values.blobVersion }}
+        - name: workdir
+          emptyDir: {}
+        {{- end }}
