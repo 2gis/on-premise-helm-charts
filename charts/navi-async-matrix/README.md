@@ -24,42 +24,42 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 
 ### Common settings
 
-| Name                              | Description                                                                                                                                                                                                   | Value   |
-| --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `replicaCount`                    | A replica count for the pod.                                                                                                                                                                                  | `1`     |
-| `imagePullSecrets`                | Kubernetes image pull secrets.                                                                                                                                                                                | `[]`    |
-| `nameOverride`                    | Base name to use in all the Kubernetes entities deployed by this chart.                                                                                                                                       | `""`    |
-| `fullnameOverride`                | Base fullname to use in all the Kubernetes entities deployed by this chart.                                                                                                                                   | `""`    |
-| `podAnnotations`                  | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                                                 | `{}`    |
-| `podLabels`                       | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                                                           | `{}`    |
-| `annotations`                     | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                                                     | `{}`    |
-| `labels`                          | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                                                               | `{}`    |
-| `podSecurityContext.runAsNonRoot` | Indicates that the container must run as a non-root user.                                                                                                                                                     | `true`  |
-| `podSecurityContext.runAsUser`    | The User ID (UID) to run the entrypoint of the container process.                                                                                                                                             | `10001` |
-| `podSecurityContext.runAsGroup`   | The primary Group ID (GID) for all processes in the container.                                                                                                                                                | `10001` |
-| `podSecurityContext.fsGroup`      | A special supplemental group ID applied to all volumes mounted by the pod.# @param securityContext Kubernetes [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/). | `10001` |
-| `securityContext`                 | Kubernetes [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).                                                                                                    | `{}`    |
-| `nodeSelector`                    | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                                                                           | `{}`    |
-| `tolerations`                     | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                                                             | `[]`    |
-| `affinity`                        | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).                                                                                   | `{}`    |
-| `priorityClassName`               | Kubernetes [pod priority](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/).                                                                                                  | `""`    |
-| `terminationGracePeriodSeconds`   | Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/).                                                                                             | `60`    |
-| `prometheusEnabled`               | If Prometheus scrape is enabled.                                                                                                                                                                              | `true`  |
-| `livenessProbe.enabled`           | Enable livenessProbe.                                                                                                                                                                                         | `true`  |
-| `livenessProbe.periodSeconds`     | Period seconds for livenessProbe.                                                                                                                                                                             | `15`    |
-| `livenessProbe.timeoutSeconds`    | Timeout seconds for livenessProbe.                                                                                                                                                                            | `5`     |
-| `livenessProbe.failureThreshold`  | Failure threshold for livenessProbe.                                                                                                                                                                          | `5`     |
-| `readinessProbe.enabled`          | Enable readinessProbe.                                                                                                                                                                                        | `true`  |
-| `readinessProbe.periodSeconds`    | Period seconds for readinessProbe.                                                                                                                                                                            | `15`    |
-| `readinessProbe.timeoutSeconds`   | Timeout seconds for readinessProbe.                                                                                                                                                                           | `5`     |
-| `readinessProbe.failureThreshold` | Failure threshold for readinessProbe.                                                                                                                                                                         | `3`     |
-| `startupProbe.enabled`            | Enable startupProbe.                                                                                                                                                                                          | `true`  |
-| `startupProbe.periodSeconds`      | Period seconds for startupProbe.                                                                                                                                                                              | `15`    |
-| `startupProbe.timeoutSeconds`     | Timeout seconds for startupProbe.                                                                                                                                                                             | `5`     |
-| `startupProbe.failureThreshold`   | Failure threshold for startupProbe.                                                                                                                                                                           | `60`    |
-| `customLivenessProbe`             | Override default liveness probe.                                                                                                                                                                              | `{}`    |
-| `customReadinessProbe`            | Override default readiness probe.                                                                                                                                                                             | `{}`    |
-| `customStartupProbe`              | Override default startup probe.                                                                                                                                                                               | `{}`    |
+| Name                              | Description                                                                                                                 | Value   |
+| --------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `replicaCount`                    | A replica count for the pod.                                                                                                | `1`     |
+| `imagePullSecrets`                | Kubernetes image pull secrets.                                                                                              | `[]`    |
+| `nameOverride`                    | Base name to use in all the Kubernetes entities deployed by this chart.                                                     | `""`    |
+| `fullnameOverride`                | Base fullname to use in all the Kubernetes entities deployed by this chart.                                                 | `""`    |
+| `podAnnotations`                  | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).               | `{}`    |
+| `podLabels`                       | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                         | `{}`    |
+| `annotations`                     | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`    |
+| `labels`                          | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`    |
+| `podSecurityContext.runAsNonRoot` | Indicates that the container must run as a non-root user.                                                                   | `true`  |
+| `podSecurityContext.runAsUser`    | The User ID (UID) to run the entrypoint of the container process.                                                           | `10001` |
+| `podSecurityContext.runAsGroup`   | The primary Group ID (GID) for all processes in the container.                                                              | `10001` |
+| `podSecurityContext.fsGroup`      | A special supplemental group ID applied to all volumes mounted by the pod.                                                  | `10001` |
+| `securityContext`                 | Kubernetes [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).                  | `{}`    |
+| `nodeSelector`                    | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).         | `{}`    |
+| `tolerations`                     | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.           | `[]`    |
+| `affinity`                        | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity). | `{}`    |
+| `priorityClassName`               | Kubernetes [pod priority](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/).                | `""`    |
+| `terminationGracePeriodSeconds`   | Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/).           | `60`    |
+| `prometheusEnabled`               | If Prometheus scrape is enabled.                                                                                            | `true`  |
+| `livenessProbe.enabled`           | Enable livenessProbe.                                                                                                       | `true`  |
+| `livenessProbe.periodSeconds`     | Period seconds for livenessProbe.                                                                                           | `15`    |
+| `livenessProbe.timeoutSeconds`    | Timeout seconds for livenessProbe.                                                                                          | `5`     |
+| `livenessProbe.failureThreshold`  | Failure threshold for livenessProbe.                                                                                        | `5`     |
+| `readinessProbe.enabled`          | Enable readinessProbe.                                                                                                      | `true`  |
+| `readinessProbe.periodSeconds`    | Period seconds for readinessProbe.                                                                                          | `15`    |
+| `readinessProbe.timeoutSeconds`   | Timeout seconds for readinessProbe.                                                                                         | `5`     |
+| `readinessProbe.failureThreshold` | Failure threshold for readinessProbe.                                                                                       | `3`     |
+| `startupProbe.enabled`            | Enable startupProbe.                                                                                                        | `true`  |
+| `startupProbe.periodSeconds`      | Period seconds for startupProbe.                                                                                            | `15`    |
+| `startupProbe.timeoutSeconds`     | Timeout seconds for startupProbe.                                                                                           | `5`     |
+| `startupProbe.failureThreshold`   | Failure threshold for startupProbe.                                                                                         | `60`    |
+| `customLivenessProbe`             | Override default liveness probe.                                                                                            | `{}`    |
+| `customReadinessProbe`            | Override default readiness probe.                                                                                           | `{}`    |
+| `customStartupProbe`              | Override default startup probe.                                                                                             | `{}`    |
 
 ### Deployment settings
 

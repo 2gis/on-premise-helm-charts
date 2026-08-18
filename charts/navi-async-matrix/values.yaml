@@ -18,7 +18,7 @@ dgctlDockerRegistry: ''
 # @param podSecurityContext.runAsNonRoot Indicates that the container must run as a non-root user.
 # @param podSecurityContext.runAsUser The User ID (UID) to run the entrypoint of the container process.
 # @param podSecurityContext.runAsGroup The primary Group ID (GID) for all processes in the container.
-# @param podSecurityContext.fsGroup A special supplemental group ID applied to all volumes mounted by the pod.# @param securityContext Kubernetes [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).
+# @param podSecurityContext.fsGroup A special supplemental group ID applied to all volumes mounted by the pod.
 # @param securityContext Kubernetes [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).
 # @param nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
 # @param tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
