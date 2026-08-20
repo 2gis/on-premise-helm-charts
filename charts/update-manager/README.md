@@ -34,8 +34,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/TODO) to learn about
 | ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
 | `api.logLevel`                              | Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.                                                                                                                | `warning`                          |
 | `api.logFormat`                             | Log format for the service. Can be: `json`, `text`.                                                                                                                                                      | `json`                             |
-| `api.oidc.url`                              | URL of the OIDC provider. **Required**                                                                                                                                                                   | `""`                               |
-| `api.oidc.issuerUrl`                        | Allows discovery to work when the issuer_url reported by upstream is mismatched with the discovery URL.                                                                                                  | `""`                               |
+| `api.keys.url`                              | URL of the Keys service API. Ex: `http://keys-api`. **Required**                                                                                                                                         | `""`                               |
 | `api.datagateway.url`                       | URL of the DataGateway instance.                                                                                                                                                                         | `https://datagateway.api.2gis.com` |
 | `api.datagateway.apiKey`                    | API key for the DataGateway instance. **Required**                                                                                                                                                       | `""`                               |
 | `api.dgctl.image.registry`                  | DGCTL image registry.                                                                                                                                                                                    | `""`                               |
@@ -50,7 +49,8 @@ See the [documentation](https://docs.2gis.com/en/on-premise/TODO) to learn about
 | `api.job.logTail`                           | Number of last lines of the job log taken unconditionally when trimming.                                                                                                                                 | `50`                               |
 | `api.job.logPattern`                        | Regexp used to filter the rest of the job log. Empty means no filtering.                                                                                                                                 | `""`                               |
 | `api.manifest.syncInterval`                 | Interval for syncing manifests.                                                                                                                                                                          | `60s`                              |
-| `api.helmTimeout`                           | Timeout for helm operations.                                                                                                                                                                             | `10m`                              |
+| `api.helm.timeout`                          | Timeout for helm operations.                                                                                                                                                                             | `10m`                              |
+| `api.helm.volume[0].emptyDir`               | Volume spec to store downloaded Helm charts. Rendered as the `charts` volume. Specify a single-element list with one volume type; the whole list replaces the default when overridden.                   | `{}`                               |
 | `api.rollbackHistoryLimit`                  | Installation history limit for rollback.                                                                                                                                                                 | `2`                                |
 | `api.installVersionsLimit`                  | Number of install versions to show.                                                                                                                                                                      | `3`                                |
 | `api.completedTaskOffset`                   | Duration to show completed tasks.                                                                                                                                                                        | `12h`                              |
@@ -76,10 +76,14 @@ See the [documentation](https://docs.2gis.com/en/on-premise/TODO) to learn about
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-| Name                        | Description                            | Value                 |
-| --------------------------- | -------------------------------------- | --------------------- |
-| `api.ingress.enabled`       | If Ingress is enabled for the service. | `false`               |
-| `api.ingress.hosts[0].host` | Hostname for the Ingress service.      | `update-manager.host` |
+| Name                                     | Description                                                                                            | Value                        |
+| ---------------------------------------- | ------------------------------------------------------------------------------------------------------ | ---------------------------- |
+| `api.ingress.enabled`                    | If Ingress is enabled for the service.                                                                 | `false`                      |
+| `api.ingress.className`                  | Ingress class name.                                                                                    | `nginx`                      |
+| `api.ingress.hosts[0].host`              | Hostname for the Ingress service.                                                                      | `update-manager.example.com` |
+| `api.ingress.hosts[0].paths[0].path`     | Path for the [[hostname|https://kubernetes.io/docs/concepts/services-networking/ingress/#path-types]]. | `/`                          |
+| `api.ingress.hosts[0].paths[0].pathType` | Ingress path type.                                                                                     | `Prefix`                     |
+| `api.ingress.tls`                        | Ingress TLS parameters.                                                                                | `[]`                         |
 
 ### Migrate job settings
 

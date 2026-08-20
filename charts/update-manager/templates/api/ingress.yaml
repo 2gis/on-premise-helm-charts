@@ -22,13 +22,15 @@ spec:
     - host: {{ $host.host | quote }}
       http:
         paths:
-          - path: "/"
-            pathType: Prefix
+          {{- range $path := $host.paths }}
+          - path: {{ $path.path | quote }}
+            pathType: {{ $path.pathType }}
             backend:
               service:
                 name: {{ include "update-manager.name" $ }}
                 port:
                   name: http
+          {{- end }}
     {{- end }}
   {{- with .Values.api.ingress.tls }}
   tls:
