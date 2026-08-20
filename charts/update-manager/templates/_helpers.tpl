@@ -191,6 +191,9 @@ for the resource kinds that chart actually renders.
 - apiGroups: ["apps"]
   resources: ["deployments"]
   verbs: {{ include "update-manager.rbac.manageVerbs" . }}
+- apiGroups: ["apps"]
+  resources: ["replicasets"]
+  verbs: {{ include "update-manager.rbac.manageVerbs" . }}
 {{- end -}}
 
 {{- define "update-manager.rbac.rule.appsStatefulSet" -}}
