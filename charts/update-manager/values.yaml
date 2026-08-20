@@ -28,12 +28,10 @@ api:
   logLevel: warning
   logFormat: json
 
-  # @param api.oidc.url URL of the OIDC provider. **Required**
-  # @param api.oidc.issuerUrl Allows discovery to work when the issuer_url reported by upstream is mismatched with the discovery URL.
+  # @param api.keys.url URL of the Keys service API. Ex: `http://keys-api`. **Required**
 
-  oidc:
+  keys:
     url: ''
-    issuerUrl: ''
 
   # @param api.datagateway.url URL of the DataGateway instance.
   # @param api.datagateway.apiKey API key for the DataGateway instance. **Required**
@@ -76,9 +74,13 @@ api:
   manifest:
     syncInterval: 60s
 
-  # @param api.helmTimeout Timeout for helm operations.
+  # @param api.helm.timeout Timeout for helm operations.
+  # @param api.helm.volume[0].emptyDir Volume spec to store downloaded Helm charts. Rendered as the `charts` volume. Specify a single-element list with one volume type; the whole list replaces the default when overridden.
 
-  helmTimeout: 10m
+  helm:
+    timeout: 10m
+    volume:
+      - emptyDir: {}
 
   # @param api.rollbackHistoryLimit Installation history limit for rollback.
   # @param api.installVersionsLimit Number of install versions to show.
@@ -253,12 +255,24 @@ api:
   # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
   # @param api.ingress.enabled If Ingress is enabled for the service.
+  # @param api.ingress.className Ingress class name.
   # @param api.ingress.hosts[0].host Hostname for the Ingress service.
+  # @param api.ingress.hosts[0].paths[0].path Path for the [[hostname|https://kubernetes.io/docs/concepts/services-networking/ingress/#path-types]].
+  # @param api.ingress.hosts[0].paths[0].pathType Ingress path type.
+  # @param api.ingress.tls Ingress TLS parameters.
 
   ingress:
+    className: nginx
     enabled: false
     hosts:
-      - host: update-manager.host
+      - host: update-manager.example.com
+        paths:
+          - path: /
+            pathType: Prefix
+    tls: []
+    # - hosts:
+    #   - update-manager.example.com
+    #   secretName: secret.tls
 
 # @section Migrate job settings
 

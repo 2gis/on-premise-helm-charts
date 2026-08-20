@@ -93,12 +93,16 @@ spec:
             - name: config
               mountPath: /config
               readOnly: true
+            - name: charts
+              mountPath: /tmp/helm-charts
             {{- include "update-manager.psql.volumeMounts" . | nindent 12 }}
             {{- include "update-manager.ca.volumeMounts" . | nindent 12 }}
       volumes:
         - name: config
           configMap:
             name: {{ include "update-manager.name" . }}
+        - name: charts
+          {{- toYaml (index .Values.api.helm.volume 0) | nindent 10 }}
         {{- include "update-manager.psql.volumes" . | nindent 8 }}
         {{- include "update-manager.ca.volumes" . | nindent 8 }}
       {{- with .Values.api.nodeSelector }}

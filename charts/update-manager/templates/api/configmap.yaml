@@ -34,14 +34,7 @@ data:
       secure: {{ .Values.dgctlStorage.secure }}
       region: {{ .Values.dgctlStorage.region | quote }}
 
-    oidc:
-      {{- $provider := required "Valid .Values.api.oidc.url required!" .Values.api.oidc.url }}
-      {{- if .Values.api.oidc.issuerUrl }}
-      issuer: {{ .Values.api.oidc.issuerUrl | quote }}
-      provider: {{ $provider | quote }}
-      {{- else }}
-      issuer: {{ $provider | quote }}
-      {{- end }}
+    keys-service-url: {{ required "Valid .Values.api.keys.url required!" .Values.api.keys.url }}
 
     datagateway-url: {{ .Values.api.datagateway.url }}
 
@@ -65,7 +58,9 @@ data:
 
     manifest-sync-interval: "{{ .Values.api.manifest.syncInterval }}"
 
-    helm-timeout: "{{ .Values.api.helmTimeout }}"
+    helm:
+      timeout: "{{ .Values.api.helm.timeout }}"
+      chart-dir: /tmp/helm-charts
 
     rollback-history-limit: {{ .Values.api.rollbackHistoryLimit }}
     install-versions-limit: {{ .Values.api.installVersionsLimit }}
