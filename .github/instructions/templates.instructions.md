@@ -18,7 +18,7 @@ excludeAgent: ["coding-agent"]
 - Do not hardcode `namespace:` in template `metadata` — namespace is set by the caller via `--namespace`
 - Do not use floating image tags (`latest`, `head`, `canary`); always use a fixed tag or SHA
 - PodTemplate selectors must be explicitly declared in `selector.matchLabels`
-- Use `generic-chart` library templates for standard resources (Deployment, Service, Ingress, HPA, VPA, PDB) instead of duplicating them
+- `generic-chart` library templates for standard resources (Deployment, Service, Ingress, HPA, VPA, PDB) are **optional**; charts may implement templates manually
 - Every chart must have a `templates/NOTES.txt` with post-install instructions. Recommended template:
   ```
   {{ .Chart.Name }} is installed by release "{{ .Release.Name }}" at "{{ .Release.Namespace }}" namespace
@@ -57,6 +57,7 @@ excludeAgent: ["coding-agent"]
     checksum/config: {{ (include (print $.Template.BasePath "/configmap.yaml") . | fromYaml).data | toYaml | sha256sum }}
     checksum/secret: {{ (include (print $.Template.BasePath "/secret.yaml") . | fromYaml).data | toYaml | sha256sum }}
   ```
+- Use consistent Kubernetes-style information size units in values and examples: `Ki`, `Mi`, `Gi`, `Ti`.
 - Services using DataGateway manifests must add the `manifest` label using the `<svc_name>.manifestCode` helper
 - Add a deprecation notice in `NOTES.txt` for renamed/removed parameters instead of silently dropping them
 
