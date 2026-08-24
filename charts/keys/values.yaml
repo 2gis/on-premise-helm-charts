@@ -36,14 +36,14 @@ featureFlags:
 backend:
   image:
     repository: 2gis-on-premise/keys-backend
-    tag: 1.175.1
+    tag: 1.176.0
 
 # @section Admin service settings
 
 admin:
   image:
     repository: 2gis-on-premise/keys-ui
-    tag: 1.7.0
+    tag: 1.7.7
 
   # @param admin.replicas A replica count for the pod.
 
