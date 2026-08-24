@@ -1,3 +1,15 @@
+## [2.10.0] (2026-08-24)
+
+#### Images
+```
+keys
+	- keys-backend:1.175.1
+	+ keys-backend:1.176.0
+	- keys-ui:1.7.0
+	+ keys-ui:1.7.7
+```
+[Full list of image versions](https://github.com/2gis/on-premise-helm-charts/blob/Core-2.10.0/changelogs/core/core_image_versions.txt)
+
 ## [2.9.0] (2026-07-28)
 
 #### Images
