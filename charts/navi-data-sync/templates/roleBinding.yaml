@@ -1,0 +1,50 @@
+{{- if .Values.rbac.create -}}
+---
+
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ include "generic-chart.fullname" . }}
+  labels:
+    {{- include "generic-chart.labels" . | nindent 4 }}
+    {{- with .Values.rbac.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- with .Values.rbac.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+subjects:
+- kind: ServiceAccount
+  name: {{ include "generic-chart.serviceAccountName" . }}
+roleRef:
+  kind: Role
+  name: {{ include "generic-chart.fullname" . }}
+  apiGroup: ""
+{{- end }}
+
+{{- if .Values.rbac.deleteHook.create }}
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: {{ include "generic-chart.fullname" . }}-delete-hook
+  labels:
+    {{- include "generic-chart.labels" . | nindent 4 }}
+    {{- with .Values.rbac.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  annotations:
+  {{- with .Values.rbac.annotations }}
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+    helm.sh/hook: post-delete
+    helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
+subjects:
+- kind: ServiceAccount
+  name: {{ include "navi-data-sync.deleteHookServiceAccountName" . }}
+roleRef:
+  kind: Role
+  name: {{ include "generic-chart.fullname" . }}-delete-hook
+  apiGroup: ""
+{{- end }}

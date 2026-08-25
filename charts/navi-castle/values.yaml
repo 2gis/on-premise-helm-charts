@@ -139,6 +139,9 @@ resources: {}
 # @param castle.storePeriod.restriction Retention period for `restriction` job data, ref. `cron/init.enabled.restriction`. Includes retention of the main dataset plus 3 additional backup copies.
 # @param castle.storePeriod.restrictionImport Retention period for `restrictionImport` job data, ref. `cron/init.enabled.restrictionImport`. Includes retention of the main dataset plus 3 additional backup copies.
 # @param castle.storePeriod.rtr Retention period for `rtr` data, ref. `rtr.enabled`. Includes retention of the main dataset plus 3 additional backup copies.
+# @extra castle.onpremise [nullable] Settings for On-Premise compatibility mode.
+# @param castle.onpremise.enabled Add `backup_dir` and routing metadata required by On-Premise Castle backup listings.
+# @param castle.onpremise.routing Routing types included in `import` and `restrictionImport` backup metadata when On-Premise compatibility mode is enabled.
 
 castle:
   image:
@@ -161,6 +164,19 @@ castle:
     restriction: week
     restrictionImport: week
     rtr: week
+  onpremise:
+    enabled: true
+    routing:
+      - ctx
+      - driving
+      - bicycle
+      - scooter
+      - truck
+      - pedestrian
+      - taxi
+      - motorcycle
+      - emergency
+      - public_transport
 
 
 # @section Navi-Front settings
