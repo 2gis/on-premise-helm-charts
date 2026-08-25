@@ -40,7 +40,7 @@ imagePullSecrets: []
 # @section API settings
 
 # @param replicas Number of replicas of API pods
-# @param revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+# @param revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment).
 
 replicas: 1
 revisionHistoryLimit: 3

@@ -24,22 +24,22 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Common settings
 
-| Name                            | Description                                                                                                                                   | Value |
-| ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| `replicaCount`                  | A replica count for the pod                                                                                                                   | `1`   |
-| `revisionHistoryLimit`          | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment) | `3`   |
-| `imagePullSecrets`              | Kubernetes image pull secrets                                                                                                                 | `[]`  |
-| `nameOverride`                  | Base name to use in all the Kubernetes entities deployed by this chart                                                                        | `""`  |
-| `fullnameOverride`              | Base fullname to use in all the Kubernetes entities deployed by this chart                                                                    | `""`  |
-| `podAnnotations`                | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)                                  | `{}`  |
-| `podSecurityContext`            | Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)                                 | `{}`  |
-| `securityContext`               | Kubernetes [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)                                     | `{}`  |
-| `nodeSelector`                  | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)                            | `{}`  |
-| `tolerations`                   | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings                              | `[]`  |
-| `affinity`                      | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)                    | `{}`  |
-| `preStopDelay`                  | Delay in seconds before terminating container                                                                                                 | `5`   |
-| `terminationGracePeriodSeconds` | Grace period for container shutdown, refer to [Pod Lifecycle](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/) for details  | `60`  |
-| `timezone`                      | Timezone for the router container. Refer to inline comments for details                                                                       | `UTC` |
+| Name                            | Description                                                                                                                                                              | Value |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
+| `replicaCount`                  | A replica count for the pod                                                                                                                                              | `1`   |
+| `revisionHistoryLimit`          | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment) | `3`   |
+| `imagePullSecrets`              | Kubernetes image pull secrets                                                                                                                                            | `[]`  |
+| `nameOverride`                  | Base name to use in all the Kubernetes entities deployed by this chart                                                                                                   | `""`  |
+| `fullnameOverride`              | Base fullname to use in all the Kubernetes entities deployed by this chart                                                                                               | `""`  |
+| `podAnnotations`                | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)                                                             | `{}`  |
+| `podSecurityContext`            | Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)                                                            | `{}`  |
+| `securityContext`               | Kubernetes [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)                                                                | `{}`  |
+| `nodeSelector`                  | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)                                                       | `{}`  |
+| `tolerations`                   | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings                                                         | `[]`  |
+| `affinity`                      | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)                                               | `{}`  |
+| `preStopDelay`                  | Delay in seconds before terminating container                                                                                                                            | `5`   |
+| `terminationGracePeriodSeconds` | Grace period for container shutdown, refer to [Pod Lifecycle](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/) for details                             | `60`  |
+| `timezone`                      | Timezone for the router container. Refer to inline comments for details                                                                                                  | `UTC` |
 
 ### Deployment settings
 

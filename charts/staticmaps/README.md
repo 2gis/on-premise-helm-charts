@@ -37,10 +37,10 @@ For details about Static Maps (Static API), see the On-Premise Maps API document
 
 ### API settings
 
-| Name                   | Description                                                                                                                                    | Value |
-| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| `replicas`             | Number of replicas of API pods                                                                                                                 | `1`   |
-| `revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`   |
+| Name                   | Description                                                                                                                                                               | Value |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `replicas`             | Number of replicas of API pods                                                                                                                                            | `1`   |
+| `revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment). | `3`   |
 
 ### Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
 
