@@ -115,14 +115,6 @@ data:
             js_content bundle.geo_coding;
         }
 
-        {{- if .Values.distMatrixCtxLocation }}
-        {{ include "tplvalues.render" ( dict "value" .Values.distMatrixCtxLocation "context" . ) | nindent 8 }}
-        {{- else }}
-        location ~* ^/get_dist_matrix_ctx$ {
-            js_content bundle.geo_coding;
-        }
-        {{- end }}
-
         location ~* ^/pedestrian {
             js_content bundle.geo_coding;
         }
