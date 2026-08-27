@@ -93,7 +93,7 @@ api:
 nginx:
   image:
     repository: 2gis-on-premise/nginx
-    tag: 1.30.2
+    tag: 1.30.4
     pullPolicy: IfNotPresent
   resources: {}
   httpPort: 8080
