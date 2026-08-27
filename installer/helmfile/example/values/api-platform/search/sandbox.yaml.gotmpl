@@ -1,0 +1,19 @@
+api:
+  resources:
+    requests:
+      cpu: 200m
+      memory: 1G
+    limits:
+      cpu: 4
+      memory: 2G
+  configOpt:
+    - "<threads_per_request>2</threads_per_request>"
+
+nginx:
+  resources:
+    requests:
+      cpu: 50m
+      memory: 100M
+    limits:
+      cpu: 200m
+      memory: 200M

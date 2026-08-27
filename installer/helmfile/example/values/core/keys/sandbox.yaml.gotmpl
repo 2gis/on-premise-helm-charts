@@ -1,0 +1,89 @@
+# Keys override for the `sandbox` (kind) environment — in-cluster PostgreSQL, Kafka, Redis, Keycloak OIDC.
+postgres:
+  rw:
+    host: postgresql
+    port: 5432
+    timeout: 3s
+    name: keys
+    schema: ''
+    username: keys_rw
+    password: keys_rw_password
+  ro:
+    host: postgresql
+    port: 5432
+    timeout: 3s
+    name: keys
+    schema: ''
+    username: keys_ro
+    password: keys_ro_password
+
+kafka:
+  bootstrapServers: kafka-controller-headless:9092
+  username: admin
+  password: admin
+  securityProtocol: SASL_PLAINTEXT
+  saslMechanism: SCRAM-SHA-512
+
+redis:
+  enabled: true
+  host: redis-master
+  password: redis123
+  db: 0
+
+api:
+  adminUsers: "admin:on-premise"
+  replicas: 1
+  oidc:
+    enabled: true
+    enableSinglePartnerMode: true
+    enableExternalProvider: true
+    url: http://{{ .Values.keycloakIngress }}/realms/Platform
+    retryCount: 3
+    timeout: 3s
+    defaultPartner:
+      id: 1
+      name: 'Test Default Partner'
+      role: admin
+  resources:
+    requests:
+      cpu: 10m
+      memory: 20Mi
+    limits:
+      cpu: 100m
+      memory: 128Mi
+
+admin:
+  resources:
+    requests:
+      cpu: 10m
+      memory: 140Mi
+    limits:
+      cpu: 100m
+      memory: 192Mi
+
+serviceApi:
+  resources:
+    requests:
+      cpu: 10m
+      memory: 56Mi
+    limits:
+      cpu: 1
+      memory: 256Mi
+
+tasker:
+  resources:
+    requests:
+      cpu: 10m
+      memory: 48Mi
+    limits:
+      cpu: 100m
+      memory: 64Mi
+
+counter:
+  resources:
+    requests:
+      cpu: 10m
+      memory: 20Mi
+    limits:
+      cpu: 1
+      memory: 512Mi

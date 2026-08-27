@@ -1,3 +1,10 @@
+# Environment-specific Redis overrides for the `sandbox` example.
+# Referenced by services/infra/redis.yaml.gotmpl via
+# `{{ .Values.valuesPath }}/values/infra/redis/{{ .Environment.Name }}.yaml.gotmpl`,
+# i.e. this file is picked up when running `helmfile -e sandbox`.
+# allowInsecureImages: образы берутся из dgctlDockerRegistry (placeholder-реестра), bitnami-чарт этого не знает.
 global:
+  security:
+    allowInsecureImages: true
   redis:
     password: '' # TODO

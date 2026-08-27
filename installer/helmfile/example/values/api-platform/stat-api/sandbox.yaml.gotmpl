@@ -1,0 +1,21 @@
+clickhouse:
+  servers: clickhouse
+  cluster: default
+  username: default
+  password: clickhouse
+  database: default
+
+migrate:
+  kafkaTableEngine:
+    topic: 'stat.sandbox.type.401'
+    group: 'clickhouse-shared-client'
+    brokers: kafka-controller-headless:9092
+
+api:
+  resources:
+    requests:
+      cpu: 10m
+      memory: 64Mi
+    limits:
+      cpu: 100m
+      memory: 256Mi

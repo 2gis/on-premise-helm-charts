@@ -1,0 +1,25 @@
+types:
+  - kind: web
+  - kind: web
+    subtype: immersive
+  - kind: mapbox
+
+cassandra:
+  hosts:
+    - 'cassandra'
+  replicaFactor: 1
+  credentials:
+    user: cassandra
+    password: 'cassandra'
+    jmxUser: cassandra
+    jmxPassword: 'cassandra'
+
+api:
+  replicaCount: 1
+  resources:
+    requests:
+      cpu: 100m
+      memory: 512Mi
+    limits:
+      cpu: 2
+      memory: 2Gi

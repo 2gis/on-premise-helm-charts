@@ -1,0 +1,37 @@
+# Catalog API override for the `sandbox` (kind) environment — in-cluster PostgreSQL.
+api:
+  replicas: 1
+  postgres:
+    host: postgresql
+    port: 5432
+    username: catalog
+    password: catalog_password
+    name: catalog
+    poolSize:
+      api: 20
+    queryTimeout: 10
+  resources:
+    requests:
+      cpu: 100m
+      memory: 500Mi
+    limits:
+      cpu: 4
+      memory: 4000Mi
+
+importer:
+  postgres:
+    host: postgresql
+    port: 5432
+    username: catalog
+    password: catalog_password
+    name: catalog
+  cleaner:
+    enabled: true
+    versionLimit: 3
+  emptyDir:
+    enabled: true
+    medium: ''
+    sizeLimit: 2Gi
+
+keys:
+  token: '{{ .Values.key }}'

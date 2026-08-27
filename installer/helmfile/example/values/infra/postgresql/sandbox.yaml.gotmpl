@@ -41,3 +41,9 @@ primary:
       styles.sql: |
         create user styles password 'styles_password';
         create database styles owner styles;
+      keycloak.sql: |
+        CREATE USER keycloak PASSWORD 'keycloak';
+        CREATE DATABASE keycloak OWNER keycloak;
+      navi_restrictions.sql: |
+        CREATE USER navi_restrictions PASSWORD 'navi_restrictions';
+        CREATE DATABASE navi_restrictions OWNER navi_restrictions;

@@ -1,0 +1,33 @@
+cassandra:
+  environment: 'sandbox'
+  hosts:
+    - 'cassandra'
+  replicaFactor: 1
+  credentials:
+    user: cassandra
+    password: 'cassandra'
+    jmxUser: cassandra
+    jmxPassword: 'cassandra'
+
+proxy:
+  access:
+    enabled: true
+    vector:
+      token: '{{ .Values.key }}'
+    raster:
+      token: '{{ .Values.key }}'
+    syncPeriod: 2m
+
+importer:
+  enabled: true
+  workerNum: 1
+  writerNum: 1
+
+api:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 512Mi
+    limits:
+      cpu: 2
+      memory: 2Gi

@@ -56,7 +56,7 @@ Elasticsearch, ClickHouse, Cassandra.
 
 В `installer/helmfile/example` находятся примеры окружений:
 - `staging` — основной рабочий пример;
-- `sandbox` — будет добавлен позднее (WIP): минимальный пример для быстрого развёртывания (например, в kind).
+- `sandbox` — минимальный готовый к запуску (kubernetes-ready) пример для быстрого развёртывания, например в kind.
 
 1. Скопируйте директорию `installer/helmfile/example` в удобное место:
    ```bash
@@ -284,6 +284,26 @@ helmfile -e <env> -f $HELMFILE_VALUES/deploy/<env>.yaml.gotmpl apply --selector 
 Настройка и проверка работоспособности:
 - [Проверка](https://docs.2gis.com/on-premise-citylens/install/installation#test)
 - [Настройка аутентификации](https://docs.2gis.com/on-premise-citylens/install/authentication)
+
+---
+
+## Sandbox-пример (kind)
+
+`installer/helmfile/example/environments/sandbox.yaml.gotmpl` + `deploy/sandbox.yaml.gotmpl` — быстрый
+kubernetes-ready пример API-платформы (infra + core + api-platform) для локального кластера `kind`. Развёртывается командой:
+
+```bash
+export HELMFILE_VALUES=/path/to/my-values
+export HELMFILE_BASE=/path/to/installer/helmfile
+helmfile -e sandbox -f $HELMFILE_VALUES/deploy/sandbox.yaml.gotmpl apply
+```
+
+Особенности:
+- `deploy/sandbox` содержит `prepare`-хук, создающий kind-кластер `2gis-on-premise`, если его нет;
+- Ingress-контроллер — `traefik` (hostPort 80/443);
+- образы сервисов и инфраструктуры берутся из `dgctlDockerRegistry`/`registry.example.com`;
+  перед запуском загрузите данные через `dgctl pull`/`restore` (см. `installer/README.md` и `installer/dgctl-fs/README.md`);
+- окружение предназначено для проверки конфигураций, для реальной установки используйте `staging`.
 
 ## Обновление
 
