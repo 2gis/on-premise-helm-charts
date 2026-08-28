@@ -65,7 +65,6 @@ image:
 # @param api.publicHost **required** Host on which the service will be available, e.g. 'maps-raster.ingress.host'.
 # @param api.protocol Protocol to use: `http:`, `https:`.
 # @param api.tileServerUrl URL of the tile server, e.g. 'https://tiles-api.ingress.host/tiles?x={x}&y={y}&z={z}'.
-# @param api.retinaTileServerUrl URL of the retina tile server.
 # @param api.trafficTileServerUrl URL of the traffic tiles server.
 # @param api.trafficTimestampServerUrl URL of the traffic timestamps server.
 # @param api.trafficScoreServerUrl URL of the traffic scores server.
@@ -86,11 +85,11 @@ api:
   key: ''
   keyServerUrl: ''
 
-
-
 # @section Strategy settings
 
-# @param strategy Deployment [strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy). Undergoes template rendering.
+# @param strategy.type Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.
+# @param strategy.rollingUpdate.maxUnavailable Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment).
+# @param strategy.rollingUpdate.maxSurge Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.
 
 strategy:
   type: RollingUpdate

@@ -40,29 +40,36 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | `tolerations`                   | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                         | `[]`   |
 | `podAnnotations`                | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                             | `{}`   |
 | `podLabels`                     | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                       | `{}`   |
+| `podSecurityContext`            | Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).                                                            | `{}`   |
+| `securityContext`               | Kubernetes [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).                                                                | `{}`   |
+| `labels`                        | Custom labels to set to Deployment resource.                                                                                                                              | `{}`   |
+| `annotations`                   | Custom annotations to set to Deployment resource.                                                                                                                         | `{}`   |
+| `priorityClassName`             | Kubernetes [Pod Priority](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass) class name.                                     | `""`   |
+| `initContainers`                | Add additional init containers.                                                                                                                                           | `[]`   |
+| `sidecars`                      | Add additional sidecar containers.                                                                                                                                        | `[]`   |
 
 ### Deployment settings
 
-| Name               | Description | Value                      |
-| ------------------ | ----------- | -------------------------- |
-| `image.repository` | Repository  | `2gis-on-premise/mapsapi2` |
-| `image.tag`        | Tag         | `0.1.0`                    |
-| `image.pullPolicy` | Pull Policy | `IfNotPresent`             |
+| Name               | Description | Value                           |
+| ------------------ | ----------- | ------------------------------- |
+| `image.repository` | Repository  | `2gis-on-premise/raster-js-api` |
+| `image.tag`        | Tag         | `4.1.0`                         |
+| `image.pullPolicy` | Pull Policy | `IfNotPresent`                  |
 
 ### API settings
 
-| Name                        | Description                                                                                | Value    |
-| --------------------------- | ------------------------------------------------------------------------------------------ | -------- |
-| `api.publicHost`            | **required** Host on which the service will be available, e.g. 'maps-raster.ingress.host'. | `""`     |
-| `api.protocol`              | Protocol to use: `http:`, `https:`.                                                        | `https:` |
-| `api.tileServerUrl`             | URL of the tile server, e.g. 'https://tiles-api.ingress.host/tiles?x={x}&y={y}&z={z}'.     | `""`     |
-| `api.retinaTileServerUrl`       | URL of the retina tile server.                                                             | `""`     |
-| `api.trafficTileServerUrl`      | URL of the traffic tiles server.                                                           | `""`     |
-| `api.trafficTimestampServerUrl` | URL of the traffic timestamps server.                                                      | `""`     |
-| `api.trafficScoreServerUrl`     | URL of the traffic scores server.                                                          | `""`     |
-| `api.webApiServerUrl`           | URL of the Catalog API service, e.g. 'https://catalog-api.ingress.host'.                   | `""`     |
-| `api.webApiKey`              | API key for the Catalog API service.                                                       | `""`     |
-| `api.key`                    | Token from 'keys-api' service. Optional API key that will be included in tile requests.    | `""`     |
+| Name                            | Description                                                                                                                                                              | Value    |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------- |
+| `api.publicHost`                | **required** Host on which the service will be available, e.g. 'maps-raster.ingress.host'.                                                                               | `""`     |
+| `api.protocol`                  | Protocol to use: `http:`, `https:`.                                                                                                                                      | `https:` |
+| `api.tileServerUrl`             | URL of the tile server, e.g. 'https://tiles-api.ingress.host/tiles?x={x}&y={y}&z={z}'.                                                                                   | `""`     |
+| `api.trafficTileServerUrl`      | URL of the traffic tiles server.                                                                                                                                         | `""`     |
+| `api.trafficTimestampServerUrl` | URL of the traffic timestamps server.                                                                                                                                    | `""`     |
+| `api.trafficScoreServerUrl`     | URL of the traffic scores server.                                                                                                                                        | `""`     |
+| `api.webApiServerUrl`           | URL of the Catalog API service, e.g. 'https://catalog-api.ingress.host'.                                                                                                 | `""`     |
+| `api.webApiKey`                 | API key for the Catalog API service. Stored in a Kubernetes Secret and mounted into the container via `secretKeyRef`.                                                    | `""`     |
+| `api.key`                       | Token from 'keys-api' service. Optional API key that will be included in tile requests. Stored in a Kubernetes Secret and mounted into the container via `secretKeyRef`. | `""`     |
+| `api.keyServerUrl`              | Keys-api service URL                                                                                                                                                     | `""`     |
 
 ### Strategy settings
 
@@ -72,6 +79,14 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | `strategy.rollingUpdate.maxUnavailable` | Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment). | `0`             |
 | `strategy.rollingUpdate.maxSurge`       | Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.                     | `1`             |
 
+### Service account settings
+
+| Name                         | Description                                                                                                             | Value   |
+| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ------- |
+| `serviceAccount.create`      | Specifies whether a service account should be created.                                                                  | `false` |
+| `serviceAccount.annotations` | Annotations to add to the service account.                                                                              | `{}`    |
+| `serviceAccount.name`        | The name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`    |
+
 ### Service settings
 
 | Name                  | Description                                                                                                                    | Value       |
@@ -80,17 +95,26 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | `service.labels`      | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                        | `{}`        |
 | `service.type`        | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types). | `ClusterIP` |
 | `service.port`        | Service port.                                                                                                                  | `80`        |
+| `service.clusterIP`   | Controls Service cluster IP allocation. Cannot be changed after resource creation.                                             | `""`        |
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-| Name                                 | Description                               | Value                  |
-| ------------------------------------ | ----------------------------------------- | ---------------------- |
-| `ingress.enabled`                    | If Ingress is enabled for the service.    | `false`                |
-| `ingress.className`                  | Name of the Ingress controller class.     | `nginx`                |
+| Name                                 | Description                               | Value                       |
+| ------------------------------------ | ----------------------------------------- | --------------------------- |
+| `ingress.enabled`                    | If Ingress is enabled for the service.    | `false`                     |
+| `ingress.className`                  | Name of the Ingress controller class.     | `nginx`                     |
 | `ingress.hosts[0].host`              | Hostname for the Ingress service.         | `raster-js-api.example.com` |
-| `ingress.hosts[0].paths[0].path`     | Path of the host for the Ingress service. | `/`                    |
-| `ingress.hosts[0].paths[0].pathType` | Type of the path for the Ingress service. | `Prefix`               |
-| `ingress.tls`                        | TLS configuration                         | `[]`                   |
+| `ingress.hosts[0].paths[0].path`     | Path of the host for the Ingress service. | `/`                         |
+| `ingress.hosts[0].paths[0].pathType` | Type of the path for the Ingress service. | `Prefix`                    |
+| `ingress.tls`                        | TLS configuration                         | `[]`                        |
+
+### [HTTPRoute](https://gateway-api.sigs.k8s.io/api-types/httproute/) configuration
+
+| Name                   | Description                                         | Value   |
+| ---------------------- | --------------------------------------------------- | ------- |
+| `httpRoute.enabled`    | If HTTPRoute is enabled for the service.            | `false` |
+| `httpRoute.hostnames`  | List of hostnames served by route.                  | `[]`    |
+| `httpRoute.parentRefs` | List of parent references (gateways) for HTTPRoute. |         |
 
 ### Limits
 
@@ -101,6 +125,30 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | `resources.limits.cpu`      | A CPU limit.      | `200m`  |
 | `resources.limits.memory`   | A memory limit.   | `192Mi` |
 
+### Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
+
+| Name                                    | Description                                                                                                                                                          | Value   |
+| --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `hpa.enabled`                           | If HPA is enabled for the service.                                                                                                                                   | `false` |
+| `hpa.minReplicas`                       | Lower limit for the number of replicas to which the autoscaler can scale down.                                                                                       | `1`     |
+| `hpa.maxReplicas`                       | Upper limit for the number of replicas to which the autoscaler can scale up.                                                                                         | `2`     |
+| `hpa.scaleDown`                         | Scale-down settings structure.                                                                                                                                       | `{}`    |
+| `hpa.scaleUp`                           | Scale-up settings structure.                                                                                                                                         | `{}`    |
+| `hpa.targetCPUUtilizationPercentage`    | Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.       | `80`    |
+| `hpa.targetMemoryUtilizationPercentage` | Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used. | `""`    |
+
+### Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings
+
+| Name                    | Description                                                                                                  | Value          |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------ | -------------- |
+| `vpa.enabled`           | If VPA is enabled for the service.                                                                           | `false`        |
+| `vpa.updateMode`        | VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start). | `Auto`         |
+| `vpa.controlledValues`  | Controlled values, one of: RequestsOnly or RequestsAndLimits.                                                | `RequestsOnly` |
+| `vpa.minAllowed.cpu`    | Lower limit for the number of CPUs to which the autoscaler can scale down.                                   |                |
+| `vpa.minAllowed.memory` | Lower limit for the RAM size to which the autoscaler can scale down.                                         |                |
+| `vpa.maxAllowed.cpu`    | Upper limit for the number of CPUs to which the autoscaler can scale up.                                     |                |
+| `vpa.maxAllowed.memory` | Upper limit for the RAM size to which the autoscaler can scale up.                                           |                |
+
 ### Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
 | Name                 | Description                                          | Value   |
@@ -109,28 +157,12 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | `pdb.minAvailable`   | How many pods must be available after the eviction.  | `""`    |
 | `pdb.maxUnavailable` | How many pods can be unavailable after the eviction. | `1`     |
 
-### Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
+### customCAs **Custom Certificate Authority**
 
-| Name                                      | Description                                                                                                                                                          | Value   |
-| ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `hpa.enabled`                             | If HPA is enabled for the service.                                                                                                                                   | `false` |
-| `hpa.minReplicas`                         | Lower limit for the number of replicas to which the autoscaler can scale down.                                                                                       | `1`     |
-| `hpa.maxReplicas`                         | Upper limit for the number of replicas to which the autoscaler can scale up.                                                                                         | `2`     |
-| `hpa.scaleDownStabilizationWindowSeconds` | Scale-down window.                                                                                                                                                   | `""`    |
-| `hpa.scaleUpStabilizationWindowSeconds`   | Scale-up window.                                                                                                                                                     | `""`    |
-| `hpa.targetCPUUtilizationPercentage`      | Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.       | `80`    |
-| `hpa.targetMemoryUtilizationPercentage`   | Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used. | `""`    |
-
-### Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings
-
-| Name                    | Description                                                                                                  | Value   |
-| ----------------------- | ------------------------------------------------------------------------------------------------------------ | ------- |
-| `vpa.enabled`           | If VPA is enabled for the service.                                                                           | `false` |
-| `vpa.updateMode`        | VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start). | `Auto`  |
-| `vpa.minAllowed.cpu`    | Lower limit for the number of CPUs to which the autoscaler can scale down.                                   | `100m`  |
-| `vpa.minAllowed.memory` | Lower limit for the RAM size to which the autoscaler can scale down.                                         | `100Mi` |
-| `vpa.maxAllowed.cpu`    | Upper limit for the number of CPUs to which the autoscaler can scale up.                                     | `200m`  |
-| `vpa.maxAllowed.memory` | Upper limit for the RAM size to which the autoscaler can scale up.                                           | `200Mi` |
+| Name                  | Description                                                                                                                 | Value |
+| --------------------- | --------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `customCAs.bundle`    | Custom CA [text representation of the X.509 PEM public-key certificate](https://www.rfc-editor.org/rfc/rfc7468#section-5.1) | `""`  |
+| `customCAs.certsPath` | Custom CA bundle mount directory in the container. If empty, the default value: "/usr/local/share/ca-certificates"          | `""`  |
 
 
 ## Maintainers
