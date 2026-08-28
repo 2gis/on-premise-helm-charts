@@ -290,20 +290,85 @@ helmfile -e <env> -f $HELMFILE_VALUES/deploy/<env>.yaml.gotmpl apply --selector 
 ## Sandbox-пример (kind)
 
 `installer/helmfile/example/environments/sandbox.yaml.gotmpl` + `deploy/sandbox.yaml.gotmpl` — быстрый
-kubernetes-ready пример API-платформы (infra + core + api-platform) для локального кластера `kind`. Развёртывается командой:
+kubernetes-ready пример API-платформы (infra + core + api-platform) для локального кластера `kind`.
 
-```bash
-export HELMFILE_VALUES=/path/to/my-values
-export HELMFILE_BASE=/path/to/installer/helmfile
-helmfile -e sandbox -f $HELMFILE_VALUES/deploy/sandbox.yaml.gotmpl apply
-```
+> Образы infra (bitnami: PostgreSQL, Kafka, MinIO, Cassandra, ClickHouse, Elasticsearch) тянутся из
+> публичного `docker.io`. Образы 2GIS (core, api-platform) — из локального registry `kind-registry:5000`,
+> который заполняется через `dgctl pull --apps-to-registry`.
+>
+> В отличие от [production-сценария](https://docs.2gis.com/on-premise-api-platform/installation#configure-host-registry),
+> где требуется HTTPS-registry с аутентификацией и `imagePullSecrets`, sandbox использует локальный
+> HTTP-registry без аутентификации (доверие настраивается через `containerdConfigPatches` в kind-конфиге).
+>
+> Официальная документация: [Installation](https://docs.2gis.com/on-premise-api-platform/installation).
 
-Особенности:
-- `deploy/sandbox` содержит `prepare`-хук, создающий kind-кластер `2gis-on-premise`, если его нет;
-- Ingress-контроллер — `traefik` (hostPort 80/443);
-- образы сервисов и инфраструктуры берутся из `dgctlDockerRegistry`/`registry.example.com`;
-  перед запуском загрузите данные через `dgctl pull`/`restore` (см. `installer/README.md` и `installer/dgctl-fs/README.md`);
-- окружение предназначено для проверки конфигураций, для реальной установки используйте `staging`.
+### Требования
+
+- [kind](https://kind.sigs.k8s.io/), Docker, kubectl
+- Helmfile 1.1.0+, Helm 4.x
+- Лицензионный ключ 2GIS ([форма на dev.2gis.ru](https://dev.2gis.ru/onpremise#form))
+
+### Шаги развёртывания
+
+1. **Kind-кластер + локальный registry:**
+   ```bash
+   kind create cluster --config installer/scripts/kind-config.yaml
+   kubectl create namespace sandbox
+   docker run -d --name kind-registry -p 5000:5000 --restart=always registry:2
+   docker network connect kind kind-registry 2>/dev/null || true
+   ```
+   Конфиг kind (`installer/scripts/kind-config.yaml`) включает `containerdConfigPatches` для доверия
+   registry `kind-registry:5000` (HTTP, без TLS). Порты 80/443 проброшены на хост.
+
+   > `prepare`-хук в `deploy/sandbox.yaml.gotmpl` также создаёт kind-кластер автоматически
+   > при запуске `helmfile -e sandbox apply`.
+
+2. **Развёртывание infra** (traefik, PostgreSQL, Kafka, MinIO, Redis, Cassandra, ClickHouse, Elasticsearch) —
+   не требует лицензии, образы из публичного `docker.io`. Запускайте из корня репозитория:
+   ```bash
+   helmfile -e sandbox -f installer/helmfile/example/deploy/sandbox.yaml.gotmpl sync \
+     --selector group=infra
+   ```
+   > **Почему `sync`, а не `apply`?** `apply` запускает `helm diff`, который валидирует CRD
+   > (traefik IngressRoute, Middleware) до их установки. При первом деплое используйте `sync`;
+   > для последующих обновлений — `apply`.
+
+3. **Загрузка образов и данных 2GIS** (требует лицензионный ключ):
+   1. Заполните `installer/dgctl/dgctl-config-sandbox.yaml` — укажите `key` (лицензионный ключ 2GIS);
+   2. Пробросьте S3: добавьте `127.0.0.1 s3.sandbox` в `/etc/hosts`
+      или `kubectl -n sandbox port-forward svc/minio 9000:9000`;
+   3. Загрузите артефакты:
+      ```bash
+      cd installer/dgctl && ./pull.sh dgctl-config-sandbox.yaml
+      ```
+      Скрипт пушит образы 2GIS в `kind-registry:5000` и генерирует `auto_values/`.
+      Подробнее: [Fetch Installation Artifacts](https://docs.2gis.com/on-premise-api-platform/installation#fetch-artifacts).
+
+4. **Развёртывание core** (License, Keycloak, Keys) — образы из `kind-registry:5000`:
+   ```bash
+   helmfile -e sandbox -f installer/helmfile/example/deploy/sandbox.yaml.gotmpl sync \
+     --selector group=core
+   ```
+   - Keycloak: realms импортируются автоматически через `keycloakConfigCli` (чарт — `charts/keycloak/realms/`);
+   - Keys: API-ключ создаётся автоматически `postsync`-хуком (`installer/scripts/create_sandbox_key.sh`);
+   - License: при первом запуске pod может не стартовать без валидной лицензии —
+     [получите лицензию](https://docs.2gis.com/on-premise-api-platform/installation#check-license-status)
+     и повторите деплой.
+
+5. **Развёртывание API-платформы** (21 сервис: search, tiles, catalog, navi, styles, mapgl, …):
+   ```bash
+   helmfile -e sandbox -f installer/helmfile/example/deploy/sandbox.yaml.gotmpl apply \
+     --selector group=api-platform
+   ```
+
+6. **Доступ** — сервисы доступны по hostname `*.sandbox` (например `http://search-api.sandbox`).
+   Добавьте `127.0.0.1 sandbox` в `/etc/hosts` или используйте `--resolve` в curl:
+   ```bash
+   curl --resolve search-api.sandbox:80:127.0.0.1 http://search-api.sandbox/v1/search?q=cafe
+   ```
+   Проверка работоспособности: [Testing](https://docs.2gis.com/on-premise-api-platform/installation#test-search).
+
+Окружение предназначено для проверки конфигураций; для реальной установки используйте `staging`.
 
 ## Обновление
 

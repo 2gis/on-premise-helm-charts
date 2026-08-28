@@ -10,17 +10,12 @@ hooks:
   command: "bash"
   args:
   - "-c"
-  - "kind get clusters 2>/dev/null | grep -q '^2gis-on-premise$' || kind create cluster --name 2gis-on-premise"
+  - "kind get clusters 2>/dev/null | grep -q '^2gis-on-premise$' || kind create cluster --name 2gis-on-premise --config {{ .Values.basePath }}/../scripts/kind-config.yaml"
 
 ---
 helmfiles:
 - path: {{ .Values.basePath }}/services/infra/traefik.yaml.gotmpl
-- path: {{ .Values.basePath }}/services/infra/sandbox-infra/cassandra.yaml.gotmpl
-- path: {{ .Values.basePath }}/services/infra/sandbox-infra/clickhouse.yaml.gotmpl
-- path: {{ .Values.basePath }}/services/infra/sandbox-infra/elasticsearch.yaml.gotmpl
-- path: {{ .Values.basePath }}/services/infra/sandbox-infra/kafka.yaml.gotmpl
-- path: {{ .Values.basePath }}/services/infra/sandbox-infra/minio.yaml.gotmpl
-- path: {{ .Values.basePath }}/services/infra/sandbox-infra/postgresql.yaml.gotmpl
+- path: {{ .Values.basePath }}/services/infra/sandbox-infra
 - path: {{ .Values.basePath }}/services/infra/redis.yaml.gotmpl
 - path: {{ .Values.basePath }}/services/core/license.yaml.gotmpl
 - path: {{ .Values.basePath }}/services/core/keycloak.yaml.gotmpl

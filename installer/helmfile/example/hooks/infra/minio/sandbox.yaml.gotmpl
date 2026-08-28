@@ -1,0 +1,29 @@
+- events: ["postsync"]
+  showlogs: true
+  command: "bash"
+  args:
+    - -c
+    - |
+      NAMESPACE="{{ .Values.namespace }}"
+      LICENSE_KEY="{{ .Values.license.key }}"
+
+      # Set S3 public-read policies on data buckets (best effort — mc may not be in the image)
+      POD=$(kubectl -n "${NAMESPACE}" get pod -l "app.kubernetes.io/name=minio" -o jsonpath='{.items[0].metadata.name}' 2>/dev/null)
+      if [ -n "$POD" ]; then
+        for BUCKET in ${NAMESPACE}-styles ${NAMESPACE}-navi-am; do
+          kubectl -n "${NAMESPACE}" exec -i "${POD}" -- sh -c \
+            "mc alias set local http://localhost:9000 admin on-premise 2>/dev/null && \
+             mc anonymous set download local/${BUCKET}" 2>/dev/null \
+            && echo "==> S3 policy set for ${BUCKET}" \
+            || echo "==> WARNING: could not set S3 policy for ${BUCKET} (mc not available?)"
+        done
+      fi
+
+      if [ "${LICENSE_KEY}" = "00000000-0000-0000-0000-000000000000" ] || [ -z "${LICENSE_KEY}" ]; then
+        echo "==> License key not set (placeholder). Skipping data loading."
+        echo "==> To load data, set a real license key in environments/sandbox.yaml.gotmpl"
+        echo "    and run: cd installer/dgctl && ./pull.sh dgctl-config-sandbox.yaml"
+      else
+        echo "==> License key detected. To load data run:"
+        echo "    cd installer/dgctl && ./pull.sh dgctl-config-sandbox.yaml"
+      fi

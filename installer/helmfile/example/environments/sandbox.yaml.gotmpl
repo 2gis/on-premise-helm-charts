@@ -11,7 +11,7 @@ environments:
     - namespace: sandbox
     - ingressController: traefik
     - ingressTls: false
-    - dgctlDockerRegistry: 'registry.example.com'
+    - dgctlDockerRegistry: 'kind-registry:5000'
     - dgctlStorage:
         host: 's3.sandbox'
         bucket: 'dgctl'

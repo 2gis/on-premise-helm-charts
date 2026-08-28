@@ -1,3 +1,35 @@
+global:
+  security:
+    allowInsecureImages: true
+
+image:
+  repository: bitnamilegacy/clickhouse
+
+keeper:
+  enabled: false
+
+replicaCount: 1
+shards: 1
+
 auth:
   username: default
   password: clickhouse
+
+resources:
+  requests:
+    cpu: 60m
+    memory: 300Mi
+  limits:
+    cpu: 750m
+    memory: 768Mi
+
+configdFiles:
+  kafka.xml: |
+    <yandex>
+      <kafka>
+        <security_protocol>sasl_plaintext</security_protocol>
+        <sasl_mechanism>SCRAM-SHA-512</sasl_mechanism>
+        <sasl_username>admin</sasl_username>
+        <sasl_password>admin</sasl_password>
+      </kafka>
+    </yandex>

@@ -1,0 +1,22 @@
+# dgctl config for the sandbox (kind) environment.
+# Fill in your 2GIS license key and Docker registry credentials, then run:
+#   cd installer/dgctl && ./pull.sh dgctl-config-sandbox.yaml
+key: # TODO: вставьте лицензионный ключ 2GIS
+log-format: text
+storage:
+  type: s3
+  host: 's3.sandbox'          # in-cluster MinIO ingress (add to /etc/hosts or use port-forward)
+  bucket: sandbox-dgctl
+  access-key: admin
+  secret-key: on-premise
+docker:
+  registry:
+    username: ''
+    password: ''
+    server-address: "http://localhost:5000"
+    image-prefix: /
+components:
+  core:
+    version: 2.9.0
+  api-platform:
+    version: 2.56.0

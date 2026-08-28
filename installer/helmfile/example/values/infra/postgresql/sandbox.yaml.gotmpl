@@ -1,17 +1,25 @@
-image:
-  registry: registry.example.com
-  repository: docker-io/bitnamilegacy/postgresql
-
-architecture: "standalone"
-
 global:
+  security:
+    allowInsecureImages: true
   postgresql:
     auth:
       username: dbadmin
       password: "on-premise"
       postgresPassword: "on-premise"
 
+image:
+  repository: bitnamilegacy/postgresql
+
+architecture: "standalone"
+
 primary:
+  resources:
+    requests:
+      cpu: 40m
+      memory: 400Mi
+    limits:
+      cpu: 2
+      memory: 4Gi
   persistence:
     enabled: true
     size: 8Gi
@@ -47,3 +55,9 @@ primary:
       navi_restrictions.sql: |
         CREATE USER navi_restrictions PASSWORD 'navi_restrictions';
         CREATE DATABASE navi_restrictions OWNER navi_restrictions;
+      navi-am.sql: |
+        create user async_matrix password 'async_matrix';
+        create database async_matrix owner async_matrix;
+      navi-vrp.sql: |
+        create user vrp password 'vrp_password';
+        create database vrp owner vrp;

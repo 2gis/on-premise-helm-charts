@@ -1,0 +1,10 @@
+- events: ["postsync"]
+  showlogs: true
+  command: "bash"
+  args:
+    - -c
+    - |
+      export OP_NAMESPACE={{ .Values.namespace }}
+      export OP_DOMAIN={{ .Values.domain }}
+      export OP_ENV_FILE={{ .Values.valuesPath }}/environments/sandbox.yaml.gotmpl
+      {{ .Values.basePath }}/../scripts/create_sandbox_key.sh

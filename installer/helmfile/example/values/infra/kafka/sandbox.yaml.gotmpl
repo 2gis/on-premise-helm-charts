@@ -1,22 +1,11 @@
 # Kafka override for the `sandbox` (kind) environment — single-node, small resources.
-controller:
-  replicaCount: 1
-  persistence:
-    storageClass: standard
-    size: 1Gi
-  resources:
-    requests:
-      cpu: 100m
-      memory: 512Mi
-    limits:
-      cpu: 1
-      memory: 1024Mi
-sasl:
-  client:
-    users:
-    - admin
-    passwords:
-    - admin
+global:
+  security:
+    allowInsecureImages: true
+
+image:
+  repository: bitnamilegacy/kafka
+
 listeners:
   client:
     protocol: SASL_PLAINTEXT
@@ -24,3 +13,23 @@ listeners:
     protocol: PLAINTEXT
   interbroker:
     protocol: PLAINTEXT
+
+sasl:
+  client:
+    users:
+    - admin
+    passwords:
+    - admin
+
+controller:
+  replicaCount: 1
+  persistence:
+    storageClass: standard
+    size: 1Gi
+  resources:
+    requests:
+      cpu: 60m
+      memory: 700Mi
+    limits:
+      cpu: 1
+      memory: 1024Mi
