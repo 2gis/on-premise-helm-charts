@@ -14,23 +14,24 @@
 - kubectl
 - S3-совместимое хранилище (MinIO, Ceph и др.)
 - Docker registry с образами 2GIS
-- Утилита dgctl (для загрузки данных)
-- Лицензионный ключ 2GIS
+- Утилита [dgctl](https://hub.docker.com/r/2gis/dgctl) версии 3.6+ (для загрузки данных, образ `2gis/dgctl:3`)
+- Лицензионный ключ 2GIS (оформляется через [форму на dev.2gis.ru](https://dev.2gis.ru/onpremise#form))
 
 Подробнее: [System Requirements](https://docs.2gis.com/on-premise-api-platform/requirements)
 
 ---
 
-## Инфраструктура
+## Внешние зависимости
 
-Для работы сервисов требуется инфраструктура: PostgreSQL, Kafka, Redis, S3, Keycloak,
+Для работы сервисов требуются внешние зависимости: PostgreSQL, Kafka, Redis, S3, Keycloak,
 Elasticsearch, ClickHouse, Cassandra.
 
-Инфраструктура может быть:
-- **Внешней** — развёрнута на отдельных ВМ (рекомендуется для production-окружений)
-- **Развёрнута через helmfile** — встроенные чарты в `services/infra/` (для тестовых окружений)
+Способы размещения внешних зависимостей:
+- **Вынесенные** — на отдельных ВМ (рекомендуется для production-окружений)
+- **Развёрнутые через helmfile** — встроенные чарты в `services/infra/` (для тестовых окружений)
 
-Подробнее: [Preparation](https://docs.2gis.com/on-premise-api-platform/installation#preparation)
+Подробнее о требованиях и версиях: [System Requirements](https://docs.2gis.com/on-premise-api-platform/requirements).
+Подготовка: [Preparation](https://docs.2gis.com/on-premise-api-platform/installation#preparation).
 
 ---
 
@@ -38,12 +39,12 @@ Elasticsearch, ClickHouse, Cassandra.
 
 Версии компонентов задаются в `installer/helmfile/common.yaml.gotmpl`:
 
-| Компонент | Версия |
-|-----------|--------|
-| Core | 2.9.0 |
-| API Platform | 2.56.0 |
-| Pro | 2.5.0 |
-| Citylens | 2.3.0 |
+| Компонент | Переменная | Версия |
+|-----------|-----------|--------|
+| Core | `versionCore` | 2.9.0 |
+| API Platform | `versionPlatform` | 2.56.0 |
+| Pro | `versionPro` | 2.5.0 |
+| Citylens | `versionCitylens` | 2.3.0 |
 
 **Обязательные компоненты:** Core + API Platform
 
@@ -51,11 +52,19 @@ Elasticsearch, ClickHouse, Cassandra.
 
 ## Подготовка конфигурации
 
+Установщик основан на [Helmfile](https://helmfile.readthedocs.io) — декларативной надстройке над Helm, описывающей набор сервисов, их values и порядок развёртывания.
+
+В `installer/helmfile/example` находятся примеры окружений:
+- `staging` — основной рабочий пример;
+- `sandbox` — будет добавлен позднее (WIP): минимальный пример для быстрого развёртывания (например, в kind).
+
 1. Скопируйте директорию `installer/helmfile/example` в удобное место:
    ```bash
    cp -r installer/helmfile/example /path/to/my-values
    ```
 2. Установите переменные окружения:
+   - `HELMFILE_VALUES` — путь к скопированным values (копия `example/`);
+   - `HELMFILE_BASE` — путь к базовым шаблонам `installer/helmfile`.
    ```bash
    export HELMFILE_VALUES=/path/to/my-values
    export HELMFILE_BASE=/path/to/installer/helmfile
@@ -74,18 +83,22 @@ Elasticsearch, ClickHouse, Cassandra.
    ```
    **Важно:** версии в `dgctl-config.yaml`, `common.yaml.gotmpl` и при установке должны совпадать.
 
-   Загрузите артефакты:
-   ```bash
-   docker run --rm \
-     -v $(pwd)/dgctl-config.yaml:/dgctl-config.yaml \
-     -v /var/run/docker.sock:/var/run/docker.sock \
-     --user $(id -u):$(id -g) \
-     2gis/dgctl:3 \
-     pull --config=/dgctl-config.yaml --apps-to-registry --generate-values
-   ```
-   Подробнее: [Fetch Installation Artifacts](https://docs.2gis.com/on-premise-api-platform/installation#artifacts)
-
-   **Примечание:** для утилиты dgctl версии 3.6+ аргумент `-v /var/run/docker.sock:/var/run/docker.sock` не требуется.
+    Загрузите артефакты (готовым скриптом `installer/dgctl/pull.sh`, см. `installer/dgctl/README.md`):
+    ```bash
+    cd installer/dgctl
+    ./pull.sh <config>.yaml
+    ```
+    Если выполнять вручную, обязательно монтируйте `-v $(pwd)/values:/values`, иначе сгенерированный `general.yaml` удаляется после запуска:
+    ```bash
+    docker run --rm \
+      -v $(pwd)/dgctl-config.yaml:/dgctl-config.yaml \
+      -v $(pwd)/values:/values \
+      --user $(id -u):$(id -g) \
+      2gis/dgctl:3 \
+      pull --config=/dgctl-config.yaml --apps-to-registry --generate-values
+    ```
+    Команда записывает актуальные значения (включая номер манифеста) в `installer/dgctl/auto_values/<component>/general.yaml` — эти файлы потом читает helmfile.
+    Подробнее: [Fetch Installation Artifacts](https://docs.2gis.com/on-premise-api-platform/installation#artifacts)
 
    **Изолированный контур.** Если хост не имеет одновременного доступа к публичной сети, реестру Docker и S3-хранилищу, используйте двуххостовую схему: загрузите артефакты через `dgctl pull` на хосте с доступом в интернет (с `storage.type: fs`), перенесите директорию на внутренний хост и выполните `dgctl restore`. Подробнее: [Fetch Installation Artifacts](https://docs.2gis.com/on-premise-api-platform/installation#fetch-artifacts).
 
@@ -110,6 +123,10 @@ Elasticsearch, ClickHouse, Cassandra.
 
 ## Развёртывание
 
+> **Важно.** Перед установкой убедитесь, что все внешние зависимости развёрнуты и доступны
+> (PostgreSQL, S3, Kafka, Redis, Elasticsearch, ClickHouse, Cassandra, Keycloak) либо развёрните группу `infra`
+> встроенными чартами `services/infra/` (для тестовых окружений).
+
 ### Фильтрация по сервисам и группам
 
 Каждый сервис помечен лейблами `service` и `group`. Это позволяет развернуть только нужные сервисы или группу:
@@ -129,10 +146,18 @@ helmfile -e <env> -f $HELMFILE_VALUES/deploy/<env>.yaml.gotmpl apply --selector 
 
 ### 1. Базовые сервисы (Core)
 
-Сначала установите сервис лицензий:
+Состав группы `core`:
+
+| Сервис | Описание | Инфраструктура | Сервисы |
+|---|---|---|---|
+| License | Управление лицензиями 2GIS | S3 | — |
+| Keys | Управление API-ключами | PostgreSQL, S3, Redis (опц.), Kafka (опц.) | Keycloak (опц.) |
+| Keycloak | Аутентификация пользователей (OIDC) | PostgreSQL | — |
+
+Установите группу `core` (keys и keycloak не зависят от лицензии):
 
 ```bash
-helmfile -e <env> -f $HELMFILE_VALUES/deploy/<env>.yaml.gotmpl apply --selector service=license
+helmfile -e <env> -f $HELMFILE_VALUES/deploy/<env>.yaml.gotmpl apply --selector group=core
 ```
 
 **Лицензия.** При первом запуске pod license не стартует — это ожидаемое поведение. Получите файл лицензии:
@@ -153,31 +178,11 @@ helmfile -e <env> -f $HELMFILE_VALUES/deploy/<env>.yaml.gotmpl apply --selector 
 
 Проверьте статус лицензии: [License](https://docs.2gis.com/on-premise-api-platform/installation#check-license-status).
 
-После успешной активации лицензии установите остальные компоненты Core (keys, keycloak):
-
-```bash
-helmfile -e <env> -f $HELMFILE_VALUES/deploy/<env>.yaml.gotmpl apply --selector group=core
-```
-
 **API-ключи.** После установки добавьте администратора и создайте API-ключ. Следуйте документации: [Keys](https://docs.2gis.com/on-premise-api-platform/installation#fetch-service-keys).
 
 **Keycloak.** Войдите в Keycloak admin console и перегенерируйте client secrets для каждого realm. Обновите их в env-specific values сервисов.
 
-Состав группы `core`:
-
-| Сервис | Описание | Инфраструктура | Сервисы |
-|---|---|---|---|
-| License | Управление лицензиями 2GIS | S3 | — |
-| Keys | Управление API-ключами | PostgreSQL, S3, Redis (опц.), Kafka (опц.) | Keycloak (опц.) |
-| Keycloak | Аутентификация пользователей (OIDC) | PostgreSQL | — |
-
 ### 2. API-платформа
-
-```bash
-helmfile -e <env> -f $HELMFILE_VALUES/deploy/<env>.yaml.gotmpl apply --selector group=api-platform
-```
-
-Если все параметры настроены правильно, платформа установится с первого раза.
 
 Состав группы `api-platform`:
 
@@ -202,6 +207,12 @@ helmfile -e <env> -f $HELMFILE_VALUES/deploy/<env>.yaml.gotmpl apply --selector 
 | Navi VRP Solver + VRP Task Manager | Решение задачи маршрутизации транспорта | PostgreSQL, Kafka, S3 | Navi-Castle, Navi-Front, Keys API |
 | Navi Restrictions | Ограничения проезда | PostgreSQL | Navi-Castle, Navi-Back |
 | Platform Manager | Веб-интерфейс управления платформой | — | Keycloak (OIDC), Keys API, License |
+
+```bash
+helmfile -e <env> -f $HELMFILE_VALUES/deploy/<env>.yaml.gotmpl apply --selector group=api-platform
+```
+
+Если все параметры настроены правильно, платформа установится с первого раза.
 
 Проверьте работоспособность:
 
@@ -241,10 +252,6 @@ helmfile -e <env> -f $HELMFILE_VALUES/deploy/<env>.yaml.gotmpl apply --selector 
 
 ### 3. Pro (опционально)
 
-```bash
-helmfile -e <env> -f $HELMFILE_VALUES/deploy/<env>.yaml.gotmpl apply --selector group=pro
-```
-
 Состав группы `pro`:
 
 | Сервис | Описание | Инфраструктура | Сервисы |
@@ -252,15 +259,15 @@ helmfile -e <env> -f $HELMFILE_VALUES/deploy/<env>.yaml.gotmpl apply --selector 
 | Pro API | Бэкенд 2ГИС Про (API, Permissions, Tasks) | PostgreSQL, S3, Elasticsearch, Kafka, Redis | Catalog API, Navi-Front, Search API, License, Keycloak (опц.) |
 | Pro UI | Веб-интерфейс 2ГИС Про | S3 | Pro API, MapGL JS API |
 
+```bash
+helmfile -e <env> -f $HELMFILE_VALUES/deploy/<env>.yaml.gotmpl apply --selector group=pro
+```
+
 Настройка и проверка работоспособности:
 - [Проверка](https://docs.2gis.com/on-premise-pro/install/installation#test)
 - [Настройка аутентификации](https://docs.2gis.com/on-premise-pro/install/authentication)
 
 ### 4. Citylens (опционально)
-
-```bash
-helmfile -e <env> -f $HELMFILE_VALUES/deploy/<env>.yaml.gotmpl apply --selector group=citylens
-```
 
 Состав группы `citylens`:
 
@@ -269,11 +276,67 @@ helmfile -e <env> -f $HELMFILE_VALUES/deploy/<env>.yaml.gotmpl apply --selector 
 | CityLens API + Routes API | API Ситискан (съёмка, треки, планирование маршрутов) | PostgreSQL + PostGIS, S3, Kafka | MapGL JS API, Tiles API, Pro API, Navi-Front, Keys API, Keycloak (опц.) |
 | CityLens Routes UI | Веб-интерфейс планирования маршрутов Ситискан | — | CityLens Routes API, Catalog API, MapGL JS API, Keycloak (OIDC) |
 
+```bash
+helmfile -e <env> -f $HELMFILE_VALUES/deploy/<env>.yaml.gotmpl apply --selector group=citylens
+```
+
 Настройка и проверка работоспособности:
 - [Проверка](https://docs.2gis.com/on-premise-citylens/install/installation#test)
 - [Настройка аутентификации](https://docs.2gis.com/on-premise-citylens/install/authentication)
 
----
+## Обновление
+
+Обновление сервисов и данных выполняется в несколько шагов: определиться с версией, загрузить/обновить артефакты, применить их через helmfile.
+
+### 1. Обновление версии сервисов
+
+Вручную менять файлы вне директории `example/` не рекомендуется. Чтобы перейти на новую версию, используйте один из способов:
+
+- **Поднять версию конкретного компонента для конкретного окружения** — задайте её в конфигурации окружения (директория `example/`); перед этим обязательно ознакомьтесь с изменениями версии (Breaking Changes);
+- **Обновить installer целиком** — выполните `git pull` этого репозитория на целевую версию (тег) или `master`; версии компонентов обновятся автоматически.
+
+Версия данных (манифест) обновляется автоматически на шаге 2 (`dgctl pull --generate-values`), вручную править её не нужно.
+
+### 2. Загрузка актуальных артефактов (данных и образов)
+
+Стандартный контур (с доступом к реестру/S3) выполняется готовым скриптом `installer/dgctl/pull.sh` (см. `installer/dgctl/README.md`):
+
+```bash
+cd installer/dgctl
+./pull.sh <config>.yaml
+```
+
+Скрипт вызывает `dgctl pull --generate-values --apps-to-registry`: обновляет данные (новый `manifest`) и образы в реестре, записывает актуальные значения в `installer/dgctl/auto_values/<component>/general.yaml`.
+Если выполнять команду вручную, обязательно монтируйте `-v $(pwd)/values:/values`, иначе сгенерированный `general.yaml` удаляется после запуска:
+
+```bash
+docker run --rm \
+  -v $(pwd)/dgctl-config.yaml:/dgctl-config.yaml \
+  -v $(pwd)/values:/values \
+  --user $(id -u):$(id -g) \
+  2gis/dgctl:3 \
+  pull --config=/dgctl-config.yaml --apps-to-registry --generate-values
+```
+
+Проверить список манифестов можно `dgctl manifest list`; очистку старых манифестов выполняет `installer/dgctl/manifest_cleanup.sh`.
+Подробнее о загрузке артефактов: [Fetch Installation Artifacts](https://docs.2gis.com/on-premise-api-platform/installation#fetch-artifacts).
+
+Изолированный контур (без доступа к сети/реестру):
+
+- используйте двуххостовую схему из `installer/dgctl-fs/` (`dgctl pull` на хосте с интернетом → перенос директории → `dgctl restore`);
+- скопируйте сгенерированные `installer/dgctl-fs/values/<component>/general.yaml` в `installer/dgctl/auto_values/<component>/general.yaml` (номер манифеста там уже актуальный, вручную не правится; см. `installer/dgctl-fs/README.md`).
+
+### 3. Применение обновлений через helmfile
+
+`helmfile apply` идемпотентен: он применяет и устанавливает, и обновляет релизы. Достаточно повторно выполнить те же команды, что при установке, целиком или по группам/сервисам:
+
+```bash
+helmfile -e <env> -f $HELMFILE_VALUES/deploy/<env>.yaml.gotmpl apply --selector group=infra
+helmfile -e <env> -f $HELMFILE_VALUES/deploy/<env>.yaml.gotmpl apply --selector group=core
+helmfile -e <env> -f $HELMFILE_VALUES/deploy/<env>.yaml.gotmpl apply --selector group=api-platform
+```
+
+Подробнее о сценариях обновления сервисов и данных (через `helm`): [Updating services and datasets](https://docs.2gis.com/on-premise-api-platform/overview/lifecycle#update-services-and-datasets).
 
 ## Дополнительные возможности
 
