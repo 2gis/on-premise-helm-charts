@@ -1,48 +1,48 @@
-{{- if .Values.geodetector.enabled }}
+{{- if .Values.segmentDetector.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "search-api-v8.fullname" . }}-geodetector
+  name: {{ include "search-api-v8.fullname" . }}-segment-detector
   labels:
     {{- include "search-api-v8.labels" . | nindent 4 }}
-    search/part: geodetector
+    search/part: segment-detector
     {{- if (.Values.dgctlStorage).manifest }}
     {{- with (include "search-api-v8.manifestCode" .) }}
     manifest: {{ . | quote }}
     {{- end }}{{- /* include "search-api-v8.manifestCode" */}}
     {{- end }}{{- /* .Values.dgctlStorage */}}
 spec:
-  {{- if not .Values.geodetector.hpa.enabled }}
-  replicas: {{ .Values.geodetector.replicaCount }}
-  {{- end }}{{- /* not .Values.geodetector.hpa.enabled */}}
+  {{- if not .Values.segmentDetector.hpa.enabled }}
+  replicas: {{ .Values.segmentDetector.replicaCount }}
+  {{- end }}{{- /* not .Values.segmentDetector.hpa.enabled */}}
   selector:
     matchLabels:
       {{- include "search-api-v8.selectorLabels" . | nindent 6 }}
-    {{- with .Values.geodetector.matchLabels }}
+    {{- with .Values.segmentDetector.matchLabels }}
       {{- toYaml . | nindent 6 }}
-    {{- end }}{{- /* .Values.geodetector.matchLabels */}}
-      search/part: geodetector
+    {{- end }}{{- /* .Values.segmentDetector.matchLabels */}}
+      search/part: segment-detector
   template:
     metadata:
       annotations:
-      {{- with .Values.geodetector.podAnnotations }}
+      {{- with .Values.segmentDetector.podAnnotations }}
         {{- toYaml . | nindent 8 }}
-      {{- end }}{{- /* .Values.geodetector.podAnnotations */}}
+      {{- end }}{{- /* .Values.segmentDetector.podAnnotations */}}
         checksum/config: {{ (include (print $.Template.BasePath "/common/configmap.yaml") . | fromYaml).data | toYaml | sha256sum }}
         prometheus.io/path: "/metrics"
         prometheus.io/port: {{ .Values.magg.ports.metrics | quote }}
         prometheus.io/scrape: "true"
       labels:
         {{- include "search-api-v8.labels" . | nindent 8 }}
-      {{- with .Values.geodetector.podLabels }}
+      {{- with .Values.segmentDetector.podLabels }}
         {{- toYaml . | nindent 8 }}
-      {{- end }}{{- /* .Values.geodetector.podLabels */}}
-        search/part: geodetector
+      {{- end }}{{- /* .Values.segmentDetector.podLabels */}}
+        search/part: segment-detector
     spec:
       terminationGracePeriodSeconds: 120
       volumes:
-        {{- if .Values.geodetector.data.persistent.enabled }}
-        - name: geodetector-data
+        {{- if .Values.segmentDetector.data.persistent.enabled }}
+        - name: segment-detector-data
           ephemeral:
             volumeClaimTemplate:
               metadata:
@@ -50,63 +50,63 @@ spec:
                 accessModes:
                   - ReadWriteOnce
                 resources:
-                  {{- .Values.geodetector.data.resources | toYaml | nindent 18 }}
-                storageClassName: {{ .Values.geodetector.data.storageClassName | quote }}
+                  {{- .Values.segmentDetector.data.resources | toYaml | nindent 18 }}
+                storageClassName: {{ .Values.segmentDetector.data.storageClassName | quote }}
                 volumeMode: Filesystem
         {{ else }}
-        - name: geodetector-data
+        - name: segment-detector-data
           emptyDir:
-            sizeLimit: {{ .Values.geodetector.data.resources.requests.storage }}
-        {{- end }}{{- /* .Values.geodetector.data.persistent.enabled */}}
-        - name: geodetector-sentry
+            sizeLimit: {{ .Values.segmentDetector.data.resources.requests.storage }}
+        {{- end }}{{- /* .Values.segmentDetector.data.persistent.enabled */}}
+        - name: segment-detector-sentry
           emptyDir:
             sizeLimit: {{ .Values.sentry.storageSize }}
-        - name: geodetector-config
+        - name: segment-detector-config
           configMap:
             name: {{ include "search-api-v8.fullname" . }}
             defaultMode: 420
       containers:
-        - name: geodetector
+        - name: segment-detector
           securityContext:
-            {{- toYaml .Values.geodetector.securityContext | nindent 12 }}
-          image: '{{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.geodetector.image.repository }}:{{ .Values.geodetector.image.tag | default .Chart.AppVersion }}'
-          imagePullPolicy: {{ .Values.geodetector.image.pullPolicy }}
+            {{- toYaml .Values.segmentDetector.securityContext | nindent 12 }}
+          image: '{{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.segmentDetector.image.repository }}:{{ .Values.segmentDetector.image.tag | default .Chart.AppVersion }}'
+          imagePullPolicy: {{ .Values.segmentDetector.image.pullPolicy }}
           ports:
-            - name: geodetector-srv
-              containerPort: {{ .Values.geodetector.ports.server }}
+            - name: segdetector-srv
+              containerPort: {{ .Values.segmentDetector.ports.server }}
               protocol: TCP
             - name: grpc
-              containerPort: {{ .Values.geodetector.ports.grpc }}
+              containerPort: {{ .Values.segmentDetector.ports.grpc }}
               protocol: TCP
             - name: monitor
-              containerPort: {{ .Values.geodetector.ports.monitor }}
+              containerPort: {{ .Values.segmentDetector.ports.monitor }}
               protocol: TCP
             - name: http-syncer
               containerPort: {{ .Values.syncer.ports.http }}
               protocol: TCP
           resources:
-            {{- toYaml .Values.geodetector.resources | nindent 12 }}
+            {{- toYaml .Values.segmentDetector.resources | nindent 12 }}
           {{- if .Values.customCAs.bundle }}
             {{- include "search-api-v8.custom.ca.volumeMounts" . | nindent 12 }}
           {{- end }}{{- /* .Values.customCAs.bundle */}}
           volumeMounts:
-            - name: geodetector-data
+            - name: segment-detector-data
               mountPath: /data
-            - name: geodetector-config
-              mountPath: /app/geodetector_vars.yaml
-              subPath: geodetector_vars.yaml
-          {{- if .Values.geodetector.livenessProbe.enabled }}
+            - name: segment-detector-config
+              mountPath: /app/segment_detector_vars.yaml
+              subPath: segment_detector_vars.yaml
+          {{- if .Values.segmentDetector.livenessProbe.enabled }}
           livenessProbe:
-            {{- include "common.tplvalues.render" (dict "value" (omit .Values.geodetector.livenessProbe "enabled") "context" $) | nindent 12 -}}
-          {{ end -}}{{- /* .Values.geodetector.livenessProbe.enabled */}}
-          {{- if .Values.geodetector.readinessProbe.enabled }}
+            {{- include "common.tplvalues.render" (dict "value" (omit .Values.segmentDetector.livenessProbe "enabled") "context" $) | nindent 12 -}}
+          {{ end -}}{{- /* .Values.segmentDetector.livenessProbe.enabled */}}
+          {{- if .Values.segmentDetector.readinessProbe.enabled }}
           readinessProbe:
-            {{- include "common.tplvalues.render" (dict "value" (omit .Values.geodetector.readinessProbe "enabled") "context" $) | nindent 12 -}}
-          {{ end -}}{{- /* .Values.geodetector.readinessProbe.enabled */}}
-          {{- if .Values.geodetector.startupProbe.enabled }}
+            {{- include "common.tplvalues.render" (dict "value" (omit .Values.segmentDetector.readinessProbe "enabled") "context" $) | nindent 12 -}}
+          {{ end -}}{{- /* .Values.segmentDetector.readinessProbe.enabled */}}
+          {{- if .Values.segmentDetector.startupProbe.enabled }}
           startupProbe:
-            {{- include "common.tplvalues.render" (dict "value" (omit .Values.geodetector.startupProbe "enabled") "context" $) | nindent 12 -}}
-          {{ end -}}{{- /* .Values.geodetector.startupProbe.enabled */}}
+            {{- include "common.tplvalues.render" (dict "value" (omit .Values.segmentDetector.startupProbe "enabled") "context" $) | nindent 12 -}}
+          {{ end -}}{{- /* .Values.segmentDetector.startupProbe.enabled */}}
         - name: syncer
           securityContext:
             {{- toYaml .Values.syncer.securityContext | nindent 12 }}
@@ -124,13 +124,13 @@ spec:
             {{- include "search-api-v8.env.custom.ca.path" . | nindent 12 }}
             {{- end }}{{- /* .Values.customCAs.bundle */}}
           volumeMounts:
-            - name: geodetector-data
+            - name: segment-detector-data
               mountPath: /data
-            - name: geodetector-sentry
+            - name: segment-detector-sentry
               mountPath: {{ .Values.sentry.databasePath }}
-            - name: geodetector-config
+            - name: segment-detector-config
               mountPath: /app/config.yaml
-              subPath: syncer-geodetector.yaml
+              subPath: syncer-segment-detector.yaml
           {{- if .Values.customCAs.bundle }}
             {{- include "search-api-v8.custom.ca.volumeMounts" . | nindent 12 }}
           {{- end }}{{- /* .Values.customCAs.bundle */}}
@@ -142,7 +142,7 @@ spec:
             - name: METRICS_AGGREGATOR_PORT
               value: {{ .Values.magg.ports.metrics | quote }}
             - name: METRICS_AGGREGATOR_SOURCES
-              value: "http://127.0.0.1:{{ .Values.geodetector.ports.monitor }}/metrics,\
+              value: "http://127.0.0.1:{{ .Values.segmentDetector.ports.monitor }}/metrics,\
                 http://127.0.0.1:{{ .Values.syncer.ports.http }}/metrics"
             - name: GOMAXPROCS
               value: "1"
@@ -159,7 +159,7 @@ spec:
             {{- toYaml .Values.magg.resources | nindent 12 }}
         {{ end }}{{- /* .Values.magg.enabled */}}
       serviceAccountName: {{ include "search-api-v8.serviceAccountName" . }}
-      securityContext: {{- toYaml .Values.geodetector.podSecurityContext | nindent 8 }}
+      securityContext: {{- toYaml .Values.segmentDetector.podSecurityContext | nindent 8 }}
   strategy:
-  {{- .Values.geodetector.strategy | toYaml | nindent 4 }}
-{{ end }}{{- /* .Values.geodetector.enabled */}}
+  {{- .Values.segmentDetector.strategy | toYaml | nindent 4 }}
+{{ end }}{{- /* .Values.segmentDetector.enabled */}}

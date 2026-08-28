@@ -25,23 +25,26 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Common settings
 
-| Name                            | Description                                                                                                                                  | Value |
-| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| `replicaCount`                  | A replica count for the pod.                                                                                                                 | `1`   |
-| `revisionHistoryLimit`          | Number of replica sets to keep for deployment rollbacks                                                                                      | `3`   |
-| `imagePullSecrets`              | Kubernetes image pull secrets.                                                                                                               | `[]`  |
-| `nameOverride`                  | Base name to use in all the Kubernetes entities deployed by this chart.                                                                      | `""`  |
-| `fullnameOverride`              | Base fullname to use in all the Kubernetes entities deployed by this chart.                                                                  | `""`  |
-| `navigroup`                     | Name of navigation deploy group.                                                                                                             | `""`  |
-| `podAnnotations`                | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                | `{}`  |
-| `podSecurityContext`            | Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).                               | `{}`  |
-| `securityContext`               | Kubernetes [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).                                   | `{}`  |
-| `nodeSelector`                  | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                          | `{}`  |
-| `tolerations`                   | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                            | `[]`  |
-| `affinity`                      | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).                  | `{}`  |
-| `labels`                        | Custom labels to set to Deployment resource.                                                                                                 | `{}`  |
-| `preStopDelay`                  | Delay in seconds before terminating container.                                                                                               | `5`   |
-| `terminationGracePeriodSeconds` | Grace period for container shutdown, refer to [Pod Lifecycle](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/) for details | `60`  |
+| Name                              | Description                                                                                                                                  | Value   |
+| --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `replicaCount`                    | A replica count for the pod.                                                                                                                 | `1`     |
+| `revisionHistoryLimit`            | Number of replica sets to keep for deployment rollbacks                                                                                      | `3`     |
+| `imagePullSecrets`                | Kubernetes image pull secrets.                                                                                                               | `[]`    |
+| `nameOverride`                    | Base name to use in all the Kubernetes entities deployed by this chart.                                                                      | `""`    |
+| `fullnameOverride`                | Base fullname to use in all the Kubernetes entities deployed by this chart.                                                                  | `""`    |
+| `navigroup`                       | Name of navigation deploy group.                                                                                                             | `""`    |
+| `podAnnotations`                  | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                | `{}`    |
+| `podSecurityContext.runAsNonRoot` | Indicates that the container must run as a non-root user.                                                                                    | `true`  |
+| `podSecurityContext.runAsUser`    | The User ID (UID) to run the entrypoint of the container process.                                                                            | `10001` |
+| `podSecurityContext.runAsGroup`   | The primary Group ID (GID) for all processes in the container.                                                                               | `10001` |
+| `podSecurityContext.fsGroup`      | A special supplemental group ID applied to all volumes mounted by the pod.                                                                   | `101`   |
+| `securityContext`                 | Kubernetes [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).                                   | `{}`    |
+| `nodeSelector`                    | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                          | `{}`    |
+| `tolerations`                     | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                            | `[]`    |
+| `affinity`                        | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).                  | `{}`    |
+| `labels`                          | Custom labels to set to Deployment resource.                                                                                                 | `{}`    |
+| `preStopDelay`                    | Delay in seconds before terminating container.                                                                                               | `5`     |
+| `terminationGracePeriodSeconds`   | Grace period for container shutdown, refer to [Pod Lifecycle](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/) for details | `60`    |
 
 ### Deployment settings
 
@@ -101,6 +104,14 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `ingress.hosts[0].paths[0].path`     | Path of the host for the Ingress service. | `/`                         |
 | `ingress.hosts[0].paths[0].pathType` | Type of the path for the Ingress service. | `Prefix`                    |
 | `ingress.tls`                        | TLS configuration                         | `[]`                        |
+
+### [HTTPRoute](https://gateway-api.sigs.k8s.io/reference/api-types/httproute/) configuration
+
+| Name                   | Description                                                                                                           | Value   |
+| ---------------------- | --------------------------------------------------------------------------------------------------------------------- | ------- |
+| `httpRoute.enabled`    | If HTTPRoute is enabled for the service.                                                                              | `false` |
+| `httpRoute.hostnames`  | List of hostnames served by route.                                                                                    | `[]`    |
+| `httpRoute.parentRefs` | List of parent references (gateways) for HTTPRoute. Defaults: canary and stable gateways in istio-gateways namespace. |         |
 
 ### Limits
 
@@ -178,7 +189,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | Name                              | Description                                                                                                                                                                                    | Value                            |
 | --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------- |
 | `envoy.image.repository`          | Repository                                                                                                                                                                                     | `2gis-on-premise/navi-envoy`     |
-| `envoy.image.tag`                 | Tag                                                                                                                                                                                            | `1.36.2-tools`                   |
+| `envoy.image.tag`                 | Tag                                                                                                                                                                                            | `1.38.1-tools`                   |
 | `envoy.image.pullPolicy`          | Pull Policy                                                                                                                                                                                    | `IfNotPresent`                   |
 | `envoy.resources.requests.cpu`    | CPU request, recommended value `100m`                                                                                                                                                          | `undefined`                      |
 | `envoy.resources.requests.memory` | Memory request, recommended value `100Mi`                                                                                                                                                      | `undefined`                      |
@@ -189,6 +200,10 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `envoy.accessLogs.enabled`        | if access logging enabled                                                                                                                                                                      | `false`                          |
 | `envoy.clusterTimeout`            | Cluster timeout.                                                                                                                                                                               | `15s`                            |
 | `envoy.connectTimeout`            | Connect timeout.                                                                                                                                                                               | `1s`                             |
+| `envoy.attractor.clusterTimeout`  | Envoy timeout for attrator cluster, if not set, will fallback to envoy.clusterTimeout value                                                                                                    | `""`                             |
+| `envoy.attractor.connectTimeout`  | Envoy timeout for attrator cluster, if not set, will fallback to envoy.connectTimeout value                                                                                                    | `""`                             |
+| `envoy.oneToMany.clusterTimeout`  | Envoy timeout for Moses(OneToMany) cluster, if not set, will fallback to envoy.clusterTimeout value                                                                                            | `""`                             |
+| `envoy.oneToMany.connectTimeout`  | Envoy timeout for Moses(OneToMany) cluster, if not set, will fallback to envoy.connectTimeout value                                                                                            | `""`                             |
 | `envoy.concurrency`               | The number of worker threads to run. Use `max(1, floor(resources.limits.cpu))` if set to `0`                                                                                                   | `""`                             |
 | `envoy.retry.enabled`             | Enable retry failed requests                                                                                                                                                                   | `false`                          |
 | `envoy.retry.retryOn`             | Status [codes for retry](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#x-envoy-retry-grpc-on)                                                      | `internal,unavailable,5xx,reset` |

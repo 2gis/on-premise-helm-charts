@@ -1,5 +1,29 @@
 # 2GIS On-Premise Changelog
 
+## [2026-08-24] Release: Core:2.10.0
+
+  [CHANGELOG](changelogs/core/CORE-CHANGELOG.md)
+
+## [2026-07-30] Release: Platform:2.56.0
+
+  [CHANGELOG](changelogs/platform/PLATFORM-CHANGELOG.md)
+
+## [2026-07-28] Release: Core:2.9.0
+
+  [CHANGELOG](changelogs/core/CORE-CHANGELOG.md)
+
+## [2026-07-27] Release: Pro:2.5.0
+
+  [CHANGELOG](changelogs/pro/PRO-CHANGELOG.md)
+
+## [2026-06-30] Release: Platform:2.55.0
+
+  [CHANGELOG](changelogs/platform/PLATFORM-CHANGELOG.md)
+
+## [2026-06-29] Release: Core:2.8.0
+
+  [CHANGELOG](changelogs/core/CORE-CHANGELOG.md)
+
 ## [2026-06-10] Release: Citylens:2.3.0
 
   [CHANGELOG](changelogs/citylens/CITYLENS-CHANGELOG.md)
