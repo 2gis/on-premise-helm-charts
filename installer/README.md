@@ -335,16 +335,15 @@ kubernetes-ready пример API-платформы (infra + core + api-platfor
    > (traefik IngressRoute, Middleware) до их установки. При первом деплое используйте `sync`;
    > для последующих обновлений — `apply`.
 
-4. **Загрузка образов и данных 2GIS** (требует лицензионный ключ):
-   1. Заполните `installer/dgctl/dgctl-config-sandbox.yaml` — укажите `key` (лицензионный ключ 2GIS);
-   2. Пробросьте доступ к S3/MinIO (используется `dgctl pull` и сервисами внутри кластера):
+4. **Загрузка образов и данных 2GIS** (требует лицензионный ключ, заполненный в шаге 1):
+   1. Пробросьте доступ к S3/MinIO (используется `dgctl pull` и сервисами внутри кластера):
       - добавьте в `/etc/hosts` запись для S3-хоста (IP — адрес хостовой машины):
         ```bash
         installer/scripts/sandbox-hosts.sh   # выведет готовый блок *.sandbox-хостов
         # вставьте вывод в /etc/hosts вручную
         ```
         или используйте `kubectl -n sandbox port-forward svc/minio 9000:9000`;
-   3. Загрузите артефакты:
+   2. Загрузите артефакты:
       ```bash
       cd installer/dgctl && ./pull.sh dgctl-config-sandbox.yaml
       ```
