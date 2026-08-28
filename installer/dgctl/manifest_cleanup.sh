@@ -15,7 +15,6 @@ function manifest_list(){
   for component in $COMPONENTS; do
     echo "Манифесты $component"
     docker run --net=host --rm \
-    -v /var/run/docker.sock:/var/run/docker.sock \
     -v `pwd`/$CFG:/config.yaml \
     -u `id -u`:`grep docker /etc/group | cut -d : -f 3` \
   2gis/dgctl:3 manifest list --config=/config.yaml --component $component
@@ -27,7 +26,6 @@ function manifest_cleanup(){
   for component in $COMPONENTS; do
     echo "Очистка $component"
     docker run --net=host --rm \
-    -v /var/run/docker.sock:/var/run/docker.sock \
     -v `pwd`/$CFG:/config.yaml \
     -u `id -u`:`grep docker /etc/group | cut -d : -f 3` \
     2gis/dgctl:3 manifest cleanup --config=/config.yaml --component $component --keep-count $KEEP_MANIFEST_COUNT

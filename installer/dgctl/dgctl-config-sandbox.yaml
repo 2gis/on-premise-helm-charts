@@ -1,7 +1,7 @@
 # dgctl config for the sandbox (kind) environment.
 # Fill in your 2GIS license key and Docker registry credentials, then run:
 #   cd installer/dgctl && ./pull.sh dgctl-config-sandbox.yaml
-key: # TODO: вставьте лицензионный ключ 2GIS
+key: # sandbox-todo: вставьте лицензионный ключ 2GIS
 log-format: text
 storage:
   type: s3

@@ -23,7 +23,6 @@ mkdir -p $VAL_DIR
 
 if [ "$LICENSE" != "-l" ];then
 docker run $env_flag --net=host --rm \
-  -v /var/run/docker.sock:/var/run/docker.sock \
   -v `pwd`/$VAL_DIR:/values \
   -v `pwd`/$CFG:/config.yaml \
   -u `id -u`:`grep docker /etc/group | cut -d : -f 3` \
@@ -31,7 +30,6 @@ docker run $env_flag --net=host --rm \
 
 else
 docker run --pull=always $env_flag --net=host --rm \
-  -v /var/run/docker.sock:/var/run/docker.sock \
   -v `pwd`/$VAL_DIR:/values \
   -v `pwd`/$CFG:/config.yaml \
   -u `id -u`:`grep docker /etc/group | cut -d : -f 3` \
@@ -52,11 +50,11 @@ checking_hosts() {
   local section_name="$1"
   local hosts
 
-  hosts=$(yq ".script.${section_name}[]" "$CFG")
+  hosts=$(yq -r ".script.${section_name}[]?" "$CFG" 2>/dev/null)
 
-  if [[ -z "$hosts" ]]; then
-    echo "No hosts found in the script section of $CFG!"
-    exit 1
+  if [[ -z "$hosts" || "$hosts" == "null" ]]; then
+    echo "No \"script.$section_name\" hosts in $CFG — skipping disk space check"
+    return 0
   fi
 
   echo "Processing $section_name hosts..."

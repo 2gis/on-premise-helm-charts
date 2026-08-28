@@ -310,7 +310,9 @@ kubernetes-ready пример API-платформы (infra + core + api-platfor
 
 ### Шаги развёртывания
 
-1. **Kind-кластер + локальный registry:**
+1. **Заполните конфигурацию** — найдите и заполните все `# sandbox-todo`
+
+2. **Kind-кластер + локальный registry:**
    ```bash
    kind create cluster --config installer/scripts/kind-config.yaml
    kubectl create namespace sandbox
@@ -323,7 +325,7 @@ kubernetes-ready пример API-платформы (infra + core + api-platfor
    > `prepare`-хук в `deploy/sandbox.yaml.gotmpl` также создаёт kind-кластер автоматически
    > при запуске `helmfile -e sandbox apply`.
 
-2. **Развёртывание infra** (traefik, PostgreSQL, Kafka, MinIO, Redis, Cassandra, ClickHouse, Elasticsearch) —
+3. **Развёртывание infra** (traefik, PostgreSQL, Kafka, MinIO, Redis, Cassandra, ClickHouse, Elasticsearch) —
    не требует лицензии, образы из публичного `docker.io`. Запускайте из корня репозитория:
    ```bash
    helmfile -e sandbox -f installer/helmfile/example/deploy/sandbox.yaml.gotmpl sync \
@@ -333,10 +335,15 @@ kubernetes-ready пример API-платформы (infra + core + api-platfor
    > (traefik IngressRoute, Middleware) до их установки. При первом деплое используйте `sync`;
    > для последующих обновлений — `apply`.
 
-3. **Загрузка образов и данных 2GIS** (требует лицензионный ключ):
+4. **Загрузка образов и данных 2GIS** (требует лицензионный ключ):
    1. Заполните `installer/dgctl/dgctl-config-sandbox.yaml` — укажите `key` (лицензионный ключ 2GIS);
-   2. Пробросьте S3: добавьте `127.0.0.1 s3.sandbox` в `/etc/hosts`
-      или `kubectl -n sandbox port-forward svc/minio 9000:9000`;
+   2. Пробросьте доступ к S3/MinIO (используется `dgctl pull` и сервисами внутри кластера):
+      - добавьте в `/etc/hosts` запись для S3-хоста (IP — адрес хостовой машины):
+        ```bash
+        installer/scripts/sandbox-hosts.sh   # выведет готовый блок *.sandbox-хостов
+        # вставьте вывод в /etc/hosts вручную
+        ```
+        или используйте `kubectl -n sandbox port-forward svc/minio 9000:9000`;
    3. Загрузите артефакты:
       ```bash
       cd installer/dgctl && ./pull.sh dgctl-config-sandbox.yaml
@@ -344,7 +351,7 @@ kubernetes-ready пример API-платформы (infra + core + api-platfor
       Скрипт пушит образы 2GIS в `kind-registry:5000` и генерирует `auto_values/`.
       Подробнее: [Fetch Installation Artifacts](https://docs.2gis.com/on-premise-api-platform/installation#fetch-artifacts).
 
-4. **Развёртывание core** (License, Keycloak, Keys) — образы из `kind-registry:5000`:
+5. **Развёртывание core** (License, Keycloak, Keys) — образы из `kind-registry:5000`:
    ```bash
    helmfile -e sandbox -f installer/helmfile/example/deploy/sandbox.yaml.gotmpl sync \
      --selector group=core
@@ -355,14 +362,15 @@ kubernetes-ready пример API-платформы (infra + core + api-platfor
      [получите лицензию](https://docs.2gis.com/on-premise-api-platform/installation#check-license-status)
      и повторите деплой.
 
-5. **Развёртывание API-платформы** (21 сервис: search, tiles, catalog, navi, styles, mapgl, …):
+6. **Развёртывание API-платформы** (21 сервис: search, tiles, catalog, navi, styles, mapgl, …):
    ```bash
    helmfile -e sandbox -f installer/helmfile/example/deploy/sandbox.yaml.gotmpl apply \
      --selector group=api-platform
    ```
 
-6. **Доступ** — сервисы доступны по hostname `*.sandbox` (например `http://search-api.sandbox`).
-   Добавьте `127.0.0.1 sandbox` в `/etc/hosts` или используйте `--resolve` в curl:
+7. **Доступ** — сервисы доступны по hostname `*.sandbox` (например `http://search-api.sandbox`).
+   Добавьте в `/etc/hosts` блок из `installer/scripts/sandbox-hosts.sh`
+   (тот же шаг, что и в п. 4) или используйте `--resolve` в curl:
    ```bash
    curl --resolve search-api.sandbox:80:127.0.0.1 http://search-api.sandbox/v1/search?q=cafe
    ```
