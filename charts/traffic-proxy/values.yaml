@@ -20,7 +20,7 @@ dgctlDockerRegistry: ''
 # @param affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
 # @param tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
 
-enableServiceLinks: true
+enableServiceLinks: false
 replicaCount: 1
 revisionHistoryLimit: 3
 terminationGracePeriodSeconds: 30
