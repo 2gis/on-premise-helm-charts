@@ -246,13 +246,11 @@ spec:
 
             - name: PermissionsApi__Url
               value: {{ include "pro-api.permissions-url" . }}
-            {{- if .Values.permissions.settings.auth.enabled }}
             - name: PermissionsApi__Key
               valueFrom:
                 secretKeyRef:
                   key: permissionsApiKey
                   name: {{ include "pro-api.secretName" . }}
-            {{- end }}
             {{- if .Values.tasks.settings.features.assetDataPreparation.enabled }}
             - name: AssetDataPreparation__Segments
               value: {{ .Values.tasks.settings.features.assetDataPreparation.segments | quote }}
@@ -280,8 +278,8 @@ spec:
 
             {{- if .Values.pagerenderer.settings.enabled }}
             - name: PageRendererApi__Url
-            {{- if .Values.pagerenderer.settings.grpcRoute.enabled }}
-              value: https://{{ index .Values.pagerenderer.settings.grpcRoute.hostnames 0 | toString }}:{{ .Values.pagerenderer.settings.grpcRoute.port }}
+            {{- if .Values.pagerenderer.settings.grpcRoute.hostname }}
+              value: http://{{ .Values.pagerenderer.settings.grpcRoute.hostname }}:{{ .Values.pagerenderer.settings.grpcPort }}
             {{- else }}
               value: http://{{ include "pro-api.pagerenderer-name" . }}:{{ .Values.pagerenderer.settings.grpcPort }}
             {{- end }}
