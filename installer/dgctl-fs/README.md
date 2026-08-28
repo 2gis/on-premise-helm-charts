@@ -42,7 +42,7 @@ docker load -i /tmp/dgctl_3.tar
 
 ### Создаем необходимые директории
 
-В той директории, откуда будете запускать скрипты, необходимо создать следующие директории под своим пользователем
+Скрипты монтируют директории через `$(pwd)`, поэтому запускать их и держать данные нужно из каталога `installer/dgctl-fs/` (здесь же лежат конфиги и скрипты). В нём создайте следующие директории под своим пользователем:
 
 ```sh
 mkdir dgctl-source
@@ -66,8 +66,11 @@ mkdir values
 
 ### Копируем данные на хост или на flash-disk
 
+Переносим на хост **и данные (`dgctl-source`), и сгенерированные значения (`values`)** — последние понадобятся для `auto_values`:
+
 ```sh
 scp -r dgctl-source host_without_internet:/tmp/dgctl-source
+scp -r values host_without_internet:/tmp/values
 ```
 
 ### Запускаем dgctl restore
@@ -80,25 +83,19 @@ scp -r dgctl-source host_without_internet:/tmp/dgctl-source
 
 ### Импорт данных из S3
 
-Далее стандартная процедура обновления сервиса/данных через helmfile
+Номер манифеста (какую порцию данных применять) helmfile читает из `installer/dgctl/auto_values/<component>/general.yaml`.
+Его генерирует `dgctl pull --generate-values` и сразу кладёт актуальный номер манифеста — вручную номер не правится.
 
-Пример:
+Но в fs-схеме `pull` пишет сгенерированные значения в `values/` (см. шаг «Запускаем dgctl pull»), а не в `auto_values`,
+а `restore` значения не генерирует. Поэтому на хосте, где выполняется обновление, один раз скопируйте их
+в каталог, который читает helmfile. Выполняйте из корня репозитория, для каждого обновляемого компонента
+(`<component>` — `core`, `api-platform`, `pro`, `citylens`):
 
-Меняем манифест на номер манифеста полученные с данными после выполнения `./dgctl-restore-fs.sh`
-
-Для core сервисов:
-
-```yaml
-dgctlStorage:
-  manifest: 'manifests/core/1715765468.json'
+```bash
+cp installer/dgctl-fs/values/<component>/general.yaml installer/dgctl/auto_values/<component>/general.yaml
 ```
 
-Для api-platform сервисов:
-
-```yaml
-dgctlStorage:
-  manifest: 'manifests/api-platform/1715761412.json'
-```
+Затем выполните стандартную процедуру обновления через helmfile:
 
 ```sh
 cd helmfile
