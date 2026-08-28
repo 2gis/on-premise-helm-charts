@@ -76,19 +76,19 @@ spec:
               value: {{ .Values.api.protocol | quote }}
             {{- if .Values.api.tileServerUrl }}
             - name: MAPSAPI2_TILE_SERVER
-              value: {{ .Values.api.tileServerUrl | quote }}
+              value: {{ print .Values.api.tileServerUrl "/tiles?x={x}&y={y}&z={z}" | quote }}
             {{- end }}
             {{- if .Values.api.trafficTileServerUrl }}
             - name: MAPSAPI2_TRAFFIC_TILE_SERVER
-              value: {{ .Values.api.trafficTileServerUrl | quote }}
+              value: {{ print .Values.api.trafficTileServerUrl "/{projectCode}/traffic/{z}/{x}/{y}/speed/{period}/{timestampString}" | quote }}
             {{- end }}
             {{- if .Values.api.trafficTimestampServerUrl }}
             - name: MAPSAPI2_TRAFFIC_TIMESTAMP_SERVER
-              value: {{ .Values.api.trafficTimestampServerUrl | quote }}
+              value: {{ print .Values.api.trafficTimestampServerUrl "/{projectCode}/meta/speed/time/" | quote }}
             {{- end }}
             {{- if .Values.api.trafficScoreServerUrl }}
             - name: MAPSAPI2_TRAFFIC_SCORE_SERVER
-              value: {{ .Values.api.trafficScoreServerUrl | quote }}
+              value: {{ print .Values.api.trafficScoreServerUrl "/{projectCode}/meta/score/0/" | quote }}
             {{- end }}
             {{- if .Values.api.webApiServerUrl }}
             - name: MAPSAPI2_WEB_API_SERVER
@@ -120,7 +120,7 @@ spec:
             - name: MAPSAPI2_RETINA_POI_META_SERVER
               value: {{ .Values.api.publicHost | quote }}
             - name: MAPSAPI2_RETINA_TILE_SERVER
-              value: {{ .Values.api.tileServerUrl | quote }}
+              value: {{ print .Values.api.tileServerUrl "/tiles?x={x}&y={y}&z={z}" | quote }}
             {{- end }}
           ports:
             - name: http

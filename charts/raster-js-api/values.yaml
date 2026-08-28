@@ -64,7 +64,7 @@ image:
 
 # @param api.publicHost **required** Host on which the service will be available, e.g. 'maps-raster.ingress.host'.
 # @param api.protocol Protocol to use: `http:`, `https:`.
-# @param api.tileServerUrl URL of the tile server, e.g. 'https://tiles-api.ingress.host/tiles?x={x}&y={y}&z={z}'.
+# @param api.tileServerUrl URL of the tile server, e.g. 'https://tiles-api.ingress.host'.
 # @param api.trafficTileServerUrl URL of the traffic tiles server.
 # @param api.trafficTimestampServerUrl URL of the traffic timestamps server.
 # @param api.trafficScoreServerUrl URL of the traffic scores server.
