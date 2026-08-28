@@ -59,7 +59,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | Name               | Description | Value                        |
 | ------------------ | ----------- | ---------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-front` |
-| `image.tag`        | Tag         | `1.31.1`                     |
+| `image.tag`        | Tag         | `1.31.2`                     |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`               |
 
 ### Navi-Front service settings
