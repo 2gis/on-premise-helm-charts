@@ -78,10 +78,6 @@ spec:
             - name: MAPSAPI2_TILE_SERVER
               value: {{ .Values.api.tileServerUrl | quote }}
             {{- end }}
-            {{- if .Values.api.retinaTileServerUrl }}
-            - name: MAPSAPI2_RETINA_TILE_SERVER
-              value: {{ .Values.api.retinaTileServerUrl | quote }}
-            {{- end }}
             {{- if .Values.api.trafficTileServerUrl }}
             - name: MAPSAPI2_TRAFFIC_TILE_SERVER
               value: {{ .Values.api.trafficTileServerUrl | quote }}
@@ -112,13 +108,19 @@ spec:
                   name: {{ include "generic-chart.fullname" . }}
                   key: key
             {{- end }}
-            {{- if .Values.api.key }}
             - name: MAPSAPI2_KEY_SERVER
               value: {{ .Values.api.keyServerUrl | quote }}
-            {{- end }}
             {{- if .Values.customCAs.bundle }}
             - name: SSL_CERT_FILE
               value: {{ include "custom.ca.mountPath" . }}/custom-ca.crt
+            {{- end }}
+            {{- if .Values.api.publicHost }}
+            - name: MAPSAPI2_POI_META_SERVER
+              value: {{ .Values.api.publicHost | quote }}
+            - name: MAPSAPI2_RETINA_POI_META_SERVER
+              value: {{ .Values.api.publicHost | quote }}
+            - name: MAPSAPI2_RETINA_TILE_SERVER
+              value: {{ .Values.api.tileServerUrl | quote }}
             {{- end }}
           ports:
             - name: http
