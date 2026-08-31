@@ -39,7 +39,7 @@ ui:
 
   image:
     repository: 2gis-on-premise/platform-ui
-    tag: 1.45.0
+    tag: 1.46.0
 
   # @section UI service settings
 
@@ -136,10 +136,12 @@ ui:
   # @section Map styles settings
 
   # @param ui.mapStyles.url URL to Map Styles API.
+  # @param ui.mapStyles.key Optional access key for the Map Styles import endpoint.
   # @param ui.mapStyles.entryPageUrl Link to the corresponding app or landing page in sidebar menu. A string containing one or more "locale=URL" pairs. Possible locale values: "ru", "en". Pairs must be separated by commas. Example: 'ru=https://example.com/ru,en=https://example.com/en'.The URL must be absolute.You can specify only one URL without a locale, e.g. 'https://example.com/healthcheck'.
 
   mapStyles:
     url: ''
+    key: ''
     entryPageUrl: ''
 
   # @section License settings
