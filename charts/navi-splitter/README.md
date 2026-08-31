@@ -51,7 +51,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | Name               | Description | Value                           |
 | ------------------ | ----------- | ------------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-splitter` |
-| `image.tag`        | Tag         | `1.15.0`                        |
+| `image.tag`        | Tag         | `1.17.0`                        |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`                  |
 
 ### Splitter application settings
@@ -189,7 +189,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | Name                              | Description                                                                                                                                                                                    | Value                            |
 | --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------- |
 | `envoy.image.repository`          | Repository                                                                                                                                                                                     | `2gis-on-premise/navi-envoy`     |
-| `envoy.image.tag`                 | Tag                                                                                                                                                                                            | `1.38.1-tools`                   |
+| `envoy.image.tag`                 | Tag                                                                                                                                                                                            | `1.38.3`                         |
 | `envoy.image.pullPolicy`          | Pull Policy                                                                                                                                                                                    | `IfNotPresent`                   |
 | `envoy.resources.requests.cpu`    | CPU request, recommended value `100m`                                                                                                                                                          | `undefined`                      |
 | `envoy.resources.requests.memory` | Memory request, recommended value `100Mi`                                                                                                                                                      | `undefined`                      |

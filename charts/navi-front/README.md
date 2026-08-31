@@ -59,7 +59,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | Name               | Description | Value                        |
 | ------------------ | ----------- | ---------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-front` |
-| `image.tag`        | Tag         | `1.29.1`                     |
+| `image.tag`        | Tag         | `1.31.2`                     |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`               |
 
 ### Navi-Front service settings
@@ -161,6 +161,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | Name                                             | Description                                                                                                                                     | Value        |
 | ------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- | ------------ |
 | `nginx.customConfigPath`                         | Path to custom nginx config file. If set, default config will be ignored.                                                                       | `""`         |
+| `nginx.mainConfig.omitUserWhenRunAsNonRoot`      | Omit the nginx user directive when podSecurityContext.runAsUser is non-root.                                                                    | `true`       |
 | `nginx.setRealIpFrom`                            | Defines trusted addresses that are known to send correct replacement addresses                                                                  | `127.0.0.1`  |
 | `nginx.opentracing.enabled`                      | If opentracing enabled for nginx requests                                                                                                       | `false`      |
 | `nginx.opentracing.serviceName`                  | Service name sent to jaeger                                                                                                                     | `navi-front` |
@@ -175,13 +176,12 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Location overrides
 
-| Name                    | Description                                                                                      | Value |
-| ----------------------- | ------------------------------------------------------------------------------------------------ | ----- |
-| `locationBlock`         | Optional nginx config block with additional locations                                            | `""`  |
-| `carroutingLocation`    | Override for default /carrouting                                                                 | `""`  |
-| `distMatrixCtxLocation` | Override for default /get_dist_matrix_ctx                                                        | `""`  |
-| `hullLocation`          | Override for default /get_hull                                                                   | `""`  |
-| `multimodLocation`      | Override for default /ctx_multi_mod and /find_platforms if enabled with `front.multimod.enabled` | `""`  |
+| Name                 | Description                                                                                      | Value |
+| -------------------- | ------------------------------------------------------------------------------------------------ | ----- |
+| `locationBlock`      | Optional nginx config block with additional locations                                            | `""`  |
+| `carroutingLocation` | Override for default /carrouting                                                                 | `""`  |
+| `hullLocation`       | Override for default /get_hull                                                                   | `""`  |
+| `multimodLocation`   | Override for default /ctx_multi_mod and /find_platforms if enabled with `front.multimod.enabled` | `""`  |
 
 ## Maintainers
 
