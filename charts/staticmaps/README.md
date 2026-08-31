@@ -75,7 +75,7 @@ For details about Static Maps (Static API), see the On-Premise Maps API document
 | Name               | Description  | Value                        |
 | ------------------ | ------------ | ---------------------------- |
 | `image.repository` | Repository.  | `2gis-on-premise/staticmaps` |
-| `image.tag`        | Tag.         | `1.0.2`                      |
+| `image.tag`        | Tag.         | `1.0.3`                      |
 | `image.pullPolicy` | Pull Policy. | `IfNotPresent`               |
 
 ### Service settings
