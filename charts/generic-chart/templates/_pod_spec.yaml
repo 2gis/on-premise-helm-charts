@@ -28,10 +28,6 @@ spec:
   terminationGracePeriodSeconds: {{ . | default 60 }}
   {{- end }}{{- /* terminationGracePeriodSeconds */}}
   enableServiceLinks: {{ .Values.enableServiceLinks | default false }}
-  {{- with .Values.hostAliases }}
-  hostAliases:
-    {{- toYaml . | nindent 8 }}
-  {{- end }}{{- /* hostAliases */}}
   {{- with .Values.nodeSelector }}
   nodeSelector:
     {{- toYaml . | nindent 8 }}

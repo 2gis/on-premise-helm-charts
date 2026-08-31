@@ -6,7 +6,7 @@
 
 Мы следуем [официальным best practices для helm-чартов](https://helm.sh/docs/chart_best_practices/conventions/).
 
-## Создание NOTES.txt
+##  Создание NOTES.txt
 
 Для каждого чарта должен существовать [templates/NOTES.txt](https://helm.sh/docs/chart_template_guide/notes_files/) файл.
 
@@ -44,7 +44,7 @@ make charts/navi-back
 
 ## Обновление Deployment при обновлении configmap/secret
 
-Для workload-ресурсов, которые должны перезапускаться при обновлении configmap и/или secret, обязательно добавить в аннотации хешсумму configmap и/или secret.
+Для того, чтобы deployment триггерился на обновление configmap и/или secret, обязательно добавить в аннотации хешсумму configmap и/или secret.
 
 Пример:
 
@@ -219,9 +219,9 @@ template:
   Пример для чарта `pro-api`: не `repository: 2gis-on-premise/urbigeo-importer`, а `repository: 2gis-on-premise/pro-api-importer`.
 
 - Настройки, связанные с подключением к другим сервисам On-Premise, должны группироваться в блоки, названные
-  в соответствии с сервисом. Адрес сервиса должен указываться в настройке `url`.
-  Ключ для авторизации должен указываться в настройке `key`. Приложение желательно должно уметь обрабатывать URL
-  в виде `hostname`, `scheme://hostname`, `scheme://hostname:port`. Если URL является шаблоном, то это можно отразить в названии,
+в соответствии с сервисом. Адрес сервиса должен указываться в настройке `url`.
+Ключ для авторизации должен указываться в настройке `key`. Приложение, желательно, должно уметь обрабатывать url
+в виде hostname, scheme://hostname, scheme://hostname:port. Если url является шаблоном, то это можно отразить в названии,
 например `urlTemplate: http://service-name.svc/{project}/{date_str}_{hour}.json`
 
 Примеры:
@@ -288,20 +288,10 @@ search:
 env:
   MAPGL_TILES_API: ''
 
-# @param postgres.host. PostgreSQL host. Ex: pg-cluster.host
-postgres:
+# @param db.host. PostgreSQL host. Ex: pg-cluster.host
+db:
   host: ''
 ```
-
-## Ресурсы
-
-- Для единиц измерения информации и ресурсов используем общепринятые двоичные сокращения Kubernetes: `Ki`, `Mi`, `Gi`, `Ti`.
-
-- В рамках одного чарта однотипные значения ресурсов должны записываться единообразно:
-  - для памяти не смешиваем без необходимости `Mi` и `Gi`;
-  - для CPU придерживаемся одного формата: либо millicores (`100m`, `500m`), либо целые значения (`1`, `2`).
-
-- Для памяти не используем дробные значения вроде `1.5Gi`. Вместо этого указываем целое значение в подходящей единице измерения, например `1536Mi`.
 
 ## Стиль кода
 

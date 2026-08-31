@@ -23,7 +23,6 @@ streams = {
 
     initialize-topics = {{ required "A valid .Values.initializeTopics.enabled entry required" .Values.initializeTopics.enabled }}
     topics-manager.prefix = {{ required "A valid .Values.topicsPrefix entry required" .Values.topicsPrefix }}
-    topics-manager.replica-factor = {{ .Values.kafka.replicationFactor | default 3 }}
 
     input-topics = [
       "{{ required "A valid .Values.topicsPrefix entry required" .Values.topicsPrefix }}input"
@@ -46,7 +45,7 @@ streams = {
     "transaction.timeout.ms" = 180000
     "processing.guarantee" = "exactly_once"
     "commit.interval.ms" = 5000
-    "replication.factor" = {{ .Values.kafka.replicationFactor | default 3 }}
+    "replication.factor" = 3
     "num.stream.threads" = 1
     "state.dir" = "/app/rocksdb"
     "cache.max.bytes.buffering" = 268435456 # 256Mb
