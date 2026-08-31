@@ -33,6 +33,7 @@ spec:
             {{- include "keys.env.db.jobs" . | nindent 12 }}
             {{- include "keys.env.predef" . | nindent 12 }}
             {{- include "keys.env.dgctlStorage" . | nindent 12 }}
+            {{- include "keys.env.auditEnvMetadata" . | nindent 12 }}
             {{- if .Values.customCAs.bundle }}
             {{- include "keys.env.custom.ca.path" . | nindent 12 }}
             {{- end }}

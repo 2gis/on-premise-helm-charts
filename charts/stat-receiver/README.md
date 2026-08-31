@@ -24,7 +24,7 @@ initializeTopics: true
 topicsPrefix: stat.env.
 ```
 
-App may initialize required topics on startup (`initilizeTopics` setting) however in cases when topics settings are explicitly managed you may initialize it manually using provided settings (see `topics-config.md`).
+App may initialize required topics on startup (`initializeTopics` setting) however in cases when topics settings are explicitly managed you may initialize it manually using provided settings (see `topics-config.md`).
 
 Then, call the `helm install` command and specify the name of the created file:
 
@@ -100,6 +100,7 @@ helm upgrade stat-receiver 2gis-on-premise/stat-receiver -f values-stat-receiver
 | ----------------------------------------- | ---------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------- |
 | `kafka.servers`                           | Kafka bootstrap connection string                                                                                | `""`                                                      |
 | `kafka.securityProtocol`                  | Protocol used to communicate with brokers. Valid values are: `PLAINTEXT`, `SSL`, `SASL_PLAINTEXT`, `SASL_SSL`    | `PLAINTEXT`                                               |
+| `kafka.replicationFactor`                 | Replication factor for Kafka topics and streams. Must be <= number of available brokers. Default: 3.             | `3`                                                       |
 | `kafka.truststore`                        | **Trust store configuration for SSL connections**                                                                |                                                           |
 | `kafka.truststore.enabled`                |                                                                                                                  | `false`                                                   |
 | `kafka.truststore.secretName`             | Kubernetes secret that holds trust store data                                                                    | `""`                                                      |

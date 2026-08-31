@@ -1,0 +1,17 @@
+{{- if .Values.segmentDetector.enabled }}
+{{- if .Values.segmentDetector.vpa.enabled }}
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: {{ include "search-api-v8.fullname" . }}-segment-detector
+  labels:
+    {{- include "search-api-v8.labels" . | nindent 4 }}
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "search-api-v8.fullname" . }}-segment-detector
+  updatePolicy:
+    updateMode: {{ ternary "On" "Off" .Values.segmentDetector.vpa.updateMode | quote }}
+{{- end }}{{- /* .Values.segmentDetector.vpa.enabled */}}
+{{- end }}{{- /* .Values.segmentDetector.enabled */}}

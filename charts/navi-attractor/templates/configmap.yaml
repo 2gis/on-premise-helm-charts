@@ -84,9 +84,9 @@ data:
         },
         "cities": {
           "update_period": 0,
-          {{- /* search .zip in files */}}
+          {{- /* search .zip in files, extract content name (part before first .zip, without path prefix) */}}
           {{- if regexMatch ".*\\.zip.*" .Values.attractor.citiesFilename }}
-          "content": "cities.conf",
+          "content": {{ regexReplaceAll "^(?:.*/)?(.+?)\\.zip.*$" .Values.attractor.citiesFilename "${1}" | quote }},
           {{- end }}
           "nodes": [
             "{REMOTE_PATH}/{{ .Values.attractor.citiesFilename }}"

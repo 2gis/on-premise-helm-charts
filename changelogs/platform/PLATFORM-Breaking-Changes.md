@@ -1,5 +1,11 @@
 # Platform Breaking-Changes
 
+## [2.55.0]
+
+### search-api-v8
+
+- Renamed `geodetector` to `segmentDetector`
+
 ## [2.54.0]
 
 ### platform

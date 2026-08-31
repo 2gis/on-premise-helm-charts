@@ -57,6 +57,7 @@
             "properties": {
                 "servers":          { "type": "string" },
                 "securityProtocol": { "type": "string", "enum": ["PLAINTEXT", "SSL", "SASL_PLAINTEXT", "SASL_SSL"] },
+                "replicationFactor": { "type": "integer", "minimum": 1, "default": 3 },
                 "truststore":       { "$ref": "#/definitions/trust_or_key_store" },
                 "keystore":         { "$ref": "#/definitions/trust_or_key_store" },
                 "sasl":             { "type": "object",

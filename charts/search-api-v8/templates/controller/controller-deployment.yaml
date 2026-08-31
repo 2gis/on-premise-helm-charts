@@ -77,8 +77,6 @@ spec:
             - name: controller-config
               mountPath: /app/config.yaml
               subPath: controller.yaml
-            - name: controller-data
-              mountPath: /tmp
           {{- if .Values.customCAs.bundle }}
             {{- include "search-api-v8.custom.ca.volumeMounts" . | nindent 12 }}
           {{- end }}{{- /* .Values.customCAs.bundle */}}
@@ -106,21 +104,6 @@ spec:
         - name: controller-config
           configMap:
             name: {{ include "search-api-v8.fullname" . }}
-        {{- if .Values.controller.data.persistent.enabled }}
-        - name: controller-data
-          ephemeral:
-            volumeClaimTemplate:
-              spec:
-                accessModes: [ "ReadWriteOnce" ]
-                storageClassName: {{ .Values.controller.data.storageClassName | quote }}
-                volumeMode: Filesystem
-                resources:
-                  {{- .Values.controller.data.resources | toYaml | nindent 18 }}
-        {{ else }}
-        - name: controller-data
-          emptyDir:
-            sizeLimit: {{ .Values.controller.data.resources.requests.storage }}
-        {{ end }}{{- /* .Values.controller.data.persistent.enabled */}}
         {{- if .Values.customCAs.bundle }}
         {{- include "search-api-v8.custom.ca.deploys.volumes" . | nindent 8 }}
         {{- end }}{{- /* .Values.customCAs.bundle */}}

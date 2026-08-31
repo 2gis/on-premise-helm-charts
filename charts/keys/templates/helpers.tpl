@@ -135,10 +135,15 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
 {{- define "keys.env.featureFlags" -}}
+  {{- if (and .Values.featureFlags.enableAuditBSS (not .Values.featureFlags.enableAudit)) }}
+    {{- fail "featureFlags.enableAuditBSS requires featureFlags.enableAudit to be true" }}
+  {{- end }}
 - name: KEYS_FEATURE_FLAGS_AUDIT
   value: {{ .Values.featureFlags.enableAudit | quote }}
 - name: KEYS_FEATURE_FLAGS_AUDIT_KAFKA
   value: {{ .Values.featureFlags.enableAuditKafka | quote }}
+- name: KEYS_FEATURE_FLAGS_AUDIT_BSS
+  value: {{ .Values.featureFlags.enableAuditBSS | quote }}
 - name: KEYS_FEATURE_FLAGS_PUBLIC_API_SIGN
   value: {{ .Values.featureFlags.enablePublicAPISign | quote }}
 - name: KEYS_FEATURE_FLAGS_SINGLE_PARTNER_MODE
@@ -157,6 +162,8 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   {{- end }}
   value: {{ .Values.featureFlags.enableStatRedis | quote }}
 - name: KEYS_FEATURE_FLAGS_SINGLE_VISIBILITY_MODE
+  value: "true"
+- name: KEYS_FEATURE_FLAGS_ON_PREMISE
   value: "true"
 {{- end }}
 
@@ -214,6 +221,10 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: {{ .Values.dispatcher.auditEvents.batchMaxSize | quote }}
 - name: KEYS_AUDIT_EVENTS_HOLD_DURATION
   value: {{ .Values.dispatcher.auditEvents.holdDuration | quote }}
+{{- if and .Values.featureFlags.enableAudit .Values.featureFlags.enableAuditBSS }}
+- name: KEYS_BSS_STAT_RECEIVER_AUDIT_BASE_URL
+  value: {{ required "A valid .Values.dispatcher.stat.url required" .Values.dispatcher.stat.url | quote }}
+{{- end }}
 {{- end }}
 
 {{- define "keys.env.cleaner" -}}
@@ -544,12 +555,14 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 - name: KEYS_KAFKA_AUDIT_TLS_CA_CERT_PATH
   value: "/etc/ssl/private/kafka-ca.crt"
 {{- end }}
+{{- if .Values.featureFlags.enableAuditKafka }}
 - name: KEYS_KAFKA_AUDIT_TOPIC
   value: {{ required "A valid .Values.kafka.audit.topic entry required" .Values.kafka.audit.topic | quote }}
 - name: KEYS_KAFKA_AUDIT_PRODUCE_RETRY_COUNT
   value: {{ .Values.kafka.audit.produce.retryCount | quote }}
 - name: KEYS_KAFKA_AUDIT_PRODUCE_IDEMPOTENT_WRITE
   value: {{ .Values.kafka.audit.produce.idempotentWrite | quote }}
+{{- end }}
 {{- end }}
 
 {{/*
@@ -806,4 +819,23 @@ Manifest name
 */}}
 {{- define "keys.manifestCode" -}}
 {{- base .Values.dgctlStorage.manifest | trimSuffix ".json" }}
+{{- end }}
+
+{{- define "keys.env.auditEnvMetadata"}}
+- name: KEYS_AUDIT_METADATA_POD_NAME
+  valueFrom:
+    fieldRef:
+      fieldPath: metadata.name
+- name: KEYS_AUDIT_METADATA_POD_NAMESPACE
+  valueFrom:
+    fieldRef:
+      fieldPath: metadata.namespace
+- name: KEYS_AUDIT_METADATA_NODE_NAME
+  valueFrom:
+    fieldRef:
+      fieldPath: spec.nodeName
+- name: KEYS_AUDIT_METADATA_POD_IP
+  valueFrom:
+    fieldRef:
+      fieldPath: status.podIP
 {{- end }}

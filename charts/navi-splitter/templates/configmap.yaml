@@ -48,7 +48,7 @@ data:
                       prefix: "/"
                     route:
                       cluster: attractor
-                      timeout: {{ .Values.envoy.clusterTimeout }}
+                      timeout: {{ include "envoy.timeout" ( list .Values.envoy "attractor" "clusterTimeout") }}
                       {{- if .Values.envoy.retry.enabled }}
                       retry_policy:
                         retry_on: {{ .Values.envoy.retry.retryOn | quote }}
@@ -122,7 +122,7 @@ data:
                       prefix: "/"
                     route:
                       cluster: oneToMany
-                      timeout: {{ .Values.envoy.clusterTimeout }}
+                      timeout: {{ include "envoy.timeout" ( list .Values.envoy "oneToMany" "clusterTimeout") }}
                       {{- if .Values.envoy.retry.enabled }}
                       retry_policy:
                         retry_on: {{ .Values.envoy.retry.retryOn | quote }}
@@ -143,12 +143,17 @@ data:
       clusters:
       {{- if .Values.attractor.enabled }}
       - name: attractor
-        connect_timeout: {{ .Values.envoy.connectTimeout }}
+        connect_timeout: {{ include "envoy.timeout" ( list .Values.envoy "attractor" "connectTimeout") }}
+
         type: STRICT_DNS
         dns_lookup_family: V4_ONLY
         lb_policy: ROUND_ROBIN
         # empty parameter specifying not to sway off gRPC
-        http2_protocol_options: {}
+        typed_extension_protocol_options:
+          envoy.extensions.upstreams.http.v3.HttpProtocolOptions:
+            "@type": type.googleapis.com/envoy.extensions.upstreams.http.v3.HttpProtocolOptions
+            explicit_http_config:
+              http2_protocol_options: {}
         load_assignment:
           cluster_name: attractor
           endpoints:
@@ -161,12 +166,16 @@ data:
       {{- end }}{{- /* if Values.attractor.enabled */}}
       {{- if .Values.oneToMany.enabled }}
       - name: oneToMany
-        connect_timeout: {{ .Values.envoy.connectTimeout }}
+        connect_timeout: {{ include "envoy.timeout" ( list .Values.envoy "oneToMany" "connectTimeout") }}
         type: STRICT_DNS
         dns_lookup_family: V4_ONLY
         lb_policy: LEAST_REQUEST
         # empty parameter specifying not to sway off gRPC
-        http2_protocol_options: {}
+        typed_extension_protocol_options:
+          envoy.extensions.upstreams.http.v3.HttpProtocolOptions:
+            "@type": type.googleapis.com/envoy.extensions.upstreams.http.v3.HttpProtocolOptions
+            explicit_http_config:
+              http2_protocol_options: {}
         load_assignment:
           cluster_name: oneToMany
           endpoints:

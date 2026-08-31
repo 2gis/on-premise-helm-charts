@@ -188,7 +188,7 @@ spec:
                   key: tasksApiKey
                   name: {{ include "pro-api.secretName" . }}
             - name: Auth__Authority
-              value: {{ required "A valid .Values.authProvider.host entry required" .Values.authProvider.host | quote }}
+              value: {{ .Values.authProvider.host | quote }}
             {{- if not .Values.tasks.settings.auth.adminRequiredRoles }}
             {{- fail "A valid .Values.tasks.settings.auth.adminRequiredRoles entry required when tasks.settings.auth.enabled is true" }}
             {{- end }}
@@ -214,8 +214,8 @@ spec:
 
             {{- if .Values.pagerenderer.settings.enabled }}
             - name: PageRendererApi__Url
-            {{- if .Values.pagerenderer.settings.grpcRoute.hostname }}
-              value: http://{{ .Values.pagerenderer.settings.grpcRoute.hostname }}:{{ .Values.pagerenderer.settings.grpcPort }}
+            {{- if .Values.pagerenderer.settings.grpcRoute.enabled }}
+              value: https://{{ index .Values.pagerenderer.settings.grpcRoute.hostnames 0 | toString }}:{{ .Values.pagerenderer.settings.grpcRoute.port }}
             {{- else }}
               value: http://{{ include "pro-api.pagerenderer-name" . }}:{{ .Values.pagerenderer.settings.grpcPort }}
             {{- end }}
