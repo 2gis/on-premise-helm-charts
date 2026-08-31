@@ -13,7 +13,10 @@ dgctlDockerRegistry: ''
 # @param fullnameOverride Base fullname to use in all the Kubernetes entities deployed by this chart.
 # @param navigroup Name of navigation deploy group.
 # @param podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
-# @param podSecurityContext Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).
+# @param podSecurityContext.runAsNonRoot Indicates that the container must run as a non-root user.
+# @param podSecurityContext.runAsUser The User ID (UID) to run the entrypoint of the container process.
+# @param podSecurityContext.runAsGroup The primary Group ID (GID) for all processes in the container.
+# @param podSecurityContext.fsGroup A special supplemental group ID applied to all volumes mounted by the pod.
 # @param securityContext Kubernetes [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).
 # @param nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
 # @param tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
@@ -29,7 +32,11 @@ nameOverride: ''
 fullnameOverride: ''
 navigroup: ''
 podAnnotations: {}
-podSecurityContext: {}
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 10001
+  runAsGroup: 10001
+  fsGroup: 101
 securityContext: {}
 nodeSelector: {}
 tolerations: []
@@ -136,6 +143,16 @@ ingress:
   # - hosts:
   #   - navi-splitter.example.com
   #   secretName: secret.tls
+
+# @section [HTTPRoute](https://gateway-api.sigs.k8s.io/reference/api-types/httproute/) configuration
+
+# @param httpRoute.enabled If HTTPRoute is enabled for the service.
+# @param httpRoute.hostnames List of hostnames served by route.
+# @extra httpRoute.parentRefs List of parent references (gateways) for HTTPRoute. Defaults: canary and stable gateways in istio-gateways namespace.
+
+httpRoute:
+  enabled: false
+  hostnames: []
 
 # @section Limits
 
@@ -258,6 +275,10 @@ passThrough:
 # @param envoy.accessLogs.enabled if access logging enabled
 # @param envoy.clusterTimeout Cluster timeout.
 # @param envoy.connectTimeout Connect timeout.
+# @param envoy.attractor.clusterTimeout Envoy timeout for attrator cluster, if not set, will fallback to envoy.clusterTimeout value
+# @param envoy.attractor.connectTimeout Envoy timeout for attrator cluster, if not set, will fallback to envoy.connectTimeout value
+# @param envoy.oneToMany.clusterTimeout Envoy timeout for Moses(OneToMany) cluster, if not set, will fallback to envoy.clusterTimeout value
+# @param envoy.oneToMany.connectTimeout Envoy timeout for Moses(OneToMany) cluster, if not set, will fallback to envoy.connectTimeout value
 # @param envoy.concurrency The number of worker threads to run. Use `max(1, floor(resources.limits.cpu))` if set to `0`
 # @param envoy.retry.enabled Enable retry failed requests
 # @param envoy.retry.retryOn Status [codes for retry](https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#x-envoy-retry-grpc-on)
@@ -269,7 +290,7 @@ envoy:
   image:
     repository: 2gis-on-premise/navi-envoy
     pullPolicy: IfNotPresent
-    tag: 1.36.2-tools
+    tag: 1.38.1-tools
   resources: {}
   systemLogs:
     logLevel: info
@@ -278,6 +299,12 @@ envoy:
     enabled: false
   clusterTimeout: 15s
   connectTimeout: 1s
+  attractor:
+    clusterTimeout: ''
+    connectTimeout: ''
+  oneToMany:
+    clusterTimeout: ''
+    connectTimeout: ''
   concurrency: ''
   retry:
     enabled: false

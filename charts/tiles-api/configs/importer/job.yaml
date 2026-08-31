@@ -4,7 +4,7 @@ metadata:
   name: {{ include "tiles.fullname" . }}-{{ .kind | sha256sum | trunc 8 }}-{{`{{.task_id}}`}}
   labels:
     task-id: {{`{{.task_id}}`}}
-    import-id: {{`{{.import_id}}`}}
+    import-id: {{ `{{.import_id}}` | quote }}
     {{- include "tiles.labels" . | nindent 4 }}
     {{- include "tiles.importer.label" . | nindent 4 }}
     tiles-kind: {{ .kind }}
@@ -17,7 +17,7 @@ spec:
       name: {{`{{.task_type}}`}}
       labels:
         task-id: {{`{{.task_id}}`}}
-        import-id: {{`{{.import_id}}`}}
+        import-id: {{ `{{.import_id}}` | quote }}
         {{- include "tiles.selectorLabels" . | nindent 8 }}
         {{- include "tiles.importer.label" . | nindent 8 }}
         tiles-kind: {{ .kind }}

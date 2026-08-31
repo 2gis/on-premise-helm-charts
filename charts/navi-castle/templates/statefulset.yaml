@@ -109,7 +109,7 @@ spec:
             {{- toYaml . | nindent 12 }}
           {{- end }}
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+            {{- toYaml (.Values.nginx.resources | default .Values.resources) | nindent 12 }}
           volumeMounts:
           - name: {{ include "castle.fullname" . }}-castle-nginx-config
             mountPath: {{ printf "%s/conf.d/castle.conf" ( include "nginx.customConfigPath" .) }}
@@ -178,7 +178,7 @@ spec:
               name: {{ include "castle.fullname" . }}-secret-env
           {{- end }}
           resources:
-            {{- toYaml $.Values.resources | nindent 12 }}
+            {{- toYaml (.Values.cron.resources | default .Values.resources) | nindent 12 }}
           startupProbe:
             {{- /* checks if supercronic prometheus port is open */}}
             httpGet:
@@ -241,7 +241,7 @@ spec:
             - --service=restriction_json
             - --daemon
           resources:
-            {{- toYaml $.Values.resources | nindent 12 }}
+            {{- toYaml (.Values.rtr.resources | default .Values.resources) | nindent 12 }}
           volumeMounts:
           - name: {{ include "castle.fullname" $ }}-builder-config
             mountPath: /opt/config_builder.conf

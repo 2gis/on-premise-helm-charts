@@ -56,25 +56,37 @@ Chart is tested using [pipeline](https://gitlab.2gis.ru/traffic/cicd-pipelines/-
 
 ### [Deployment](https://kubernetes.io/docs/tasks/run-application/run-stateless-application-deployment/) settings
 
-| Name                            | Description                                                                                                                                  | Value   |
-| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `labels`                        | Custom labels to set to Deployment resource                                                                                                  | `{}`    |
-| `annotations`                   | Custom annotations to set to Deployment resource                                                                                             | `{}`    |
-| `replicaCount`                  | A replica count for the pod                                                                                                                  | `1`     |
-| `revisionHistoryLimit`          | Number of replica sets to keep for deployment rollbacks                                                                                      | `1`     |
-| `strategy`                      | Deployment [strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy). Undergoes template rendering          | `{}`    |
-| `podAnnotations`                | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)                                 | `{}`    |
-| `imagePullSecrets`              | Kubernetes image pull secrets                                                                                                                | `[]`    |
-| `podSecurityContext`            | Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)                                | `{}`    |
-| `priorityClassName`             | Kubernetes [Pod Priority](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass) class name         | `""`    |
-| `terminationGracePeriodSeconds` | Maximum time allowed for graceful shutdown                                                                                                   | `60`    |
-| `nodeSelector`                  | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)                           | `{}`    |
-| `affinity`                      | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)                   | `{}`    |
-| `tolerations`                   | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings                             | `[]`    |
-| `enableServiceLinks`            | Services injection into containers environment                                                                                               | `false` |
-| `restartPolicy`                 | Kubernetes pod [restart policy](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy)                            | `""`    |
-| `updateStrategy`                | Kubernetes StatefulSet [update strategy](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies)           | `{}`    |
-| `volumeClaimTemplates`          | Kubernetes StatefulSet [volue claim template](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#volume-claim-templates) | `[]`    |
+| Name                                                | Description                                                                                                                                  | Value            |
+| --------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| `labels`                                            | Custom labels to set to Deployment resource                                                                                                  | `{}`             |
+| `annotations`                                       | Custom annotations to set to Deployment resource                                                                                             | `{}`             |
+| `replicaCount`                                      | A replica count for the pod                                                                                                                  | `1`              |
+| `revisionHistoryLimit`                              | Number of replica sets to keep for deployment rollbacks                                                                                      | `1`              |
+| `strategy`                                          | Deployment [strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy). Undergoes template rendering          | `{}`             |
+| `podAnnotations`                                    | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)                                 | `{}`             |
+| `imagePullSecrets`                                  | Kubernetes image pull secrets                                                                                                                | `[]`             |
+| `podSecurityContext.runAsNonRoot`                   | Indicates that the container must run as a non-root user                                                                                     | `true`           |
+| `podSecurityContext.runAsUser`                      | The User ID (UID) to run the entrypoint of the container process                                                                             | `10001`          |
+| `podSecurityContext.runAsGroup`                     | The primary Group ID (GID) for all processes in the container                                                                                | `10002`          |
+| `podSecurityContext.fsGroup`                        | A special supplemental group ID applied to all volumes mounted by the pod                                                                    | `10001`          |
+| `containerSecurityContext.privileged`               | Runs the container in privileged mode (processes are essentially equivalent to root on the host)                                             | `false`          |
+| `containerSecurityContext.runAsNonRoot`             | Forces the container to run as a non-root user                                                                                               | `true`           |
+| `containerSecurityContext.runAsUser`                | The User ID (UID) to run the container process                                                                                               | `10001`          |
+| `containerSecurityContext.runAsGroup`               | The primary Group ID (GID) for the container process                                                                                         | `10002`          |
+| `containerSecurityContext.allowPrivilegeEscalation` | Controls whether a process can gain more privileges than its parent process                                                                  | `false`          |
+| `containerSecurityContext.readOnlyRootFilesystem`   | Whether this container has a read-only root filesystem                                                                                       | `true`           |
+| `containerSecurityContext.capabilities.drop`        | The Linux capabilities to drop from the container                                                                                            | `["ALL"]`        |
+| `containerSecurityContext.seccompProfile.type`      | The type of seccomp profile to apply (e.g., RuntimeDefault)                                                                                  | `RuntimeDefault` |
+| `priorityClassName`                                 | Kubernetes [Pod Priority](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass) class name         | `""`             |
+| `terminationGracePeriodSeconds`                     | Maximum time allowed for graceful shutdown                                                                                                   | `60`             |
+| `hostAliases`                                       | Kubernetes [host aliases](https://kubernetes.io/docs/tasks/network/customize-hosts-file-for-pods/)                                           | `[]`             |
+| `nodeSelector`                                      | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)                           | `{}`             |
+| `affinity`                                          | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)                   | `{}`             |
+| `tolerations`                                       | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings                             | `[]`             |
+| `enableServiceLinks`                                | Services injection into containers environment                                                                                               | `false`          |
+| `restartPolicy`                                     | Kubernetes pod [restart policy](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy)                            | `""`             |
+| `updateStrategy`                                    | Kubernetes StatefulSet [update strategy](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies)           | `{}`             |
+| `volumeClaimTemplates`                              | Kubernetes StatefulSet [volue claim template](https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#volume-claim-templates) | `[]`             |
 
 ### Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
 
@@ -134,11 +146,12 @@ Chart is tested using [pipeline](https://gitlab.2gis.ru/traffic/cicd-pipelines/-
 
 ### [Service account](https://kubernetes.io/docs/concepts/security/service-accounts/) settings
 
-| Name                         | Description                                                                                                             | Value  |
-| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ------ |
-| `serviceAccount.create`      | Specifies whether a service account should be created.                                                                  | `true` |
-| `serviceAccount.annotations` | Annotations to add to the service account.                                                                              | `{}`   |
-| `serviceAccount.name`        | The name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`   |
+| Name                                          | Description                                                                                                             | Value   |
+| --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ------- |
+| `serviceAccount.create`                       | Specifies whether a service account should be created.                                                                  | `true`  |
+| `serviceAccount.annotations`                  | Annotations to add to the service account.                                                                              | `{}`    |
+| `serviceAccount.name`                         | The name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`    |
+| `serviceAccount.automountServiceAccountToken` | Automount service account token.                                                                                        | `false` |
 
 ### [CronJob](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/) settings
 
@@ -177,22 +190,32 @@ Chart is tested using [pipeline](https://gitlab.2gis.ru/traffic/cicd-pipelines/-
 
 ### [HTTPRoute](https://gateway-api.sigs.k8s.io/api-types/httproute/) configuration
 
-| Name                                | Description                                         | Value            |
-| ----------------------------------- | --------------------------------------------------- | ---------------- |
-| `httpRoute.enabled`                 | If HTTPRoute is enabled for the service.            | `false`          |
-| `httpRoute.hostnames`               | List of hostnames served by route                   | `[]`             |
-| `httpRoute.parentRefs`              | List of parent references (gateways) for HTTPRoute. |                  |
-| `httpRoute.parentRefs[0].name`      | Name for the first default parentRef                | `canary`         |
-| `httpRoute.parentRefs[0].namespace` | Namespace for the first default parentRef           | `istio-gateways` |
-| `httpRoute.parentRefs[1].name`      | Name for the second default parentRef               | `stable`         |
-| `httpRoute.parentRefs[1].namespace` | Namespace for the second default parentRef          | `istio-gateways` |
+| Name                                | Description                                                                                                             | Value            |
+| ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| `httpRoute.enabled`                 | If HTTPRoute is enabled for the service                                                                                 | `false`          |
+| `httpRoute.annotations`             | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) for HTTPRoute. | `{}`             |
+| `httpRoute.labels`                  | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/) for HTTPRoute.           | `{}`             |
+| `httpRoute.hostnames`               | List of hostnames served by route                                                                                       | `[]`             |
+| `httpRoute.parentRefs`              | List of parent references (gateways) for HTTPRoute                                                                      |                  |
+| `httpRoute.parentRefs[0].name`      | Name for the first parentRef                                                                                            | `canary`         |
+| `httpRoute.parentRefs[0].namespace` | Namespace for the first parentRef                                                                                       | `istio-gateways` |
+| `httpRoute.parentRefs[1].name`      | Name for the second parentRef                                                                                           | `stable`         |
+| `httpRoute.parentRefs[1].namespace` | Namespace for the second parentRef                                                                                      | `istio-gateways` |
 
 ### [GRPCRoute](https://gateway-api.sigs.k8s.io/api-types/grpcroute/) configuration
 
-| Name                  | Description                                                                                        | Value |
-| --------------------- | -------------------------------------------------------------------------------------------------- | ----- |
-| `grpcRoute.hostnames` | List of hostnames served by route                                                                  | `[]`  |
-| `grpcRoute.port`      | Destination grpcroute.spec.rules.backendRefs.port number, must be set if grpcRoute.enabled is true | `nil` |
+| Name                                | Description                                                                                                             | Value            |
+| ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| `grpcRoute.enabled`                 | If GRPCRoute is enabled for the service.                                                                                | `false`          |
+| `grpcRoute.annotations`             | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) for GRPCRoute. | `{}`             |
+| `grpcRoute.labels`                  | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/) for GRPCRoute.           | `{}`             |
+| `grpcRoute.hostnames`               | List of hostnames served by route                                                                                       | `[]`             |
+| `grpcRoute.port`                    | Destination grpcroute.spec.rules.backendRefs.port number, must be set if grpcRoute.enabled is true                      | `nil`            |
+| `grpcRoute.parentRefs`              | List of parent references (gateways) for GRPCRoute.                                                                     |                  |
+| `grpcRoute.parentRefs[0].name`      | Name for the first parentRef                                                                                            | `canary`         |
+| `grpcRoute.parentRefs[0].namespace` | Namespace for the first parentRef                                                                                       | `istio-gateways` |
+| `grpcRoute.parentRefs[1].name`      | Name for the second parentRef                                                                                           | `stable`         |
+| `grpcRoute.parentRefs[1].namespace` | Namespace for the second parentRef                                                                                      | `istio-gateways` |
 
 ## Maintainers
 

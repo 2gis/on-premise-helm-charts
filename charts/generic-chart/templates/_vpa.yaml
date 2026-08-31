@@ -18,7 +18,9 @@ spec:
   resourcePolicy:
     containerPolicies:
       - containerName: {{ include "generic-chart.vpaContainerName" $ctx }}
-        controlledValues: {{ .controlledValues }}
+        {{- with .controlledValues }}
+        controlledValues: {{ . }}
+        {{- end }}
         mode: Auto
         {{- with .minAllowed }}
         minAllowed:

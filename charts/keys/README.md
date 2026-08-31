@@ -27,18 +27,19 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `imagePullSecrets`         | Kubernetes image pull secrets.    | `[]`                           |
 | `imagePullPolicy`          | Pull policy.                      | `IfNotPresent`                 |
 | `backend.image.repository` | Backend service image repository. | `2gis-on-premise/keys-backend` |
-| `backend.image.tag`        | Backend service image tag.        | `1.165.1`                      |
+| `backend.image.tag`        | Backend service image tag.        | `1.176.0`                      |
 | `admin.image.repository`   | Admin service image repository.   | `2gis-on-premise/keys-ui`      |
-| `admin.image.tag`          | Admin service image tag.          | `1.7.0`                        |
+| `admin.image.tag`          | Admin service image tag.          | `1.7.7`                        |
 
 ### Flags for enabling/disabling certain features.
 
-| Name                               | Description                                     | Value   |
-| ---------------------------------- | ----------------------------------------------- | ------- |
-| `featureFlags.enableAudit`         | Enable audit logging for sending to DB.         | `false` |
-| `featureFlags.enableAuditKafka`    | Enable audit logging for sending to Kafka.      | `false` |
-| `featureFlags.enablePublicAPISign` | Enable signing responses in Public API.         | `false` |
-| `featureFlags.enableStatRedis`     | Enable receiving monthly statistics from Redis. | `false` |
+| Name                               | Description                                            | Value   |
+| ---------------------------------- | ------------------------------------------------------ | ------- |
+| `featureFlags.enableAudit`         | Enable audit logging for sending to DB.                | `false` |
+| `featureFlags.enableAuditKafka`    | Enable audit logging for sending to Kafka.             | `false` |
+| `featureFlags.enableAuditBSS`      | Enable audit logging for sending to BSS Stat Receiver. | `false` |
+| `featureFlags.enablePublicAPISign` | Enable signing responses in Public API.                | `false` |
+| `featureFlags.enableStatRedis`     | Enable receiving monthly statistics from Redis.        | `false` |
 
 ### Admin service settings
 
@@ -202,6 +203,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `dispatcher.enabled`                                 | If dispatcher worker is deployed.                                                                                                                                                                        | `false`         |
 | `dispatcher.logLevel`                                | Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.                                                                                                                | `warning`       |
 | `dispatcher.replicas`                                | A replica count for the pod.                                                                                                                                                                             | `1`             |
+| `dispatcher.stat.url`                                | Statistics receiver API URL for sending audit events, ex: http://stat-receiver-api. **Required if** `featureFlags.enableAuditBSS: true`                                                                  | `""`            |
 | `dispatcher.auditEvents.sendInterval`                | Send audit events interval                                                                                                                                                                               | `1m`            |
 | `dispatcher.auditEvents.batchMaxSize`                | Max batch size when sending audit events                                                                                                                                                                 | `1000`          |
 | `dispatcher.auditEvents.holdDuration`                | In case of an unsuccessful attempt to send messages, the service will not resend it for a given duration                                                                                                 | `10m`           |
@@ -325,7 +327,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 | `kafka.stats.fetchMax`                  | Maximum fetch size. KB, MB, GB refers to 2^10, 2^20, 2^30 bytes respectively. Plain number refers to bytes. '0' means no limit.                            | `0`         |
 | `kafka.stats.fetchMaxWaitTime`          | Maximum wait time for fetch response.                                                                                                                      | `250ms`     |
 | `kafka.audit`                           | **Settings for sending audit messages.**                                                                                                                   |             |
-| `kafka.audit.topic`                     | Topic to produce audit messages. **Required**                                                                                                              | `""`        |
+| `kafka.audit.topic`                     | Topic to produce audit messages. **Required if** `featureFlags.enableAuditKafka: true`                                                                     | `""`        |
 | `kafka.audit.produce.retryCount`        | Number of retries to produce a message.                                                                                                                    | `5`         |
 | `kafka.audit.produce.idempotentWrite`   | Flag to enable/disable [idempotent write](https://docs.confluent.io/platform/current/installation/configuration/producer-configs.html#enable-idempotence). | `true`      |
 

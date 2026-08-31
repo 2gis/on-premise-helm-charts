@@ -30,16 +30,16 @@ spec:
         {{- with .ingress.explicitNamespacesSelector }}
           # From authorized namespaces
           namespaceSelector:
-            {{ toYaml . | nindent 12 }}
+            {{- toYaml . | nindent 12 }}
         {{- end }}{{- /* with .ingress.explicitNamespacesSelector */}}
-        {{- with .ingress.additionalRules }}
-            # Or from custom additional rules
-          {{ toYaml . | nindent 8 }}
-        {{- end }}{{- /* with .ingress.additionalRules */}}
+      {{- with .ingress.additionalRules }}
+        # Or from custom additional rules
+        {{- toYaml . | nindent 8 }}
+      {{- end }}{{- /* with .ingress.additionalRules */}}
   {{- end }}{{/* if (.ingress).enabled */}}
   {{- if (.egress).enabled }}
   egress:
-    {{ .egress.config | toYaml | nindent 4 }}
+    {{- .egress.config | toYaml | nindent 4 }}
   {{- end }}{{/* if .egress.enabled */}}
 {{- end }}{{/* with .Values.networkPolicy */}}
 {{- end }} {{- /* define */}}

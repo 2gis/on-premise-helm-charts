@@ -1,5 +1,12 @@
 # Core Breaking-Changes
 
+## [2.8.0]
+
+### keys
+
+- Deprecated services removed: Public Transport API (merged into Routing API) and Truck Distance Matrix API (merged into Distance Matrix API)
+- New service added: Static API
+
 ## [2.7.0]
 
 ### keys
