@@ -283,7 +283,7 @@ spec:
                   key: apiKey
                   name: {{ include "pro-api.secretName" . }}
             {{- end }}
-            {{- if .Values.permissions.settings.auth.enabled }}
+            {{- if .Values.permissions.settings.auth.apiKey }}
             - name: Auth__PermissionsApiKey
               valueFrom:
                 secretKeyRef:
@@ -353,7 +353,7 @@ spec:
               value: {{ .Values.permissions.service.port | quote }}
             - name: PermissionsApi__GrpcPort
               value: {{ .Values.permissions.settings.grpcPort | quote }}
-            {{- if .Values.permissions.settings.auth.enabled }}
+            {{- if .Values.permissions.settings.auth.apiKey }}
             - name: PermissionsApi__Key
               valueFrom:
                 secretKeyRef:

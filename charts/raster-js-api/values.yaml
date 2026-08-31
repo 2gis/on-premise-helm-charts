@@ -19,6 +19,13 @@ dgctlDockerRegistry: ''
 # @param tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
 # @param podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
 # @param podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+# @param podSecurityContext Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).
+# @param securityContext Kubernetes [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).
+# @param labels Custom labels to set to Deployment resource.
+# @param annotations Custom annotations to set to Deployment resource.
+# @param priorityClassName Kubernetes [Pod Priority](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/#priorityclass) class name.
+# @param initContainers Add additional init containers.
+# @param sidecars Add additional sidecar containers.
 
 enableServiceLinks: true
 replicaCount: 1
@@ -32,6 +39,13 @@ affinity: {}
 tolerations: []
 podAnnotations: {}
 podLabels: {}
+podSecurityContext: {}
+securityContext: {}
+labels: {}
+annotations: {}
+priorityClassName: ''
+initContainers: []
+sidecars: []
 
 
 # @section Deployment settings
@@ -41,36 +55,35 @@ podLabels: {}
 # @param image.pullPolicy Pull Policy
 
 image:
-  repository: 2gis-on-premise/mapsapi2
-  tag: 0.1.0
+  repository: 2gis-on-premise/raster-js-api
+  tag: 4.1.0
   pullPolicy: IfNotPresent
 
 
-# @section Environment variables
+# @section API settings
 
-# @param env.PUBLIC_HOST **required** Host on which the service will be available, e.g. 'maps-raster.ingress.host'.
-# @param env.MAPSAPI2_PROTOCOL Protocol to use: `http:`, `https:`.
-# @param env.MAPSAPI2_TILE_SERVER URL of the tile server, e.g. 'https://tiles-api.ingress.host/tiles?x={x}&y={y}&z={z}'.
-# @param env.MAPSAPI2_RETINA_TILE_SERVER URL of the retina tile server.
-# @param env.MAPSAPI2_TRAFFIC_TILE_SERVER URL of the traffic tiles server.
-# @param env.MAPSAPI2_TRAFFIC_TIMESTAMP_SERVER URL of the traffic timestamps server.
-# @param env.MAPSAPI2_TRAFFIC_SCORE_SERVER URL of the traffic scores server.
-# @param env.MAPSAPI2_WEB_API_SERVER URL of the Catalog API service, e.g. 'https://catalog-api.ingress.host'.
-# @param env.MAPSAPI2_WEB_API_KEY API key for the Catalog API service.
-# @param env.MAPSAPI2_DEMO_KEY Token from 'keys-api' service. Optional API key that will be included in tile requests.
+# @param api.publicHost **required** Host on which the service will be available, e.g. 'maps-raster.ingress.host'.
+# @param api.protocol Protocol to use: `http:`, `https:`.
+# @param api.tileServerUrl URL of the tile server, e.g. 'https://tiles-api.ingress.host'.
+# @param api.trafficTileServerUrl URL of the traffic tiles server, e.g. 'https://traffic-tiles-api.ingress.host'.
+# @param api.trafficTimestampServerUrl URL of the traffic timestamps server, e.g. 'https://traffic-score.ingress.host'.
+# @param api.trafficScoreServerUrl URL of the traffic scores server, e.g. 'https://traffic-score.ingress.host'.
+# @param api.webApiServerUrl URL of the Catalog API service, e.g. 'https://catalog-api.ingress.host'.
+# @param api.webApiKey API key for the Catalog API service. Stored in a Kubernetes Secret and mounted into the container via `secretKeyRef`.
+# @param api.key Optional API key that will be included in tile requests. Stored in a Kubernetes Secret and mounted into the container via `secretKeyRef`.
+# @param api.keyServerUrl Keys-api service URL, e.g. 'https://keys-api.ingress.host/public/v1/keys/'
 
-env:
-  PUBLIC_HOST: ''
-  MAPSAPI2_PROTOCOL: 'https:'
-  MAPSAPI2_TILE_SERVER: ''
-  MAPSAPI2_RETINA_TILE_SERVER: ''
-  MAPSAPI2_TRAFFIC_TILE_SERVER: ''
-  MAPSAPI2_TRAFFIC_TIMESTAMP_SERVER: ''
-  MAPSAPI2_TRAFFIC_SCORE_SERVER: ''
-  MAPSAPI2_WEB_API_SERVER: ''
-  MAPSAPI2_WEB_API_KEY: ''
-  MAPSAPI2_DEMO_KEY: ''
-
+api:
+  publicHost: ''
+  protocol: 'https:'
+  tileServerUrl: ''
+  trafficTileServerUrl: ''
+  trafficTimestampServerUrl: ''
+  trafficScoreServerUrl: ''
+  webApiServerUrl: ''
+  webApiKey: ''
+  key: ''
+  keyServerUrl: ''
 
 # @section Strategy settings
 
@@ -85,17 +98,31 @@ strategy:
     maxSurge: 1
 
 
+# @section Service account settings
+
+# @param serviceAccount.create Specifies whether a service account should be created.
+# @param serviceAccount.annotations Annotations to add to the service account.
+# @param serviceAccount.name The name of the service account to use. If not set and create is true, a name is generated using the fullname template.
+
+serviceAccount:
+  create: false
+  annotations: {}
+  name: ''
+
+
 # @section Service settings
 
 # @param service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
 # @param service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
 # @param service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
 # @param service.port Service port.
+# @param service.clusterIP Controls Service cluster IP allocation. Cannot be changed after resource creation.
 
 service:
   annotations: {}
   labels: {}
   type: ClusterIP
+  clusterIP: ''
   port: 80
 
 
@@ -112,14 +139,25 @@ ingress:
   enabled: false
   className: nginx
   hosts:
-  - host: mapsapi2.example.com
+  - host: raster-js-api.example.com
     paths:
     - path: /
       pathType: Prefix
   tls: []
   # - hosts:
-  #   - mapsapi2.example.com
+  #   - raster-js-api.example.com
   #   secretName: secret.tls
+
+
+# @section [HTTPRoute](https://gateway-api.sigs.k8s.io/api-types/httproute/) configuration
+
+# @param httpRoute.enabled If HTTPRoute is enabled for the service.
+# @param httpRoute.hostnames List of hostnames served by route.
+# @extra httpRoute.parentRefs List of parent references (gateways) for HTTPRoute.
+
+httpRoute:
+  enabled: false
+  hostnames: []
 
 
 # @section Limits
@@ -138,6 +176,42 @@ resources:
     memory: 192Mi
 
 
+# @section Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
+
+# @param hpa.enabled If HPA is enabled for the service.
+# @param hpa.minReplicas Lower limit for the number of replicas to which the autoscaler can scale down.
+# @param hpa.maxReplicas Upper limit for the number of replicas to which the autoscaler can scale up.
+# @param hpa.scaleDown Scale-down settings structure.
+# @param hpa.scaleUp Scale-up settings structure.
+# @param hpa.targetCPUUtilizationPercentage Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.
+# @param hpa.targetMemoryUtilizationPercentage Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used.
+
+hpa:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 2
+  scaleDown: {}
+  scaleUp: {}
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: ''
+
+
+# @section Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings
+
+# @param vpa.enabled If VPA is enabled for the service.
+# @param vpa.updateMode VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start).
+# @param vpa.controlledValues Controlled values, one of: RequestsOnly or RequestsAndLimits.
+# @extra vpa.minAllowed.cpu Lower limit for the number of CPUs to which the autoscaler can scale down.
+# @extra vpa.minAllowed.memory Lower limit for the RAM size to which the autoscaler can scale down.
+# @extra vpa.maxAllowed.cpu Upper limit for the number of CPUs to which the autoscaler can scale up.
+# @extra vpa.maxAllowed.memory Upper limit for the RAM size to which the autoscaler can scale up.
+
+vpa:
+  enabled: false
+  updateMode: Auto
+  controlledValues: RequestsOnly
+
+
 # @section Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
 # @param pdb.enabled If PDB is enabled for the service.
@@ -150,41 +224,15 @@ pdb:
   maxUnavailable: 1
 
 
-# @section Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
+# @section customCAs **Custom Certificate Authority**
 
-# @param hpa.enabled If HPA is enabled for the service.
-# @param hpa.minReplicas Lower limit for the number of replicas to which the autoscaler can scale down.
-# @param hpa.maxReplicas Upper limit for the number of replicas to which the autoscaler can scale up.
-# @param hpa.scaleDownStabilizationWindowSeconds Scale-down window.
-# @param hpa.scaleUpStabilizationWindowSeconds Scale-up window.
-# @param hpa.targetCPUUtilizationPercentage Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used.
-# @param hpa.targetMemoryUtilizationPercentage Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used.
+# @param customCAs.bundle Custom CA [text representation of the X.509 PEM public-key certificate](https://www.rfc-editor.org/rfc/rfc7468#section-5.1)
+# @param customCAs.certsPath Custom CA bundle mount directory in the container. If empty, the default value: "/usr/local/share/ca-certificates"
 
-hpa:
-  enabled: false
-  minReplicas: 1
-  maxReplicas: 2
-  scaleDownStabilizationWindowSeconds: ''
-  scaleUpStabilizationWindowSeconds: ''
-  targetCPUUtilizationPercentage: 80
-  targetMemoryUtilizationPercentage: ''
-
-
-# @section Kubernetes [Vertical Pod Autoscaling](https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/README.md) settings
-
-# @param vpa.enabled If VPA is enabled for the service.
-# @param vpa.updateMode VPA [update mode](https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler#quick-start).
-# @param vpa.minAllowed.cpu Lower limit for the number of CPUs to which the autoscaler can scale down.
-# @param vpa.minAllowed.memory Lower limit for the RAM size to which the autoscaler can scale down.
-# @param vpa.maxAllowed.cpu Upper limit for the number of CPUs to which the autoscaler can scale up.
-# @param vpa.maxAllowed.memory Upper limit for the RAM size to which the autoscaler can scale up.
-
-vpa:
-  enabled: false
-  updateMode: Auto
-  minAllowed:
-    cpu: 100m
-    memory: 100Mi
-  maxAllowed:
-    cpu: 200m
-    memory: 200Mi
+customCAs:
+  bundle: ''
+# bundle: |
+    # -----BEGIN CERTIFICATE-----
+    # ...
+    # -----END CERTIFICATE-----
+  certsPath: ''

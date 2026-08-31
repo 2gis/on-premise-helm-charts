@@ -1,12 +1,5 @@
 # PRO Breaking-Changes
 
-## [2.5.0]
-
-### pro-api
-
-- If CityLens filter synchronization is used, the synchronization token must be granted the `edit` permission on the `asset` resource type.
-- `permissions.settings.auth.enabled` and `authProvider.enabled` can now be disabled. Both parameters must be set consistently: either both `true` or both `false`.
-
 ## [2.4.0]
 
 ### pro-api

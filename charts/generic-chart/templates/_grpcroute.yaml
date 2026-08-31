@@ -1,26 +1,23 @@
 {{- define "generic-chart.grpcRoute.tpl" -}}
-{{- if (.Values.grpcRoute).enabled -}}
 {{- include "generic-chart.checkHostnames" $ -}}
 apiVersion: gateway.networking.k8s.io/v1
 kind: GRPCRoute
 metadata:
   name: {{ include "generic-chart.fullname" . }}
-  labels:
-    {{- include "generic-chart.labels" . | nindent 4 }}
-    {{- with .Values.grpcRoute.labels }}
-    {{- include "tplvalues.render" (dict "value" . "context" $) | nindent 4 }}
-    {{- end }}
-  {{- with .Values.grpcRoute.annotations }}
-  annotations:
-    {{- include "tplvalues.render" (dict "value" . "context" $) | nindent 4 }}
-  {{- end }}
 spec:
   {{- with .Values.grpcRoute.hostnames }}
   hostnames:
     {{- . | toYaml | nindent 4 }}
   {{- end }}
   parentRefs:
-    {{- include "generic-chart.grpcRouteParentRefs" . | nindent 4 }}
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: canary
+      namespace: istio-gateways
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: stable
+      namespace: istio-gateways
   rules:
     - backendRefs:
         - group: ""
@@ -28,5 +25,4 @@ spec:
           name: {{  include "generic-chart.fullname" . }}
           port: {{ required "grpcRoute.port is required" (.Values.grpcRoute).port }}
           weight: 1
-{{- end }}{{/* if enabled */}}
 {{- end }}{{/* define */}}
