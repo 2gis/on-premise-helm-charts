@@ -54,7 +54,7 @@ terminationGracePeriodSeconds: 60
 image:
   repository: 2gis-on-premise/navi-splitter
   pullPolicy: IfNotPresent
-  tag: 1.15.0
+  tag: 1.17.0
 
 # @section Splitter application settings
 
@@ -290,7 +290,7 @@ envoy:
   image:
     repository: 2gis-on-premise/navi-envoy
     pullPolicy: IfNotPresent
-    tag: 1.38.1-tools
+    tag: 1.38.3
   resources: {}
   systemLogs:
     logLevel: info

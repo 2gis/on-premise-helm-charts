@@ -144,7 +144,7 @@ castle:
   image:
     repository: 2gis-on-premise/navi-castle
     pullPolicy: IfNotPresent
-    tag: 1.10.8
+    tag: 1.12.1
   castleDataPath: /opt/castle/data
   restrictions:
     url: ''
@@ -181,7 +181,7 @@ nginx:
   port: 8080
   image:
     repository: 2gis-on-premise/navi-front
-    tag: 1.29.1
+    tag: 1.31.2
   nodeHeader: false
   locationsBlock: ''
   customConfigPath: ''
