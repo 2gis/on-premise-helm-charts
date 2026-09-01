@@ -81,7 +81,7 @@ customReadinessProbe: {}
 image:
   repository: 2gis-on-premise/navi-front
   pullPolicy: IfNotPresent
-  tag: 1.31.2
+  tag: 1.31.3
 
 
 # @section Navi-Front service settings
