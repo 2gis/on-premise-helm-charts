@@ -92,8 +92,8 @@ api:
 
 nginx:
   image:
-    repository: 2gis-on-premise/nginx
-    tag: 1.30.4
+    repository: 2gis-on-premise/nginx-alpine
+    tag: 3.1.20
     pullPolicy: IfNotPresent
   resources: {}
   httpPort: 8080
