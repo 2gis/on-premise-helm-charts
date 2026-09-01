@@ -3,7 +3,7 @@ name: license
 type: application
 description: A Helm chart for Kubernetes to deploy License service
 
-version: 2.9.0
+version: 2.10.0
 appVersion: 2.6.1
 
 maintainers:

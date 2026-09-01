@@ -1,7 +1,9 @@
 # 2GIS On-Premise Helm Charts — Code Review Instructions
 
 This repository contains Helm charts for deploying 2GIS On-Premise products on Kubernetes.
-Charts share a common library chart (`generic-chart`) and follow internal coding standards.
+Charts may optionally share a common library chart (`generic-chart`) and follow internal coding standards.
+
+Use `/home/runner/work/on-premise-helm-charts/on-premise-helm-charts/styleguide.md` as the primary source of chart authoring rules. Treat this file as a review checklist and summary, not as a replacement for the styleguide.
 
 ## Review Language
 
@@ -13,6 +15,7 @@ When performing a code review, respond in **Russian**.
 - `changelogs/` — per-product-group changelogs (`core/`, `platform/`, `pro/`, `citylens/`, `evergis/`)
   - Breaking changes are tracked in `changelogs/<group>/*-Breaking-Changes.md`
   - `Breaking-Changes.md` at the repo root is an index that links to the group files
+  - files in this directory are updated only by release scripts and must not be edited manually
 - `.github/workflows/` — CI: `lint.yaml`, `check-readme.yaml`, `release.yaml`, `release-oci.yaml`
 - `CONTRIBUTING.md` — branching model (Gitflow, PRs target `develop`)
 
@@ -71,6 +74,7 @@ When performing a code review, flag the following:
 - Non-empty string default written with quotes (should be without)
 - Empty string default written without quotes (should be `''`)
 - Integer default written as a quoted string (e.g., `port: '5432'` should be `port: 5432`)
+- Information size units are written inconsistently (use consistent Kubernetes-style units such as `Ki`, `Mi`, `Gi`, `Ti`)
 - Service URL parameter description missing the recommended URL format hint (`http://{service-name}.svc`, etc.)
 - Template file name uses camelCase instead of dashed notation
 - Named template not namespaced with chart name
@@ -85,3 +89,5 @@ When performing a code review, flag the following:
 - `endpoint` or `url` used instead of `host` in s3 block
 - `servers` or `bootstrapServer` used instead of `bootstrapServers` in kafka block
 - Data import service block not named `importer`
+- Chart declares a `generic-chart` dependency but manually implements standard resources (Deployment, Service, Ingress, HPA, VPA, PDB, ServiceAccount) instead of using `generic-chart.*.tpl` templates
+- Chart without a `generic-chart` dependency flagged for missing the dependency — `generic-chart` is optional; manual template implementation is acceptable
