@@ -14,6 +14,10 @@ helmfiles:
 - path: {{ .Values.basePath }}/services/api-platform/styles.yaml.gotmpl
 - path: {{ .Values.basePath }}/services/api-platform/mapgl.yaml.gotmpl
 - path: {{ .Values.basePath }}/services/api-platform/search.yaml.gotmpl
+# Search API v8 (опционально): альтернативный бэкенд для Catalog API.
+# Задействуйте вместо search-api, раскомментировав строку ниже и задав search.url в values каталога.
+# - path: {{ .Values.basePath }}/services/api-platform/search-api-v8.yaml.gotmpl
+- path: {{ .Values.basePath }}/services/api-platform/raster-js-api.yaml.gotmpl
 - path: {{ .Values.basePath }}/services/api-platform/tiles.yaml.gotmpl
 - path: {{ .Values.basePath }}/services/api-platform/staticmaps.yaml.gotmpl
 - path: {{ .Values.basePath }}/services/api-platform/catalog.yaml.gotmpl

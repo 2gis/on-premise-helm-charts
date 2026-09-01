@@ -33,7 +33,7 @@ values:
     # chartLocation: ../../../on-premise-helm-charts/charts
     chartLocation: oci://ghcr.io/2gis/charts
 
-    ingressController: nginx # TODO nginx/traefik
+    ingressController: nginx # nginx/traefik
     ingressClassName: {{ .Values.ingressController }}
 
     ingressTls: true
@@ -44,6 +44,7 @@ values:
     catalogIngress: catalog-api.{{ .Values.domain }}
     searchIngress: search-api.{{ .Values.domain }}
     searchIngressV8: search-api-v8.{{ .Values.domain }}
+    rasterJsApiIngress: raster-js-api.{{ .Values.domain }}
     tilesMultiIngress: tiles-api.{{ .Values.domain }}
     tilesRasterIngress: tiles-api-raster.{{ .Values.domain }}
     mapglIngress: mapgl-js-api.{{ .Values.domain }}
@@ -85,6 +86,7 @@ values:
     timeoutNaviBack: 600
     timeoutProApi: 3600
     timeoutSearch: 600
+    timeoutRasterJsApi: 600
     timeoutStyles: 600
     timeoutTiles: 7200
     timeoutTrafficProxy: 300

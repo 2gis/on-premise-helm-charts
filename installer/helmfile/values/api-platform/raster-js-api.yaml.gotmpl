@@ -1,0 +1,37 @@
+{{- $protocol := ternary "https" "http" .Values.ingressTls }}
+
+api:
+  publicHost: '{{ $protocol }}://{{ .Values.rasterJsApiIngress }}'
+  protocol: '{{ $protocol }}:'
+  tileServerUrl: '{{ $protocol }}://{{ .Values.tilesRasterIngress }}'
+  trafficTileServerUrl: '' # необходим отдельный прокси до растровых пробок
+  {{- $traffic := ternary (printf "%s://%s" $protocol .Values.trafficProxyMapIngress) "" (has (lower .Values.proxyMode) (list "map" "full")) }}
+  trafficTimestampServerUrl: '{{ $traffic }}'
+  trafficScoreServerUrl: '{{ $traffic }}'
+  webApiServerUrl: '{{ $protocol }}://{{ .Values.catalogIngress }}'
+  keyServerUrl: '{{ $protocol }}://{{ .Values.keysApiIngress }}/public/v1/keys/'
+  webApiKey: '{{ .Values.key }}'
+  key: '{{ .Values.key }}'
+
+ingress:
+  enabled: true
+  className: {{ .Values.ingressClassName }}
+  hosts:
+  - host: {{ .Values.rasterJsApiIngress }}
+    paths:
+    - path: /
+      pathType: Prefix
+  {{- if .Values.ingressTls }}
+  tls:
+  - hosts:
+    - {{ .Values.rasterJsApiIngress }}
+    secretName: {{ .Values.tlsSecret }}
+  {{- end }}
+
+resources:
+  requests:
+    cpu: 30m
+    memory: 32Mi
+  limits:
+    cpu: 100m
+    memory: 128Mi

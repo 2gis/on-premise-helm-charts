@@ -1,7 +1,7 @@
 {{- $protocol := ternary "https" "http" .Values.ingressTls }}
 ui:
   brand: 2gis
-  pages: "status,playground,map_styles,license" # TODO
+  pages: "status,playground,map_styles,license"
   status:
     mapgl: "MapGL JS={{ $protocol }}://{{ .Values.mapglIngress }},Tiles API={{ $protocol }}://{{ .Values.tilesMultiIngress }}/healthcheck"
     search: "Catalog API={{ $protocol }}://{{ .Values.catalogIngress }},Search API={{ $protocol }}://{{ .Values.searchIngress }}/v2/status"

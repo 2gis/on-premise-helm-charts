@@ -196,6 +196,7 @@ helmfile -e <env> -f $HELMFILE_VALUES/deploy/<env>.yaml.gotmpl apply --selector 
 | Styles API | Управление стилями карт | PostgreSQL, S3 | — |
 | Search API | Поиск мест, геокодирование, подсказки | S3 | — |
 | Search API v8 (опционально) | Новая версия Search API | S3 | — |
+| Raster JS API | Растровые карты (Leaflet) | — | Tiles API, Catalog API, Keys API |
 | Catalog API | Каталог данных | PostgreSQL + PostGIS, S3 | License |
 | Navi-Castle | Распределение данных для маршрутизации | S3, Kafka (опц.) | — |
 | Navi-Back | Построение маршрутов | Kafka (опц.), S3 (опц.) | Navi-Castle, License, Traffic Proxy (опц.) |
