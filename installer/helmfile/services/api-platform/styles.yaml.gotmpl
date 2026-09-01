@@ -13,6 +13,7 @@ releases:
       group: api-platform
       service: styles
     values:
+      - {{ .Values.basePath }}/../dgctl/auto_values/api-platform/general.yaml
       - {{ .Values.basePath }}/values/dgctl.yaml.gotmpl
       - {{ .Values.basePath }}/values/ingressAnnotations.yaml.gotmpl
       - {{ .Values.valuesPath }}/values/ingressAnnotations/{{ .Environment.Name }}.yaml.gotmpl
