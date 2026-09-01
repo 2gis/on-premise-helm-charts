@@ -66,7 +66,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/traffic-proxy) to le
 | ------------------ | ----------- | ---------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-front` |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`               |
-| `image.tag`        | Tag         | `1.31.2`                     |
+| `image.tag`        | Tag         | `1.31.3`                     |
 
 ### Strategy settings
 
