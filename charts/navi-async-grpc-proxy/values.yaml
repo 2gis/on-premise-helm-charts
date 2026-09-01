@@ -43,7 +43,7 @@ labels: {}
 image:
   repository: 2gis-on-premise/async-grpc-proxy
   pullPolicy: IfNotPresent
-  tag: 1.0.0
+  tag: 1.3.1
 
 
 # @section async-grpc-proxy application settings

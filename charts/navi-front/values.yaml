@@ -81,7 +81,7 @@ customReadinessProbe: {}
 image:
   repository: 2gis-on-premise/navi-front
   pullPolicy: IfNotPresent
-  tag: 1.29.1
+  tag: 1.31.2
 
 
 # @section Navi-Front service settings
@@ -246,6 +246,7 @@ pdb:
 # @section Nginx container
 
 # @param nginx.customConfigPath Path to custom nginx config file. If set, default config will be ignored.
+# @param nginx.mainConfig.omitUserWhenRunAsNonRoot Omit the nginx user directive when podSecurityContext.runAsUser is non-root.
 # @param nginx.setRealIpFrom Defines trusted addresses that are known to send correct replacement addresses
 # @param nginx.opentracing.enabled If opentracing enabled for nginx requests
 # @param nginx.opentracing.serviceName Service name sent to jaeger
@@ -261,6 +262,8 @@ pdb:
 
 nginx:
   customConfigPath: ''
+  mainConfig:
+    omitUserWhenRunAsNonRoot: true
   setRealIpFrom: 127.0.0.1
   opentracing:
     enabled: false
@@ -280,12 +283,10 @@ nginx:
 
 # @param locationBlock Optional nginx config block with additional locations
 # @param carroutingLocation Override for default /carrouting
-# @param distMatrixCtxLocation Override for default /get_dist_matrix_ctx
 # @param hullLocation Override for default /get_hull
 # @param multimodLocation Override for default /ctx_multi_mod and /find_platforms if enabled with `front.multimod.enabled`
 
 locationBlock: ''
 carroutingLocation: ''
-distMatrixCtxLocation: ''
 hullLocation: ''
 multimodLocation: ''

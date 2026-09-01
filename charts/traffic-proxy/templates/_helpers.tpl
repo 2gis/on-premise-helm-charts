@@ -40,8 +40,8 @@
 {{/*Location for proxy*/}}
 {{- define "locationDG" -}}
 {{/* 1. ECA endpoints*/}}
-location = /eca/traffic/moses/speeds5.json {
-    rewrite ^ /api/v1/services/navi/proxy/eca-index/traffic/moses/speeds5.json break;
+location ~ ^/eca/traffic/moses/speeds5\.json(\.zip)?$ {
+    rewrite ^/eca/(.*)$ /api/v1/services/navi/proxy/eca-index/$1 break;
     {{- include "proxyParams" . }}
 }
 
