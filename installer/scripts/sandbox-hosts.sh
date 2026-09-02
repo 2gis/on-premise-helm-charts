@@ -53,8 +53,8 @@ if [ ! -f "${COMMON}" ]; then
 fi
 
 # Домены из helmfile (ingress) + служебные хосты (S3)
-HOSTS=$(grep -oE "^    [a-zA-Z0-9]+Ingress: [a-z0-9-]+\.\{\{ \.Values\.domain \}\}" "${COMMON}" \
-  | sed -E "s/^    [a-zA-Z0-9]+Ingress: //; s/\{\{ \.Values\.domain \}\}/${DOMAIN}/" | sort -u)
+HOSTS=$(grep -oE "^ *(- )?[a-zA-Z0-9]+Ingress: [a-z0-9-]+\.\{\{ \.Values\.domain \}\}" "${COMMON}" \
+  | sed -E "s/^ *(- )?[a-zA-Z0-9]+Ingress: //; s/\{\{ \.Values\.domain \}\}/${DOMAIN}/" | sort -u)
 HOSTS="${HOSTS}
 s3.${DOMAIN}"
 

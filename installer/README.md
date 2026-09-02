@@ -316,11 +316,21 @@ kubernetes-ready пример API-платформы (infra + core + api-platfor
    ```bash
    kind create cluster --config installer/scripts/kind-config.yaml
    kubectl create namespace sandbox
-   docker run -d --name kind-registry -p 5000:5000 --restart=always registry:2
+   docker run -d --name kind-registry -p 5000:5000 --restart=always registry:3
    docker network connect kind kind-registry 2>/dev/null || true
    ```
-   Конфиг kind (`installer/scripts/kind-config.yaml`) включает `containerdConfigPatches` для доверия
-   registry `kind-registry:5000` (HTTP, без TLS). Порты 80/443 проброшены на хост.
+   Порты 80/443 проброшены на хост (`extraPortMappings` в `installer/scripts/kind-config.yaml`).
+
+   Доверие к HTTP-registry `kind-registry:5000` настраивается через `hosts.toml` в каждой ноде
+   (см. [kind docs: local registry](https://kind.sigs.k8s.io/docs/user/local-registry/)):
+   ```bash
+   for node in $(kind get nodes --name 2gis-on-premise); do
+     docker exec "$node" mkdir -p /etc/containerd/certs.d/kind-registry:5000
+     printf '[host."http://kind-registry:5000"]\n' | \
+       docker exec -i "$node" cp /dev/stdin /etc/containerd/certs.d/kind-registry:5000/hosts.toml
+     docker exec "$node" systemctl restart containerd
+   done
+   ```
 
    > `prepare`-хук в `deploy/sandbox.yaml.gotmpl` также создаёт kind-кластер автоматически
    > при запуске `helmfile -e sandbox apply`.
@@ -364,8 +374,12 @@ kubernetes-ready пример API-платформы (infra + core + api-platfor
 6. **Развёртывание API-платформы** (21 сервис: search, tiles, catalog, navi, styles, mapgl, …):
    ```bash
    helmfile -e sandbox -f installer/helmfile/example/deploy/sandbox.yaml.gotmpl apply \
-     --selector group=api-platform
+     --selector group=api-platform \
+     --diff-args --skip-schema-validation --args --skip-schema-validation
    ```
+
+   > **`--skip-schema-validation`** нужен, потому что values-схемы api-platform-чартов не принимают
+   > `dgctlDockerRegistry` в формате `host:port` (в sandbox — `kind-registry:5000`).
 
 7. **Доступ** — сервисы доступны по hostname `*.sandbox` (например `http://search-api.sandbox`).
    Добавьте в `/etc/hosts` блок из `installer/scripts/sandbox-hosts.sh`

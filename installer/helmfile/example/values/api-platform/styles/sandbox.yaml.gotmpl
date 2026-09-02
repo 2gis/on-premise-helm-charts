@@ -1,6 +1,10 @@
 # Styles override for the `sandbox` (kind) environment — in-cluster PostgreSQL and MinIO.
 s3:
-  host: http://minio:9000
+  host: minio:9000
+  secure: false
+
+stylesImport:
+  startOnDeploy: true
 
 postgres:
   host: postgresql

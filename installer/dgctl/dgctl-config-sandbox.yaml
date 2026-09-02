@@ -17,6 +17,6 @@ docker:
     image-prefix: /
 components:
   core:
-    version: 2.9.0
+    version: 2.10.0
   api-platform:
-    version: 2.56.0
+    version: 2.57.0
