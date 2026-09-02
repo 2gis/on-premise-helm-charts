@@ -13,9 +13,9 @@ proxy:
   access:
     enabled: true
     vector:
-      token: '{{ .Values.key }}'
+      token: '4df2b7c6-9635-4555-9709-3342d17fdf7a' # predefined.service: tiles-api
     raster:
-      token: '{{ .Values.key }}'
+      token: '1336f9e5-2de5-4a97-b3ff-eb9431eb5da9' # predefined.service: tiles-raster-api
     syncPeriod: 2m
 
 importer:
@@ -24,6 +24,7 @@ importer:
   writerNum: 1
 
 api:
+  replicaCount: 1
   resources:
     requests:
       cpu: 100m
