@@ -1,0 +1,43 @@
+resources:
+  limits:
+    cpu: "1"
+    memory: 1Gi
+  requests:
+    cpu: "250m"
+    memory: 64Mi
+
+dm:
+  key: {{ .Values.key }}
+  url: http://navi-async-matrix/create_task/get_dist_matrix
+
+keys:
+  url: http://keys-service-api/service/v1/keys
+
+cities:
+  linkToCitiesFile: http://navi-castle/cities.conf
+
+kafka:
+  # shared with solver
+  statusTopic: navi.{{ .Environment.Name }}.vrp.status.topic
+  taskTopic: navi.{{ .Environment.Name }}.vrp.task.topic
+  # shared with dm-async-matrix
+  messageBusTopic: navi.{{ .Environment.Name }}.vrp.dm.status.topic
+  solver:
+    groupId: navi_{{ .Environment.Name }}_vrp_task_manager
+  dm:
+    groupId: navi_{{ .Environment.Name }}_vrp_task_manager
+
+ingress:
+  enabled: true
+  className: {{ .Values.ingressClassName }}
+  hosts:
+  - host: {{ .Values.naviVrpTaskManagerIngress }}
+    paths:
+    - path: /
+      pathType: Prefix
+  {{- if .Values.ingressTls }}
+  tls:
+  - hosts:
+    - {{ .Values.naviVrpTaskManagerIngress }}
+    secretName: {{ .Values.tlsSecret }}
+  {{- end }}

@@ -1,0 +1,27 @@
+---
+bases:
+- {{ env "HELMFILE_BASE" | default (printf "%s/installer/helmfile" (env "PWD")) }}/common.yaml.gotmpl
+
+---
+releases:
+  - name: kafka
+    chart: {{ .Values.chartLocationBitnami }}/kafka
+    version: 31.5.0
+    namespace: {{ .Values.namespace  }}
+    kubeContext: {{ .Values.kubeContext }}
+    atomic: true
+    wait: true
+    waitForJobs: true
+    timeout: 600
+    labels:
+      group: infra
+      service: kafka
+    missingFileHandler: Warn
+    values:
+      - {{ .Values.basePath }}/values/infra/kafka.yaml.gotmpl
+      - {{ .Values.valuesPath }}/values/infra/kafka/{{ .Environment.Name }}.yaml.gotmpl
+    hooks:
+{{- $hooksPath := printf "%s/hooks/infra/kafka/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $hooksPath }}
+{{- readFile $hooksPath | fromYaml | toYaml | nindent 4 }}
+{{- end }}

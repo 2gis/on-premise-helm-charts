@@ -1,0 +1,14 @@
+ingress:
+  enabled: true
+  className: {{ .Values.ingressClassName }}
+  hosts:
+  - host: {{ .Values.searchIngressV8 }}
+    paths:
+    - path: /
+      pathType: Prefix
+  {{- if .Values.ingressTls }}
+  tls:
+  - hosts:
+    - {{ .Values.searchIngressV8 }}
+    secretName: {{ .Values.tlsSecret }}
+  {{- end }}

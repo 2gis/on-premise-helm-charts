@@ -1,0 +1,16 @@
+---
+bases:
+- {{ env "HELMFILE_BASE" | default (printf "%s/installer/helmfile" (env "PWD")) }}/common.yaml.gotmpl
+
+---
+helmfiles:
+- path: {{ .Values.basePath }}/services/infra/nginx-ingress-controller.yaml.gotmpl
+- path: {{ .Values.basePath }}/services/infra/sandbox-infra
+- path: {{ .Values.basePath }}/services/infra/redis.yaml.gotmpl
+# - path: ../services/license.yaml
+
+# hooks:
+# - events: ["prepare"]
+#   showlogs: true
+#   command: "kind"
+#   args: ["create", "cluster", "--name", "2gis-on-premise"]

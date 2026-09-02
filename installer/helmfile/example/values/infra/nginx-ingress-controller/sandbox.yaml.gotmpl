@@ -1,0 +1,29 @@
+image:
+  registry: registry.example.com
+  repository: docker-io/bitnamilegacy/nginx-ingress-controller
+
+defaultBackend:
+  image:
+    registry: registry.example.com
+    repository: docker-io/bitnamilegacy/nginx
+
+kind: DaemonSet
+daemonset:
+  useHostPort: true
+  hostPorts:
+    http: 80
+    https: 443
+
+service:
+  type: NodePort
+#  nodePorts:
+#    http: 80
+#    https: 443
+
+# nodeSelector:
+#   ingress-ready: "true"
+tolerations:
+  - key: node-role.kubernetes.io/control-plane
+    operator: Exists
+
+namespaceOverride: "kube-system"

@@ -1,0 +1,21 @@
+image:
+  registry: registry.example.com
+  repository: docker-io/bitnamilegacy/minio
+
+console:
+  enabled: false
+  image:
+    registry: registry.example.com
+    repository: docker-io/bitnamilegacy/minio-object-browser
+
+clientImage:
+  registry: registry.example.com
+  repository: docker-io/bitnamilegacy/minio-client
+
+persistence:
+  enabled: true
+  size: 30Gi
+  storageClass: "standard"
+
+statefulset:
+  replicaCount: 1

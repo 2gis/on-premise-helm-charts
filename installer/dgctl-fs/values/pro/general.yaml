@@ -1,0 +1,5 @@
+# TODO Добавить в этот файл в gitignore
+dgctlStorage:
+    manifest: manifests/pro/00000000000.json
+license:
+    type: 1

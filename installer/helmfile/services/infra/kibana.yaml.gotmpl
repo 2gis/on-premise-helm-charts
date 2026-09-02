@@ -1,0 +1,32 @@
+---
+bases:
+- {{ env "HELMFILE_BASE" | default (printf "%s/installer/helmfile" (env "PWD")) }}/common.yaml.gotmpl
+
+---
+releases:
+  - name: kibana
+    chart: {{ .Values.chartLocationBitnami }}/kibana
+    version: 11.5.2
+    namespace: {{ .Values.namespace }}
+    kubeContext: {{ .Values.kubeContext }}
+    timeout: 300
+    labels:
+      service: kibana
+      group: infra
+    values:
+      - {{ .Values.basePath }}/values/infra/kibana.yaml.gotmpl
+      - {{ .Values.valuesPath }}/values/infra/kibana/{{ .Environment.Name }}.yaml.gotmpl
+    hooks:
+    - events: ["postsync"]
+      showlogs: true
+      command: "bash"
+      args:
+        - "{{ .Values.basePath }}/../scripts/k8s-show-logs.sh"
+        - "{{ .Values.kubeContext }}"
+        - "{{ .Values.namespace }}"
+        - "{{`{{ .Release.Name }}`}}"
+        - '{{`{{ if .Event.Error }}failure{{ end }}`}}'
+{{- $hooksPath := printf "%s/hooks/infra/kibana/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $hooksPath }}
+{{- readFile $hooksPath | fromYaml | toYaml | nindent 4 }}
+{{- end }}

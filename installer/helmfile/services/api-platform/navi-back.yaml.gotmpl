@@ -1,0 +1,262 @@
+---
+bases:
+- {{ env "HELMFILE_BASE" | default (printf "%s/installer/helmfile" (env "PWD")) }}/common.yaml.gotmpl
+
+---
+templates:
+  default:
+    namespace: {{ .Values.namespace  }}
+    version: {{ .Values.versionPlatform }}
+    missingFileHandler: Warn
+    timeout: {{ .Values.timeoutNaviBack }}
+    kubeContext: {{ .Values.kubeContext }}
+    values:
+      - {{ .Values.basePath }}/values/dgctl.yaml.gotmpl
+    hooks:
+    - events: ["postsync"]
+      showlogs: true
+      command: "bash"
+      args:
+        - "{{ .Values.basePath }}/../scripts/k8s-show-logs.sh"
+        - "{{ .Values.kubeContext }}"
+        - "{{ .Values.namespace }}"
+        - "{{`{{ .Release.Name }}`}}"
+        - '{{`{{ if .Event.Error }}failure{{ end }}`}}'
+
+releases:
+
+# Синхронный деплой — управляется через {env}-rules.yaml.gotmpl
+
+{{- $path := printf "%s/values/api-platform/navi-rules/%s-rules.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- $vals := tpl (readFile $path) . | fromYaml -}}
+{{- range $service := $vals.rules }}
+
+  - name: navi-back-{{ $service.name }}
+    inherit:
+    - template: default
+    chart: {{ $.Values.chartLocation }}/navi-back
+    labels:
+      group: api-platform
+      service: {{ $service.name }}
+    set:
+      - name: naviback.appRule
+        value: {{ $service.name }}
+      - name: remoteAttractor.host
+        value: navi-attr-{{ $service.name }}
+      - name: remoteAttractor.enabled
+        value: true
+      {{- if or (mustHas "get_dist_matrix" $service.queries) (mustHas "get_pairs" $service.queries) }}
+      - name: naviback.behindSplitter
+        value: true
+      {{- end }}
+      {{- if mustHas "emergency" $service.routing }}
+      - name: naviback.simpleNetwork.emergency
+        value: true
+      {{- end }}
+    values:
+      - {{ $.Values.basePath }}/values/api-platform/navi-back.yaml.gotmpl
+      - {{ $.Values.valuesPath }}/values/api-platform/navi-back/{{ $.Environment.Name }}.yaml.gotmpl
+      - {{ $.Values.valuesPath }}/values/api-platform/navi-rules/{{ $.Environment.Name }}-rules.yaml.gotmpl
+      - {{ $.Values.valuesPath }}/values/api-platform/navi-back/{{ $.Environment.Name }}-{{ $service.name }}.yaml.gotmpl
+    hooks:
+{{- $hooksPath := printf "%s/hooks/api-platform/navi-back/%s.yaml.gotmpl" $.Values.valuesPath $.Environment.Name -}}
+{{- if isFile $hooksPath }}
+{{- readFile $hooksPath | fromYaml | toYaml | nindent 4 }}
+{{- end }}
+
+  - name: navi-attr-{{ $service.name }}
+    inherit:
+    - template: default
+    chart: {{ $.Values.chartLocation }}/navi-attractor
+    labels:
+      group: api-platform
+      service: {{ $service.name }}
+    set:
+      - name: attractor.appRule
+        value: {{ $service.name }}
+    values:
+      - {{ $.Values.basePath }}/values/api-platform/navi-attractor.yaml.gotmpl
+      - {{ $.Values.valuesPath }}/values/api-platform/navi-attractor/{{ $.Environment.Name }}.yaml.gotmpl
+      - {{ $.Values.valuesPath }}/values/api-platform/navi-rules/{{ $.Environment.Name }}-rules.yaml.gotmpl
+      - {{ $.Values.valuesPath }}/values/api-platform/navi-attractor/{{ $.Environment.Name }}-{{ $service.name }}.yaml.gotmpl
+    hooks:
+{{- $hooksPath := printf "%s/hooks/api-platform/navi-attractor/%s.yaml.gotmpl" $.Values.valuesPath $.Environment.Name -}}
+{{- if isFile $hooksPath }}
+{{- readFile $hooksPath | fromYaml | toYaml | nindent 4 }}
+{{- end }}
+
+    {{- if or (mustHas "get_dist_matrix" $service.queries) (mustHas "get_pairs" $service.queries) }}
+  - name: navi-splitter-{{ $service.name }}
+    inherit:
+      - template: default
+    chart: {{ $.Values.chartLocation }}/navi-splitter
+    labels:
+      group: api-platform
+      service: {{ $service.name }}
+    set:
+      - name: splitter.appRule
+        value: {{ $service.name }}
+      - name: attractor.host
+        value: navi-attr-{{ $service.name }}
+      - name: oneToMany.host
+        value: navi-back-{{ $service.name }}-headless
+      - name: passThrough.host
+        value: navi-back-{{ $service.name }}
+      - name: splitter.ctxUrl
+        value: http://navi-back-{{ $service.name }}/ctx/2.0/?source=distance_matrix
+      - name: splitter.ctxBaseUrl
+        value: http://navi-back-{{ $service.name }}/ctx/2.0
+      - name: splitter.ctxV3BaseUrl
+        value: http://navi-back-{{ $service.name }}/ctx/3.0
+      - name: splitter.findPlatformUrl
+        value: http://navi-back-{{ $service.name }}/find_platforms
+    values:
+    - {{ $.Values.basePath }}/values/api-platform/navi-splitter.yaml.gotmpl
+    - {{ $.Values.valuesPath }}/values/api-platform/navi-splitter/{{ $.Environment.Name }}.yaml.gotmpl
+    hooks:
+{{- $hooksPath := printf "%s/hooks/api-platform/navi-splitter/%s.yaml.gotmpl" $.Values.valuesPath $.Environment.Name -}}
+{{- if isFile $hooksPath }}
+{{- readFile $hooksPath | fromYaml | toYaml | nindent 4 }}
+{{- end }}
+    {{- end }}
+{{- end }}
+
+# Асинхронный деплой (DMA) — управляется через {env}-rules-dma.yaml.gotmpl
+# Файл опциональный: если отсутствует, асинхронные релизы не создаются
+
+{{- $dmaPath := printf "%s/values/api-platform/navi-rules/%s-rules-dma.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $dmaPath -}}
+{{- $dmaVals := tpl (readFile $dmaPath) . | fromYaml -}}
+{{- $async := list -}}
+{{- range $rule := $dmaVals.rules }}
+  {{- if mustHas "ctx" $rule.routing }}
+    # ctx-правило порождает два сервиса: основной и find-platform.
+    # find-platform использует аттрактор основного правила (attractorFromRule).
+    {{- $ctxRule := $rule | deepCopy -}}
+    {{- $async = append $async $ctxRule -}}
+    {{- $fpRule := merge (dict "name" ($rule.name | replace "ctx" "find-platform") "attractorFromRule" $rule.name) ($rule | deepCopy) -}}
+    {{- $async = append $async $fpRule -}}
+  {{- else }}
+    {{- $async = append $async $rule -}}
+  {{- end }}
+{{- end }}
+{{- range $service := $async }}
+
+  - name: navi-back-{{ $service.name }}
+    inherit:
+    - template: default
+    chart: {{ $.Values.chartLocation }}/navi-back
+    labels:
+      group: api-platform
+      service: {{ $service.name }}
+    set:
+      - name: naviback.appRule
+        value: {{ $service.name }}
+      - name: navigroup
+        value: {{ $.Environment.Name }}-{{ $service.name }}
+      - name: rules[0].name
+        value: {{ $service.name }}
+      {{- range $i, $query := $service.queries }}
+      - name: rules[0].queries[{{ $i }}]
+        value: {{ $query }}
+      {{- end }}
+      {{- range $i, $routing := $service.routing }}
+      - name: rules[0].routing[{{ $i }}]
+        value: {{ $routing }}
+      {{- end }}
+      - name: s3.enabled
+        value: true
+      - name: kafka.enabled
+        value: true
+      - name: kafka.groupId
+        value: navi_{{ $.Environment.Name }}_{{ $service.name | replace "-" "_" }}
+      {{- if mustHas "ctx" $service.routing }}
+      # routing: ["ctx"] всегда требует внешнего аттрактора
+      # attractorFromRule: если задано — используем аттрактор родительского правила, иначе свой
+      {{- $attractorName := index $service "attractorFromRule" | default $service.name }}
+      - name: remoteAttractor.host
+        value: navi-attr-{{ $attractorName }}
+      - name: remoteAttractor.enabled
+        value: true
+      {{- else }}
+      - name: remoteAttractor.enabled
+        value: false
+      {{- end }}
+      {{- if mustHas "emergency" $service.routing }}
+      - name: naviback.simpleNetwork.emergency
+        value: true
+      {{- end }}
+      {{- if contains "find-platform" $service.name }}
+      - name: kafka.distanceMatrix.statusTopic
+        value: navi.{{ $.Environment.Name }}.find.platform.status.topic
+      - name: kafka.distanceMatrix.taskTopic
+        value: navi.{{ $.Environment.Name }}.find.platform.task.topic
+      {{- else }}
+      - name: kafka.distanceMatrix.statusTopic
+        value: navi.{{ $.Environment.Name }}.one.to.many.topic
+      - name: kafka.distanceMatrix.taskTopic
+        value: navi.{{ $.Environment.Name }}.{{ $service.name | replace "-" "_" | replace "async_" "" }}.task.topic
+      {{- end }}
+      - name: kafka.distanceMatrix.cancelTopic
+        value: navi.{{ $.Environment.Name }}.cancel.topic
+    values:
+      - {{ $.Values.basePath }}/values/api-platform/navi-back.yaml.gotmpl
+      - {{ $.Values.valuesPath }}/values/api-platform/navi-back/{{ $.Environment.Name }}.yaml.gotmpl
+      - {{ $.Values.valuesPath }}/values/api-platform/navi-back/{{ $.Environment.Name }}-async.yaml.gotmpl
+      - {{ $.Values.valuesPath }}/values/api-platform/navi-back/{{ $.Environment.Name }}-{{ $service.name }}.yaml.gotmpl
+    hooks:
+{{- $hooksPath := printf "%s/hooks/api-platform/navi-back/%s-dma.yaml.gotmpl" $.Values.valuesPath $.Environment.Name -}}
+{{- if isFile $hooksPath }}
+{{- readFile $hooksPath | fromYaml | toYaml | nindent 4 }}
+{{- end }}
+
+  # Асинхронный аттрактор (не деплоим для find-platform — он использует аттрактор ctx-правила)
+  {{- if not (index $service "attractorFromRule") }}
+  - name: navi-attr-{{ $service.name }}
+    inherit:
+    - template: default
+    chart: {{ $.Values.chartLocation }}/navi-attractor
+    labels:
+      group: api-platform
+      service: {{ $service.name }}
+    set:
+      - name: attractor.appRule
+        value: {{ $service.name }}
+      - name: navigroup
+        value: {{ $.Environment.Name }}-{{ $service.name }}
+      - name: rules[0].name
+        value: {{ $service.name }}
+      {{- range $i, $query := $service.queries }}
+      - name: rules[0].queries[{{ $i }}]
+        value: {{ $query }}
+      {{- end }}
+      {{- range $i, $routing := $service.routing }}
+      - name: rules[0].routing[{{ $i }}]
+        value: {{ $routing }}
+      {{- end }}
+      - name: s3.enabled
+        value: true
+      - name: kafka.enabled
+        value: true
+      - name: kafka.groupId
+        value: navi_{{ $.Environment.Name }}_{{ $service.name | replace "-" "_" }}
+      - name: kafka.distanceMatrix.statusTopic
+        value: navi.{{ $.Environment.Name }}.attract.topic
+      - name: kafka.distanceMatrix.taskTopic
+        value: navi.{{ $.Environment.Name }}.attract.{{ $service.name | replace "-" "_" | replace "async_" "" }}.task.topic
+      - name: kafka.distanceMatrix.cancelTopic
+        value: navi.{{ $.Environment.Name }}.cancel.topic
+    values:
+      - {{ $.Values.basePath }}/values/api-platform/navi-attractor.yaml.gotmpl
+      - {{ $.Values.valuesPath }}/values/api-platform/navi-attractor/{{ $.Environment.Name }}.yaml.gotmpl
+      - {{ $.Values.valuesPath }}/values/api-platform/navi-attractor/{{ $.Environment.Name }}-async.yaml.gotmpl
+      - {{ $.Values.valuesPath }}/values/api-platform/navi-attractor/{{ $.Environment.Name }}-{{ $service.name }}.yaml.gotmpl
+    hooks:
+{{- $hooksPath := printf "%s/hooks/api-platform/navi-attractor/%s-dma.yaml.gotmpl" $.Values.valuesPath $.Environment.Name -}}
+{{- if isFile $hooksPath }}
+{{- readFile $hooksPath | fromYaml | toYaml | nindent 4 }}
+{{- end }}
+  {{- end }}
+
+{{- end }}
+{{- end }}

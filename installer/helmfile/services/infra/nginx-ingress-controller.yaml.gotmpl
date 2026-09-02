@@ -1,0 +1,25 @@
+---
+bases:
+- {{ env "HELMFILE_BASE" | default (printf "%s/installer/helmfile" (env "PWD")) }}/common.yaml.gotmpl
+
+---
+releases:
+  - name: nginx-ingress-controller
+    chart: {{ .Values.chartLocationBitnami }}/nginx-ingress-controller
+    version: 12.0.7
+    kubeContext: {{ .Values.kubeContext }}
+    atomic: true
+    wait: true
+    waitForJobs: true
+    timeout: 300
+    labels:
+      service: nginx-ingress
+      group: infra
+    values:
+      - {{ .Values.basePath }}/values/infra/nginx-ingress-controller.yaml.gotmpl
+      - {{ .Values.valuesPath }}/values/infra/nginx-ingress-controller/{{ .Environment.Name }}.yaml.gotmpl
+    hooks:
+{{- $hooksPath := printf "%s/hooks/infra/nginx-ingress-controller/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $hooksPath }}
+{{- readFile $hooksPath | fromYaml | toYaml | nindent 4 }}
+{{- end }}

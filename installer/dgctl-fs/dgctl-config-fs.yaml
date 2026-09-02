@@ -1,0 +1,17 @@
+key: 00000000-0000-0000-0000-000000000000 # TODO licence key
+log-format: json
+
+storage:
+  type: fs
+  directory: /dgctl-source
+
+# Для утилиты версии 3
+components:
+  core:
+    version: 2.10.0
+  api-platform:
+    version: 2.57.0
+  pro:
+    version: 2.5.0
+  citylens:
+    version: 2.3.0

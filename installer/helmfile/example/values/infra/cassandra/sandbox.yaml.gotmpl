@@ -1,0 +1,31 @@
+---
+
+image:
+  registry: registry.example.com
+  repository: docker-io/bitnamilegacy/cassandra
+
+dbUser:
+  user: 'cassandra'
+  password: 'cassandra'
+  forcePassword: true
+
+resources:
+  requests:
+    cpu: 1
+    memory: 3Gi
+  limits:
+    cpu: 2
+    memory: 4Gi
+
+persistence:
+  storageClass: standard
+  size: 30Gi
+
+readinessProbe:
+  initialDelaySeconds: 120
+
+cluster:
+  seedCount: 1
+replicaCount: 1
+
+initDBConfigMap: ""

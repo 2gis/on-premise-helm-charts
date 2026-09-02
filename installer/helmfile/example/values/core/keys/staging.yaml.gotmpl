@@ -1,0 +1,43 @@
+postgres:
+  rw: &rw
+    host: 'haproxy' # TODO
+    port: 5000 # TODO
+    timeout: 3s
+    name: 'keys'  # TODO
+    schema: '' # TODO
+    username: 'keys_rw'
+    password: 'pass_rw' # TODO
+  ro:
+    <<: *rw
+    port: 5001 # TODO
+    username: 'keys_ro'
+    password: 'pass_ro' # TODO
+
+kafka:
+  bootstrapServers: '' # TODO
+  username: '' # TODO
+  password: '' # TODO
+  securityProtocol: SASL_PLAINTEXT # TODO
+  saslMechanism: SCRAM-SHA-512 # TODO
+
+redis:
+  enabled: false # TODO
+  host: '' # TODO
+  password: '' # TODO
+  db: 0 # TODO
+
+api:
+  adminUsers: "admin:admin" # TODO
+  replicas: 1
+  oidc:
+    enabled: false # TODO для citylens и platform
+    enableSinglePartnerMode: true # TODO
+    enableExternalProvider: true #TODO
+    url: https://{{ .Values.keycloakIngress }}/realms/Platform #TODO
+    issuerUrl: '' # TODO
+    retryCount: 3
+    timeout: 3s
+    defaultPartner:
+      id: 1 # TODO
+      name: 'Test Default Partner' # TODO
+      role: admin # TODO

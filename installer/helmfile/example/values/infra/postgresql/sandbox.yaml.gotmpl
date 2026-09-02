@@ -1,0 +1,43 @@
+image:
+  registry: registry.example.com
+  repository: docker-io/bitnamilegacy/postgresql
+
+architecture: "standalone"
+
+global:
+  postgresql:
+    auth:
+      username: dbadmin
+      password: "on-premise"
+      postgresPassword: "on-premise"
+
+primary:
+  persistence:
+    enabled: true
+    size: 8Gi
+    storageClass: "standard"
+  initdb:
+    user: postgres
+    password: "on-premise"
+    scripts:
+      keys.sql: |
+        CREATE USER keys_rw PASSWORD 'keys_rw_password';
+        CREATE USER keys_ro PASSWORD 'keys_ro_password';
+        CREATE DATABASE keys OWNER keys_rw;
+        \c keys
+        ALTER DEFAULT PRIVILEGES FOR ROLE keys_rw IN SCHEMA public GRANT SELECT ON TABLES TO keys_ro;
+        ALTER DEFAULT PRIVILEGES FOR ROLE keys_rw IN SCHEMA public GRANT SELECT ON SEQUENCES TO keys_ro;
+      catalog.sql: |
+        CREATE USER catalog PASSWORD 'catalog_password';
+        CREATE DATABASE catalog OWNER catalog;
+        \c catalog
+        CREATE SCHEMA IF NOT EXISTS extensions;
+        CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+        CREATE EXTENSION IF NOT EXISTS postgis WITH SCHEMA extensions;
+        GRANT USAGE ON SCHEMA extensions TO catalog, public;
+        GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA extensions TO catalog, public;
+        ALTER DEFAULT PRIVILEGES IN SCHEMA extensions GRANT EXECUTE ON FUNCTIONS TO public;
+        ALTER DEFAULT PRIVILEGES IN SCHEMA extensions GRANT USAGE ON TYPES TO public;
+      styles.sql: |
+        create user styles password 'styles_password';
+        create database styles owner styles;

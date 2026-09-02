@@ -1,0 +1,30 @@
+api:
+  ingress:
+    enabled: true
+    className: {{ .Values.ingressClassName }}
+    annotations:
+    {{- if eq .Values.ingressController "nginx" }}
+      {{- $annotations := pick .Values.ingressAnnotations.nginx "cors" -}}
+      {{- $result := dict -}}
+      {{- range $_, $value := $annotations }}
+        {{- $result = merge $result $value -}}
+      {{- end }}
+      {{- $result | toYaml | nindent 6 }}
+    {{- else if eq .Values.ingressController "traefik" }}
+      {{- $annotations := pick .Values.ingressAnnotations.traefik "cors" -}}
+      {{- $middlewares := join "," (sortAlpha (values $annotations)) -}}
+      {{- dict "traefik.ingress.kubernetes.io/router.middlewares" $middlewares | toYaml | nindent 6 }}
+    {{- else }}
+      {}
+    {{- end }}
+    hosts:
+    - host: {{ .Values.tilesMultiIngress }}
+      paths:
+      - path: /
+        pathType: Prefix
+    {{- if .Values.ingressTls }}
+    tls:
+    - hosts:
+      - {{ .Values.tilesMultiIngress }}
+      secretName: {{ .Values.tlsSecret }}
+    {{- end }}

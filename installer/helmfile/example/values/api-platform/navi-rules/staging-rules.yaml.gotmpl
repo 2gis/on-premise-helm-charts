@@ -1,0 +1,28 @@
+rules: # TODO
+- name: all-car # навигация для авто
+  queries: ["routing", "get_hull", "map_matching", "route_planner", "area_clustering", "get_pairs", "get_dist_matrix"]
+  routing: ["driving"]
+- name: all-pedestrian # навигация для пешеходов
+  queries: ["routing", "get_hull", "get_pairs", "get_dist_matrix"]
+  routing: ["pedestrian"]
+- name: all-bicycle # навигация для велосипедов и самокатов
+  queries: ["routing", "get_hull", "get_pairs", "get_dist_matrix"]
+  routing: ["bicycle", "scooter"]
+- name: all-motorcycle # навигация для мотоциклов
+  queries: ["routing", "get_hull", "get_dist_matrix"]
+  routing: ["motorcycle"]
+- name: all-truck # навигация для грузовиков
+  queries: ["routing", "get_dist_matrix"]
+  routing: ["truck"]
+- name: all-taxi # навигация для такси
+  queries: ["routing", "get_pairs", "get_dist_matrix"]
+  routing: ["taxi"]
+- name: all-ctx # навигация для общественного транспорта
+  queries: ["public_transport", "get_dist_matrix", "get_hull"]
+  routing: ["public_transport", "ctx"]
+- name: emergency # навигация с игнорированием ПДД
+  queries: ["routing"]
+  routing: ["emergency"]
+- name: freeroam # навигация без маршрута
+  queries: ["free_roam"]
+  routing: []

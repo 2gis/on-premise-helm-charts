@@ -1,0 +1,41 @@
+navigroup: {{ .Environment.Name }}
+replicaCount: 1
+livenessProbeDelay: 10
+readinessProbeDelay: 10
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 1024Mi
+  limits:
+    cpu: 500m
+    memory: 4000Mi
+
+ingress:
+  enabled: true
+  className: {{ .Values.ingressClassName }}
+  hosts:
+  - host: {{ .Release.Name }}.{{ .Values.domain }}
+    paths:
+    - path: /
+      pathType: Prefix
+  {{- if .Values.ingressTls }}
+  tls:
+  - hosts:
+    - {{ .Release.Name }}.{{ .Values.domain }}
+    secretName: {{ .Values.tlsSecret }}
+  {{- end }}
+
+attractor:
+  castleUrl: http://navi-castle
+  {{- if has (lower .Values.proxyMode) (list "navi" "full") }}
+  castleUrlProxy: http://traffic-proxy-navi/navi-castle
+  restrictions:
+    enabled: true
+  {{- end }}
+  maxProcessTime: 600
+  dump:
+    query: true
+    result: true
+    answer: true
+  grpcPort: 50051
