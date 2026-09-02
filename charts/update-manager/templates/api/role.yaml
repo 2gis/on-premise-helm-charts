@@ -26,8 +26,8 @@ rules:
   verbs: ["create", "get", "list", "watch", "update", "patch", "delete"]
 # =====================================================================
 # Per-chart rules — added only when a chart is enabled in api.components.
-# Each block grants rights only for the resource kinds that chart renders.
-# ConfigMaps, Secrets, Jobs and Pods are already covered by the base rules.
+# Each block is self-contained: it grants every resource kind that the
+# chart renders, not relying on the base rules above.
 # =====================================================================
 {{- if .Values.api.rulesOverride }}
 {{ toYaml .Values.api.rulesOverride }}
@@ -46,26 +46,43 @@ rules:
 {{- include "update-manager.rbac.rule.appsDeployment" . | nindent 0 }}
 {{- include "update-manager.rbac.rule.appsStatefulSet" . | nindent 0 }}
 {{- include "update-manager.rbac.rule.coreService" . | nindent 0 }}
+{{- include "update-manager.rbac.rule.coreConfigMap" . | nindent 0 }}
+{{- include "update-manager.rbac.rule.coreSecret" . | nindent 0 }}
+{{- include "update-manager.rbac.rule.corePod" . | nindent 0 }}
+{{- include "update-manager.rbac.rule.batchJob" . | nindent 0 }}
+{{- include "update-manager.rbac.rule.batchCronJob" . | nindent 0 }}
 {{- include "update-manager.rbac.rule.networkingIngress" . | nindent 0 }}
 {{- include "update-manager.rbac.rule.autoscalingHPA" . | nindent 0 }}
-{{- include "update-manager.rbac.rule.batchCronJob" . | nindent 0 }}
 {{- end }}
 {{- if has "tiles-api" $enabledCharts }}
 # tiles-api
 {{- include "update-manager.rbac.rule.appsDeployment" . | nindent 0 }}
 {{- include "update-manager.rbac.rule.coreService" . | nindent 0 }}
 {{- include "update-manager.rbac.rule.coreServiceAccount" . | nindent 0 }}
+{{- include "update-manager.rbac.rule.coreConfigMap" . | nindent 0 }}
+{{- include "update-manager.rbac.rule.coreSecret" . | nindent 0 }}
+{{- include "update-manager.rbac.rule.corePod" . | nindent 0 }}
+{{- include "update-manager.rbac.rule.batchJob" . | nindent 0 }}
+{{- include "update-manager.rbac.rule.batchCronJob" . | nindent 0 }}
 {{- include "update-manager.rbac.rule.networkingIngress" . | nindent 0 }}
 {{- include "update-manager.rbac.rule.autoscalingHPA" . | nindent 0 }}
 {{- include "update-manager.rbac.rule.autoscalingVPA" . | nindent 0 }}
 {{- include "update-manager.rbac.rule.policyPDB" . | nindent 0 }}
-{{- include "update-manager.rbac.rule.batchCronJob" . | nindent 0 }}
 {{- include "update-manager.rbac.rule.rbac" . | nindent 0 }}
+# Roles copied from tiles-api's own Role (tiles-api/templates/role.yaml)
+- apiGroups: ["batch"]
+  resources: ["jobs"]
+  verbs: ["create", "get", "list", "delete", "deletecollection"]
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "list", "delete", "deletecollection"]
 {{- end }}
 {{- if has "search-api" $enabledCharts }}
 # search-api
 {{- include "update-manager.rbac.rule.appsDeployment" . | nindent 0 }}
 {{- include "update-manager.rbac.rule.coreService" . | nindent 0 }}
+{{- include "update-manager.rbac.rule.coreConfigMap" . | nindent 0 }}
+{{- include "update-manager.rbac.rule.coreSecret" . | nindent 0 }}
 {{- include "update-manager.rbac.rule.networkingIngress" . | nindent 0 }}
 {{- include "update-manager.rbac.rule.autoscalingHPA" . | nindent 0 }}
 {{- include "update-manager.rbac.rule.policyPDB" . | nindent 0 }}
@@ -75,6 +92,10 @@ rules:
 {{- include "update-manager.rbac.rule.appsDeployment" . | nindent 0 }}
 {{- include "update-manager.rbac.rule.coreService" . | nindent 0 }}
 {{- include "update-manager.rbac.rule.corePVC" . | nindent 0 }}
+{{- include "update-manager.rbac.rule.coreConfigMap" . | nindent 0 }}
+{{- include "update-manager.rbac.rule.coreSecret" . | nindent 0 }}
+{{- include "update-manager.rbac.rule.corePod" . | nindent 0 }}
+{{- include "update-manager.rbac.rule.batchJob" . | nindent 0 }}
 {{- include "update-manager.rbac.rule.networkingIngress" . | nindent 0 }}
 {{- include "update-manager.rbac.rule.autoscalingHPA" . | nindent 0 }}
 {{- include "update-manager.rbac.rule.policyPDB" . | nindent 0 }}
@@ -85,6 +106,9 @@ rules:
 {{- include "update-manager.rbac.rule.appsStatefulSet" . | nindent 0 }}
 {{- include "update-manager.rbac.rule.coreService" . | nindent 0 }}
 {{- include "update-manager.rbac.rule.coreServiceAccount" . | nindent 0 }}
+{{- include "update-manager.rbac.rule.coreConfigMap" . | nindent 0 }}
+{{- include "update-manager.rbac.rule.coreSecret" . | nindent 0 }}
+{{- include "update-manager.rbac.rule.corePod" . | nindent 0 }}
 {{- include "update-manager.rbac.rule.networkingIngress" . | nindent 0 }}
 {{- include "update-manager.rbac.rule.autoscalingHPA" . | nindent 0 }}
 {{- include "update-manager.rbac.rule.autoscalingVPA" . | nindent 0 }}
@@ -95,14 +119,21 @@ rules:
 {{- include "update-manager.rbac.rule.appsStatefulSet" . | nindent 0 }}
 {{- include "update-manager.rbac.rule.coreService" . | nindent 0 }}
 {{- include "update-manager.rbac.rule.coreServiceAccount" . | nindent 0 }}
-{{- include "update-manager.rbac.rule.networkingIngress" . | nindent 0 }}
+{{- include "update-manager.rbac.rule.coreConfigMap" . | nindent 0 }}
+{{- include "update-manager.rbac.rule.coreSecret" . | nindent 0 }}
+{{- include "update-manager.rbac.rule.corePod" . | nindent 0 }}
 {{- include "update-manager.rbac.rule.batchCronJob" . | nindent 0 }}
+{{- include "update-manager.rbac.rule.networkingIngress" . | nindent 0 }}
 {{- end }}
 {{- if has "twins-api" $enabledCharts }}
 # twins-api
 {{- include "update-manager.rbac.rule.appsDeployment" . | nindent 0 }}
 {{- include "update-manager.rbac.rule.coreService" . | nindent 0 }}
 {{- include "update-manager.rbac.rule.corePVC" . | nindent 0 }}
+{{- include "update-manager.rbac.rule.coreConfigMap" . | nindent 0 }}
+{{- include "update-manager.rbac.rule.coreSecret" . | nindent 0 }}
+{{- include "update-manager.rbac.rule.corePod" . | nindent 0 }}
+{{- include "update-manager.rbac.rule.batchJob" . | nindent 0 }}
 {{- include "update-manager.rbac.rule.networkingIngress" . | nindent 0 }}
 {{- include "update-manager.rbac.rule.autoscalingHPA" . | nindent 0 }}
 {{- end }}
@@ -110,6 +141,10 @@ rules:
 # pro-ui
 {{- include "update-manager.rbac.rule.appsDeployment" . | nindent 0 }}
 {{- include "update-manager.rbac.rule.coreService" . | nindent 0 }}
+{{- include "update-manager.rbac.rule.coreConfigMap" . | nindent 0 }}
+{{- include "update-manager.rbac.rule.coreSecret" . | nindent 0 }}
+{{- include "update-manager.rbac.rule.corePod" . | nindent 0 }}
+{{- include "update-manager.rbac.rule.batchJob" . | nindent 0 }}
 {{- include "update-manager.rbac.rule.networkingIngress" . | nindent 0 }}
 {{- include "update-manager.rbac.rule.autoscalingHPA" . | nindent 0 }}
 {{- include "update-manager.rbac.rule.policyPDB" . | nindent 0 }}
@@ -119,17 +154,35 @@ rules:
 {{- include "update-manager.rbac.rule.appsDeployment" . | nindent 0 }}
 {{- include "update-manager.rbac.rule.coreService" . | nindent 0 }}
 {{- include "update-manager.rbac.rule.coreServiceAccount" . | nindent 0 }}
+{{- include "update-manager.rbac.rule.coreConfigMap" . | nindent 0 }}
+{{- include "update-manager.rbac.rule.coreSecret" . | nindent 0 }}
+{{- include "update-manager.rbac.rule.corePod" . | nindent 0 }}
+{{- include "update-manager.rbac.rule.batchJob" . | nindent 0 }}
+{{- include "update-manager.rbac.rule.batchCronJob" . | nindent 0 }}
 {{- include "update-manager.rbac.rule.networkingIngress" . | nindent 0 }}
 {{- include "update-manager.rbac.rule.autoscalingVPA" . | nindent 0 }}
 {{- include "update-manager.rbac.rule.policyPDB" . | nindent 0 }}
-{{- include "update-manager.rbac.rule.batchCronJob" . | nindent 0 }}
 {{- include "update-manager.rbac.rule.rbac" . | nindent 0 }}
 {{- include "update-manager.rbac.rule.gatewayGRPCRoute" . | nindent 0 }}
+# Roles copied from pro-api's own Role (pro-api/templates/role.yaml)
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "list", "create", "watch", "delete"]
+- apiGroups: ["batch"]
+  resources: ["jobs", "cronjobs"]
+  verbs: ["get", "list", "create", "watch", "delete"]
+- apiGroups: ["batch"]
+  resources: ["jobs/status"]
+  verbs: ["get"]
 {{- end }}
 {{- if has "citylens" $enabledCharts }}
 # citylens
 {{- include "update-manager.rbac.rule.appsDeployment" . | nindent 0 }}
 {{- include "update-manager.rbac.rule.coreService" . | nindent 0 }}
+{{- include "update-manager.rbac.rule.coreConfigMap" . | nindent 0 }}
+{{- include "update-manager.rbac.rule.coreSecret" . | nindent 0 }}
+{{- include "update-manager.rbac.rule.corePod" . | nindent 0 }}
+{{- include "update-manager.rbac.rule.batchJob" . | nindent 0 }}
 {{- include "update-manager.rbac.rule.networkingIngress" . | nindent 0 }}
 {{- include "update-manager.rbac.rule.autoscalingHPA" . | nindent 0 }}
 {{- include "update-manager.rbac.rule.autoscalingVPA" . | nindent 0 }}
