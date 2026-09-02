@@ -250,10 +250,37 @@ for the resource kinds that chart actually renders.
   verbs: {{ include "update-manager.rbac.manageVerbs" . }}
 {{- end -}}
 
+{{- define "update-manager.rbac.rule.batchJob" -}}
+- apiGroups: ["batch"]
+  resources: ["jobs"]
+  verbs: {{ include "update-manager.rbac.manageVerbs" . }}
+{{- end -}}
+
 {{- define "update-manager.rbac.rule.batchCronJob" -}}
 - apiGroups: ["batch"]
   resources: ["cronjobs"]
   verbs: {{ include "update-manager.rbac.manageVerbs" . }}
+{{- end -}}
+
+{{- define "update-manager.rbac.rule.coreConfigMap" -}}
+- apiGroups: [""]
+  resources: ["configmaps"]
+  verbs: {{ include "update-manager.rbac.manageVerbs" . }}
+{{- end -}}
+
+{{- define "update-manager.rbac.rule.coreSecret" -}}
+- apiGroups: [""]
+  resources: ["secrets"]
+  verbs: {{ include "update-manager.rbac.manageVerbs" . }}
+{{- end -}}
+
+{{- define "update-manager.rbac.rule.corePod" -}}
+- apiGroups: [""]
+  resources: ["pods", "events"]
+  verbs: ["list"]
+- apiGroups: [""]
+  resources: ["pods/log"]
+  verbs: ["get"]
 {{- end -}}
 
 {{- define "update-manager.rbac.rule.rbac" -}}
