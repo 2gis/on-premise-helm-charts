@@ -1,0 +1,123 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "update-manager.name" . }}
+  {{- with .Values.api.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "update-manager.labels" . | nindent 4 }}
+    {{- with .Values.api.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  {{- with .Values.api.revisionHistoryLimit }}
+  revisionHistoryLimit: {{ . }}
+  {{- end }}
+  replicas: {{ .Values.api.replicas }}
+  selector:
+    matchLabels:
+      {{- include "update-manager.selectorLabels" . | nindent 6 }}
+  {{- if not (empty .Values.api.strategy) }}
+  strategy:
+    {{- toYaml .Values.api.strategy | nindent 4 }}
+  {{- end }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include "update-manager.checksum" (merge (dict "path" "/api/configmap.yaml") .) }}
+        checksum/config-ca: {{ include "update-manager.checksum" (merge (dict "path" "/api/configmap-ca.yaml") .) }}
+        checksum/secret: {{ include "update-manager.checksum" (merge (dict "path" "/api/secret.yaml") .) }}
+        checksum/psql-secret: {{ include "update-manager.checksum" (merge (dict "path" "/secret-psql-tls.yaml") .) }}
+        {{- with .Values.api.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      labels:
+        {{- include "update-manager.selectorLabels" . | nindent 8 }}
+        {{- with .Values.api.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      serviceAccountName: {{ include "update-manager.serviceAccount" . }}
+      terminationGracePeriodSeconds: 30
+      {{- with include "update-manager.psql.initTLS" . }}
+      initContainers:
+      {{- . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: update-manager
+          image: {{ include "update-manager.image" . }}
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          command: ["updatemanager", "server"]
+          ports:
+            - name: api
+              containerPort: 8080
+            - name: metrics
+              containerPort: 9090
+          readinessProbe:
+            httpGet:
+              path: /healthcheck
+              port: api
+          livenessProbe:
+            httpGet:
+              path: /healthcheck
+              port: api
+          env:
+            - name: CONFIG_PATH
+              value: "/config/api.yaml"
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: DATABASE_PASSWORD
+                  name: {{ include "update-manager.name" . }}
+            - name: API_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: API_KEY
+                  name: {{ include "update-manager.name" . }}
+            - name: STORAGE_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: STORAGE_ACCESS_KEY
+                  name: {{ include "update-manager.name" . }}
+            - name: STORAGE_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: STORAGE_SECRET_KEY
+                  name: {{ include "update-manager.name" . }}
+          resources:
+            {{- toYaml .Values.api.resources | nindent 12 }}
+          volumeMounts:
+            - name: config
+              mountPath: /config
+              readOnly: true
+            - name: charts
+              mountPath: /tmp/helm-charts
+            {{- include "update-manager.psql.volumeMounts" . | nindent 12 }}
+            {{- include "update-manager.ca.volumeMounts" . | nindent 12 }}
+      volumes:
+        - name: config
+          configMap:
+            name: {{ include "update-manager.name" . }}
+        - name: charts
+          {{- toYaml (index .Values.api.helm.volume 0) | nindent 10 }}
+        {{- include "update-manager.psql.volumes" . | nindent 8 }}
+        {{- include "update-manager.ca.volumes" . | nindent 8 }}
+      {{- with .Values.api.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.api.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.api.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

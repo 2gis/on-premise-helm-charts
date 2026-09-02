@@ -1,0 +1,69 @@
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "update-manager.migrate.name" . }}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    "helm.sh/hook-weight": "-10"
+  labels:
+    {{- include "update-manager.labels" . | nindent 4 }}
+spec:
+  backoffLimit: 0
+  template:
+    metadata:
+      name: {{ include "update-manager.migrate.name" . }}
+      labels:
+        {{- include "update-manager.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: migrate
+    spec:
+      restartPolicy: Never
+      initContainers:
+        {{- if .Values.migrate.initialDelaySeconds }}
+        - name: delay
+          image: {{ include "update-manager.image" . }}
+          command: [ "sh", "-c", "sleep {{ .Values.migrate.initialDelaySeconds }}" ]
+          resources:
+            {{- toYaml .Values.migrate.resources | nindent 12 }}
+        {{- end }}
+        {{- include "update-manager.psql.initTLS" . | nindent 8 }}
+      containers:
+        - name: migrate
+          image: {{ include "update-manager.image" . }}
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          command: ["updatemanager", "migrate", "up"]
+          env:
+            - name: CONFIG_PATH
+              value: /config/migrate.yaml
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: DATABASE_PASSWORD
+                  name: {{ include "update-manager.migrate.name" . }}
+          resources:
+            {{- toYaml .Values.migrate.resources | nindent 12 }}
+          volumeMounts:
+            - name: config
+              mountPath: /config
+              readOnly: true
+            {{- include "update-manager.psql.volumeMounts" . | nindent 12 }}
+            {{- include "update-manager.ca.volumeMounts" . | nindent 12 }}
+      volumes:
+        - name: config
+          configMap:
+            name: {{ include "update-manager.migrate.name" . }}
+        {{- include "update-manager.psql.volumes" . | nindent 8 }}
+        {{- include "update-manager.ca.migrate.volumes" . | nindent 8 }}
+      {{- with .Values.migrate.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.migrate.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
