@@ -371,7 +371,7 @@ kubernetes-ready пример API-платформы (infra + core + api-platfor
      [получите лицензию](https://docs.2gis.com/on-premise-api-platform/installation#check-license-status)
      и повторите деплой.
 
-6. **Развёртывание API-платформы** (21 сервис: search, tiles, catalog, navi, styles, mapgl, …):
+6. **Развёртывание API-платформы** (22 релиза: search, tiles, catalog, navi, styles, mapgl, …):
    ```bash
    helmfile -e sandbox -f installer/helmfile/example/deploy/sandbox.yaml.gotmpl apply \
      --selector group=api-platform \

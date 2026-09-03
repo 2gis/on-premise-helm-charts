@@ -1,3 +1,34 @@
+kafka:
+  properties:
+    bootstrap.servers: kafka-controller-headless:9092
+    security.protocol: SASL_PLAINTEXT
+    sasl.mechanism: SCRAM-SHA-512
+    sasl.plain.username: admin
+  sensitiveProperties:
+    sasl.plain.password: admin
+
+s3:
+  host: http://s3.sandbox
+  bucket: sandbox-navi-am
+  accessKey: {{ .Values.dgctlStorage.accessKey }}
+  secretKey: {{ .Values.dgctlStorage.secretKey }}
+  enabled: true
+
+db:
+  host: postgresql
+  port: 5432
+  name: async_matrix
+  user: async_matrix
+  password: async_matrix
+  schema: public
+
+keys:
+  token: '0c70a612-e12a-4d39-b99b-1e1f6a74152d' # predefined.service: distance-matrix-api
+
+stat:
+  enabled: true
+  url: 'http://stat-receiver-api/bss/3'
+
 resources:
   requests:
     cpu: 50m

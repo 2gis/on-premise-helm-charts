@@ -1,4 +1,4 @@
-# Kafka override for the `sandbox` (kind) environment — single-node, small resources.
+# Kafka override for the `sandbox` (kind) environment — small resources.
 global:
   security:
     allowInsecureImages: true
@@ -22,7 +22,7 @@ sasl:
     - admin
 
 controller:
-  replicaCount: 1
+  replicaCount: 3
   persistence:
     storageClass: standard
     size: 1Gi

@@ -10,7 +10,7 @@
       # Set S3 public-read policies on data buckets (best effort — mc may not be in the image)
       POD=$(kubectl -n "${NAMESPACE}" get pod -l "app.kubernetes.io/name=minio" -o jsonpath='{.items[0].metadata.name}' 2>/dev/null)
       if [ -n "$POD" ]; then
-        for BUCKET in ${NAMESPACE}-styles ${NAMESPACE}-navi-am; do
+        for BUCKET in ${NAMESPACE}-styles ${NAMESPACE}-navi-am ${NAMESPACE}-navi-vrp ${NAMESPACE}-navi-async; do
           kubectl -n "${NAMESPACE}" exec -i "${POD}" -- sh -c \
             "mc alias set local http://localhost:9000 admin on-premise 2>/dev/null && \
              mc anonymous set download local/${BUCKET}" 2>/dev/null \
