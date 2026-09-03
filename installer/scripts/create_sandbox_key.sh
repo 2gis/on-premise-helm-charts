@@ -17,6 +17,8 @@ KEYS_API_URL="http://${KEYS_HOST}"
 # kind: traefik listens on hostPort 80, so --resolve maps the ingress host to 127.0.0.1
 CURL_RESOLVE="--resolve ${KEYS_HOST}:80:127.0.0.1"
 
+PARTNER_NAME="Sandbox Partner"
+
 echo "==> Waiting for keys-api pod to be ready..."
 kubectl -n "${NAMESPACE}" wait --for=condition=ready pod -l "app.kubernetes.io/name=keys-api" --timeout=120s 2>/dev/null || {
   echo "WARNING: keys-api pod not ready, skipping key creation"
@@ -52,9 +54,41 @@ if [ -z "$KEYS_API_TOKEN" ] || [ "$KEYS_API_TOKEN" = "null" ]; then
 fi
 echo "==> Auth token received"
 
-PARTNER_JSON=$(cat <<EOF
+keys_get() {
+  curl -sf ${CURL_RESOLVE} "$1" \
+    -H "accept: application/json" \
+    -H "X-Brand: 2gis" \
+    -H "X-Auth-Token: ${KEYS_API_TOKEN}"
+}
+
+# Current key from the environments file (the `- key:` line, not the license key)
+CURRENT_KEY=""
+if [ -n "$ENV_FILE" ] && [ -f "$ENV_FILE" ]; then
+  CURRENT_KEY=$(grep -E "^[[:space:]]*- key: '[a-f0-9-]{36}'" "${ENV_FILE}" 2>/dev/null \
+    | head -1 | sed "s/.*'\(.*\)'.*/\1/")
+fi
+
+# Idempotency: the key from the env file is already in the DB and active — nothing to do
+if [ -n "${CURRENT_KEY}" ]; then
+  if keys_get "${KEYS_API_URL}/admin/v1/keys" 2>/dev/null \
+      | jq -e --arg k "${CURRENT_KEY}" '.result.items[]? | select(.key == $k and .status == "active")' > /dev/null; then
+    echo "==> Key ${CURRENT_KEY:0:8}... already exists and is active, nothing to do"
+    exit 0
+  fi
+  echo "==> Key ${CURRENT_KEY:0:8}... not found in keys DB or not active, recreating"
+fi
+
+# Partner: reuse by name, create only if missing
+PARTNER_ID=$(keys_get "${KEYS_API_URL}/admin/v1/partners" 2>/dev/null \
+  | jq -r --arg name "${PARTNER_NAME}" '.result.items[]? | select(.name == $name) | .id' | head -1)
+
+if [ -n "${PARTNER_ID}" ] && [ "${PARTNER_ID}" != "null" ]; then
+  echo "==> Partner '${PARTNER_NAME}' already exists (id=${PARTNER_ID})"
+else
+  echo "==> Creating partner..."
+  PARTNER_JSON=$(cat <<EOF
 {
-  "name": "Sandbox Partner",
+  "name": "${PARTNER_NAME}",
   "country": "Россия",
   "city": "Москва",
   "website": "https://2gis.ru",
@@ -68,23 +102,23 @@ PARTNER_JSON=$(cat <<EOF
 }
 EOF
 )
+  PARTNER_RESPONSE=$(curl -sf ${CURL_RESOLVE} -X POST \
+    "${KEYS_API_URL}/admin/v1/partners" \
+    -H "accept: application/json" \
+    -H "X-Brand: 2gis" \
+    -H "X-Auth-Token: ${KEYS_API_TOKEN}" \
+    -H "Content-Type: application/json" \
+    -d "${PARTNER_JSON}")
 
-echo "==> Creating partner..."
-PARTNER_RESPONSE=$(curl -sf ${CURL_RESOLVE} -X POST \
-  "${KEYS_API_URL}/admin/v1/partners" \
-  -H "accept: application/json" \
-  -H "X-Brand: 2gis" \
-  -H "X-Auth-Token: ${KEYS_API_TOKEN}" \
-  -H "Content-Type: application/json" \
-  -d "${PARTNER_JSON}")
-
-PARTNER_ID=$(echo "$PARTNER_RESPONSE" | jq -r '.result.id // .id' 2>/dev/null)
-if [ -z "$PARTNER_ID" ] || [ "$PARTNER_ID" = "null" ]; then
-  echo "==> Using default partner_id=1"
-  PARTNER_ID=1
+  PARTNER_ID=$(echo "$PARTNER_RESPONSE" | jq -r '.result.id // .id' 2>/dev/null)
+  if [ -z "$PARTNER_ID" ] || [ "$PARTNER_ID" = "null" ]; then
+    echo "==> Using default partner_id=1"
+    PARTNER_ID=1
+  fi
 fi
 echo "==> partner_id: ${PARTNER_ID}"
 
+# Subscription: a new key is generated along with it
 SUBSCRIPTION_JSON=$(cat <<EOF
 {
   "partner_id": ${PARTNER_ID},
@@ -130,11 +164,7 @@ curl -sf ${CURL_RESOLVE} -X POST \
   -d "${SUBSCRIPTION_JSON}" | jq . 2>/dev/null || true
 
 echo "==> Fetching demo key..."
-DEMO_KEY=$(curl -sf ${CURL_RESOLVE} -X GET \
-  "${KEYS_API_URL}/admin/v1/keys" \
-  -H "accept: application/json" \
-  -H "X-Brand: 2gis" \
-  -H "X-Auth-Token: ${KEYS_API_TOKEN}" | jq -r '.result.items[0].key' 2>/dev/null)
+DEMO_KEY=$(keys_get "${KEYS_API_URL}/admin/v1/keys" 2>/dev/null | jq -r '.result.items[0].key')
 
 if [ -z "$DEMO_KEY" ] || [ "$DEMO_KEY" = "null" ]; then
   echo "WARNING: failed to get demo key"
@@ -142,11 +172,9 @@ if [ -z "$DEMO_KEY" ] || [ "$DEMO_KEY" = "null" ]; then
 fi
 echo "==> Demo key: ${DEMO_KEY:0:8}..."
 
-echo "==> Demo key (full): ${DEMO_KEY}"
-
-if [ -n "$ENV_FILE" ] && [ -f "$ENV_FILE" ]; then
+if [ -n "$ENV_FILE" ] && [ -f "$ENV_FILE" ] && [ "${DEMO_KEY}" != "${CURRENT_KEY}" ]; then
   echo "==> Patching key in ${ENV_FILE}..."
-  sed -i "s|^\(    - key: \).*|\1'${DEMO_KEY}' # auto-generated|" "${ENV_FILE}"
+  sed -i "s|^\([[:space:]]*- key: \).*|\1'${DEMO_KEY}' # auto-generated|" "${ENV_FILE}"
   echo "==> Key patched"
 else
   echo "==> ENV_FILE not set or not found, skipping patch"
