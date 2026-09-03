@@ -143,16 +143,36 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
       key: s3SecretKey
 {{- end }}
 
+{{- define "styles.env.keys" -}}
+- name: MGS_KEYS_ENABLED
+  value: {{ .Values.keys.enabled | quote }}
+{{- if .Values.keys.enabled }}
+- name: MGS_KEYS_ENDPOINT
+  value: {{ required "A valid .Values.keys.url required" .Values.keys.url | quote }}
+- name: MGS_KEYS_CLIENT_TIMEOUT
+  value: {{ .Values.keys.clientTimeout | quote }}
+- name: MGS_KEYS_REFRESH_INTERVAL
+  value: {{ .Values.keys.refreshInterval | quote }}
+- name: MGS_KEYS_SERVICE_KEY
+  valueFrom:
+    secretKeyRef:
+      name: {{ include "styles.secret.deploys.name" . }}
+      key: keysServiceKey
+{{- end }}
+{{- end }}
+
 {{- define "styles.env.api" -}}
 {{ include "styles.env.loglevel" . }}
 {{ include "styles.env.db.deploys" . }}
 {{ include "styles.env.s3.deploys" . }}
+{{ include "styles.env.keys" . }}
 {{- end }}
 
 {{- define "styles.env.worker" -}}
 {{ include "styles.env.loglevel" . }}
 {{ include "styles.env.db.deploys" . }}
 {{ include "styles.env.s3.deploys" . }}
+{{ include "styles.env.keys" . }}
 {{- end }}
 
 {{- define "styles.env.migrate" -}}
