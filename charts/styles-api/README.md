@@ -139,13 +139,13 @@ Use this Helm chart to deploy API Styles service, which is a part of 2GIS's [On-
 
 ### API Keys service settings
 
-| Name                   | Description                                                                                       | Value   |
-| ---------------------- | ------------------------------------------------------------------------------------------------- | ------- |
-| `keys.enabled`         | Enable API key validation for import methods.                                                     | `false` |
-| `keys.endpoint`        | Keys service endpoint URL.                                                                        | `""`    |
-| `keys.serviceKey`      | Service key for authentication with the Keys service. **Required** when `keys.enabled` is `true`. | `""`    |
-| `keys.clientTimeout`   | HTTP client timeout for requests to the Keys service.                                             | `500ms` |
-| `keys.refreshInterval` | Interval for periodic refresh of API keys cache.                                                  | `5m`    |
+| Name                   | Description                                                                                           | Value   |
+| ---------------------- | ----------------------------------------------------------------------------------------------------- | ------- |
+| `keys.enabled`         | Enable API key validation for import methods.                                                         | `false` |
+| `keys.url`             | API Keys endpoint url, ex: http://keys-service-api. **Required** when `keys.enabled` is `true`.       | `""`    |
+| `keys.token`           | Service key for authentication with the Keys API service. **Required** when `keys.enabled` is `true`. | `""`    |
+| `keys.clientTimeout`   | HTTP client timeout for requests to the Keys service.                                                 | `500ms` |
+| `keys.refreshInterval` | Interval for periodic refresh of API keys cache.                                                      | `5m`    |
 
 ### customCAs **Custom Certificate Authority**
 

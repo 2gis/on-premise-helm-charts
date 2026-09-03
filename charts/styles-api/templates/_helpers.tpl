@@ -146,8 +146,9 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- define "styles.env.keys" -}}
 - name: MGS_KEYS_ENABLED
   value: {{ .Values.keys.enabled | quote }}
+{{- if .Values.keys.enabled }}
 - name: MGS_KEYS_ENDPOINT
-  value: {{ .Values.keys.endpoint | quote }}
+  value: {{ required "A valid .Values.keys.url required" .Values.keys.url | quote }}
 - name: MGS_KEYS_CLIENT_TIMEOUT
   value: {{ .Values.keys.clientTimeout | quote }}
 - name: MGS_KEYS_REFRESH_INTERVAL
@@ -157,6 +158,7 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
     secretKeyRef:
       name: {{ include "styles.secret.deploys.name" . }}
       key: keysServiceKey
+{{- end }}
 {{- end }}
 
 {{- define "styles.env.api" -}}
