@@ -1,0 +1,35 @@
+releases:
+{{ $releaseVersion :=  .Values.global.version }}
+{{- range $release, $v := .Values.apps }}
+- name: {{ $release }}
+  labels:
+    app: {{ $release }}
+  chart: {{ $v.repo }}/{{ $v.chart }}
+  {{- if $v | getOrNil "version" }}
+  version: {{ $v.version }}
+  {{- else }}
+  version: {{ $releaseVersion }}
+  {{- end }}
+  {{- if $v | getOrNil "namespace" }}
+  namespace: {{ $v.namespace }}
+  {{- end }}
+  missingFileHandler: Info
+  values:
+    {{- if $v | getOrNil "valueFiles" }}
+    {{- range $valueFile := $v.valueFiles }}
+    - releases/{{ $valueFile }}
+    {{- end }}
+    {{- else }}
+    - releases/{{ $release }}.yaml.gotmpl
+    {{- end }}
+    - releases/_override.yaml.gotmpl
+  {{- if ($v | getOrNil "installed") }}
+  installed: true
+  {{- else }}
+  installed: false
+  {{- end }}
+  {{- if ($v | getOrNil "needs") }}
+  needs:
+    {{- toYaml $v.needs | trim | nindent 4 }}
+  {{- end }}
+{{- end }}
