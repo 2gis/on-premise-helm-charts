@@ -374,7 +374,8 @@ kubernetes-ready пример API-платформы (infra + core + api-platfor
    ```bash
    curl --resolve search-api.sandbox:80:127.0.0.1 http://search-api.sandbox/v1/search?q=cafe
    ```
-   Проверка работоспособности: [Testing](https://docs.2gis.com/on-premise-api-platform/installation#test-search).
+   Проверка работоспособности — по спискам «Проверьте работоспособность» в разделах выше:
+   [1. Базовые сервисы (Core)](#1-базовые-сервисы-core) и [2. API-платформа](#2-api-платформа).
 
 Окружение предназначено для проверки конфигураций; для реальной установки используйте `staging`.
 
