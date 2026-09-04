@@ -298,7 +298,8 @@ kubernetes-ready пример API-платформы (infra + core + api-platfor
 >
 > В отличие от [production-сценария](https://docs.2gis.com/on-premise-api-platform/installation#configure-host-registry),
 > где требуется HTTPS-registry с аутентификацией и `imagePullSecrets`, sandbox использует локальный
-> HTTP-registry без аутентификации (доверие настраивается через `containerdConfigPatches` в kind-конфиге).
+> HTTP-registry без аутентификации (доверие настраивается скриптом `installer/scripts/kind-up.sh`
+> через `hosts.toml` в нодах).
 >
 > Официальная документация: [Installation](https://docs.2gis.com/on-premise-api-platform/installation).
 
@@ -312,28 +313,14 @@ kubernetes-ready пример API-платформы (infra + core + api-platfor
 
 1. **Заполните конфигурацию** — найдите и заполните все `# sandbox-todo`
 
-2. **Kind-кластер + локальный registry:**
+2. **Kind-кластер + локальный registry** — идемпотентный скрипт (можно запускать повторно):
    ```bash
-   kind create cluster --config installer/scripts/kind-config.yaml
-   kubectl create namespace sandbox
-   docker run -d --name kind-registry -p 5000:5000 --restart=always registry:3
-   docker network connect kind kind-registry 2>/dev/null || true
+   installer/scripts/kind-up.sh
    ```
+   Скрипт создаёт кластер `2gis-on-premise`, namespace `sandbox`, HTTP-registry `kind-registry:5000`
+   и настраивает доверие к нему в каждой ноде через `hosts.toml`
+   (см. [kind docs: local registry](https://kind.sigs.k8s.io/docs/user/local-registry/)).
    Порты 80/443 проброшены на хост (`extraPortMappings` в `installer/scripts/kind-config.yaml`).
-
-   Доверие к HTTP-registry `kind-registry:5000` настраивается через `hosts.toml` в каждой ноде
-   (см. [kind docs: local registry](https://kind.sigs.k8s.io/docs/user/local-registry/)):
-   ```bash
-   for node in $(kind get nodes --name 2gis-on-premise); do
-     docker exec "$node" mkdir -p /etc/containerd/certs.d/kind-registry:5000
-     printf '[host."http://kind-registry:5000"]\n' | \
-       docker exec -i "$node" cp /dev/stdin /etc/containerd/certs.d/kind-registry:5000/hosts.toml
-     docker exec "$node" systemctl restart containerd
-   done
-   ```
-
-   > `prepare`-хук в `deploy/sandbox.yaml.gotmpl` также создаёт kind-кластер автоматически
-   > при запуске `helmfile -e sandbox apply`.
 
 3. **Развёртывание infra** (traefik, PostgreSQL, Kafka, MinIO, Redis, Cassandra, ClickHouse, Elasticsearch) —
    не требует лицензии, образы из публичного `docker.io`. Запускайте из корня репозитория:

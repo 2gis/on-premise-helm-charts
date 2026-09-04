@@ -3,16 +3,6 @@ bases:
 - {{ env "HELMFILE_BASE" | default (printf "%s/installer/helmfile" (env "PWD")) }}/common.yaml.gotmpl
 
 ---
-# Создаёт kind-кластер, если он ещё не существует (sandbox-пример: helmfile -e sandbox apply).
-hooks:
-- events: ["prepare"]
-  showlogs: false
-  command: "bash"
-  args:
-  - "-c"
-  - "kind get clusters 2>/dev/null | grep -q '^2gis-on-premise$' || kind create cluster --name 2gis-on-premise --config {{ .Values.basePath }}/../scripts/kind-config.yaml"
-
----
 helmfiles:
 - path: {{ .Values.basePath }}/services/infra/traefik.yaml.gotmpl
 - path: {{ .Values.basePath }}/services/infra/sandbox-infra
