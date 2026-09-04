@@ -361,7 +361,7 @@ kubernetes-ready пример API-платформы (infra + core + api-platfor
    - Keycloak: realms импортируются автоматически через `keycloakConfigCli` (чарт — `charts/keycloak/realms/`);
    - Keys: API-ключ создаётся автоматически `postsync`-хуком (`installer/scripts/create_sandbox_key.sh`);
    - License: при первом запуске pod может не стартовать без валидной лицензии —
-     [получите лицензию](https://docs.2gis.com/on-premise-api-platform/installation#check-license-status)
+     [получите лицензию](https://docs.2gis.com/on-premise-api-platform/installation#get-license)
      и повторите деплой.
 
 6. **Развёртывание API-платформы** (22 релиза: search, tiles, catalog, navi, styles, mapgl, …):
