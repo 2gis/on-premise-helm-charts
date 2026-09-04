@@ -1,0 +1,22 @@
+kafka:
+  properties:
+    bootstrap.servers: kafka-controller-headless:9092
+    security.protocol: SASL_PLAINTEXT
+    sasl.mechanism: SCRAM-SHA-512
+    sasl.username: admin
+    sasl.password: admin
+
+s3:
+  host: http://s3.sandbox
+  bucket: sandbox-navi-async
+  accessKey: {{ .Values.dgctlStorage.accessKey }}
+  secretKey: {{ .Values.dgctlStorage.secretKey }}
+  expirationDays: 3
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 256Mi
+  limits:
+    cpu: 1
+    memory: 1Gi

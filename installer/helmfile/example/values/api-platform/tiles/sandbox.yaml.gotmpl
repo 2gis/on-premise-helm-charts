@@ -1,0 +1,34 @@
+cassandra:
+  environment: 'sandbox'
+  hosts:
+    - 'cassandra'
+  replicaFactor: 1
+  credentials:
+    user: cassandra
+    password: 'cassandra'
+    jmxUser: cassandra
+    jmxPassword: 'cassandra'
+
+proxy:
+  access:
+    enabled: true
+    vector:
+      token: '4df2b7c6-9635-4555-9709-3342d17fdf7a' # predefined.service: tiles-api
+    raster:
+      token: '1336f9e5-2de5-4a97-b3ff-eb9431eb5da9' # predefined.service: tiles-raster-api
+    syncPeriod: 2m
+
+importer:
+  enabled: true
+  workerNum: 1
+  writerNum: 1
+
+api:
+  replicaCount: 1
+  resources:
+    requests:
+      cpu: 100m
+      memory: 512Mi
+    limits:
+      cpu: 2
+      memory: 2Gi

@@ -1,0 +1,35 @@
+# Kafka override for the `sandbox` (kind) environment — small resources.
+global:
+  security:
+    allowInsecureImages: true
+
+image:
+  repository: bitnamilegacy/kafka
+
+listeners:
+  client:
+    protocol: SASL_PLAINTEXT
+  controller:
+    protocol: PLAINTEXT
+  interbroker:
+    protocol: PLAINTEXT
+
+sasl:
+  client:
+    users:
+    - admin
+    passwords:
+    - admin
+
+controller:
+  replicaCount: 3
+  persistence:
+    storageClass: standard
+    size: 1Gi
+  resources:
+    requests:
+      cpu: 60m
+      memory: 700Mi
+    limits:
+      cpu: 1
+      memory: 1024Mi

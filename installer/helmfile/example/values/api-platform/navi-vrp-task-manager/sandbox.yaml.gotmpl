@@ -1,0 +1,47 @@
+kafka:
+  solver:
+    properties:
+      bootstrap.servers: kafka-controller-headless:9092
+      security.protocol: SASL_PLAINTEXT
+      sasl.mechanism: SCRAM-SHA-512
+      sasl.plain.username: admin
+    sensitiveProperties:
+      sasl.plain.password: admin
+  dm:
+    properties:
+      bootstrap.servers: kafka-controller-headless:9092
+      security.protocol: SASL_PLAINTEXT
+      sasl.mechanism: SCRAM-SHA-512
+      sasl.plain.username: admin
+    sensitiveProperties:
+      sasl.plain.password: admin
+
+s3:
+  url: http://s3.sandbox
+  publicUrl: http://s3.sandbox
+  vrp:
+    bucket: sandbox-navi-vrp
+    accessKey: {{ .Values.dgctlStorage.accessKey }}
+    secretKey: {{ .Values.dgctlStorage.secretKey }}
+
+keys:
+  token: 'bcd55b3e-c0d1-4374-84f4-b9277674fb46' # predefined.service: tsp-api
+
+db:
+  host: postgresql
+  port: 5432
+  name: vrp
+  user: vrp
+  password: vrp_password
+
+stat:
+  enabled: true
+  url: 'http://stat-receiver-api/bss/3'
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 256Mi
+  limits:
+    cpu: 1
+    memory: 1Gi

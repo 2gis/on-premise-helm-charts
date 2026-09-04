@@ -1,8 +1,11 @@
 ---
 
+global:
+  security:
+    allowInsecureImages: true
+
 image:
-  registry: registry.example.com
-  repository: docker-io/bitnamilegacy/cassandra
+  repository: bitnamilegacy/cassandra
 
 dbUser:
   user: 'cassandra'
@@ -11,8 +14,8 @@ dbUser:
 
 resources:
   requests:
-    cpu: 1
-    memory: 3Gi
+    cpu: 500m
+    memory: 2700Mi
   limits:
     cpu: 2
     memory: 4Gi

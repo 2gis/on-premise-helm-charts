@@ -1,0 +1,23 @@
+# Styles override for the `sandbox` (kind) environment — in-cluster PostgreSQL and MinIO.
+s3:
+  host: minio:9000
+  secure: false
+
+stylesImport:
+  startOnDeploy: true
+
+postgres:
+  host: postgresql
+  port: 5432
+  username: styles
+  password: styles_password
+  name: styles
+
+api:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 1
+      memory: 1024Mi

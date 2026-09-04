@@ -1,0 +1,18 @@
+global:
+  security:
+    allowInsecureImages: true
+
+image:
+  repository: bitnamilegacy/elasticsearch
+
+sysctlImage:
+  repository: bitnamilegacy/os-shell
+
+master:
+  resources:
+    requests:
+      cpu: 30m
+      memory: 3400Mi
+    limits:
+      cpu: 2
+      memory: 4096Mi
