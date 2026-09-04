@@ -141,10 +141,10 @@ Use this Helm chart to deploy Platform service, which is a part of 2GIS's [On-Pr
 
 ### Static Map settings
 
-| Name            | Description                                               | Value |
-| --------------- | --------------------------------------------------------- | ----- |
-| `ui.static.url` | URL for [Static API](https://static.maps.2gis.com).       | `""`  |
-| `ui.static.key` | Access key to [Static API](https://static.maps.2gis.com). | `""`  |
+| Name            | Description                                            | Value |
+| --------------- | ------------------------------------------------------ | ----- |
+| `ui.static.url` | URL for Static API, ex:https://staticmaps.example.com. | `""`  |
+| `ui.static.key` | Access key to Static API.                              | `""`  |
 
 ### Strategy settings
 

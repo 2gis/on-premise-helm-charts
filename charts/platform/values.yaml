@@ -199,8 +199,8 @@ ui:
 
   # @section Static Map settings
 
-  # @param ui.static.url URL for [Static API](https://static.maps.2gis.com).
-  # @param ui.static.key Access key to [Static API](https://static.maps.2gis.com).
+  # @param ui.static.url URL for Static API, ex:https://staticmaps.example.com.
+  # @param ui.static.key Access key to Static API.
   static:
     url: ''
     key: ''
