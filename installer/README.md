@@ -311,6 +311,9 @@ kubernetes-ready пример API-платформы (infra + core + api-platfor
 
 ### Шаги развёртывания
 
+Все команды выполняются из корня репозитория. `HELMFILE_BASE`/`HELMFILE_VALUES` задавать не требуется —
+пути по умолчанию определяются из `PWD` (`installer/helmfile/common.yaml.gotmpl`).
+
 1. **Заполните конфигурацию** — найдите и заполните все `# sandbox-todo`
 
 2. **Kind-кластер + локальный registry** — идемпотентный скрипт (можно запускать повторно):
@@ -323,7 +326,7 @@ kubernetes-ready пример API-платформы (infra + core + api-platfor
    Порты 80/443 проброшены на хост (`extraPortMappings` в `installer/scripts/kind-config.yaml`).
 
 3. **Развёртывание infra** (traefik, PostgreSQL, Kafka, MinIO, Redis, Cassandra, ClickHouse, Elasticsearch) —
-   не требует лицензии, образы из публичного `docker.io`. Запускайте из корня репозитория:
+   не требует лицензии, образы из публичного `docker.io`:
    ```bash
    helmfile -e sandbox -f installer/helmfile/example/deploy/sandbox.yaml.gotmpl sync \
      --selector group=infra
@@ -340,6 +343,9 @@ kubernetes-ready пример API-платформы (infra + core + api-platfor
         # вставьте вывод в /etc/hosts вручную
         ```
         или используйте `kubectl -n sandbox port-forward svc/minio 9000:9000`;
+
+        > Скрипт выводит также хосты опциональных сервисов, которых нет в sandbox
+        > (citylens, pro, kibana и др.) — они резолвятся в traefik и отдадут 404; это не ошибка.
    2. Загрузите артефакты:
       ```bash
       cd installer/dgctl && ./pull.sh dgctl-config-sandbox.yaml
@@ -372,7 +378,7 @@ kubernetes-ready пример API-платформы (infra + core + api-platfor
    Добавьте в `/etc/hosts` блок из `installer/scripts/sandbox-hosts.sh`
    (тот же шаг, что и в п. 4) или используйте `--resolve` в curl:
    ```bash
-   curl --resolve search-api.sandbox:80:127.0.0.1 http://search-api.sandbox/v1/search?q=cafe
+   curl --resolve search-api.sandbox:80:127.0.0.1 "http://search-api.sandbox/v2/search?q=cafe"   # → 200
    ```
    Проверка работоспособности — по спискам «Проверьте работоспособность» в разделах выше:
    [1. Базовые сервисы (Core)](#1-базовые-сервисы-core) и [2. API-платформа](#2-api-платформа).
