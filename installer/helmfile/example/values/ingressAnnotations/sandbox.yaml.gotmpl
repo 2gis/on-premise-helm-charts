@@ -1,4 +1,7 @@
-# Environment-specific ingress annotations overrides.
+# Environment-specific ingress annotations overrides for the `sandbox` example.
+# Referenced by the service templates (e.g. services/api-platform/catalog.yaml.gotmpl) via
+# `{{ .Values.valuesPath }}/values/ingressAnnotations/{{ .Environment.Name }}.yaml.gotmpl`,
+# i.e. this file is picked up when running `helmfile -e sandbox`.
 # Override shared values from installer/helmfile/values/ingressAnnotations.yaml.gotmpl as needed.
 
 # Example: Traefik middleware selection

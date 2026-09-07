@@ -56,7 +56,7 @@ Elasticsearch, ClickHouse, Cassandra.
 
 В `installer/helmfile/example` находятся примеры окружений:
 - `staging` — основной рабочий пример;
-- `sandbox` — будет добавлен позднее (WIP): минимальный пример для быстрого развёртывания (например, в kind).
+- `sandbox` — минимальный готовый к запуску (kubernetes-ready) пример для быстрого развёртывания, например в kind.
 
 1. Скопируйте директорию `installer/helmfile/example` в удобное место:
    ```bash
@@ -284,6 +284,106 @@ helmfile -e <env> -f $HELMFILE_VALUES/deploy/<env>.yaml.gotmpl apply --selector 
 Настройка и проверка работоспособности:
 - [Проверка](https://docs.2gis.com/on-premise-citylens/install/installation#test)
 - [Настройка аутентификации](https://docs.2gis.com/on-premise-citylens/install/authentication)
+
+---
+
+## Sandbox-пример (kind)
+
+`installer/helmfile/example/environments/sandbox.yaml.gotmpl` + `deploy/sandbox.yaml.gotmpl` — быстрый
+kubernetes-ready пример API-платформы (infra + core + api-platform) для локального кластера `kind`.
+
+> Образы infra (bitnami: PostgreSQL, Kafka, MinIO, Cassandra, ClickHouse, Elasticsearch) тянутся из
+> публичного `docker.io`. Образы 2GIS (core, api-platform) — из локального registry `kind-registry:5000`,
+> который заполняется через `dgctl pull --apps-to-registry`.
+>
+> В отличие от [production-сценария](https://docs.2gis.com/on-premise-api-platform/installation#configure-host-registry),
+> где требуется HTTPS-registry с аутентификацией и `imagePullSecrets`, sandbox использует локальный
+> HTTP-registry без аутентификации (доверие настраивается скриптом `installer/scripts/kind-up.sh`
+> через `hosts.toml` в нодах).
+>
+> Официальная документация: [Installation](https://docs.2gis.com/on-premise-api-platform/installation).
+
+### Требования
+
+- [kind](https://kind.sigs.k8s.io/), Docker, kubectl
+- Helmfile 1.1.0+, Helm 4.x
+- Лицензионный ключ 2GIS ([форма на dev.2gis.ru](https://dev.2gis.ru/onpremise#form))
+
+### Шаги развёртывания
+
+Все команды выполняются из корня репозитория. `HELMFILE_BASE`/`HELMFILE_VALUES` задавать не требуется —
+пути по умолчанию определяются из `PWD` (`installer/helmfile/common.yaml.gotmpl`).
+
+1. **Заполните конфигурацию** — найдите и заполните все `# sandbox-todo`
+
+2. **Kind-кластер + локальный registry** — идемпотентный скрипт (можно запускать повторно):
+   ```bash
+   installer/scripts/kind-up.sh
+   ```
+   Скрипт создаёт кластер `2gis-on-premise`, namespace `sandbox`, HTTP-registry `kind-registry:5000`
+   и настраивает доверие к нему в каждой ноде через `hosts.toml`
+   (см. [kind docs: local registry](https://kind.sigs.k8s.io/docs/user/local-registry/)).
+   Порты 80/443 проброшены на хост (`extraPortMappings` в `installer/scripts/kind-config.yaml`).
+
+3. **Развёртывание infra** (traefik, PostgreSQL, Kafka, MinIO, Redis, Cassandra, ClickHouse, Elasticsearch) —
+   не требует лицензии, образы из публичного `docker.io`:
+   ```bash
+   helmfile -e sandbox -f installer/helmfile/example/deploy/sandbox.yaml.gotmpl sync \
+     --selector group=infra
+   ```
+   > **Почему `sync`, а не `apply`?** `apply` запускает `helm diff`, который валидирует CRD
+   > (traefik IngressRoute, Middleware) до их установки. При первом деплое используйте `sync`;
+   > для последующих обновлений — `apply`.
+
+4. **Загрузка образов и данных 2GIS** (требует лицензионный ключ, заполненный в шаге 1):
+   1. Пробросьте доступ к S3/MinIO (используется `dgctl pull` и сервисами внутри кластера):
+      - добавьте в `/etc/hosts` запись для S3-хоста (IP — адрес хостовой машины):
+        ```bash
+        installer/scripts/sandbox-hosts.sh   # выведет готовый блок *.sandbox-хостов
+        # вставьте вывод в /etc/hosts вручную
+        ```
+        или используйте `kubectl -n sandbox port-forward svc/minio 9000:9000`;
+
+        > Скрипт выводит также хосты опциональных сервисов, которых нет в sandbox
+        > (citylens, pro, kibana и др.) — они резолвятся в traefik и отдадут 404; это не ошибка.
+   2. Загрузите артефакты:
+      ```bash
+      cd installer/dgctl && ./pull.sh dgctl-config-sandbox.yaml
+      ```
+      Скрипт пушит образы 2GIS в `kind-registry:5000` и генерирует `auto_values/`.
+      Подробнее: [Fetch Installation Artifacts](https://docs.2gis.com/on-premise-api-platform/installation#fetch-artifacts).
+
+5. **Развёртывание core** (License, Keycloak, Keys) — образы из `kind-registry:5000`:
+   ```bash
+   helmfile -e sandbox -f installer/helmfile/example/deploy/sandbox.yaml.gotmpl sync \
+     --selector group=core
+   ```
+   - Keycloak: realms импортируются автоматически через `keycloakConfigCli` (чарт — `charts/keycloak/realms/`);
+   - Keys: API-ключ создаётся автоматически `postsync`-хуком (`installer/scripts/create_sandbox_key.sh`);
+   - License: при первом запуске pod может не стартовать без валидной лицензии —
+     [получите лицензию](https://docs.2gis.com/on-premise-api-platform/installation#get-license)
+     и повторите деплой.
+
+6. **Развёртывание API-платформы** (22 релиза: search, tiles, catalog, navi, styles, mapgl, …):
+   ```bash
+   helmfile -e sandbox -f installer/helmfile/example/deploy/sandbox.yaml.gotmpl apply \
+     --selector group=api-platform \
+     --diff-args --skip-schema-validation --args --skip-schema-validation
+   ```
+
+   > **`--skip-schema-validation`** нужен, потому что values-схемы api-platform-чартов не принимают
+   > `dgctlDockerRegistry` в формате `host:port` (в sandbox — `kind-registry:5000`).
+
+7. **Доступ** — сервисы доступны по hostname `*.sandbox` (например `http://search-api.sandbox`).
+   Добавьте в `/etc/hosts` блок из `installer/scripts/sandbox-hosts.sh`
+   (тот же шаг, что и в п. 4) или используйте `--resolve` в curl:
+   ```bash
+   curl --resolve search-api.sandbox:80:127.0.0.1 "http://search-api.sandbox/v2/search?q=cafe"   # → 200
+   ```
+   Проверка работоспособности — по спискам «Проверьте работоспособность» в разделах выше:
+   [1. Базовые сервисы (Core)](#1-базовые-сервисы-core) и [2. API-платформа](#2-api-платформа).
+
+Окружение предназначено для проверки конфигураций; для реальной установки используйте `staging`.
 
 ## Обновление
 

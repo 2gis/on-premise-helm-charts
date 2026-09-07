@@ -1,0 +1,18 @@
+# Traefik override for the `sandbox` (kind) environment.
+# Make the ingress reachable from the host via hostPort.
+ports:
+  web:
+    hostPort: 80
+    forwardedHeaders:
+      trustedIPs:
+        - "0.0.0.0/0"
+  websecure:
+    hostPort: 443
+    forwardedHeaders:
+      trustedIPs:
+        - "0.0.0.0/0"
+service:
+  type: ClusterIP
+ingressRoute:
+  dashboard:
+    enabled: false

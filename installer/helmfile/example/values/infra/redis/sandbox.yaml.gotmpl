@@ -1,3 +1,22 @@
+# В sandbox redis берётся из публичного docker.io, а не из dgctlDockerRegistry.
 global:
+  security:
+    allowInsecureImages: true
   redis:
-    password: '' # TODO
+    password: redis123
+
+image:
+  registry: docker.io
+  repository: bitnamilegacy/redis
+
+metrics:
+  enabled: false
+
+master:
+  resources:
+    requests:
+      cpu: 30m
+      memory: 20Mi
+    limits:
+      cpu: 1
+      memory: 1024Mi

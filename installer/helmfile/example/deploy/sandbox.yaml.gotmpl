@@ -4,13 +4,25 @@ bases:
 
 ---
 helmfiles:
-- path: {{ .Values.basePath }}/services/infra/nginx-ingress-controller.yaml.gotmpl
+- path: {{ .Values.basePath }}/services/infra/traefik.yaml.gotmpl
 - path: {{ .Values.basePath }}/services/infra/sandbox-infra
 - path: {{ .Values.basePath }}/services/infra/redis.yaml.gotmpl
-# - path: ../services/license.yaml
-
-# hooks:
-# - events: ["prepare"]
-#   showlogs: true
-#   command: "kind"
-#   args: ["create", "cluster", "--name", "2gis-on-premise"]
+- path: {{ .Values.basePath }}/services/core
+- path: {{ .Values.basePath }}/services/api-platform/stat-receiver.yaml.gotmpl
+- path: {{ .Values.basePath }}/services/api-platform/stat-api.yaml.gotmpl
+- path: {{ .Values.basePath }}/services/api-platform/platform.yaml.gotmpl
+- path: {{ .Values.basePath }}/services/api-platform/traffic-proxy.yaml.gotmpl
+- path: {{ .Values.basePath }}/services/api-platform/styles.yaml.gotmpl
+- path: {{ .Values.basePath }}/services/api-platform/mapgl.yaml.gotmpl
+- path: {{ .Values.basePath }}/services/api-platform/search.yaml.gotmpl
+- path: {{ .Values.basePath }}/services/api-platform/raster-js-api.yaml.gotmpl
+- path: {{ .Values.basePath }}/services/api-platform/tiles.yaml.gotmpl
+- path: {{ .Values.basePath }}/services/api-platform/catalog.yaml.gotmpl
+- path: {{ .Values.basePath }}/services/api-platform/staticmaps.yaml.gotmpl
+- path: {{ .Values.basePath }}/services/api-platform/navi-castle.yaml.gotmpl
+- path: {{ .Values.basePath }}/services/api-platform/navi-back.yaml.gotmpl
+- path: {{ .Values.basePath }}/services/api-platform/navi-restrictions.yaml.gotmpl
+- path: {{ .Values.basePath }}/services/api-platform/navi-router.yaml.gotmpl
+- path: {{ .Values.basePath }}/services/api-platform/navi-front.yaml.gotmpl
+- path: {{ .Values.basePath }}/services/api-platform/navi-async-matrix.yaml.gotmpl
+- path: {{ .Values.basePath }}/services/api-platform/navi-vrp.yaml.gotmpl

@@ -3,21 +3,23 @@ environments:
     values:
     - kubeContext: kind-2gis-on-premise
     - chartLocation: oci://ghcr.io/2gis/charts
+    # для работы с локальными чартами
+    # - chartLocation: ../../../../charts
     - chartLocationGrafana: oci://ghcr.io/grafana/helm-charts
     - chartLocationVector: oci://ghcr.io/vectordotdev/helm-charts
     - chartLocationPrometheus: oci://ghcr.io/prometheus-community/charts
     - chartLocationBitnami: oci://registry-1.docker.io/bitnamicharts
     - domain: sandbox
     - namespace: sandbox
-    - ingressController: nginx
+    - ingressController: traefik
     - ingressTls: false
-    - dgctlDockerRegistry: 'registry.example.com'
+    - dgctlDockerRegistry: 'kind-registry:5000'
     - dgctlStorage:
         host: 's3.sandbox'
-        bucket: 'dgctl'
+        bucket: 'sandbox-dgctl'
         accessKey: 'admin'
         secretKey: 'on-premise'
         secure: false
-    - key: 'example-key-123456789'
+    - key: 'example-key-4c5b-8478-4ce8e6012ca1'
     - license:
-        key: "00000000-0000-0000-0000-000000000000"
+        key: # sandbox-todo: вставьте лицензионный ключ 2GIS

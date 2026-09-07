@@ -1,16 +1,12 @@
-image:
-  registry: registry.example.com
-  repository: docker-io/bitnamilegacy/minio
+global:
+  security:
+    allowInsecureImages: true
 
-console:
-  enabled: false
-  image:
-    registry: registry.example.com
-    repository: docker-io/bitnamilegacy/minio-object-browser
+image:
+  repository: bitnamilegacy/minio
 
 clientImage:
-  registry: registry.example.com
-  repository: docker-io/bitnamilegacy/minio-client
+  repository: bitnamilegacy/minio-client
 
 persistence:
   enabled: true
@@ -19,3 +15,14 @@ persistence:
 
 statefulset:
   replicaCount: 1
+
+console:
+  enabled: false
+
+resources:
+  requests:
+    cpu: 10m
+    memory: 230Mi
+  limits:
+    cpu: 375m
+    memory: 384Mi
