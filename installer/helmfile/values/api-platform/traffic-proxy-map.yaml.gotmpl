@@ -1,0 +1,21 @@
+replicaCount: 1
+
+proxy:
+  log:
+    errorLog:
+      level: error # Allowed values: `debug`, `info`, `notice`, `warn`, `error`, `crit`, `alert`, `emerg`.
+
+ingress:
+  enabled: true
+  className: {{ .Values.ingressClassName }}
+  hosts:
+  - host: {{ .Values.trafficProxyMapIngress }}
+    paths:
+    - path: /
+      pathType: Prefix
+  {{- if .Values.ingressTls }}
+  tls:
+  - hosts:
+    - {{ .Values.trafficProxyMapIngress }}
+    secretName: {{ .Values.tlsSecret }}
+  {{- end }}

@@ -1,0 +1,72 @@
+ingress:
+  ingressClassName: {{ .Values.ingressClassName }}
+  enabled: true
+  annotations:
+  {{- if eq .Values.ingressController "nginx" }}
+    {{- $annotations := pick .Values.ingressAnnotations.nginx "cors" -}}
+    {{- $result := dict -}}
+    {{- range $_, $value := $annotations }}
+    {{- $result = merge $result $value -}}
+    {{- end }}
+    {{- $result | toYaml | nindent 4 }}
+  {{- else if eq .Values.ingressController "traefik" }}
+    {{- $annotations := pick .Values.ingressAnnotations.traefik "cors" -}}
+    {{- $middlewares := join "," (sortAlpha (values $annotations)) -}}
+    {{- dict "traefik.ingress.kubernetes.io/router.middlewares" $middlewares | toYaml | nindent 4 }}
+  {{- else }}
+    {}
+  {{- end }}
+  hostname: {{ .Values.keycloakIngress }}
+  {{- if .Values.ingressTls }}
+  extraTls:
+  - hosts:
+    - {{ .Values.keycloakIngress }}
+    secretName: {{ .Values.tlsSecret }}
+  {{- end }}
+
+extraEnvVars:
+  - name: JAVA_OPTS
+    value: -server -Xms64m -Xmx1024m
+
+logging:
+  output: default  # default or json
+  level: INFO      # Allowed values as documented: FATAL, ERROR, WARN, INFO, DEBUG, TRACE, ALL, OFF
+
+resources:
+  limits:
+    cpu: 2
+    memory: 4Gi
+  requests:
+    cpu: 100m
+    memory: 2Gi
+
+keycloakConfigCli:
+  resources:
+    requests:
+      cpu: 500m
+      memory: 256Mi
+    limits:
+      cpu: 1
+      memory: 512Mi
+
+keycloakThemes:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 100M
+    limits:
+      cpu: 200m
+      memory: 200M
+
+defaultInitContainers:
+  prepareWriteDirs:
+    resources:
+      requests:
+        cpu: 1
+        memory: 512Mi
+      limits:
+        cpu: 2
+        memory: 1024Mi
+
+production: true
+httpEnabled: true

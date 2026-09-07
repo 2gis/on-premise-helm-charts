@@ -1,0 +1,28 @@
+---
+bases:
+- {{ env "HELMFILE_BASE" | default (printf "%s/installer/helmfile" (env "PWD")) }}/common.yaml.gotmpl
+
+---
+releases:
+  - name: minio
+    chart: {{ .Values.chartLocationBitnami }}/minio
+    version: 17.0.21
+    namespace: {{ .Values.namespace  }}
+    kubeContext: {{ .Values.kubeContext }}
+    atomic: true
+    wait: true
+    waitForJobs: true
+    timeout: 600
+    labels:
+      group: infra
+      service: minio
+    values:
+      - {{ .Values.basePath }}/values/ingressAnnotations.yaml.gotmpl
+      - {{ .Values.valuesPath }}/values/ingressAnnotations/{{ .Environment.Name }}.yaml.gotmpl
+      - {{ .Values.basePath }}/values/infra/minio.yaml.gotmpl
+      - {{ .Values.valuesPath }}/values/infra/minio/{{ .Environment.Name }}.yaml.gotmpl
+    hooks:
+{{- $hooksPath := printf "%s/hooks/infra/minio/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $hooksPath }}
+{{- readFile $hooksPath | fromYaml | toYaml | nindent 4 }}
+{{- end }}

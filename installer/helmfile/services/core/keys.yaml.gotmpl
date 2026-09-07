@@ -1,0 +1,53 @@
+---
+bases:
+- {{ env "HELMFILE_BASE" | default (printf "%s/installer/helmfile" (env "PWD")) }}/common.yaml.gotmpl
+
+---
+releases:
+  - name: keys
+    chart: {{ .Values.chartLocation }}/keys
+    namespace: {{ .Values.namespace  }}
+    version: {{ .Values.versionCore }}
+    timeout: {{ .Values.timeoutKeys }}
+    kubeContext: {{ .Values.kubeContext }}
+    labels:
+      group: core
+      service: keys
+    values:
+      - {{ .Values.basePath }}/../dgctl/auto_values/core/general.yaml
+      - {{ .Values.basePath }}/values/dgctl.yaml.gotmpl
+      - {{ .Values.basePath }}/values/ingressAnnotations.yaml.gotmpl
+      - {{ .Values.valuesPath }}/values/ingressAnnotations/{{ .Environment.Name }}.yaml.gotmpl
+      - {{ .Values.basePath }}/values/core/keys.yaml.gotmpl
+      - {{ .Values.valuesPath }}/values/core/keys/{{ .Environment.Name }}.yaml.gotmpl
+    hooks:
+    - events: ["postsync"]
+      showlogs: true
+      command: "bash"
+      args:
+        - "{{ .Values.basePath }}/../scripts/k8s-show-logs.sh"
+        - "{{ .Values.kubeContext }}"
+        - "{{ .Values.namespace }}"
+        - "{{`{{ .Release.Name }}`}}"
+        - '{{`{{ if .Event.Error }}failure{{ end }}`}}'
+{{- $hooksPath := printf "%s/hooks/core/keys/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $hooksPath }}
+{{- readFile $hooksPath | fromYaml | toYaml | nindent 4 }}
+{{- end }}
+
+# Бэкап базы перед накаткой релиза
+# Для работы хука необходимо наличие релиза pgbackup с cronjob (можно даже в SUSPEND true)
+#    hooks:
+#    - events: ["presync"]
+#      showlogs: true
+#      command: bash
+#      args:
+#        - -c
+#        - |
+#          TIMESTAMP=$(date '+%Y%m%d%H%M%S')
+#          JOB_NAME="{{ .Environment.Name }}-pgbackup-keys-$TIMESTAMP"
+#          kubectl --context "{{ .Values.kubeContext }}" -n "{{ .Values.namespace }}" \
+#            create job --from=cronjob/{{ .Environment.Name }}-pgbackup-keys "$JOB_NAME"
+#          echo "Waiting for job to complete: $JOB_NAME ..."
+#          kubectl --context "{{ .Values.kubeContext }}" -n "{{ .Values.namespace }}" \
+#            wait --for=condition=complete --timeout=300s job/"$JOB_NAME"

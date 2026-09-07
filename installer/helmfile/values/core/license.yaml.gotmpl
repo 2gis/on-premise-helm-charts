@@ -1,0 +1,38 @@
+license:
+  type: 1
+  retryPeriod: 30s
+  softBlockPeriod: 2w
+  log:
+    level: debug
+    format: json
+
+persistence:
+  host: {{ .Values.dgctlStorage.host }}
+  bucket: {{ .Values.dgctlStorage.bucket }}
+  root: 'license_state'
+  secure: {{ .Values.dgctlStorage.secure }}
+  accessKey: {{ .Values.dgctlStorage.accessKey }}
+  secretKey: {{ .Values.dgctlStorage.secretKey }}
+
+resources:
+  limits:
+    cpu: 250m
+    memory: 128Mi
+  requests:
+    cpu: 50m
+    memory: 64Mi
+
+ingress:
+  enabled: true
+  className: {{ .Values.ingressClassName }}
+  hosts:
+  - host: {{ .Values.licenseIngress }}
+    paths:
+    - path: /
+      pathType: Prefix
+  {{- if .Values.ingressTls }}
+  tls:
+  - hosts:
+    - {{ .Values.licenseIngress }}
+    secretName: {{ .Values.tlsSecret }}
+  {{- end }}

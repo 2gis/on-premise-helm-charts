@@ -1,0 +1,4 @@
+dgctlStorage:
+    manifest: manifests/core/0000000000.json
+license:
+    type: 1

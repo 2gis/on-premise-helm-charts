@@ -1,0 +1,117 @@
+# Keys override for the `sandbox` (kind) environment — in-cluster PostgreSQL, Kafka, Redis, Keycloak OIDC.
+postgres:
+  rw:
+    host: postgresql
+    port: 5432
+    timeout: 3s
+    name: keys
+    schema: ''
+    username: keys_rw
+    password: keys_rw_password
+  ro:
+    host: postgresql
+    port: 5432
+    timeout: 3s
+    name: keys
+    schema: ''
+    username: keys_ro
+    password: keys_ro_password
+
+kafka:
+  bootstrapServers: kafka-controller-headless:9092
+  username: admin
+  password: admin
+  securityProtocol: SASL_PLAINTEXT
+  saslMechanism: SCRAM-SHA-512
+
+redis:
+  enabled: true
+  host: redis-master
+  password: redis123
+  db: 0
+
+api:
+  adminUsers: "admin:on-premise"
+  replicas: 1
+  oidc:
+    enabled: true
+    enableSinglePartnerMode: true
+    enableExternalProvider: true
+    url: http://{{ .Values.keycloakIngress }}/realms/Platform
+    retryCount: 3
+    timeout: 3s
+    defaultPartner:
+      id: 1
+      name: 'Test Default Partner'
+      role: admin
+  resources:
+    requests:
+      cpu: 10m
+      memory: 20Mi
+    limits:
+      cpu: 100m
+      memory: 128Mi
+
+admin:
+  resources:
+    requests:
+      cpu: 10m
+      memory: 140Mi
+    limits:
+      cpu: 100m
+      memory: 192Mi
+
+serviceApi:
+  resources:
+    requests:
+      cpu: 10m
+      memory: 56Mi
+    limits:
+      cpu: 1
+      memory: 256Mi
+
+tasker:
+  resources:
+    requests:
+      cpu: 10m
+      memory: 48Mi
+    limits:
+      cpu: 100m
+      memory: 64Mi
+
+counter:
+  resources:
+    requests:
+      cpu: 10m
+      memory: 20Mi
+    limits:
+      cpu: 1
+      memory: 512Mi
+
+# Фиксированные токены сервисов (keysctl services в поде keys-api) — деплои детерминированы.
+predefined:
+  service:
+    aliases:
+      catalog_apis: 48a6cd36-7cef-4457-97ab-bc4a009f6521
+    keys:
+      categories-api: a80a4b37-02f1-4af5-9a0a-cfd47fe8bd0f
+      directions-api: b9e5b2ae-5aa8-4f93-890c-5d3ea102e0c4
+      distance-matrix-api: 0c70a612-e12a-4d39-b99b-1e1f6a74152d
+      freeroam-api: 33d0e5c3-eb9b-4f94-9c66-94680bddc64c
+      geocoder-api: 82d915d8-3ab3-4be3-b01d-0b0686c898e3
+      isochrone-api: 39df804c-8ea0-4dbc-93d2-dbc977304090
+      map-matching-api: 40e762e5-1d0a-44bc-951c-a36f4fa1c9a7
+      mapgl-js-api: 7e7f7a10-7c98-47ea-b950-a85069dd57dd
+      markers-api: 16a17d08-95d1-4475-bacc-6e94aac7ac2b
+      pairs-directions-api: 205240d7-02e5-4197-bbe1-1b370ee7654a
+      places-api: 04092558-8f57-436d-82fa-97c4403587b0
+      tiles-raster-api: 1336f9e5-2de5-4a97-b3ff-eb9431eb5da9
+      regions-api: 83e6bf16-155c-4ce6-ab27-6377477b04f0
+      route-planner-api: 6ae78da6-9e0f-4007-81bb-9f03f4f43fb4
+      routing-api: e452361d-403e-44ad-93a8-b3b496667469
+      suggest-api: 1e4654fa-616a-49dd-8a35-f5780a767c79
+      tsp-api: bcd55b3e-c0d1-4374-84f4-b9277674fb46
+      tiles-api: 4df2b7c6-9635-4555-9709-3342d17fdf7a
+      truck-directions-api: bb11a66c-6687-4a2e-92ef-3df6d69dff74
+      twins-api: 01c1a324-5eb2-42cf-b797-12bfeb2b3f85
+      static-api: c3cc77c8-f76f-44bc-82e8-b278f8d40b55

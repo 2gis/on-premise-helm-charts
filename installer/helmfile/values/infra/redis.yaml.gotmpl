@@ -1,0 +1,45 @@
+image:
+  registry: {{ .Values.dgctlDockerRegistry }}
+  repository: k8s/redis
+  tag: 7.2.3-debian-11-r2
+  pullPolicy: IfNotPresent
+
+architecture: standalone
+
+master:
+  podSecurityContext:
+    enabled: false
+  containerSecurityContext:
+    enabled: false
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 1
+      memory: 1024Mi
+  persistence:
+    enabled: false
+
+commonConfiguration: |-
+  logfile ""
+  databases 1
+  timeout 600
+  tcp-keepalive 60
+  port 6379
+  appendonly no
+  save ""
+
+metrics:
+  enabled: true
+  serviceMonitor:
+    enabled: false
+  podMonitor:
+    enabled: false
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 100m
+      memory: 128Mi
