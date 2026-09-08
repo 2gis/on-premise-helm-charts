@@ -13,15 +13,15 @@ storage:
 
 docker:
   registry:
-    username: 'username' # TODO docker-registry username
-    password: 'password' # TODO docker-registry password
-    server-address: "docker-registry.host.com" # TODO docker-registry server address
+    username: username   # TODO docker-registry username
+    password: password   # TODO docker-registry password
+    server-address: docker-registry.host.com   # TODO docker-registry server address
     image-prefix: /
 
 # Для утилиты версии 3
 components:
   core:
-    version: 2.10.0
+    version: 2.11.0
   api-platform:
     version: 2.57.0
   pro:

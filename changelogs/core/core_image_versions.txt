@@ -4,6 +4,6 @@ keycloak
 	keycloak:26.3.3
 keys
 	keys-backend:1.176.0
-	keys-ui:1.7.7
+	keys-ui:1.7.9
 license
 	license:2.6.1
