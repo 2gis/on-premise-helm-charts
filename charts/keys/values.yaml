@@ -24,13 +24,11 @@ featureFlags:
   # @param featureFlags.enableAuditKafka Enable audit logging for sending to Kafka.
   # @param featureFlags.enableAuditBSS Enable audit logging for sending to BSS Stat Receiver.
   # @param featureFlags.enablePublicAPISign Enable signing responses in Public API.
-  # @param featureFlags.enableStatRedis Enable receiving monthly statistics from Redis.
 
   enableAudit: false
   enableAuditKafka: false
   enableAuditBSS: false
   enablePublicAPISign: false
-  enableStatRedis: false
 
 
 backend:
