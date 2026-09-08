@@ -8,7 +8,7 @@ storage:
 # Для утилиты версии 3
 components:
   core:
-    version: 2.10.0
+    version: 2.11.0
   api-platform:
     version: 2.57.0
   pro:

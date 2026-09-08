@@ -10,11 +10,11 @@ docker:
   registry:
     username: ''
     password: ''
-    server-address: "" # TODO
+    server-address: '' # TODO
     image-prefix: /
 components:
   core:
-    version: 2.10.0
+    version: 2.11.0
   api-platform:
     version: 2.57.0
   pro:
@@ -25,6 +25,6 @@ components:
 # Не для dgctl! Для скрипта проверки свободного места в БД из pull.sh
 script:
   postgres:
-    - postgres_host # TODO
+  - postgres_host   # TODO
   cassandra:
-    - cassandra_host # TODO
+  - cassandra_host   # TODO

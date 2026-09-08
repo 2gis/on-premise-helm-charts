@@ -5,7 +5,7 @@ key: # sandbox-todo: вставьте лицензионный ключ 2GIS
 log-format: text
 storage:
   type: s3
-  host: 's3.sandbox'          # in-cluster MinIO ingress (add to /etc/hosts or use port-forward)
+  host: s3.sandbox            # in-cluster MinIO ingress (add to /etc/hosts or use port-forward)
   bucket: sandbox-dgctl
   access-key: admin
   secret-key: on-premise
@@ -13,10 +13,10 @@ docker:
   registry:
     username: ''
     password: ''
-    server-address: "http://localhost:5000"
+    server-address: http://localhost:5000
     image-prefix: /
 components:
   core:
-    version: 2.10.0
+    version: 2.11.0
   api-platform:
     version: 2.57.0

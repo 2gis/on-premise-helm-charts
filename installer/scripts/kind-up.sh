@@ -56,4 +56,3 @@ echo
 echo "Готово. Далее:"
 echo "  - /etc/hosts: installer/scripts/sandbox-hosts.sh (см. README, шаги 4 и 7)"
 echo "  - деплой infra: helmfile -e sandbox -f installer/helmfile/example/deploy/sandbox.yaml.gotmpl sync --selector group=infra"
-
