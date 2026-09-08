@@ -1,0 +1,25 @@
+rules: # TODO — перечислите нужные асинхронные сервисы (DMA — Distance Matrix Async)
+  # Асинхронная матрица расстояний для автомобилей
+  - name: async-car
+    queries: ["get_dist_matrix"]
+    routing: ["driving"]
+  # Асинхронная матрица расстояний для грузовиков
+  - name: async-truck
+    queries: ["get_dist_matrix"]
+    routing: ["truck"]
+  # Асинхронная матрица расстояний для пешеходов
+  - name: async-pedestrian
+    queries: ["get_dist_matrix"]
+    routing: ["pedestrian"]
+  # Асинхронная матрица расстояний для велосипедов
+  - name: async-bicycle
+    queries: ["get_dist_matrix"]
+    routing: ["bicycle"]
+  # Асинхронная матрица расстояний для самокатов
+  - name: async-scooter
+    queries: ["get_dist_matrix"]
+    routing: ["scooter"]
+  # Асинхронная матрица расстояний для общественного транспорта
+  - name: async-ctx
+    queries: ["get_dist_matrix"]
+    routing: ["ctx"]

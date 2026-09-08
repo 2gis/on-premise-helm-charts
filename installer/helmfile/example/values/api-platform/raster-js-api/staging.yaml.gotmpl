@@ -1,0 +1,17 @@
+replicaCount: 1
+
+api:
+  # TODO (опционально): переопределить параметры ниже, если нужны отдельные эндпоинты/ключ
+  # trafficTileServerUrl: '' # отдельный прокси до растровых пробок (traffic tiles)
+  # trafficTimestampServerUrl: '' # по умолчанию — trafficProxyMapIngress при proxyMode: map|full
+  # trafficScoreServerUrl: '' # по умолчанию — trafficProxyMapIngress при proxyMode: map|full
+  # webApiKey: '' # отдельный ключ для Catalog API, если не совпадает с основным
+  webApiKey: '{{ .Values.key }}'
+
+resources:
+  requests:
+    cpu: 10m
+    memory: 24Mi
+  limits:
+    cpu: 700m
+    memory: 256Mi

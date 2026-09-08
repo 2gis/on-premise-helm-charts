@@ -1,0 +1,57 @@
+search:
+  url: http://search-api
+
+keys:
+  url: http://keys-service-api
+
+license:
+  url: https://license
+
+api:
+  logLevel: info
+  resources:
+    limits:
+      cpu: "1"
+      memory: 4Gi
+    requests:
+      cpu: 100m
+      memory: 2Gi
+  ingress:
+    enabled: true
+    className: {{ .Values.ingressClassName }}
+    annotations:
+    {{- if eq .Values.ingressController "nginx" }}
+      {{- $annotations := pick .Values.ingressAnnotations.nginx "cors" "proxy" "vpn" -}}
+      {{- $result := dict -}}
+      {{- range $_, $value := $annotations }}
+        {{- $result = merge $result $value -}}
+      {{- end }}
+      {{- $result | toYaml | nindent 6 }}
+    {{- else if eq .Values.ingressController "traefik" }}
+      {{- $annotations := pick .Values.ingressAnnotations.traefik "cors" "proxy" "vpn" -}}
+      {{- $middlewares := join "," (sortAlpha (values $annotations)) -}}
+      {{- if $middlewares }}
+        {{- dict "traefik.ingress.kubernetes.io/router.middlewares" $middlewares | toYaml | nindent 6 }}
+      {{- end }}
+    {{- else }}
+      {}
+    {{- end }}
+    hosts:
+    - host: {{ .Values.catalogIngress }}
+      paths:
+      - path: /
+        pathType: Prefix
+    {{- if .Values.ingressTls }}
+    tls:
+    - hosts:
+        - {{ .Values.catalogIngress }}
+      secretName: {{ .Values.tlsSecret }}
+    {{- end }}
+
+podLabels:
+  app: catalog-api
+
+strategy:
+  rollingUpdate:
+    maxSurge: 1
+    maxUnavailable: 0

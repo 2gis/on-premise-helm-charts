@@ -1,0 +1,44 @@
+global:
+  security:
+    allowInsecureImages: true
+
+networkPolicy:
+  enabled: false
+
+pdb:
+  create: false
+
+auth:
+  rootUser: "admin"
+  rootPassword: "on-premise"
+
+statefulset:
+  replicaCount: 3
+
+console:
+  replicaCount: 1
+
+ingress:
+  enabled: true
+  ingressClassName: {{ .Values.ingressClassName }}
+  annotations:
+  {{- if eq .Values.ingressController "nginx" }}
+    {{- $annotations := pick .Values.ingressAnnotations.nginx "cors" -}}
+    {{- $result := dict -}}
+    {{- range $_, $value := $annotations }}
+    {{- $result = merge $result $value -}}
+    {{- end }}
+    {{- $result | toYaml | nindent 4 }}
+  {{- else if eq .Values.ingressController "traefik" }}
+    {{- $annotations := pick .Values.ingressAnnotations.traefik "cors" -}}
+    {{- $middlewares := join "," (sortAlpha (values $annotations)) -}}
+    {{- dict "traefik.ingress.kubernetes.io/router.middlewares" $middlewares | toYaml | nindent 4 }}
+  {{- else }}
+    {}
+  {{- end }}
+  path: /
+  pathType: Prefix
+  hostname: s3.{{ .Values.domain }}
+
+# Comma, semi-colon or space separated list of buckets to create at initialization (only in standalone mode)
+defaultBuckets: "{{ .Environment.Name }}-dgctl,{{ .Environment.Name }}-styles,{{ .Environment.Name }}-navi-am,{{ .Environment.Name }}-navi-vrp,{{ .Environment.Name }}-pro-assets,{{ .Environment.Name }}-pro-layers,{{ .Environment.Name }}-pro-snapshot,{{ .Environment.Name }}-pro-userast,{{ .Environment.Name }}-pro-ui-styles"

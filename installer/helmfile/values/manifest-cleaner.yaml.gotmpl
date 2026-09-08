@@ -1,0 +1,14 @@
+config:
+  key: {{ .Values.license.key }}
+  storage:
+    type: s3
+    {{- with .Values.dgctlStorage }}
+    host: {{ .host }}
+    bucket: {{ .bucket }}
+    access-key: {{ .accessKey }}
+    secret-key: {{ .secretKey }}
+    secure: {{ .secure }}
+    {{- end }}
+
+image:
+  registry: {{ .Values.dgctlDockerRegistry }}

@@ -1,0 +1,136 @@
+{{- $protocol := ternary "https" "http" .Values.ingressTls }}
+catalog:
+  url: 'http://catalog-api'
+  key: '{{ .Values.key }}'
+
+navi:
+  url: 'http://navi-front'
+  key: '{{ .Values.key }}'
+
+search:
+  url: 'http://search-api'
+
+license:
+  url: 'https://license'
+
+s3:
+  layerDataBucket: '{{ .Environment.Name }}-pro-layers'  # для хранения отложенных задач
+  userAssetsDataBucket: '{{ .Environment.Name }}-pro-userast'
+  snapshotBucket: '{{ .Environment.Name }}-pro-snapshot'
+  assetsDataBucket: '{{ .Environment.Name }}-pro-assets'
+  resourcesBucket: '{{ .Environment.Name }}-pro-resources'
+
+assetImporter:
+  enabled: true          # cronjob
+  startOnDeploy: true    # deploy hook (job)
+  settings:
+    maxParallelJobs: 3
+    externalLinksProxyUrl: '{{ $protocol }}://{{ .Values.proApiIngress }}/proxy?url={0}'
+
+api:
+  settings:
+    corsOrigins: '*'
+    logging:
+      format: simple  # possible options: 'default' - compact json, 'renderedCompactJson' - rendered json format, 'simple' - plain text
+    env: '{{ .Environment.Name }}'
+    backgroundJobs:
+      enableUserAssetsImporter: true
+      enableAssetsStreaming: true
+    # ограничение по сессиям
+    auth:
+      url: {{ $protocol }}://{{ .Values.keycloakIngress }}
+      apiKey: {{ .Values.key }}
+      type: openid10
+      userInfoEndpoint: realms/Pro/protocol/openid-connect/userinfo
+      autoRegisterUsers: true
+
+  ingress:
+    enabled: true
+    className: {{ .Values.ingressClassName }}
+    annotations:
+    {{- if eq .Values.ingressController "nginx" }}
+      {{- $annotations := pick .Values.ingressAnnotations.nginx "cors" "proxy" -}}
+      {{- $result := dict -}}
+      {{- range $_, $value := $annotations }}
+        {{- $result = merge $result $value -}}
+      {{- end }}
+      {{- $result | toYaml | nindent 6 }}
+    {{- else if eq .Values.ingressController "traefik" }}
+      {{- $annotations := pick .Values.ingressAnnotations.traefik "cors" "proxy" -}}
+      {{- $middlewares := join "," (sortAlpha (values $annotations)) -}}
+      {{- dict "traefik.ingress.kubernetes.io/router.middlewares" $middlewares | toYaml | nindent 6 }}
+    {{- else }}
+      {}
+    {{- end }}
+    hosts:
+    - host: {{ .Values.proApiIngress }}
+      paths:
+      - path: /
+        pathType: Prefix
+    {{- if .Values.ingressTls }}
+    tls:
+    - hosts:
+      - {{ .Values.proApiIngress }}
+      secretName: {{ .Values.tlsSecret }}
+    {{- end }}
+
+permissions:
+  settings:
+    enabled: true
+    auth:
+      apiKey: {{ .Values.key }}
+      uiRequiredRoles:
+      - 'permAdmin'
+    # Только для новых пользователей
+    defaultPermissions:
+      openProUi: true
+      assets: ['*']
+      territories: ['*']
+      analytics: ['*']
+      addUserAssets:
+        allow: true
+        quantity: 1000
+        fileSize: 100
+      isochrones: 1000
+      newUserExpirationDays: 3650
+  ingress:
+    className: {{ .Values.ingressClassName }}
+    enabled: true
+    annotations:
+    {{- if eq .Values.ingressController "nginx" }}
+      {{- $annotations := pick .Values.ingressAnnotations.nginx "cors" "proxy" -}}
+      {{- $result := dict -}}
+      {{- range $_, $value := $annotations }}
+        {{- $result = merge $result $value -}}
+      {{- end }}
+      {{- $result | toYaml | nindent 6 }}
+    {{- else if eq .Values.ingressController "traefik" }}
+      {{- $annotations := pick .Values.ingressAnnotations.traefik "cors" "proxy" -}}
+      {{- $middlewares := join "," (sortAlpha (values $annotations)) -}}
+      {{- dict "traefik.ingress.kubernetes.io/router.middlewares" $middlewares | toYaml | nindent 6 }}
+    {{- else }}
+      {}
+    {{- end }}
+    hosts:
+      - host: {{ .Values.proPermissionsIngress }}
+        paths:
+          - path: /
+            pathType: Prefix
+    {{- if .Values.ingressTls }}
+    tls:
+      - hosts:
+          - {{ .Values.proPermissionsIngress }}
+        secretName: {{ .Values.tlsSecret }}
+    {{- end }}
+
+authProvider:
+  schema: Basic
+  host: {{ $protocol }}://{{ .Values.proPermissionsIngress }}
+  allowedHosts:
+  - '*'
+  basic:
+    users:
+    - username: 'admin'
+      password: 'password'
+      roles:
+      - 'permAdmin'

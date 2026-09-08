@@ -1,0 +1,20 @@
+migrate:
+  kafkaTableEngine:
+    topic: 'stat.{{ .Environment.Name }}.type.401'
+    group: 'clickhouse-shared-client'
+
+api:
+  ingress:
+    enabled: true
+    className: {{ .Values.ingressClassName }}
+    hosts:
+    - host: {{ .Values.statApiIngress }}
+      paths:
+      - path: /
+        pathType: Prefix
+    {{- if .Values.ingressTls }}
+    tls:
+    - hosts:
+      - {{ .Values.statApiIngress }}
+      secretName: {{ .Values.tlsSecret }}
+    {{- end }}

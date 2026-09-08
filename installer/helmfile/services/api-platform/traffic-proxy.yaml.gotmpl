@@ -1,0 +1,65 @@
+---
+bases:
+- {{ env "HELMFILE_BASE" | default (printf "%s/installer/helmfile" (env "PWD")) }}/common.yaml.gotmpl
+
+---
+releases:
+  {{- if has (lower .Values.proxyMode) (list "navi" "full") }}
+  - name: traffic-proxy-navi
+    chart: {{ .Values.chartLocation }}/traffic-proxy
+    namespace: {{ .Values.namespace }}
+    version: {{ .Values.versionPlatform }}
+    timeout: {{ .Values.timeoutTrafficProxy }}
+    kubeContext: {{ .Values.kubeContext }}
+    labels:
+      group: api-platform
+      service: traffic-proxy
+    values:
+      - {{ .Values.basePath }}/values/dgctl.yaml.gotmpl
+      - {{ .Values.basePath }}/values/api-platform/traffic-proxy-navi.yaml.gotmpl
+      - {{ .Values.valuesPath }}/values/api-platform/traffic-proxy/navi/{{ .Environment.Name }}.yaml.gotmpl
+    hooks:
+    - events: ["postsync"]
+      showlogs: true
+      command: "bash"
+      args:
+        - "{{ .Values.basePath }}/../scripts/k8s-show-logs.sh"
+        - "{{ .Values.kubeContext }}"
+        - "{{ .Values.namespace }}"
+        - "{{`{{ .Release.Name }}`}}"
+        - '{{`{{ if .Event.Error }}failure{{ end }}`}}'
+{{- $hooksPath := printf "%s/hooks/api-platform/traffic-proxy/navi/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $hooksPath }}
+{{- readFile $hooksPath | fromYaml | toYaml | nindent 4 }}
+{{- end }}
+  {{- end }}
+
+  {{- if has (lower .Values.proxyMode) (list "map" "full") }}
+  - name: traffic-proxy-map
+    chart: {{ .Values.chartLocation }}/traffic-proxy
+    namespace: {{ .Values.namespace }}
+    version: {{ .Values.versionPlatform }}
+    timeout: {{ .Values.timeoutTrafficProxy }}
+    kubeContext: {{ .Values.kubeContext }}
+    labels:
+      group: api-platform
+      service: traffic-proxy-map
+    values:
+      - {{ .Values.basePath }}/values/dgctl.yaml.gotmpl
+      - {{ .Values.basePath }}/values/api-platform/traffic-proxy-map.yaml.gotmpl
+      - {{ .Values.valuesPath }}/values/api-platform/traffic-proxy/map/{{ .Environment.Name }}.yaml.gotmpl
+    hooks:
+    - events: ["postsync"]
+      showlogs: true
+      command: "bash"
+      args:
+        - "{{ .Values.basePath }}/../scripts/k8s-show-logs.sh"
+        - "{{ .Values.kubeContext }}"
+        - "{{ .Values.namespace }}"
+        - "{{`{{ .Release.Name }}`}}"
+        - '{{`{{ if .Event.Error }}failure{{ end }}`}}'
+{{- $hooksPath := printf "%s/hooks/api-platform/traffic-proxy/map/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $hooksPath }}
+{{- readFile $hooksPath | fromYaml | toYaml | nindent 4 }}
+{{- end }}
+  {{- end }}

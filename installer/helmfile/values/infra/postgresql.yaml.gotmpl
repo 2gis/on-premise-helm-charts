@@ -1,0 +1,25 @@
+# https://github.com/bitnami/charts/tree/main/bitnami/postgresql
+
+global:
+  security:
+    allowInsecureImages: true
+
+primary:
+  resources:
+    limits:
+      cpu: 2
+      memory: 4Gi
+    requests:
+      cpu: 100m
+      memory: 1Gi
+  networkPolicy:
+    enabled: false
+  extendedConfiguration: |
+    log_connections = off
+    log_disconnections = off
+    log_min_duration_statement = 10000
+    shared_buffers = 2GB
+    max_connections = 200
+    work_mem = 64MB
+    max_locks_per_transaction = 1024
+    maintenance_work_mem = 1GB

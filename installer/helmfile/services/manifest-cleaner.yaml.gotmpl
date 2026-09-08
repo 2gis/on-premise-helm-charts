@@ -1,0 +1,31 @@
+---
+bases:
+- {{ env "HELMFILE_BASE" | default (printf "%s/installer/helmfile" (env "PWD")) }}/common.yaml.gotmpl
+
+---
+releases:
+  - name: manifest-cleaner
+    chart: {{ .Values.chartLocation }}/manifest-cleaner
+    version: 0.2.0
+    namespace: {{ .Values.namespace }}
+    kubeContext: {{ .Values.kubeContext }}
+    labels:
+      group: monitoring
+      service: manifest-cleaner
+    values:
+      - {{ .Values.basePath }}/values/manifest-cleaner.yaml.gotmpl
+      - {{ .Values.valuesPath }}/values/manifest-cleaner/{{ .Environment.Name }}.yaml.gotmpl
+    hooks:
+    - events: ["postsync"]
+      showlogs: true
+      command: "bash"
+      args:
+        - "{{ .Values.basePath }}/../scripts/k8s-show-logs.sh"
+        - "{{ .Values.kubeContext }}"
+        - "{{ .Values.namespace }}"
+        - "{{`{{ .Release.Name }}`}}"
+        - '{{`{{ if .Event.Error }}failure{{ end }}`}}'
+{{- $hooksPath := printf "%s/hooks/manifest-cleaner/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $hooksPath }}
+{{- readFile $hooksPath | fromYaml | toYaml | nindent 4 }}
+{{- end }}

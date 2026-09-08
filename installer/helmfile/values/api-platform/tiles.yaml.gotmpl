@@ -1,0 +1,40 @@
+cassandra:
+  consistencyLevelRead: LOCAL_QUORUM
+  consistencyLevelWrite: LOCAL_QUORUM
+
+proxy:
+  access:
+    url: http://keys-service-api
+
+importer:
+  enabled: true
+  workerNum: 2
+  writerNum: 8
+  clearSnapshots: true
+  cleaner:
+    enabled: true
+    limit: 1
+  resources:
+    limits:
+      cpu: 1000m
+      memory: 512Mi
+    requests:
+      cpu: 50m
+      memory: 128Mi
+
+api:
+  uiWhitelist: 0.0.0.0/0
+  replicaCount: 3
+  resources:
+    limits:
+      cpu: 250m
+      memory: 256Mi
+    requests:
+      cpu: 50m
+      memory: 64Mi
+
+license:
+  url: https://license
+
+logLevel: info  # Allowed options: info|warn|debug|error.
+logFormat: json # Allowed options: text|json.

@@ -1,0 +1,31 @@
+---
+bases:
+- {{ env "HELMFILE_BASE" | default (printf "%s/installer/helmfile" (env "PWD")) }}/common.yaml.gotmpl
+
+---
+releases:
+  - name: haproxy
+    chart: {{ .Values.chartLocation }}/haproxy
+    version: 2.1.8
+    namespace: {{ .Values.namespace }}
+    kubeContext: {{ .Values.kubeContext }}
+    labels:
+      service: haproxy
+      group: infra
+    values:
+      - {{ .Values.basePath }}/values/infra/haproxy.yaml.gotmpl
+      - {{ .Values.valuesPath }}/values/infra/haproxy/{{ .Environment.Name }}.yaml.gotmpl
+    hooks:
+    - events: ["postsync"]
+      showlogs: true
+      command: "bash"
+      args:
+        - "{{ .Values.basePath }}/../scripts/k8s-show-logs.sh"
+        - "{{ .Values.kubeContext }}"
+        - "{{ .Values.namespace }}"
+        - "{{`{{ .Release.Name }}`}}"
+        - '{{`{{ if .Event.Error }}failure{{ end }}`}}'
+{{- $hooksPath := printf "%s/hooks/infra/haproxy/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $hooksPath }}
+{{- readFile $hooksPath | fromYaml | toYaml | nindent 4 }}
+{{- end }}

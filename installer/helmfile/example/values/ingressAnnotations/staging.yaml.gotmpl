@@ -1,0 +1,19 @@
+# Environment-specific ingress annotations overrides.
+# Override shared values from installer/helmfile/values/ingressAnnotations.yaml.gotmpl as needed.
+
+# Example: Traefik middleware selection
+# Uncomment and customize to use specific middleware defined in infra/traefik/staging.yaml.gotmpl
+# ingressAnnotations:
+#   traefik:
+#     cors: "staging-cors-headers@kubernetescrd"
+#     proxy: "staging-buffering-limit@kubernetescrd"
+#     corsGet: "staging-s3-cors-headers@kubernetescrd"
+#     vpn: "staging-allow-vpn-office@kubernetescrd"
+#
+# Example: Nginx annotations override
+# ingressAnnotations:
+#   nginx:
+#     cors:
+#       nginx.ingress.kubernetes.io/cors-allow-headers: "DNT,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization,x-share-token,X-Company-Id"
+#     vpn:
+#       nginx.ingress.kubernetes.io/whitelist-source-range: "# TODO: specific IP ranges"

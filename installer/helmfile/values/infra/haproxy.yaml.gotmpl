@@ -1,0 +1,80 @@
+# docker-image docker.io/bitnami/haproxy:2.8.1-debian-11-r3
+image:
+  registry: {{ .Values.dgctlDockerRegistry }}
+  repository: k8s/haproxy
+  tag: 3.0.5-debian-12-r3
+
+replicaCount: 1
+
+resources:
+  limits:
+    cpu: 2
+    memory: 256Mi
+  requests:
+    cpu: 500m
+    memory: 128Mi
+
+containerSecurityContext:
+  enabled: false
+  runAsUser: 1001
+  runAsGroup: 1001
+
+networkPolicy:
+  enabled: false
+
+service:
+  type: ClusterIP
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+    - name: pgsql-rw
+      protocol: TCP
+      port: 5000
+      targetPort: 5000
+    - name: pgsql-ro
+      protocol: TCP
+      port: 5001
+      targetPort: 5001
+    - name: minio
+      protocol: TCP
+      port: 9000
+      targetPort: 9000
+
+ingress:
+  enabled: true
+  ingressClassName: {{ .Values.ingressClassName }}
+  annotations:
+  {{- if eq .Values.ingressController "nginx" }}
+    {{- $annotations := pick .Values.ingressAnnotations.nginx "corsGet" -}}
+    {{- $result := dict -}}
+    {{- range $_, $value := $annotations }}
+      {{- $result = merge $result $value -}}
+    {{- end }}
+    {{- $result | toYaml | nindent 4 }}
+  {{- else if eq .Values.ingressController "traefik" }}
+    {{- $annotations := pick .Values.ingressAnnotations.traefik "corsGet" -}}
+    {{- $middlewares := join "," (sortAlpha (values $annotations)) -}}
+    {{- dict "traefik.ingress.kubernetes.io/router.middlewares" $middlewares | toYaml | nindent 4 }}
+  {{- else }}
+    {}
+  {{- end }}
+  hostname: haproxy.local
+  extraRules:
+    - host: {{ .Values.s3ProxyStylesIngress }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: haproxy
+                port:
+                  name: minio
+  {{- if .Values.ingressTls }}
+  extraTls:
+    - hosts:
+        - {{ .Values.s3ProxyStylesIngress }}
+      secretName: {{ .Values.tlsSecret }}
+  {{- end }}

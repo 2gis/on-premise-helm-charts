@@ -1,3 +1,94 @@
+## [2.57.0] (2026-08-31)
+
+#### Images
+```
+mapgl-js-api
+	- mapgl:1.76.0
+	+ mapgl:1.76.2
+navi-async-grpc-proxy
+	- async-grpc-proxy:1.0.0
+	+ async-grpc-proxy:1.3.1
+navi-attractor
+	- navi-attractor:7.58.0.5
+	+ navi-attractor:7.60.0.7
+navi-back
+	- navi-back:7.58.0.5
+	+ navi-back:7.60.0.7
+	- navi-envoy:1.38.1-tools
+	+ navi-envoy:1.38.3
+navi-castle
+	- navi-castle:1.10.8
+	+ navi-castle:1.12.1
+	- navi-front:1.29.1
+	+ navi-front:1.31.2
+navi-front
+	- navi-front:1.29.1
+	+ navi-front:1.31.2
+navi-splitter
+	- navi-envoy:1.38.1-tools
+	+ navi-envoy:1.38.3
+	- navi-splitter:1.15.0
+	+ navi-splitter:1.17.0
+platform
+	- platform-ui:1.39.0
+	+ platform-ui:1.45.0
+raster-js-api
+	+ raster-js-api:4.1.0
+search-api
+	- nginx:1.30.2
+	+ nginx:1.30.4
+	- search-api:7.107.0
+	+ search-api:7.110.0
+search-api-v8
+	- search-api-v8-controller:8.26.0
+	+ search-api-v8-controller:8.30.0
+	- search-api-v8-data-adapter:8.26.0
+	+ search-api-v8-data-adapter:8.30.0
+	- search-api-v8-envoy:1.38.1-tools
+	+ search-api-v8-envoy:1.38.3
+	- search-api-v8-files-storage:8.26.0
+	+ search-api-v8-files-storage:8.30.0
+	- search-api-v8-head:8.26.0
+	+ search-api-v8-head:8.30.0
+	- search-api-v8-indexer:8.26.0
+	+ search-api-v8-indexer:8.30.0
+	- search-api-v8-ingress-router:8.26.0
+	+ search-api-v8-ingress-router:8.30.0
+	- search-api-v8-segment-detector:8.26.0
+	+ search-api-v8-segment-detector:8.30.0
+	- search-api-v8-syncer:8.26.0
+	+ search-api-v8-syncer:8.30.0
+	- search-api-v8-worker:8.26.0
+	+ search-api-v8-worker:8.30.0
+stat-api
+	- stat-api-migrate:0.2.1
+	+ stat-api-migrate:0.2.4
+	- stat-api:0.2.1
+	+ stat-api:0.2.4
+stat-receiver
+	- stat-receiver-api:1.16.0
+	+ stat-receiver-api:1.16.10
+	- stat-receiver-streams:1.16.0
+	+ stat-receiver-streams:1.16.12
+staticmaps
+	- staticmaps:1.0.2
+	+ staticmaps:1.0.3
+styles-api
+	- styles-api:0.42.0
+	+ styles-api:0.45.1
+tiles-api
+	- tiles-api-importer:4.88.6
+	+ tiles-api-importer:4.91.0
+	- tiles-api-proxy:4.88.6
+	+ tiles-api-proxy:4.91.0
+	- tiles-api:4.88.6
+	+ tiles-api:4.91.0
+traffic-proxy
+	- nginx:1.30.2
+	+ navi-front:1.31.2
+```
+[Full list of image versions](https://github.com/2gis/on-premise-helm-charts/blob/Platform-2.57.0/changelogs/platform/platform_image_versions.txt)
+
 ## [2.56.0] (2026-07-30)
 
 #### Images

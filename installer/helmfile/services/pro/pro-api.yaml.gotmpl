@@ -1,0 +1,36 @@
+---
+bases:
+- {{ env "HELMFILE_BASE" | default (printf "%s/installer/helmfile" (env "PWD")) }}/common.yaml.gotmpl
+
+---
+releases:
+  - name: pro-api
+    chart: {{ .Values.chartLocation }}/pro-api
+    version: {{ .Values.versionPro }}
+    namespace: {{ .Values.namespace  }}
+    timeout: {{ .Values.timeoutProApi }}
+    kubeContext: {{ .Values.kubeContext }}
+    labels:
+      group: pro
+      service: pro-api
+    values:
+      - {{ .Values.basePath }}/../dgctl/auto_values/pro/general.yaml
+      - {{ .Values.basePath }}/values/dgctl.yaml.gotmpl
+      - {{ .Values.basePath }}/values/ingressAnnotations.yaml.gotmpl
+      - {{ .Values.valuesPath }}/values/ingressAnnotations/{{ .Environment.Name }}.yaml.gotmpl
+      - {{ .Values.basePath }}/values/pro/pro-api.yaml.gotmpl
+      - {{ .Values.valuesPath }}/values/pro/pro-api/{{ .Environment.Name }}.yaml.gotmpl
+    hooks:
+    - events: ["postsync"]
+      showlogs: true
+      command: "bash"
+      args:
+        - "{{ .Values.basePath }}/../scripts/k8s-show-logs.sh"
+        - "{{ .Values.kubeContext }}"
+        - "{{ .Values.namespace }}"
+        - "{{`{{ .Release.Name }}`}}"
+        - '{{`{{ if .Event.Error }}failure{{ end }}`}}'
+{{- $hooksPath := printf "%s/hooks/pro/pro-api/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $hooksPath }}
+{{- readFile $hooksPath | fromYaml | toYaml | nindent 4 }}
+{{- end }}
