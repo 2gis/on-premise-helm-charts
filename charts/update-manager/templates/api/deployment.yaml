@@ -56,6 +56,12 @@ spec:
               containerPort: 8080
             - name: metrics
               containerPort: 9090
+          startupProbe:
+            httpGet:
+              path: /healthcheck
+              port: api
+            timeoutSeconds: 10
+            failureThreshold: 12
           readinessProbe:
             httpGet:
               path: /healthcheck
