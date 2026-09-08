@@ -1,0 +1,86 @@
+name: Lint Installer
+
+on:
+  pull_request:
+    branches:
+      - develop
+      - master
+    paths:
+      - 'installer/**'
+  workflow_dispatch:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    container: ghcr.io/helmfile/helmfile:v1.7.0
+    env:
+      # CI валидирует локальные чарты из чекаута: в PR с bump версии чарты
+      # ещё не опубликованы в ghcr.io/2gis/charts (публикация — по тегу после merge).
+      CHART_LOCATION: ${{ github.workspace }}/charts
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+
+      - name: Check chart versions match common.yaml.gotmpl
+        run: |
+          COMMON="$GITHUB_WORKSPACE/installer/helmfile/common.yaml.gotmpl"
+          get_version() {
+            grep -m1 -oE "$1: [0-9][0-9.]*" "$COMMON" | awk '{print $2}'
+          }
+          VERSION_CORE=$(get_version versionCore)
+          VERSION_PLATFORM=$(get_version versionPlatform)
+          VERSION_PRO=$(get_version versionPro)
+          VERSION_CITYLENS=$(get_version versionCitylens)
+          echo "common.yaml.gotmpl: Core=$VERSION_CORE Platform=$VERSION_PLATFORM Pro=$VERSION_PRO Citylens=$VERSION_CITYLENS"
+
+          FAILED=""
+          for chart_path in charts/*/Chart.yaml; do
+            chart=$(basename "$(dirname "$chart_path")")
+            # gis-platform (Evergis) версионируется независимо от common.yaml.gotmpl
+            if [ "$chart" = "gis-platform" ]; then continue; fi
+            actual=$(grep -m1 '^version:' "$chart_path" | awk '{print $2}')
+            case "$chart" in
+              keys|license|keycloak)       expected="$VERSION_CORE" ;;
+              pro-api|pro-ui)              expected="$VERSION_PRO" ;;
+              citylens|citylens-routes-ui) expected="$VERSION_CITYLENS" ;;
+              *)                           expected="$VERSION_PLATFORM" ;;
+            esac
+            if [ "$actual" != "$expected" ]; then
+              echo "::error file=$chart_path::Version mismatch: expected $expected, found $actual"
+              FAILED="$FAILED $chart($actual != $expected)"
+            fi
+          done
+
+          if [ -n "$FAILED" ]; then
+            echo "Version consistency check failed:$FAILED"
+            exit 1
+          fi
+          echo "Chart versions are consistent with common.yaml.gotmpl"
+
+      - name: Helmfile lint (staging)
+        run: |
+          HELMFILE_BASE="$GITHUB_WORKSPACE/installer/helmfile" \
+          helmfile -e staging -f installer/helmfile/example/deploy/staging.yaml.gotmpl lint
+
+      - name: Helmfile template (staging)
+        run: |
+          HELMFILE_BASE="$GITHUB_WORKSPACE/installer/helmfile" \
+          helmfile -e staging -f installer/helmfile/example/deploy/staging.yaml.gotmpl \
+            template --concurrency=1 > installer_artifact
+
+      - name: Install kubeconform
+        run: |
+          curl -LO https://github.com/yannh/kubeconform/releases/download/v0.6.7/kubeconform-linux-amd64.tar.gz
+          tar xzf kubeconform-linux-amd64.tar.gz
+          chmod +x kubeconform
+
+      - name: Validate manifests
+        run: |
+          for v in 1.33.0 1.32.1 1.31.1 1.30.0 1.29.0; do
+            echo "=== Kubernetes $v ==="
+            cat installer_artifact | ./kubeconform -summary \
+              -kubernetes-version "$v" \
+              -ignore-missing-schemas
+          done

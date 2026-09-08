@@ -1,0 +1,80 @@
+api:
+  logLevel: warning   # Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.
+  resources:
+    limits:
+      cpu: 100m
+      memory: 128Mi
+    requests:
+      cpu: 50m
+      memory: 64Mi
+  ingress:
+    enabled: true
+    className: {{ .Values.ingressClassName }}
+    hosts:
+    - host: {{ .Values.keysApiIngress }}
+      paths:
+      - path: /
+        pathType: Prefix
+    {{- if .Values.ingressTls }}
+    tls:
+    - hosts:
+      - {{ .Values.keysApiIngress }}
+      secretName: {{ .Values.tlsSecret }}
+    {{- end }}
+
+admin:
+  logLevel: warning   # Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.
+  resources:
+    limits:
+      cpu: 100m
+      memory: 192Mi
+    requests:
+      cpu: 50m
+      memory: 128Mi
+  ingress:
+    enabled: true
+    className: {{ .Values.ingressClassName }}
+    annotations:
+    {{- if eq .Values.ingressController "nginx" }}
+      {{- $annotations := pick .Values.ingressAnnotations.nginx "cors" "proxy" "vpn" -}}
+      {{- $result := dict -}}
+      {{- range $_, $value := $annotations }}
+        {{- $result = merge $result $value -}}
+      {{- end }}
+      {{- $result | toYaml | nindent 6 }}
+    {{- else if eq .Values.ingressController "traefik" }}
+      {{- $annotations := pick .Values.ingressAnnotations.traefik "cors" "proxy" "vpn" -}}
+      {{- $middlewares := join "," (sortAlpha (values $annotations)) -}}
+      {{- dict "traefik.ingress.kubernetes.io/router.middlewares" $middlewares | toYaml | nindent 6 }}
+    {{- else }}
+      {}
+    {{- end }}
+    hosts:
+    - host: {{ .Values.keysAdminIngress }}
+      paths:
+      - path: /
+        pathType: Prefix
+    {{- if .Values.ingressTls }}
+    tls:
+    - hosts:
+      - {{ .Values.keysAdminIngress }}
+      secretName: {{ .Values.tlsSecret }}
+    {{- end }}
+
+migrate:
+  logLevel: warning   # Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.
+
+tasker:
+  logLevel: warning   # Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.
+
+dispatcher:
+  logLevel: warning   # Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.
+
+cleaner:
+  logLevel: warning   # Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.
+
+kafka:
+  stats:
+    topic: 'stat.{{ .Environment.Name }}.type.401'
+    groupId: '{{ .Environment.Name }}-keys-counter'
+    clientId: '{{ .Environment.Name }}-keys-counter'

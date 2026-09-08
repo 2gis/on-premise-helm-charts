@@ -1,0 +1,28 @@
+global:
+  security:
+    allowInsecureImages: true
+
+master:
+  networkPolicy:
+    enabled: false
+  pdb:
+    create: false
+  masterOnly: false
+  replicaCount: 1
+  persistence:
+    size: 5Gi
+  heapSize: 2048m
+  resources:
+    requests:
+      cpu: 500m
+      memory: 2048Mi
+    limits:
+      cpu: 2
+      memory: 4096Mi
+
+data:
+  replicaCount: 0
+coordinating:
+  replicaCount: 0
+ingest:
+  replicaCount: 0

@@ -1,0 +1,28 @@
+global:
+  security:
+    allowInsecureImages: true
+
+image:
+  repository: bitnamilegacy/minio
+
+clientImage:
+  repository: bitnamilegacy/minio-client
+
+persistence:
+  enabled: true
+  size: 30Gi
+  storageClass: "standard"
+
+statefulset:
+  replicaCount: 1
+
+console:
+  enabled: false
+
+resources:
+  requests:
+    cpu: 10m
+    memory: 230Mi
+  limits:
+    cpu: 375m
+    memory: 384Mi

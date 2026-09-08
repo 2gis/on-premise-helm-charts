@@ -1,0 +1,44 @@
+{{- $protocol := ternary "https" "http" .Values.ingressTls }}
+env:
+  MAPGL_DEMO_KEY: {{ .Values.key }}
+  MAPGL_HOST: {{ $protocol }}://{{ .Values.mapglIngress }}
+  MAPGL_TILES_API: {{ $protocol }}://{{ .Values.tilesMultiIngress }}
+  {{- if has (lower .Values.proxyMode) (list "map" "full") }}
+  MAPGL_TRAFFICSERVER: {{ $protocol }}://{{ .Values.trafficProxyMapIngress }}
+  {{- else }}
+  MAPGL_TRAFFICSERVER: https://jam.api.2gis.com
+  {{- end }}
+  MAPGL_RTLPLUGIN: {{ $protocol }}://{{ .Values.mapglIngress }}/api/js/plugins/rtl-v1.0.0.js
+  MAPGL_RTLPLUGINHASH: sha512-YAPPEl+Atvsm/cMkrfWefmlQLAlKTGaqFjIkI6urAnDgam2uTVEVVnZZEhHCa91JjYYxa5yr4Ndb4Vl3NUovfA==
+  MAPGL_KEYSERVER: "{{ $protocol }}://{{ .Values.keysApiIngress }}/public/v1/keys/{keyID}/services/mapgl-js-api"
+  MAPGL_STYLESERVER: "{{ $protocol }}://{{ .Values.stylesIngress }}"
+
+ingress:
+  enabled: true
+  className: {{ .Values.ingressClassName }}
+  annotations:
+  {{- if eq .Values.ingressController "nginx" }}
+    {{- $annotations := pick .Values.ingressAnnotations.nginx "cors" "vpn" "proxy" -}}
+    {{- $result := dict -}}
+    {{- range $_, $value := $annotations }}
+      {{- $result = merge $result $value -}}
+    {{- end }}
+    {{- $result | toYaml | nindent 4 }}
+  {{- else if eq .Values.ingressController "traefik" }}
+    {{- $annotations := pick .Values.ingressAnnotations.traefik "cors" "vpn" "proxy" -}}
+    {{- $middlewares := join "," (sortAlpha (values $annotations)) -}}
+    {{- dict "traefik.ingress.kubernetes.io/router.middlewares" $middlewares | toYaml | nindent 4 }}
+  {{- else }}
+    {}
+  {{- end }}
+  hosts:
+  - host: {{ .Values.mapglIngress }}
+    paths:
+    - path: /
+      pathType: Prefix
+  {{- if .Values.ingressTls }}
+  tls:
+  - hosts:
+    - {{ .Values.mapglIngress }}
+    secretName: {{ .Values.tlsSecret }}
+  {{- end }}

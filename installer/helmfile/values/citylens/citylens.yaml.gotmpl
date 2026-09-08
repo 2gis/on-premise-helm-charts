@@ -1,0 +1,167 @@
+{{- $protocol := ternary "https" "http" .Values.ingressTls }}
+kafka:
+  topics:
+    frames: citylens.{{ .Environment.Name }}.frames
+    tracks: citylens.{{ .Environment.Name }}.tracks
+    pro: pro.{{ .Environment.Name }}.task
+    proDrivers: pro.{{ .Environment.Name }}.drivers
+    proObjects: pro.{{ .Environment.Name }}.objects
+    logs: citylens.{{ .Environment.Name }}.logs
+    uploader: citylens.{{ .Environment.Name }}.uploader
+    predictions: citylens.{{ .Environment.Name }}.recognized.camcom
+    framesLifecycle: citylens.{{ .Environment.Name }}.lifecycle
+    tracksLifecycle: citylens.{{ .Environment.Name }}.tracks.lifecycle
+    objectsLifecycle: citylens.{{ .Environment.Name }}.objects.lifecycle
+  consumerGroups:
+    prefix: citylens_{{ .Environment.Name }}_
+
+s3:
+  bucketPrefix: {{ .Environment.Name }}-citylens
+  logsBucketPrefix: {{ .Environment.Name }}-citylens-logs
+  verifySsl: true
+  region: ''
+  setPublicReadACL: false
+
+dashboardDomain: {{ $protocol }}://{{ .Values.citylensIngress }}
+
+web:
+  auth:
+    enabled: true
+    authServerUrl: {{ $protocol }}://{{ .Values.keycloakIngress }}
+    verifySsl: true
+  ingress:
+    className: {{ .Values.ingressClassName }}
+    enabled: true
+    hosts:
+    - host: {{ .Values.citylensIngress }}
+      paths:
+      - path: /
+        pathType: Prefix
+    {{- if .Values.ingressTls }}
+    tls:
+    - hosts:
+      - {{ .Values.citylensIngress }}
+      secretName: {{ .Values.tlsSecret }}
+    {{- end }}
+
+locale: ru
+
+map:
+  tileserverUrl: '{{ $protocol }}://{{ .Values.tilesMultiIngress }}'
+  mapgl:
+    host: '{{ .Values.mapglIngress }}'
+    key: '{{ .Values.key }}'
+
+api:
+  licensing:
+    url: https://license
+  routesApiBaseUrl: http://citylens-routes-api
+  auth:
+    enabled: true
+    authServerUrl: {{ $protocol }}://{{ .Values.keycloakIngress }}
+    verifySsl: true
+  ingress:
+    className: {{ .Values.ingressClassName }}
+    enabled: true
+    hosts:
+    - host: {{ .Values.citylensApiIngress }}
+      paths:
+      - path: /
+        pathType: Prefix
+    {{- if .Values.ingressTls }}
+    tls:
+    - hosts:
+      - {{ .Values.citylensApiIngress }}
+      secretName: {{ .Values.tlsSecret }}
+    {{- end }}
+
+dgctlStorage:
+  verifySsl: false
+
+routes:
+  postgres:
+    api:
+      database: routes
+    hangfire:
+      database: hangfire
+    realtimeDataApi:
+      database: realtime_data
+  hangfire:
+    postgres:
+      database: hangfire
+  api:
+    ingress:
+      enabled: true
+      className: {{ .Values.ingressClassName }}
+      annotations:
+      {{- if eq .Values.ingressController "nginx" }}
+        {{- $annotations := pick .Values.ingressAnnotations.nginx "cors" "proxy" -}}
+        {{- $result := dict -}}
+        {{- range $_, $value := $annotations }}
+          {{- $result = merge $result $value -}}
+        {{- end }}
+        {{- $result | toYaml | nindent 8 }}
+      {{- else if eq .Values.ingressController "traefik" }}
+        {{- $annotations := pick .Values.ingressAnnotations.traefik "cors" "proxy" -}}
+        {{- $middlewares := join "," (sortAlpha (values $annotations)) -}}
+        {{- dict "traefik.ingress.kubernetes.io/router.middlewares" $middlewares | toYaml | nindent 8 }}
+      {{- else }}
+        {}
+      {{- end }}
+      hosts:
+        - host: {{ .Values.citylensRoutesApiIngress }}
+          paths:
+            - path: /
+              pathType: Prefix
+      {{- if .Values.ingressTls }}
+      tls:
+        - hosts:
+            - {{ .Values.citylensRoutesApiIngress }}
+          secretName: {{ .Values.tlsSecret }}
+      {{- end }}
+  worker:
+    busConfig:
+      consumers:
+        appEvents:
+          groupId: citylens.{{ .Environment.Name }}.bus
+          bufferSize: 100
+          workersCount: 10
+
+  features:
+    authorizationEnabled: true
+    oidcMobileAuthorizationEnabled: true
+    coverageRatioEnabled: true
+    tasksAssetEnabled: true
+  navi:
+    url: http://navi-front
+    timeout: 180
+    key: {{ .Values.key }}
+
+  keys:
+    url: http://keys-api
+
+  pro:
+    authorizationToken: {{ .Values.key }}
+
+  realtimeDataApi:
+    replicaCount: 1
+
+    postgres:
+      database: realtime_data
+      timeout: 15
+      commandTimeout: 30
+      poolSize:
+        min: 1
+        max: 30
+
+    logging:
+      level: information
+
+    daysToLeaveData: 30
+
+  realtimeData:
+    url: http://citylens-routes-realtime-data-api
+
+  tasksAssetSettings:
+    plannedTasksAssetId: user_dyn_citylens_planned_tasks
+    completedTasksAssetId: user_dyn_citylens_completed_tasks

@@ -1,0 +1,80 @@
+{{- $protocol := ternary "https" "http" .Values.ingressTls }}
+ui:
+  brand: 2gis
+  pages: "status,playground,map_styles,license"
+  status:
+    mapgl: "MapGL JS={{ $protocol }}://{{ .Values.mapglIngress }},Tiles API={{ $protocol }}://{{ .Values.tilesMultiIngress }}/healthcheck"
+    search: "Catalog API={{ $protocol }}://{{ .Values.catalogIngress }},Search API={{ $protocol }}://{{ .Values.searchIngress }}/v2/status"
+    navi: "Castle={{ $protocol }}://{{ .Values.naviCastleIngress }}/cities.conf,Routing={{ $protocol }}://{{ .Values.naviFrontIngress }}/healthcheck"
+    pro: "PRO UI={{ $protocol }}://{{ .Values.proUiIngress }}/api/healthcheck/app,PRO API={{ $protocol }}://{{ .Values.proApiIngress }}/health/live,PRO Permissions API={{ $protocol }}://{{ .Values.proPermissionsIngress }}"
+    keys: "Keys UI={{ $protocol }}://{{ .Values.keysAdminIngress }},Keys API=http://keys-api/healthcheck,Keys Service API=http://keys-service-api/healthcheck"
+    mapStyles: "{{ $protocol }}://{{ .Values.stylesIngress }}/healthcheck"
+
+  mapgl:
+    url: "{{ $protocol }}://{{ .Values.mapglIngress }}"
+    key: {{ .Values.key }}
+
+  catalog:
+    url: "{{ $protocol }}://{{ .Values.catalogIngress }}"
+    key: {{ .Values.key }}
+
+  navi:
+    url: "{{ $protocol }}://{{ .Values.naviFrontIngress }}"
+    key: {{ .Values.key }}
+
+  mapStyles:
+    url: "{{ $protocol }}://{{ .Values.stylesIngress }}"
+    key: {{ .Values.key }}
+
+  pro:
+    entryPageUrl: {{ $protocol }}://{{ .Values.proUiIngress }}
+  cityLens:
+    entryPageUrl: {{ $protocol }}://{{ .Values.citylensRoutesUiIngress }}
+  onpremise:
+    entryPageUrl: ''
+
+  kitDocs:
+    entryPageUrl: https://docs.2gis.com/on-premise
+
+  license:
+    url: http://license
+
+  ingress:
+    enabled: true
+    className: {{ .Values.ingressClassName }}
+    annotations:
+    {{- if eq .Values.ingressController "nginx" }}
+      {{- $annotations := pick .Values.ingressAnnotations.nginx "vpn" -}}
+      {{- $result := dict -}}
+      {{- range $_, $value := $annotations }}
+        {{- $result = merge $result $value -}}
+      {{- end }}
+      {{- $result | toYaml | nindent 6 }}
+    {{- else if eq .Values.ingressController "traefik" }}
+      {{- $annotations := pick .Values.ingressAnnotations.traefik "vpn" -}}
+      {{- $middlewares := join "," (sortAlpha (values $annotations)) -}}
+      {{- if $middlewares }}
+      {{- dict "traefik.ingress.kubernetes.io/router.middlewares" $middlewares | toYaml | nindent 6 }}
+      {{- end }}
+    {{- else }}
+      {}
+    {{- end }}
+    hosts:
+      - host: {{ .Values.platformIngress }}
+        paths:
+          - path: /
+            pathType: Prefix
+    {{- if .Values.ingressTls }}
+    tls:
+      - hosts:
+          - {{ .Values.platformIngress }}
+        secretName: {{ .Values.tlsSecret }}
+    {{- end }}
+
+  resources:
+    limits:
+      cpu: 250m
+      memory: 384Mi
+    requests:
+      cpu: 100m
+      memory: 256Mi

@@ -1,0 +1,31 @@
+resources:
+  limits:
+    cpu: "1"
+    memory: 1Gi
+  requests:
+    cpu: "250m"
+    memory: 64Mi
+
+kafka:
+  groupId: navi_{{ .Environment.Name }}_vrp_solver
+  statusTopic: navi.{{ .Environment.Name }}.vrp.status.topic
+  taskTopic: navi.{{ .Environment.Name }}.vrp.task.topic
+
+ingress:
+  enabled: true
+  className: {{ .Values.ingressClassName }}
+  hosts:
+  - host: {{ .Values.naviVrpSolverIngress }}
+    paths:
+    - path: /
+      pathType: Prefix
+  {{- if .Values.ingressTls }}
+  tls:
+  - hosts:
+    - {{ .Values.naviVrpSolverIngress }}
+    secretName: {{ .Values.tlsSecret }}
+  {{- end }}
+
+naviFront:
+  key: {{ .Values.key }}
+  url: http://navi-front/carrouting/6.0.1/global

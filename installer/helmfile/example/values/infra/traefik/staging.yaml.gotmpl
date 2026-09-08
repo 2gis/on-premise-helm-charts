@@ -1,0 +1,125 @@
+# image:
+#   registry: registry.example.com  # TODO: set your container registry
+
+# ports:
+#   web:
+#     hostPort: 80
+#     forwardedHeaders:
+#       trustedIPs:
+#         - "192.168.0.0/29"  # TODO: set actual LB IP range
+#   websecure:
+#     hostPort: 443
+#     forwardedHeaders:
+#       trustedIPs:
+#         - "192.168.0.0/29"  # TODO: set actual LB IP range
+
+# ingressRoute:
+#   dashboard:
+#     enabled: true
+#     matchRule: Host(`traefik.{{ .Values.domain }}`)
+#     entryPoints:
+#       - websecure
+
+# gateway:
+#   listeners:
+#     websecure:
+#       mode: Terminate
+#       certificateRefs:
+#         - kind: Secret
+#           name: traefik-cert  # TODO: set your TLS secret name
+#           namespace: {{ .Release.Namespace }}
+#           group: ""
+
+# # Override extraObjects (middleware definitions)
+# # WARNING: This completely replaces the default extraObjects from traefik.yaml.gotmpl
+# # If you need custom middleware, copy ALL middleware definitions here and modify as needed
+# extraObjects:
+#   # CORS middleware — copy from traefik.yaml.gotmpl and customize origins
+#   - apiVersion: traefik.io/v1alpha1
+#     kind: Middleware
+#     metadata:
+#       name: cors-headers  # TODO: keep same name as in ingressAnnotations
+#       namespace: {{ .Release.Namespace }}
+#     spec:
+#       headers:
+#         accessControlAllowMethods:
+#           - "GET"
+#           - "PUT"
+#           - "POST"
+#           - "DELETE"
+#           - "PATCH"
+#           - "OPTIONS"
+#         accessControlAllowHeaders:
+#           - "DNT"
+#           - "Keep-Alive"
+#           - "User-Agent"
+#           - "X-Requested-With"
+#           - "If-Modified-Since"
+#           - "Cache-Control"
+#           - "Content-Type"
+#           - "Range"
+#           - "Authorization"
+#           - "x-share-token"
+#           - "X-Company-Id"
+#         accessControlAllowCredentials: true
+#         accessControlMaxAge: 100
+#         addVaryHeader: true
+#         accessControlAllowOriginList:
+#           - "https://{{ .Values.mapglIngress }}"  # TODO: add your service origins
+#           - "https://{{ .Values.catalogIngress }}"
+
+#   # S3 CORS middleware — GET only
+#   - apiVersion: traefik.io/v1alpha1
+#     kind: Middleware
+#     metadata:
+#       name: s3-cors-headers  # TODO: keep same name as in ingressAnnotations
+#       namespace: {{ .Release.Namespace }}
+#     spec:
+#       headers:
+#         accessControlAllowMethods:
+#           - "GET"
+#         accessControlAllowOriginList:
+#           - "*"
+#         addVaryHeader: true
+
+#   # Buffering middleware — request body size limit
+#   - apiVersion: traefik.io/v1alpha1
+#     kind: Middleware
+#     metadata:
+#       name: buffering-limit  # TODO: keep same name as in ingressAnnotations
+#       namespace: {{ .Release.Namespace }}
+#     spec:
+#       buffering:
+#         maxRequestBodyBytes: 104857600  # 100 MB
+
+#   # Block /metrics endpoint
+#   - apiVersion: traefik.io/v1alpha1
+#     kind: IngressRoute
+#     metadata:
+#       name: block-metrics
+#       namespace: {{ .Release.Namespace }}
+#     spec:
+#       entryPoints:
+#         - web
+#         - websecure
+#       routes:
+#         - match: Path(`/metrics`)
+#           kind: Rule
+#           priority: 1000000
+#           services:
+#             - kind: TraefikService
+#               name: noop@internal
+
+#   # VPN whitelist middleware — customize IP ranges
+#   - apiVersion: traefik.io/v1alpha1
+#     kind: Middleware
+#     metadata:
+#       name: allow-vpn-office  # TODO: keep same name as in ingressAnnotations
+#       namespace: {{ .Release.Namespace }}
+#     spec:
+#       ipAllowList:
+#         sourceRange:
+#           - "10.0.0.0/8"  # TODO: replace with your IP ranges
+#           - "172.16.0.0/12"
+#         ipStrategy:
+#           depth: 1

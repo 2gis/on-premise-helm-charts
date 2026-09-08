@@ -1,0 +1,35 @@
+configuration: |-
+  global
+    log stdout format raw local0
+    maxconn 500
+  defaults
+    log global
+    timeout client 30m
+    timeout connect 4s
+    timeout server 30m
+    timeout check 5s
+
+    listen stats
+        mode http
+        bind *:8080
+        stats enable
+        stats uri /
+        http-request use-service prometheus-exporter if { path /metrics }
+
+    listen pgsqlReadWrite
+        bind *:5000
+        option srvtcpka
+        server prod-psql-node-01_5432 TODO-IP:5432
+
+    listen pgsqlReadOnly
+        bind *:5001
+        option srvtcpka
+        server prod-psql-node-01_5432 TODO_IP:5432
+
+    listen minio
+      bind *:9000
+      mode http
+      balance leastconn
+      server prod-minio-node-01_9000 TODO_IP:9000
+
+# helmfile -e staging -f services/haproxy.yaml --context=1 apply -i

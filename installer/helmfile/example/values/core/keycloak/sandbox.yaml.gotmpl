@@ -1,0 +1,36 @@
+# Keycloak override for the `sandbox` (kind) environment.
+# Realms/services configure via Keycloak admin console after deploy (см. installer/README.md).
+externalDatabase:
+  user: keycloak
+  password: keycloak
+  host: postgresql
+  port: 5432
+  database: keycloak
+
+auth:
+  adminUser: admin
+  adminPassword: admin
+
+replicaCount: 1
+
+defaultUser:
+  enabled: true
+  name: 'user'
+  email: 'user@test.com'
+  password: 'userpass'
+  firstName: 'user'
+  lastName: 'user'
+
+tls:
+  enabled: false
+
+production: false
+httpEnabled: true
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 512Mi
+  limits:
+    cpu: 2
+    memory: 2Gi

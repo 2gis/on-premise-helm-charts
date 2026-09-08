@@ -1,0 +1,26 @@
+environments:
+  staging:
+    values:
+    - kubeContext: default # TODO
+    # Public registry by default; override via CHART_LOCATION env for an internal mirror.
+    - chartLocation: {{ env "CHART_LOCATION" | default "oci://ghcr.io/2gis/charts" }}
+    - chartLocationGrafana: oci://ghcr.io/grafana/helm-charts
+    - chartLocationVector: oci://ghcr.io/vectordotdev/helm-charts
+    - chartLocationPrometheus: oci://ghcr.io/prometheus-community/charts
+    - domain: 'example.com' # TODO
+    - namespace: staging # TODO
+    - ingressController: nginx # TODO nginx/traefik
+    # - traefikVpnAllowList: # TODO: IP-диапазоны VPN для traefik middleware allow-vpn-office (актуально только для traefik)
+    #   - 10.0.0.0/8 # TODO
+    - monitoringNamespace: prometheus # TODO
+    - tlsSecret: secret-tls # TODO
+    - dgctlDockerRegistry: 'registry.example.com' # TODO
+    - dgctlStorage:
+        host: 's3.example.com'
+        bucket: 'onpremise-artifacts-staging'  # TODO
+        accessKey: 'accessKey' # TODO
+        secretKey: 'secretKey' # TODO
+        secure: false # TODO
+    - key: 'example-key-123456789' # TODO
+    - license:
+        key: "00000000-0000-0000-0000-000000000000" # TODO

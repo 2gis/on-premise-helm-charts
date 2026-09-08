@@ -1,0 +1,71 @@
+kafka:
+  bootstrapServer: server # TODO
+  username: user # TODO
+  password: pass # TODO
+  securityProtocol: SASL_PLAINTEXT # TODO
+  saslMechanism: SCRAM-SHA-512 # TODO
+  # topics:
+  #   pro: pro.staging.task   # TODO uncomment and adjust if streaming asset files use a different topic name
+  #   proDrivers: pro.staging.drivers
+  #   proObjects: pro.staging.objects
+
+s3:
+  endpoint: "http://s3.staging.host" # TODO
+  accessKey: access # TODO
+  secretAccessKey: secret # TODO
+
+postgres:
+  host: host # TODO
+  port: port # TODO
+  database: database # TODO
+  username: user # TODO
+  password: pass # TODO
+
+api:
+  auth:
+    enabled: true # TODO
+    realm: realm # TODO
+    storeOIDCUserinfoFields: [] # TODO
+    verifySsl: true # TODO
+    predictorsTokens:
+      camcom: token # TODO
+
+web:
+  auth:
+    enabled: true # TODO
+    verifySsl: true # TODO
+    realm: realm # TODO
+    clientId: clientId # TODO
+    clientSecret: clientSecret # TODO
+
+pro:
+  baseUrl: http://pro-api
+  key: &proToken key # TODO
+  verifySsl: false
+  framesAssetId: citylens_pollution
+  objectsAssetId: citylens_objects
+
+routes:
+  postgres:
+    api:
+      database: routes # TODO
+    hangfire:
+      database: hangfire # TODO
+    realtimeDataApi:
+      database: realtime_data # TODO
+  tasksAssetSettings:
+    systemAccessToken: *proToken
+  adminCredentials:
+    username: 'admin' # TODO
+    password: 'admin' # TODO
+    cookieSigningKey: '0123456789abcdef0123456789abcdef' # TODO: openssl rand -hex 32
+  endpointInternalApiKey:
+    dataScience: "00000000-0000-0000-0000-000000000000" # TODO
+    companies: "00000000-0000-0000-0000-000000000000" # TODO
+    users: "00000000-0000-0000-0000-000000000000" # TODO
+
+map:
+  projects: # TODO
+    - name: ''  # TODO
+      coords: []  # TODO
+  initialProject: '' # TODO

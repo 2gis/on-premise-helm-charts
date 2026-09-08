@@ -1,0 +1,154 @@
+global:
+  checkNewVersion: false
+  sendAnonymousUsage: false
+
+deployment:
+  kind: DaemonSet
+
+service:
+  enabled: false
+
+ports:
+  web:
+    port: 30080
+    hostPort: 80
+    forwardedHeaders:
+      insecure: false
+    http: {}
+  websecure:
+    port: 30443
+    hostPort: 443
+    forwardedHeaders:
+      insecure: false
+
+ingressRoute:
+  dashboard:
+    enabled: false
+    entryPoints:
+      - websecure
+
+extraObjects:
+  - apiVersion: traefik.io/v1alpha1
+    kind: Middleware
+    metadata:
+      name: cors-headers
+      namespace: {{ .Release.Namespace }}
+    spec:
+      headers:
+        accessControlAllowMethods:
+          - "GET"
+          - "PUT"
+          - "POST"
+          - "DELETE"
+          - "PATCH"
+          - "OPTIONS"
+        accessControlAllowHeaders:
+          - "DNT"
+          - "Keep-Alive"
+          - "User-Agent"
+          - "X-Requested-With"
+          - "If-Modified-Since"
+          - "Cache-Control"
+          - "Content-Type"
+          - "Range"
+          - "Authorization"
+          - "x-share-token"
+          - "X-Company-Id"
+          - "x-brand"
+          - "x-source"
+        accessControlAllowCredentials: true
+        accessControlMaxAge: 100
+        addVaryHeader: true
+        accessControlAllowOriginList:
+          - "*"
+
+  - apiVersion: traefik.io/v1alpha1
+    kind: Middleware
+    metadata:
+      name: s3-cors-headers
+      namespace: {{ .Release.Namespace }}
+    spec:
+      headers:
+        accessControlAllowMethods:
+          - "GET"
+        accessControlAllowOriginList:
+          - "*"
+        addVaryHeader: true
+
+  - apiVersion: traefik.io/v1alpha1
+    kind: Middleware
+    metadata:
+      name: buffering-limit
+      namespace: {{ .Release.Namespace }}
+    spec:
+      buffering:
+        maxRequestBodyBytes: 104857600
+
+  - apiVersion: traefik.io/v1alpha1
+    kind: IngressRoute
+    metadata:
+      name: block-metrics
+      namespace: {{ .Release.Namespace }}
+    spec:
+      entryPoints:
+        - web
+        - websecure
+      routes:
+        - match: Path(`/metrics`)
+          kind: Rule
+          priority: 1000000
+          services:
+            - kind: TraefikService
+              name: noop@internal
+
+  - apiVersion: traefik.io/v1alpha1
+    kind: Middleware
+    metadata:
+      name: allow-vpn-office
+      namespace: {{ .Release.Namespace }}
+    spec:
+      ipAllowList:
+        sourceRange:
+        {{- range $ip := index .Values "traefikVpnAllowList" | default (list "0.0.0.0/0") }}
+          - {{ $ip }}
+        {{- end }}
+
+ingressClass:
+  enabled: true
+  isDefaultClass: true
+  name: "traefik"
+
+providers:
+  kubernetesIngress:
+    enabled: true
+  kubernetesIngressNginx:
+    enabled: true
+  kubernetesGateway:
+    enabled: false
+
+gateway:
+  listeners:
+    web:
+      port: 80
+      protocol: HTTP
+      namespacePolicy:
+        from: All
+
+    websecure:
+      port: 443
+      protocol: HTTPS
+      namespacePolicy:
+        from: All
+      mode: Terminate
+
+logs:
+  general:
+    level: INFO
+  access:
+    enabled: true
+    format: json
+    fields:
+      headers:
+        defaultmode: keep
+        names:
+          X-Forwarded-For: keep

@@ -1,0 +1,10 @@
+dgctlDockerRegistry: {{ .Values.dgctlDockerRegistry }}
+
+dgctlStorage:
+  host: {{ .Values.dgctlStorage.host }}
+  region: 'US'
+  bucket: {{ .Values.dgctlStorage.bucket }}
+  accessKey: {{ .Values.dgctlStorage.accessKey }}
+  secretKey: {{ .Values.dgctlStorage.secretKey }}
+#  verifySsl: false
+  secure: {{ .Values.dgctlStorage.secure }}
