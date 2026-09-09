@@ -17,7 +17,7 @@ Use this Helm chart to deploy API Styles service, which is a part of 2GIS's [On-
 | `imagePullSecrets` | Kubernetes image pull secrets.                                                                | `[]`                         |
 | `imagePullPolicy`  | Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) | `IfNotPresent`               |
 | `image.repository` | Styles API service image repository.                                                          | `2gis-on-premise/styles-api` |
-| `image.tag`        | Styles API service image tag.                                                                 | `0.45.1`                     |
+| `image.tag`        | Styles API service image tag.                                                                 | `0.46.0`                     |
 
 ### API service settings
 
@@ -137,6 +137,16 @@ Use this Helm chart to deploy API Styles service, which is a part of 2GIS's [On-
 | `s3.requestTimeout`  | S3 management client request timeout. If not specified, the default value is 30s.   | `5s`    |
 | `s3.responseTimeout` | S3 management client response timeout. If not specified, the default value is 3s.   | `5s`    |
 
+### API Keys service settings
+
+| Name                   | Description                                                                                           | Value   |
+| ---------------------- | ----------------------------------------------------------------------------------------------------- | ------- |
+| `keys.enabled`         | Enable API key validation for import methods.                                                         | `false` |
+| `keys.url`             | API Keys endpoint url, ex: http://keys-service-api. **Required** when `keys.enabled` is `true`.       | `""`    |
+| `keys.token`           | Service key for authentication with the Keys API service. **Required** when `keys.enabled` is `true`. | `""`    |
+| `keys.clientTimeout`   | HTTP client timeout for requests to the Keys service.                                                 | `500ms` |
+| `keys.refreshInterval` | Interval for periodic refresh of API keys cache.                                                      | `5m`    |
+
 ### customCAs **Custom Certificate Authority**
 
 | Name                  | Description                                                                                                                 | Value |
@@ -160,7 +170,7 @@ Use this Helm chart to deploy API Styles service, which is a part of 2GIS's [On-
 
 | Name                                     | Description                                                                                                                                          | Value   |
 | ---------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `stylesImport.startOnDeploy`             | Run styles import job automatically on Helm install/upgrade (pre-hook).                                                                              | `false` |
+| `stylesImport.startOnDeploy`             | Run styles import job automatically on Helm install/upgrade (post-hook).                                                                             | `false` |
 | `stylesImport.backoffLimit`              | Number of [retries](https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy) before considering the Job as failed. | `0`     |
 | `stylesImport.nodeSelector`              | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                  | `{}`    |
 | `stylesImport.tolerations`               | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                    | `[]`    |
