@@ -300,7 +300,7 @@ dgctlStorage:
 
 # @section Styles Import settings
 
-# @param stylesImport.startOnDeploy Run styles import job automatically on Helm install/upgrade (pre-hook).
+# @param stylesImport.startOnDeploy Run styles import job automatically on Helm install/upgrade (post-hook).
 # @param stylesImport.backoffLimit Number of [retries](https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy) before considering the Job as failed.
 # @param stylesImport.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
 # @param stylesImport.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.

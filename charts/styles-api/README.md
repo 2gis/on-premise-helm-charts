@@ -170,7 +170,7 @@ Use this Helm chart to deploy API Styles service, which is a part of 2GIS's [On-
 
 | Name                                     | Description                                                                                                                                          | Value   |
 | ---------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `stylesImport.startOnDeploy`             | Run styles import job automatically on Helm install/upgrade (pre-hook).                                                                              | `false` |
+| `stylesImport.startOnDeploy`             | Run styles import job automatically on Helm install/upgrade (post-hook).                                                                             | `false` |
 | `stylesImport.backoffLimit`              | Number of [retries](https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy) before considering the Job as failed. | `0`     |
 | `stylesImport.nodeSelector`              | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                  | `{}`    |
 | `stylesImport.tolerations`               | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                    | `[]`    |
