@@ -51,7 +51,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | Name               | Description | Value                           |
 | ------------------ | ----------- | ------------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-splitter` |
-| `image.tag`        | Tag         | `1.17.0`                        |
+| `image.tag`        | Tag         | `1.18.0`                        |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`                  |
 
 ### Splitter application settings
@@ -232,6 +232,20 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `metrics.resources.requests.memory` | Memory request, recommended value `10Mi`.       |                                           |
 | `metrics.resources.limits.cpu`      | CPU limit, recommended value `100m`.            |                                           |
 | `metrics.resources.limits.memory`   | Memory limit, recommended value `10Mi`.         |                                           |
+
+### Telemetry (OpenTelemetry)
+
+| Name                      | Description                                                                                                                                                              | Value   |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------- |
+| `telemetry.enabled`       | If span export is enabled. Trace context propagation works regardless of this flag.                                                                                      | `false` |
+| `telemetry.host`          | OTLP collector hostname, without a scheme for plain export. Add a scheme (`https://HOST`) to export over TLS. Empty value means `OTEL_EXPORTER_OTLP_ENDPOINT` decides.   | `""`    |
+| `telemetry.port`          | OTLP collector port. Must match `telemetry.protocol`: `4318` for `http`, `4317` for `grpc`.                                                                              | `4318`  |
+| `telemetry.protocol`      | OTLP transport: `http` (collector port 4318) or `grpc` (collector port 4317). Empty value means `OTEL_EXPORTER_OTLP_PROTOCOL` decides, `grpc` otherwise.                 | `http`  |
+| `telemetry.sampleRatio`   | Ratio of sampled root requests, from `0` to `1`. Value `0` means only requests that arrived already sampled are traced. Empty value means `OTEL_TRACES_SAMPLER` decides. | `""`    |
+| `telemetry.environment`   | Value of the `deployment.environment.name` span attribute. Ex.: `staging`, `production`.                                                                                 | `""`    |
+| `telemetry.legacyJaeger`  | Adds the `uber-trace-id` propagator for neighbour services that do not support W3C Trace Context.                                                                        | `false` |
+| `telemetry.forceHeader`   | Name of the request header that manually enables tracing for a single request. Empty value turns the feature off. Suggested name: `X-Force-Trace`.                       | `""`    |
+| `telemetry.traceIdHeader` | Name of the response header carrying the trace identifier back to the client. Empty value turns the feature off. Suggested name: `X-Trace-Id`.                           | `""`    |
 
 ## Maintainers
 
