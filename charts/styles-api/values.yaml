@@ -15,7 +15,7 @@ imagePullSecrets: []
 imagePullPolicy: IfNotPresent
 image:
   repository: 2gis-on-premise/styles-api
-  tag: 0.45.1
+  tag: 0.46.0
 
 # @section API service settings
 
@@ -251,6 +251,21 @@ s3:
   requestTimeout: 5s
   responseTimeout: 5s
 
+  # @section API Keys service settings
+
+  # @param keys.enabled Enable API key validation for import methods.
+  # @param keys.url API Keys endpoint url, ex: http://keys-service-api. **Required** when `keys.enabled` is `true`.
+  # @param keys.token Service key for authentication with the Keys API service. **Required** when `keys.enabled` is `true`.
+  # @param keys.clientTimeout HTTP client timeout for requests to the Keys service.
+  # @param keys.refreshInterval Interval for periodic refresh of API keys cache.
+
+keys:
+  enabled: false
+  url: ''
+  token: ''
+  clientTimeout: 500ms
+  refreshInterval: 5m
+
 # @section customCAs **Custom Certificate Authority**
 
 # @param customCAs.bundle Custom CA [text representation of the X.509 PEM public-key certificate](https://www.rfc-editor.org/rfc/rfc7468#section-5.1)
@@ -285,7 +300,7 @@ dgctlStorage:
 
 # @section Styles Import settings
 
-# @param stylesImport.startOnDeploy Run styles import job automatically on Helm install/upgrade (pre-hook).
+# @param stylesImport.startOnDeploy Run styles import job automatically on Helm install/upgrade (post-hook).
 # @param stylesImport.backoffLimit Number of [retries](https://kubernetes.io/docs/concepts/workloads/controllers/job/#pod-backoff-failure-policy) before considering the Job as failed.
 # @param stylesImport.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
 # @param stylesImport.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.

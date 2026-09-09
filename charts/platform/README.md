@@ -30,7 +30,7 @@ Use this Helm chart to deploy Platform service, which is a part of 2GIS's [On-Pr
 | Name                  | Description                    | Value                         |
 | --------------------- | ------------------------------ | ----------------------------- |
 | `ui.image.repository` | Repository                     | `2gis-on-premise/platform-ui` |
-| `ui.image.tag`        | Tag                            | `1.45.0`                      |
+| `ui.image.tag`        | Tag                            | `1.46.0`                      |
 | `imagePullSecrets`    | Kubernetes image pull secrets. | `[]`                          |
 
 ### UI service settings
@@ -92,6 +92,7 @@ Use this Helm chart to deploy Platform service, which is a part of 2GIS's [On-Pr
 | Name                        | Description                                                                                                                                                                                                                                                                                                                                                              | Value |
 | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
 | `ui.mapStyles.url`          | URL to Map Styles API.                                                                                                                                                                                                                                                                                                                                                   | `""`  |
+| `ui.mapStyles.key`          | Optional access key for the Map Styles import endpoint.                                                                                                                                                                                                                                                                                                                  | `""`  |
 | `ui.mapStyles.entryPageUrl` | Link to the corresponding app or landing page in sidebar menu. A string containing one or more "locale=URL" pairs. Possible locale values: "ru", "en". Pairs must be separated by commas. Example: 'ru=https://example.com/ru,en=https://example.com/en'.The URL must be absolute.You can specify only one URL without a locale, e.g. 'https://example.com/healthcheck'. | `""`  |
 
 ### License settings
@@ -140,10 +141,10 @@ Use this Helm chart to deploy Platform service, which is a part of 2GIS's [On-Pr
 
 ### Static Map settings
 
-| Name            | Description                                               | Value |
-| --------------- | --------------------------------------------------------- | ----- |
-| `ui.static.url` | URL for [Static API](https://static.maps.2gis.com).       | `""`  |
-| `ui.static.key` | Access key to [Static API](https://static.maps.2gis.com). | `""`  |
+| Name            | Description                                            | Value |
+| --------------- | ------------------------------------------------------ | ----- |
+| `ui.static.url` | URL for Static API, ex:https://staticmaps.example.com. | `""`  |
+| `ui.static.key` | Access key to Static API.                              | `""`  |
 
 ### Strategy settings
 
@@ -164,14 +165,15 @@ Use this Helm chart to deploy Platform service, which is a part of 2GIS's [On-Pr
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
-| Name                                    | Description                               | Value                     |
-| --------------------------------------- | ----------------------------------------- | ------------------------- |
-| `ui.ingress.enabled`                    | If Ingress is enabled for the service.    | `false`                   |
-| `ui.ingress.className`                  | Name of the Ingress controller class.     | `nginx`                   |
-| `ui.ingress.hosts[0].host`              | Hostname for the Ingress service.         | `platform-ui.example.com` |
-| `ui.ingress.hosts[0].paths[0].path`     | Path of the host for the Ingress service. | `/`                       |
-| `ui.ingress.hosts[0].paths[0].pathType` | Type of the path for the Ingress service. | `Prefix`                  |
-| `ui.ingress.tls`                        | TLS configuration                         | `[]`                      |
+| Name                                                                 | Description                               | Value                                                    |
+| -------------------------------------------------------------------- | ----------------------------------------- | -------------------------------------------------------- |
+| `ui.ingress.enabled`                                                 | If Ingress is enabled for the service.    | `false`                                                  |
+| `ui.ingress.className`                                               | Name of the Ingress controller class.     | `nginx`                                                  |
+| `ui.ingress.annotations.nginx.ingress.kubernetes.io/proxy-body-size` | Proxy-body-size parameter.                | `{"nginx.ingress.kubernetes.io/proxy-body-size":"100m"}` |
+| `ui.ingress.hosts[0].host`                                           | Hostname for the Ingress service.         | `platform-ui.example.com`                                |
+| `ui.ingress.hosts[0].paths[0].path`                                  | Path of the host for the Ingress service. | `/`                                                      |
+| `ui.ingress.hosts[0].paths[0].pathType`                              | Type of the path for the Ingress service. | `Prefix`                                                 |
+| `ui.ingress.tls`                                                     | TLS configuration                         | `[]`                                                     |
 
 ### Limits
 

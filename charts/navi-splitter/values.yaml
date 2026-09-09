@@ -54,7 +54,7 @@ terminationGracePeriodSeconds: 60
 image:
   repository: 2gis-on-premise/navi-splitter
   pullPolicy: IfNotPresent
-  tag: 1.17.0
+  tag: 1.18.0
 
 # @section Splitter application settings
 
@@ -347,3 +347,26 @@ metrics:
     tag: 1.0.0
   port: 9090
   resources: {}
+
+# @section Telemetry (OpenTelemetry)
+
+# @param telemetry.enabled If span export is enabled. Trace context propagation works regardless of this flag.
+# @param telemetry.host OTLP collector hostname, without a scheme for plain export. Add a scheme (`https://HOST`) to export over TLS. Empty value means `OTEL_EXPORTER_OTLP_ENDPOINT` decides.
+# @param telemetry.port OTLP collector port. Must match `telemetry.protocol`: `4318` for `http`, `4317` for `grpc`.
+# @param telemetry.protocol OTLP transport: `http` (collector port 4318) or `grpc` (collector port 4317). Empty value means `OTEL_EXPORTER_OTLP_PROTOCOL` decides, `grpc` otherwise.
+# @param telemetry.sampleRatio Ratio of sampled root requests, from `0` to `1`. Value `0` means only requests that arrived already sampled are traced. Empty value means `OTEL_TRACES_SAMPLER` decides.
+# @param telemetry.environment Value of the `deployment.environment.name` span attribute. Ex.: `staging`, `production`.
+# @param telemetry.legacyJaeger Adds the `uber-trace-id` propagator for neighbour services that do not support W3C Trace Context.
+# @param telemetry.forceHeader Name of the request header that manually enables tracing for a single request. Empty value turns the feature off. Suggested name: `X-Force-Trace`.
+# @param telemetry.traceIdHeader Name of the response header carrying the trace identifier back to the client. Empty value turns the feature off. Suggested name: `X-Trace-Id`.
+
+telemetry:
+  enabled: false
+  host: ''
+  port: 4318
+  protocol: http
+  sampleRatio: ''
+  environment: ''
+  legacyJaeger: false
+  forceHeader: ''
+  traceIdHeader: ''

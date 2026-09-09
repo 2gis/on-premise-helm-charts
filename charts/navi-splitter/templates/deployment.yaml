@@ -132,6 +132,28 @@ spec:
             - name: MOSES_URL
               value: '{{ .Values.passThrough.scheme }}://{{ coalesce .Values.passThrough.host .Values.oneToMany.host }}:{{ .Values.passThrough.port }}'
             {{- end }}
+            {{- if .Values.telemetry.enabled }}
+            - name: TRACING_ENABLED
+              value: "true"
+            {{- /* For these an empty value means the same as an unset variable: let OTEL_* or the application default decide. */}}
+            {{- if .Values.telemetry.host }}
+            - name: TRACING_ENDPOINT
+              value: {{ printf "%s:%v" .Values.telemetry.host .Values.telemetry.port | quote }}
+            {{- end }}
+            - name: TRACING_PROTOCOL
+              value: {{ .Values.telemetry.protocol | quote }}
+            - name: TRACING_SAMPLE_RATIO
+              value: {{ .Values.telemetry.sampleRatio | quote }}
+            - name: TRACING_ENVIRONMENT
+              value: {{ .Values.telemetry.environment | quote }}
+            - name: TRACING_LEGACY_JAEGER
+              value: {{ .Values.telemetry.legacyJaeger | quote }}
+            {{- /* For these an empty value turns the feature off. */}}
+            - name: TRACING_FORCE_HEADER
+              value: {{ .Values.telemetry.forceHeader | quote }}
+            - name: TRACING_TRACE_ID_HEADER
+              value: {{ .Values.telemetry.traceIdHeader | quote }}
+            {{- end }}{{- /* telemetry.enabled */}}
           ports:
             - name: http
               containerPort: {{ .Values.splitter.appPort }}

@@ -82,6 +82,13 @@ spec:
                   name: {{ include "platform.ui.secretName" . }}
                   key: staticApiKey
             {{- end }}
+            {{- if .Values.ui.mapStyles.key }}
+            - name: STYLES_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "platform.ui.secretName" . }}
+                  key: stylesApiKey
+            {{- end }}
             - name: DEFAULT_LOCALE
               value: {{ .Values.ui.defaultLocale | quote }}
             - name: BRAND
