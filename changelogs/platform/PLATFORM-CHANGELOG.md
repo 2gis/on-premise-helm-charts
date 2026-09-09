@@ -1,3 +1,50 @@
+## [2.58.0] (2026-09-09)
+
+#### Images
+```
+mapgl-js-api
+	- mapgl:1.76.2
+	+ mapgl:1.77.0
+navi-attractor
+	- navi-attractor:7.60.0.7
+	+ navi-attractor:7.61.0.2
+navi-back
+	- navi-back:7.60.0.7
+	+ navi-back:7.61.0.2
+navi-castle
+	- navi-castle:1.12.1
+	+ navi-castle:1.13.2
+	- navi-front:1.31.2
+	+ navi-front:1.31.3
+navi-front
+	- navi-front:1.31.2
+	+ navi-front:1.31.3
+navi-router
+	- navi-router:6.43.1.2
+	+ navi-router:6.43.3.2
+navi-splitter
+	- navi-splitter:1.17.0
+	+ navi-splitter:1.18.0
+platform
+	- platform-ui:1.45.0
+	+ platform-ui:1.46.0
+search-api
+	- nginx:1.30.4
+	+ nginx-alpine:3.1.20
+stat-api
+	- stat-api-migrate:0.2.4
+	+ stat-api-migrate:0.2.5
+	- stat-api:0.2.4
+	+ stat-api:0.2.5
+styles-api
+	- styles-api:0.45.1
+	+ styles-api:0.46.0
+traffic-proxy
+	- navi-front:1.31.2
+	+ navi-front:1.31.3
+```
+[Full list of image versions](https://github.com/2gis/on-premise-helm-charts/blob/Platform-2.58.0/changelogs/platform/platform_image_versions.txt)
+
 ## [2.57.0] (2026-08-31)
 
 #### Images
