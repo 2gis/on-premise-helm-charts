@@ -157,6 +157,8 @@ spec:
               value: {{ .Values.ui.status.mapStyles | quote }}
             - name: LICENSE_API_URL
               value: {{ .Values.ui.license.url | quote }}
+            - name: UPDATE_MANAGER_API_URL
+              value: {{ .Values.ui.updateManager.url | quote }}
             {{- if .Values.ui.godmode }}
             - name: GOD_MODE
               value: {{ .Values.ui.godmode | quote }}
