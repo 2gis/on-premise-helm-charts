@@ -1,0 +1,451 @@
+# @section Docker Registry settings
+
+# @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`. **Required**
+
+dgctlDockerRegistry: ''
+
+# @section Common settings
+
+# @param imagePullSecrets Kubernetes image pull secrets.
+# @param imagePullPolicy Pull policy.
+# @param image.repository Service image repository.
+# @param image.tag Service image tag.
+
+imagePullSecrets: []
+imagePullPolicy: IfNotPresent
+
+image:
+  repository: 2gis-on-premise/update-manager
+  tag: 1.0.0  # TODO: точная версия
+
+# @section API service settings
+
+api:
+
+  # @param api.logLevel Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.
+  # @param api.logFormat Log format for the service. Can be: `json`, `text`.
+
+  logLevel: warning
+  logFormat: json
+
+  # @param api.keys.url URL of the Keys service API. Ex: `http://keys-api`. **Required**
+
+  keys:
+    url: ''
+
+  # @param api.datagateway.url URL of the DataGateway instance.
+  # @param api.datagateway.apiKey API key for the DataGateway instance. **Required**
+
+  datagateway:
+    url: https://datagateway.api.2gis.com
+    apiKey: ''
+
+  # @param api.dgctl.image.registry DGCTL image registry.
+  # @param api.dgctl.image.repository DGCTL image repository.
+  # @param api.dgctl.image.tag DGCTL image tag.
+  # @param api.dgctl.image.pullPolicy Pull policy for the DGCTL image used in download jobs.
+
+  dgctl:
+    image:
+      registry: ''
+      repository: 2gis/dgctl
+      tag: 3  # TODO: точная версия
+      pullPolicy: IfNotPresent
+
+  # @param api.job.activeDeadline Active deadline for the created jobs.
+  # @param api.job.backoffLimit Backoff limit for the created jobs.
+  # @param api.job.syncInterval Interval for syncing jobs.
+  # @param api.job.startTimeout Timeout for a job pod to start before the task is marked failed.
+  # @param api.job.logHead Number of first lines of the job log taken unconditionally when trimming.
+  # @param api.job.logTail Number of last lines of the job log taken unconditionally when trimming.
+  # @param api.job.logPattern Regexp used to filter the rest of the job log. Empty means no filtering.
+
+  job:
+    activeDeadline: 2h
+    backoffLimit: 3
+    syncInterval: 10s
+    startTimeout: 5m
+    logHead: 10
+    logTail: 50
+    logPattern: ''
+
+  # @param api.manifest.syncInterval Interval for syncing manifests.
+
+  manifest:
+    syncInterval: 60s
+
+  # @param api.helm.timeout Timeout for helm operations.
+  # @param api.helm.volume[0].emptyDir Volume spec to store downloaded Helm charts. Rendered as the `charts` volume. Specify a single-element list with one volume type; the whole list replaces the default when overridden.
+
+  helm:
+    timeout: 10m
+    volume:
+      - emptyDir: {}
+
+  # @param api.rollbackHistoryLimit Installation history limit for rollback.
+  # @param api.installVersionsLimit Number of install versions to show.
+  # @param api.completedTaskOffset Duration to show completed tasks.
+  # @param api.manifestUpdateOffset Duration to show manifest updates.
+
+  rollbackHistoryLimit: 2
+  installVersionsLimit: 3
+  completedTaskOffset: 12h
+  manifestUpdateOffset: 8h
+
+  components:
+    core:
+      version: 2.9.0
+      charts:
+        keys:
+          enabled: true
+          refOverride: ''
+          releases:
+            - name: ''
+              releaseName: ''
+              services:
+                - keys
+    api-platform:
+      version: 2.56.0
+      charts:
+        tiles-api:
+          enabled: false
+          refOverride: ''
+          releases:
+            - name: ''
+              releaseName: ''
+              services:
+                - tiles-api-mapbox
+                - tiles-api-mobile-sdk
+                - tiles-api-raster
+                - tiles-api-vector
+        search-api:
+          enabled: false
+          refOverride: ''
+          releases:
+            - name: ''
+              releaseName: ''
+              services:
+                - search
+        catalog-api:
+          enabled: false
+          refOverride: ''
+          releases:
+            - name: ''
+              releaseName: ''
+              services:
+                - catalog
+        search-api-v8:
+          enabled: false
+          refOverride: ''
+          releases:
+            - name: ''
+              releaseName: ''
+              services:
+                - search-api-v8
+        navi-castle:
+          enabled: false
+          refOverride: ''
+          releases:
+            - name: ''
+              releaseName: ''
+              services:
+                - navi
+        twins-api:
+          enabled: false
+          refOverride: ''
+          releases:
+            - name: ''
+              releaseName: ''
+              services:
+                - twins
+    pro:
+      version: 2.5.0
+      charts:
+        pro-ui:
+          enabled: false
+          refOverride: ''
+          releases:
+            - name: ''
+              releaseName: ''
+              services:
+                - pro-ui
+        pro-api:
+          enabled: false
+          refOverride: ''
+          releases:
+            - name: ''
+              releaseName: ''
+              services:
+                - pro
+    citylens:
+      version: 2.3.0
+      charts:
+        citylens:
+          enabled: false
+          refOverride: ''
+          releases:
+            - name: ''
+              releaseName: ''
+              services:
+                - citylens
+
+  # @param api.replicas A replica count for the pod.
+
+  replicas: 1
+
+  # @param api.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment).
+
+  revisionHistoryLimit: 3
+
+  # @param api.serviceAccountOverride Override the service account name.
+  # @param api.rulesOverride Override per-chart rules.
+
+  serviceAccountOverride: ''
+  rulesOverride: []
+
+  # @param api.strategy.type Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.
+  # @param api.strategy.rollingUpdate.maxUnavailable Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.
+  # @param api.strategy.rollingUpdate.maxSurge Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment).
+
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 1
+      memory: 256Mi
+
+  # @param api.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param api.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+  annotations: {}
+  labels: {}
+
+  # @param api.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param api.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+
+  podAnnotations: {}
+  podLabels: {}
+
+  # @param api.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+  # @param api.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
+  # @param api.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+
+  nodeSelector: {}
+  affinity: {}
+  tolerations: []
+
+  # @param api.service.annotations Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param api.service.labels Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+  # @param api.service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
+  # @param api.service.port Service port.
+
+  service:
+    annotations: {}
+    labels: {}
+    type: ClusterIP
+    port: 80
+
+  # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
+
+  # @param api.ingress.enabled If Ingress is enabled for the service.
+  # @param api.ingress.className Ingress class name.
+  # @param api.ingress.hosts[0].host Hostname for the Ingress service.
+  # @param api.ingress.hosts[0].paths[0].path Path for the [[hostname|https://kubernetes.io/docs/concepts/services-networking/ingress/#path-types]].
+  # @param api.ingress.hosts[0].paths[0].pathType Ingress path type.
+  # @param api.ingress.tls Ingress TLS parameters.
+
+  ingress:
+    className: nginx
+    enabled: false
+    hosts:
+      - host: update-manager.example.com
+        paths:
+          - path: /
+            pathType: Prefix
+    tls: []
+    # - hosts:
+    #   - update-manager.example.com
+    #   secretName: secret.tls
+
+# @section Migrate job settings
+
+migrate:
+
+  # @param migrate.initialDelaySeconds Delay in seconds at the service startup.
+
+  initialDelaySeconds: 0
+
+  resources:
+    requests:
+      cpu: 10m
+      memory: 32Mi
+    limits:
+      cpu: 100m
+      memory: 64Mi
+
+  # @param migrate.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+
+  nodeSelector: {}
+
+  # @param migrate.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+  tolerations: []
+
+# @section Database access settings
+
+postgres:
+
+  # @param postgres.host PostgreSQL hostname or IP.  **Required**
+  # @param postgres.port PostgreSQL port.
+  # @param postgres.name PostgreSQL database name. **Required**
+  # @param postgres.username PostgreSQL username. **Required**
+  # @param postgres.password PostgreSQL password. **Required**
+  # @param postgres.tls.mode PostgreSQL ssl [connection mode](https://www.postgresql.org/docs/current/libpq-ssl.html#LIBPQ-SSL-PROTECTION). Available modes: `disable`, `require`, `verify-ca` and `verify-full`.
+  # @param postgres.tls.rootCert PostgreSQL CA certificate for server CA verify. **Required for mode `verify-ca` or `verify-full`**.
+  # @param postgres.tls.cert client certificate. **Required for mode `verify-full`**.
+  # @param postgres.tls.key client private key. **Required for mode `verify-full`**.
+
+  host: ''
+  port: 5432
+  name: ''
+  username: ''
+  password: ''
+  tls:
+    mode: disable
+    rootCert: ''
+    cert: ''
+    key: ''
+
+# @section Deployment Artifacts Storage settings
+
+# @param dgctlStorage.host S3 endpoint. Format: `host:port`. **Required**
+# @param dgctlStorage.region S3 region name.
+# @param dgctlStorage.secure Set to `true` if dgctlStorage.host must be accessed via https.
+# @param dgctlStorage.bucket S3 bucket name. **Required**
+# @param dgctlStorage.accessKey S3 access key for accessing the bucket. **Required**
+# @param dgctlStorage.secretKey S3 secret key for accessing the bucket. **Required**
+
+dgctlStorage:
+  host: ''
+  region: ''
+  secure: false
+  bucket: ''
+  accessKey: ''
+  secretKey: ''
+
+# @section Managed helm releases settings
+
+# @extra api.components.core Services helm releases of the [`core` component](https://docs.2gis.com/en/on-premise-api-platform/core/releases).
+# @param api.components.core.version Version of the `core` component services releases.
+
+# @extra api.components.core.charts.keys Settings for the `keys` chart of the [API Keys service](https://docs.2gis.com/en/on-premise-api-platform/core/install/keys).
+# @param api.components.core.charts.keys.enabled Enable release management for the `keys` chart.
+# @param api.components.core.charts.keys.refOverride Override the `keys` chart reference.
+# @param api.components.core.charts.keys.releases[0].name Public name of the managed release to be shown in the UI. **Required if chart is enabled**
+# @param api.components.core.charts.keys.releases[0].releaseName Name of the managed release in the cluster. **Required if chart is enabled**
+# @param api.components.core.charts.keys.releases[0].services List of DGCTL services attached to the release. Allowed values: "keys".
+
+# @extra api.components.api-platform Services helm releases of the [`api-platform` component](https://docs.2gis.com/en/on-premise-api-platform/api-platform/releases).
+# @param api.components.api-platform.version Version of the `api-platform` component services releases.
+
+# @extra api.components.api-platform.charts.tiles-api Settings for the `tiles-api` chart of the [Maps API](https://docs.2gis.com/en/on-premise-api-platform/api-platform/install/maps).
+# @param api.components.api-platform.charts.tiles-api.enabled Enable release management for the `tiles-api` chart.
+# @param api.components.api-platform.charts.tiles-api.refOverride Override the `tiles-api` chart reference.
+# @param api.components.api-platform.charts.tiles-api.releases[0].name Public name of the managed release to be shown in the UI. **Required if chart is enabled**
+# @param api.components.api-platform.charts.tiles-api.releases[0].releaseName Name of the managed release in the cluster. **Required if chart is enabled**
+# @param api.components.api-platform.charts.tiles-api.releases[0].services List of DGCTL services attached to the release. Allowed values: "tiles-api-mapbox", "tiles-api-mobile-sdk", "tiles-api-raster", "tiles-api-vector".
+
+# @extra api.components.api-platform.charts.search-api Settings for the `search-api` chart of the [Search API (search)](https://docs.2gis.com/en/on-premise-api-platform/api-platform/install/search).
+# @param api.components.api-platform.charts.search-api.enabled Enable release management for the `search-api` chart.
+# @param api.components.api-platform.charts.search-api.refOverride Override the `search-api` chart reference.
+# @param api.components.api-platform.charts.search-api.releases[0].name Public name of the managed release to be shown in the UI. **Required if chart is enabled**
+# @param api.components.api-platform.charts.search-api.releases[0].releaseName Name of the managed release in the cluster. **Required if chart is enabled**
+# @param api.components.api-platform.charts.search-api.releases[0].services List of DGCTL services attached to the release. Allowed values: "search".
+
+# @extra api.components.api-platform.charts.catalog-api Settings for the `catalog-api` chart of the [Search API (catalog)](https://docs.2gis.com/en/on-premise-api-platform/api-platform/install/search).
+# @param api.components.api-platform.charts.catalog-api.enabled Enable release management for the `catalog-api` chart.
+# @param api.components.api-platform.charts.catalog-api.refOverride Override the `catalog-api` chart reference.
+# @param api.components.api-platform.charts.catalog-api.releases[0].name Public name of the managed release to be shown in the UI. **Required if chart is enabled**
+# @param api.components.api-platform.charts.catalog-api.releases[0].releaseName Name of the managed release in the cluster. **Required if chart is enabled**
+# @param api.components.api-platform.charts.catalog-api.releases[0].services List of DGCTL services attached to the release. Allowed values: "catalog".
+
+# @extra api.components.api-platform.charts.search-api-v8 Settings for the `search-api-v8` chart of the [Search API (new version)](https://docs.2gis.com/en/on-premise-api-platform/api-platform/install/search-v8).
+# @param api.components.api-platform.charts.search-api-v8.enabled Enable release management for the `search-api-v8` chart.
+# @param api.components.api-platform.charts.search-api-v8.refOverride Override the `search-api-v8` chart reference.
+# @param api.components.api-platform.charts.search-api-v8.releases[0].name Public name of the managed release to be shown in the UI. **Required if chart is enabled**
+# @param api.components.api-platform.charts.search-api-v8.releases[0].releaseName Name of the managed release in the cluster. **Required if chart is enabled**
+# @param api.components.api-platform.charts.search-api-v8.releases[0].services List of DGCTL services attached to the release. Allowed values: "search-api-v8".
+
+# @extra api.components.api-platform.charts.navi-castle Settings for the `navi-castle` chart of the [Navigation API](https://docs.2gis.com/en/on-premise-api-platform/api-platform/install/navigation).
+# @param api.components.api-platform.charts.navi-castle.enabled Enable release management for the `navi-castle` chart.
+# @param api.components.api-platform.charts.navi-castle.refOverride Override the `navi-castle` chart reference.
+# @param api.components.api-platform.charts.navi-castle.releases[0].name Public name of the managed release to be shown in the UI. **Required if chart is enabled**
+# @param api.components.api-platform.charts.navi-castle.releases[0].releaseName Name of the managed release in the cluster. **Required if chart is enabled**
+# @param api.components.api-platform.charts.navi-castle.releases[0].services List of DGCTL services attached to the release. Allowed values: "navi".
+
+# @extra api.components.api-platform.charts.twins-api Settings for the `twins-api` chart.
+# @param api.components.api-platform.charts.twins-api.enabled Enable release management for the `twins-api` chart.
+# @param api.components.api-platform.charts.twins-api.refOverride Override the `twins-api` chart reference.
+# @param api.components.api-platform.charts.twins-api.releases[0].name Public name of the managed release to be shown in the UI. **Required if chart is enabled**
+# @param api.components.api-platform.charts.twins-api.releases[0].releaseName Name of the managed release in the cluster. **Required if chart is enabled**
+# @param api.components.api-platform.charts.twins-api.releases[0].services List of DGCTL services attached to the release. Allowed values: "twins".
+
+# @extra api.components.pro Services helm releases of the [`pro` component](https://docs.2gis.com/en/on-premise-pro/releases).
+# @param api.components.pro.version Version of the `pro` component services releases.
+
+# @extra api.components.pro.charts.pro-ui Settings for the `pro-ui` chart of the [2GIS Pro (ui)](https://docs.2gis.com/en/on-premise-pro/install/installation).
+# @param api.components.pro.charts.pro-ui.enabled Enable release management for the `pro-ui` chart.
+# @param api.components.pro.charts.pro-ui.refOverride Override the `pro-ui` chart reference.
+# @param api.components.pro.charts.pro-ui.releases[0].name Public name of the managed release to be shown in the UI. **Required if chart is enabled**
+# @param api.components.pro.charts.pro-ui.releases[0].releaseName Name of the managed release in the cluster. **Required if chart is enabled**
+# @param api.components.pro.charts.pro-ui.releases[0].services List of DGCTL services attached to the release. Allowed values: "pro-ui".
+
+# @extra api.components.pro.charts.pro-api Settings for the `pro-api` chart of the [2GIS Pro (api)](https://docs.2gis.com/en/on-premise-pro/install/installation).
+# @param api.components.pro.charts.pro-api.enabled Enable release management for the `pro-api` chart.
+# @param api.components.pro.charts.pro-api.refOverride Override the `pro-api` chart reference.
+# @param api.components.pro.charts.pro-api.releases[0].name Public name of the managed release to be shown in the UI. **Required if chart is enabled**
+# @param api.components.pro.charts.pro-api.releases[0].releaseName Name of the managed release in the cluster. **Required if chart is enabled**
+# @param api.components.pro.charts.pro-api.releases[0].services List of DGCTL services attached to the release. Allowed values: "pro".
+
+# @extra api.components.citylens Services helm releases of the [`citylens` component](https://docs.2gis.com/en/on-premise-citylens/releases).
+# @param api.components.citylens.version Version of the `citylens` component services releases.
+
+# @extra api.components.citylens.charts.citylens Settings for the `citylens` chart of the [CityLens](https://docs.2gis.com/en/on-premise-citylens/install/installation).
+# @param api.components.citylens.charts.citylens.enabled Enable release management for the `citylens` chart.
+# @param api.components.citylens.charts.citylens.refOverride Override the `citylens` chart reference.
+# @param api.components.citylens.charts.citylens.releases[0].name Public name of the managed release to be shown in the UI. **Required if chart is enabled**
+# @param api.components.citylens.charts.citylens.releases[0].releaseName Name of the managed release in the cluster. **Required if chart is enabled**
+# @param api.components.citylens.charts.citylens.releases[0].services List of DGCTL services attached to the release. Allowed values: "citylens".
+
+# @section Limits
+
+# @extra api.resources **Limits for the API service**
+# @param api.resources.requests.cpu A CPU request.
+# @param api.resources.requests.memory A memory request.
+# @param api.resources.limits.cpu A CPU limit.
+# @param api.resources.limits.memory A memory limit.
+
+# @extra migrate.resources **Limits for the Migrate job**
+# @param migrate.resources.requests.cpu A CPU request.
+# @param migrate.resources.requests.memory A memory request.
+# @param migrate.resources.limits.cpu A CPU limit.
+# @param migrate.resources.limits.memory A memory limit.
+
+# @section customCAs **Custom Certificate Authority**
+
+# @param customCAs.bundle Custom CA [text representation of the X.509 PEM public-key certificate](https://www.rfc-editor.org/rfc/rfc7468#section-5.1)
+# @param customCAs.certsPath Custom CA bundle mount directory in the container.
+
+customCAs:
+  bundle: ''
+    # bundle: |
+    # -----BEGIN CERTIFICATE-----
+    # ...
+    # -----END CERTIFICATE-----
+  certsPath: ''

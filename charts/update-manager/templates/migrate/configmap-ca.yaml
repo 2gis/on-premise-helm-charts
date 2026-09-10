@@ -1,0 +1,15 @@
+{{- if .Values.customCAs.bundle }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "update-manager.migrate.name" . }}-ca
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
+    "helm.sh/hook-weight": "-10"
+  labels:
+    {{- include "update-manager.labels" . | nindent 4 }}
+data:
+  custom-ca.crt: |-
+{{- .Values.customCAs.bundle | nindent 4 }}
+{{- end }}
