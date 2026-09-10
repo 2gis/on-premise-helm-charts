@@ -1,0 +1,10 @@
+dgctlDockerRegistry: {{ .Values.dgctlDockerRegistry }}
+
+dgctlStorage:
+  host: {{ .Values.s3Storage.host }}
+  secure: {{ .Values.s3Storage.secure }}
+  region: {{ .Values.s3Storage.region }}
+  bucket: {{ .Values.dgctlStorage.bucket }}
+  accessKey: {{ .Values.s3Storage.accessKey }}
+  secretKey: {{ .Values.s3Storage.secretKey }}
+  verifySsl: true

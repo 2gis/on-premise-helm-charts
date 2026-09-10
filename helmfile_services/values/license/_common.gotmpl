@@ -1,0 +1,25 @@
+license:
+  retryPeriod: 30s
+  softBlockPeriod: 2w
+  statusPort: 8080
+  apiPort: 8443
+
+ingress:
+  enabled: true
+  className: nginx
+  hosts:
+  - host: license.{{ .Values.domain }}
+    paths:
+    - path: /
+      pathType: Prefix
+  tls:
+  - hosts:
+    - license.{{ .Values.domain }}
+    secretName: {{ .Values.tlsSecret }}
+
+persistence:
+  host: {{ .Values.s3Storage.host }}
+  secure: {{ .Values.s3Storage.secure }}
+  region: {{ .Values.s3Storage.region }}
+  accessKey: {{ .Values.s3Storage.accessKey }}
+  secretKey: {{ .Values.s3Storage.secretKey }}
