@@ -100,6 +100,12 @@ Use this Helm chart to deploy Platform service, which is a part of 2GIS's [On-Pr
 | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
 | `ui.license.url` | URL to License API. Can be an internal Kubernetes service address (e.g., `http://<svc-name>.<namespace>.svc`), since requests to this URL are made server-side by the platform service itself, but a public address can be used as well. | `""`  |
 
+### Update Manager settings
+
+| Name                   | Description                                                                                                                                                                                                                                                      | Value |
+|------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------| ----- |
+| `ui.updateManager.url` | URL to Update Manager API (Update Manager). Can be an internal Kubernetes service address (e.g., `http://<svc-name>.<namespace>.svc`), since requests to this URL are made server-side by the platform service itself, but a public address can be used as well. | `""`  |
+
 ### Service Pro settings
 
 | Name                  | Description                                                                                                                                                                                                                                                                                                                                                              | Value |
