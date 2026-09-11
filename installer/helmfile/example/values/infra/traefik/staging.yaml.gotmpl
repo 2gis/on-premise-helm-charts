@@ -34,7 +34,7 @@
 # # WARNING: This completely replaces the default extraObjects from traefik.yaml.gotmpl
 # # If you need custom middleware, copy ALL middleware definitions here and modify as needed
 # extraObjects:
-#   # CORS middleware — copy from traefik.yaml.gotmpl and customize origins
+#   # CORS middleware - copy from traefik.yaml.gotmpl and customize origins
 #   - apiVersion: traefik.io/v1alpha1
 #     kind: Middleware
 #     metadata:
@@ -68,7 +68,7 @@
 #           - "https://{{ .Values.mapglIngress }}"  # TODO: add your service origins
 #           - "https://{{ .Values.catalogIngress }}"
 
-#   # S3 CORS middleware — GET only
+#   # S3 CORS middleware - GET only
 #   - apiVersion: traefik.io/v1alpha1
 #     kind: Middleware
 #     metadata:
@@ -82,7 +82,7 @@
 #           - "*"
 #         addVaryHeader: true
 
-#   # Buffering middleware — request body size limit
+#   # Buffering middleware - request body size limit
 #   - apiVersion: traefik.io/v1alpha1
 #     kind: Middleware
 #     metadata:
@@ -110,7 +110,7 @@
 #             - kind: TraefikService
 #               name: noop@internal
 
-#   # VPN whitelist middleware — customize IP ranges
+#   # VPN whitelist middleware - customize IP ranges
 #   - apiVersion: traefik.io/v1alpha1
 #     kind: Middleware
 #     metadata:

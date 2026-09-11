@@ -1,7 +1,7 @@
 search:
   # Бэкенд поиска. По умолчанию search-api:
   url: http://search-api
-  # Альтернатива — Search API v8 (деплой опционален, см. deploy/<env>.yaml.gotmpl).
+  # Альтернатива - Search API v8 (деплой опционален, см. deploy/<env>.yaml.gotmpl).
   # При её использовании укажите:
   # url: http://search-api-v8-ingress-router:9092
 
@@ -18,7 +18,6 @@ api:
     host: 'haproxy' # TODO
     port: 5000 # TODO
     username: catalog
-    password: 'pass' # TODO
     name: catalog
     poolSize:
       api: 20
@@ -34,6 +33,3 @@ importer:
     enabled: true
     medium: ''
     sizeLimit: 10Gi
-
-keys:
-  token: 'CATALOG_APIS_TOKEN' # TODO: сервисный токен для сервиса Catalog APIs

@@ -15,6 +15,11 @@ releases:
     values:
       - {{ .Values.basePath }}/values/infra/redis.yaml.gotmpl
       - {{ .Values.valuesPath }}/values/infra/redis/{{ .Environment.Name }}.yaml.gotmpl
+{{- $secretsPath := printf "%s/values/infra/redis/%s.secrets.yaml" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $secretsPath }}
+    secrets:
+      - {{ $secretsPath }}
+{{- end }}
     hooks:
     - events: ["postsync"]
       showlogs: true

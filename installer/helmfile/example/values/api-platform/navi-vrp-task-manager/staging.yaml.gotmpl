@@ -5,16 +5,12 @@ kafka:
       security.protocol: SASL_PLAINTEXT # TODO
       sasl.mechanism: SCRAM-SHA-512 # TODO
       sasl.plain.username: test-username # TODO
-    sensitiveProperties:
-      sasl.plain.password: password # TODO
   dm:
     properties:
       bootstrap.servers: host:31560 # TODO
       security.protocol: SASL_PLAINTEXT  # TODO
       sasl.mechanism: SCRAM-SHA-512 # TODO
       sasl.plain.username: test-username # TODO
-    sensitiveProperties:
-      sasl.plain.password: password # TODO
 
 s3:
   url: 'http://s3.staging.host' # TODO
@@ -24,12 +20,8 @@ s3:
     accessKey: access # TODO
     secretKey: secret # TODO
 
-keys:
-  token: 'TSP_API_TOKEN' # TODO: сервисный токен для сервиса TSP API
-
 db:
   host: host # TODO
   port: port # TODO
   name: 'vrp' # TODO
   user: 'navi' # TODO
-  password: '' # TODO

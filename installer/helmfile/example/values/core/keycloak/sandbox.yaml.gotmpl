@@ -2,14 +2,12 @@
 # Realms/services configure via Keycloak admin console after deploy (см. installer/README.md).
 externalDatabase:
   user: keycloak
-  password: keycloak
   host: postgresql
   port: 5432
   database: keycloak
 
 auth:
   adminUser: admin
-  adminPassword: admin
 
 replicaCount: 1
 
@@ -17,7 +15,6 @@ defaultUser:
   enabled: true
   name: 'user'
   email: 'user@test.com'
-  password: 'userpass'
   firstName: 'user'
   lastName: 'user'
 

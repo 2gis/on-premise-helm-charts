@@ -1,11 +1,10 @@
-# Catalog API override for the `sandbox` (kind) environment — in-cluster PostgreSQL.
+# Catalog API override for the `sandbox` (kind) environment - in-cluster PostgreSQL.
 api:
   replicas: 1
   postgres:
     host: postgresql
     port: 5432
     username: catalog
-    password: catalog_password
     name: catalog
     poolSize:
       api: 20
@@ -23,7 +22,6 @@ importer:
     host: postgresql
     port: 5432
     username: catalog
-    password: catalog_password
     name: catalog
   cleaner:
     enabled: true
@@ -32,6 +30,3 @@ importer:
     enabled: true
     medium: ''
     sizeLimit: 2Gi
-
-keys:
-  token: '48a6cd36-7cef-4457-97ab-bc4a009f6521' # predefined.service.aliases: catalog_apis

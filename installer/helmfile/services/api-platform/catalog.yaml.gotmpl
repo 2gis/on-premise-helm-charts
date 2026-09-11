@@ -20,6 +20,11 @@ releases:
       - {{ .Values.valuesPath }}/values/ingressAnnotations/{{ .Environment.Name }}.yaml.gotmpl
       - {{ .Values.basePath }}/values/api-platform/catalog.yaml.gotmpl
       - {{ .Values.valuesPath }}/values/api-platform/catalog/{{ .Environment.Name }}.yaml.gotmpl
+{{- $secretsPath := printf "%s/values/api-platform/catalog/%s.secrets.yaml" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $secretsPath }}
+    secrets:
+      - {{ $secretsPath }}
+{{- end }}
     hooks:
     - events: ["postsync"]
       showlogs: true

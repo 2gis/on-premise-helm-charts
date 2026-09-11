@@ -9,6 +9,7 @@ helmDefaults:
 #   url: https://2gis.github.io/on-premise-helm-charts
 
 ---
+helmBinary: {{ env "HELMFILE_HELM_BINARY" | default "helm" | quote }}
 {{- $valuesPath := env "HELMFILE_VALUES" | default (printf "%s/installer/helmfile/example" (env "PWD")) }}
 {{- $basePath := env "HELMFILE_BASE" | default (printf "%s/installer/helmfile" (env "PWD")) }}
 values:

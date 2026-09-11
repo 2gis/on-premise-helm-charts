@@ -20,6 +20,11 @@ releases:
     values:
       - {{ .Values.basePath }}/values/infra/kafka.yaml.gotmpl
       - {{ .Values.valuesPath }}/values/infra/kafka/{{ .Environment.Name }}.yaml.gotmpl
+{{- $secretsPath := printf "%s/values/infra/kafka/%s.secrets.yaml" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $secretsPath }}
+    secrets:
+      - {{ $secretsPath }}
+{{- end }}
     hooks:
 {{- $hooksPath := printf "%s/hooks/infra/kafka/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $hooksPath }}

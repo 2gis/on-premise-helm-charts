@@ -16,6 +16,11 @@ releases:
       - {{ .Values.basePath }}/values/dgctl.yaml.gotmpl
       - {{ .Values.basePath }}/values/api-platform/stat-receiver.yaml.gotmpl
       - {{ .Values.valuesPath }}/values/api-platform/stat-receiver/{{ .Environment.Name }}.yaml.gotmpl
+{{- $secretsPath := printf "%s/values/api-platform/stat-receiver/%s.secrets.yaml" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $secretsPath }}
+    secrets:
+      - {{ $secretsPath }}
+{{- end }}
     hooks:
     - events: ["postsync"]
       showlogs: true

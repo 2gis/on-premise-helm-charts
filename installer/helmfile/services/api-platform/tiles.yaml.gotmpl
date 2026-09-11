@@ -22,6 +22,11 @@ releases:
       - {{ .Values.valuesPath }}/values/api-platform/tiles/{{ .Environment.Name }}.yaml.gotmpl
       - {{ .Values.basePath }}/values/api-platform/tiles-multi.yaml.gotmpl
       - {{ .Values.valuesPath }}/values/api-platform/tiles/multi/{{ .Environment.Name }}.yaml.gotmpl
+{{- $secretsPathMulti := printf "%s/values/api-platform/tiles/%s.secrets.yaml" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $secretsPathMulti }}
+    secrets:
+      - {{ $secretsPathMulti }}
+{{- end }}
     hooks:
     - events: ["postsync"]
       showlogs: true
@@ -55,6 +60,11 @@ releases:
       - {{ .Values.valuesPath }}/values/api-platform/tiles/{{ .Environment.Name }}.yaml.gotmpl
       - {{ .Values.basePath }}/values/api-platform/tiles-raster.yaml.gotmpl
       - {{ .Values.valuesPath }}/values/api-platform/tiles/raster/{{ .Environment.Name }}.yaml.gotmpl
+{{- $secretsPathRaster := printf "%s/values/api-platform/tiles/%s.secrets.yaml" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $secretsPathRaster }}
+    secrets:
+      - {{ $secretsPathRaster }}
+{{- end }}
     hooks:
     - events: ["postsync"]
       showlogs: true

@@ -19,6 +19,11 @@ releases:
     values:
       - {{ .Values.basePath }}/values/infra/clickhouse.yaml.gotmpl
       - {{ .Values.valuesPath }}/values/infra/clickhouse/{{ .Environment.Name }}.yaml.gotmpl
+{{- $secretsPath := printf "%s/values/infra/clickhouse/%s.secrets.yaml" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $secretsPath }}
+    secrets:
+      - {{ $secretsPath }}
+{{- end }}
     hooks:
 {{- $hooksPath := printf "%s/hooks/infra/clickhouse/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $hooksPath }}

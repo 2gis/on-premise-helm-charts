@@ -1,4 +1,4 @@
-# Styles override for the `sandbox` (kind) environment — in-cluster PostgreSQL and MinIO.
+# Styles override for the `sandbox` (kind) environment - in-cluster PostgreSQL and MinIO.
 s3:
   host: minio:9000
   secure: false
@@ -10,7 +10,6 @@ postgres:
   host: postgresql
   port: 5432
   username: styles
-  password: styles_password
   name: styles
 
 api:
@@ -21,6 +20,3 @@ api:
     limits:
       cpu: 1
       memory: 1024Mi
-
-keys:
-  token: '1b187e48-2b3f-4e7c-aa0a-bda93a3d0224' # predefined.service: styles-api

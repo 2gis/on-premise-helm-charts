@@ -20,6 +20,11 @@ releases:
     values:
       - {{ .Values.basePath }}/values/infra/postgresql.yaml.gotmpl
       - {{ .Values.valuesPath }}/values/infra/postgresql/{{ .Environment.Name }}.yaml.gotmpl
+{{- $secretsPath := printf "%s/values/infra/postgresql/%s.secrets.yaml" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $secretsPath }}
+    secrets:
+      - {{ $secretsPath }}
+{{- end }}
     hooks:
 {{- $hooksPath := printf "%s/hooks/infra/postgresql/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $hooksPath }}

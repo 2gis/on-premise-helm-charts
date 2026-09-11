@@ -18,6 +18,11 @@ releases:
       - {{ .Values.valuesPath }}/values/ingressAnnotations/{{ .Environment.Name }}.yaml.gotmpl
       - {{ .Values.basePath }}/values/api-platform/staticmaps.yaml.gotmpl
       - {{ .Values.valuesPath }}/values/api-platform/staticmaps/{{ .Environment.Name }}.yaml.gotmpl
+{{- $secretsPath := printf "%s/values/api-platform/staticmaps/%s.secrets.yaml" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $secretsPath }}
+    secrets:
+      - {{ $secretsPath }}
+{{- end }}
     hooks:
     - events: ["postsync"]
       showlogs: true
