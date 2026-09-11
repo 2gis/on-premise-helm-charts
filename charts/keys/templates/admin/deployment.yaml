@@ -2,14 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "keys.admin.name" . }}
-  {{- if or .Values.admin.annotations .Values.customCAs.bundle }}
+  {{- with .Values.admin.annotations }}
   annotations:
-    {{- if .Values.customCAs.bundle }}
-    checksum/config: {{ include (print .Template.BasePath "/configmap-deploys.yaml") . | sha256sum }}
-    {{- end }}
-    {{- with .Values.admin.annotations }}
     {{- toYaml . | nindent 4 }}
-    {{- end }}
   {{- end }}
   labels:
     {{- include "keys.admin.labels" . | nindent 4 }}
@@ -26,10 +21,13 @@ spec:
       {{- include "keys.admin.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.admin.podAnnotations }}
       annotations:
+        {{- if .Values.customCAs.bundle }}
+        checksum/config: {{ include (print $.Template.BasePath "/configmap-deploys.yaml") . | sha256sum }}
+        {{- end }}
+        {{- with .Values.admin.podAnnotations }}
         {{- toYaml . | nindent 8 }}
-      {{- end }}
+        {{- end }}
       labels:
         {{- include "keys.admin.labels" . | nindent 8 }}
         {{- with .Values.admin.podLabels }}

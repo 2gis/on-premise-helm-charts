@@ -2,14 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "catalog.name" . }}
-  {{- if or .Values.annotations .Values.customCAs.bundle }}
+  {{- with .Values.annotations }}
   annotations:
-    {{- if .Values.customCAs.bundle }}
-    checksum/config: {{ include (print .Template.BasePath "/configmap-deploys.yaml") . | sha256sum }}
-    {{- end }}
-    {{- with .Values.annotations }}
     {{- toYaml . | nindent 4 }}
-    {{- end }}
   {{- end }}
   labels:
     {{- if (.Values.dgctlStorage).manifest }}
@@ -35,10 +30,14 @@ spec:
       {{- include "catalog.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
       annotations:
+        {{- if .Values.customCAs.bundle }}
+        checksum/config: {{ include (print $.Template.BasePath "/configmap-deploys.yaml") . | sha256sum }}
+        {{- end }}
+        checksum/secret: {{ include (print $.Template.BasePath "/secret-deploys.yaml") . | sha256sum }}
+        {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
-      {{- end }}
+        {{- end }}
       labels:
         {{- include "catalog.labels" . | nindent 8 }}
         {{- with .Values.podLabels }}

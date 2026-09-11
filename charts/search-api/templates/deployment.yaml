@@ -4,14 +4,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "search-api.fullname" . }}
-  {{- if or .Values.annotations .Values.customCAs.bundle }}
+  {{- with .Values.annotations }}
   annotations:
-    {{- if .Values.customCAs.bundle }}
-    checksum/config: {{ include (print .Template.BasePath "/configmap.yaml") . | sha256sum }}
-    {{- end }}
-    {{- with .Values.annotations }}
     {{- toYaml . | nindent 4 }}
-    {{- end }}
   {{- end }}
   labels:
     {{- if (.Values.dgctlStorage).manifest }}

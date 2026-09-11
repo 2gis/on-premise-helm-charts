@@ -2,14 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "keys.serviceAPI.name" . }}
-  {{- if or .Values.serviceApi.annotations .Values.customCAs.bundle }}
+  {{- with .Values.serviceApi.annotations }}
   annotations:
-    {{- if .Values.customCAs.bundle }}
-    checksum/config: {{ include (print $.Template.BasePath "/configmap-deploys.yaml") . | sha256sum }}
-    {{- end }}
-    {{- with .Values.serviceApi.annotations }}
     {{- toYaml . | nindent 4 }}
-    {{- end }}
   {{- end }}
   labels:
     {{- if (.Values.dgctlStorage).manifest }}
@@ -33,10 +28,14 @@ spec:
       {{- include "keys.serviceAPI.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.serviceApi.podAnnotations }}
       annotations:
+        {{- if .Values.customCAs.bundle }}
+        checksum/config: {{ include (print $.Template.BasePath "/configmap-deploys.yaml") . | sha256sum }}
+        {{- end }}
+        checksum/secret: {{ (include (print $.Template.BasePath "/secret-deploys.yaml") . | fromYaml).data | toYaml | sha256sum }}
+        {{- with .Values.serviceApi.podAnnotations }}
         {{- toYaml . | nindent 8 }}
-      {{- end }}
+        {{- end }}
       labels:
         {{- include "keys.serviceAPI.labels" . | nindent 8 }}
         {{- with .Values.serviceApi.podLabels }}
