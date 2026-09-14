@@ -33,9 +33,9 @@ spec:
       {{- include "keys.api.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.api.podAnnotations }}
+      {{- with include "keys.podAnnotations" (dict "ctx" $ "component" .Values.api) }}
       annotations:
-        {{- toYaml . | nindent 8 }}
+      {{- . | nindent 8 }}
       {{- end }}
       labels:
         {{- include "keys.api.labels" . | nindent 8 }}
@@ -44,7 +44,13 @@ spec:
         {{- end }}
     spec:
       terminationGracePeriodSeconds: 60
-      {{- with include "keys.psql.initTLS" . }}
+      automountServiceAccountToken: {{ .Values.automountServiceAccountToken }}
+      enableServiceLinks: {{ .Values.enableServiceLinks }}
+      {{- with include "keys.podSecurityContext" (dict "ctx" $ "component" .Values.api) }}
+      securityContext:
+      {{- . | nindent 8 }}
+      {{- end }}
+      {{- with include "keys.psql.initTLS" (dict "ctx" $ "component" .Values.api) }}
       initContainers:
       {{- . | nindent 8 }}
       {{- end }}
@@ -52,6 +58,10 @@ spec:
         - name: keys-api
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
+          {{- with include "keys.securityContext" (dict "ctx" $ "component" .Values.api) }}
+          securityContext:
+          {{- . | nindent 12 }}
+          {{- end }}
           command: [ "keys-api" ]
           ports:
             - name: http
@@ -82,11 +92,17 @@ spec:
           {{- include "keys.custom.ca.volumeMounts" . | nindent 12 }}
           {{- end }}
           {{- include "keys.psql.volumeMount" . | nindent 12 }}
+          {{- with include "keys.writable.volumeMounts" (dict "ctx" $ "component" .Values.api) }}
+          {{- . | nindent 12 }}
+          {{- end }}
       volumes:
       {{- if .Values.customCAs.bundle }}
       {{- include "keys.custom.ca.deploys.volumes" . | nindent 8 }}
       {{- end }}
       {{- include "keys.psql.volume" . | nindent 8 }}
+      {{- with include "keys.writable.volumes" (dict "ctx" $ "component" .Values.api) }}
+      {{- . | nindent 8 }}
+      {{- end }}
       {{- with .Values.api.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
