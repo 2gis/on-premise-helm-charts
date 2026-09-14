@@ -1,25 +1,20 @@
 {{- if .Values.api.ingress.enabled -}}
+{{- include "stat-api.ingress.checks" (dict "global" $ "ingress" .Values.api.ingress "name" "api") -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ include "stat-api.componentname" (dict "global" $ "component" "api") }}
   labels:
     {{- include "stat-api.labels" (dict "global" $ "component" "api") | nindent 4 }}
-  {{- with .Values.api.ingress.annotations }}
+  {{- with include "stat-api.ingress.annotations" (dict "global" $ "ingress" .Values.api.ingress) }}
   annotations:
-    {{- toYaml . | nindent 4 }}
+  {{- . | nindent 4 }}
   {{- end }}
 spec:
   ingressClassName: {{ .Values.api.ingress.className }}
-  {{- if .Values.api.ingress.tls }}
+  {{- with include "stat-api.ingress.tls" (dict "global" $ "ingress" .Values.api.ingress "secretName" (printf "%s-tls" (include "stat-api.componentname" (dict "global" $ "component" "api")))) }}
   tls:
-    {{- range .Values.api.ingress.tls }}
-    - hosts:
-        {{- range .hosts }}
-        - {{ . | quote }}
-        {{- end }}
-      secretName: {{ .secretName }}
-    {{- end }}
+  {{- . | nindent 4 }}
   {{- end }}
   rules:
     {{- range .Values.api.ingress.hosts }}
@@ -30,10 +25,7 @@ spec:
           - path: {{ .path }}
             pathType: {{ .pathType }}
             backend:
-              service:
-                name: {{ include "stat-api.componentname" (dict "global" $ "component" "api") }}
-                port:
-                  number: {{ $.Values.api.service.port }}
+              {{- include "stat-api.ingress.backend" (dict "global" $ "name" (include "stat-api.componentname" (dict "global" $ "component" "api")) "port" $.Values.api.service.port) | nindent 14 }}
           {{- end }}
     {{- end }}
 {{- end }}

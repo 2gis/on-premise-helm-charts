@@ -1,0 +1,97 @@
+{{- if .Values.serviceMesh.enabled }}
+{{- $ctx := . }}
+{{- $hosts := include "stat-api.serviceMesh.hostnames" . | fromYamlArray }}
+{{- $name := include "stat-api.componentname" (dict "global" $ "component" "api") }}
+{{- if and .Values.serviceMesh.ingressGateway.enabled $hosts }}
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: {{ $name }}
+  labels:
+    {{- include "stat-api.labels" (dict "global" $ "component" "api") | nindent 4 }}
+spec:
+  hosts:
+    {{- range $hosts }}
+    - {{ . | quote }}
+    {{- end }}
+  gateways:
+    - {{ include "stat-api.serviceMesh.gateway.name" . }}
+  {{- if eq .Values.serviceMesh.ingressGateway.tls.mode "PASSTHROUGH" }}
+  tls:
+    - match:
+        - port: {{ .Values.serviceMesh.ingressGateway.port }}
+          sniHosts:
+            {{- range $hosts }}
+            - {{ . | quote }}
+            {{- end }}
+      route:
+        - destination:
+            host: {{ printf "%s.%s.svc.cluster.local" $name .Release.Namespace }}
+            port:
+              number: {{ .Values.api.service.port }}
+  {{- else }}
+  http:
+    - route:
+        - destination:
+            host: {{ printf "%s.%s.svc.cluster.local" $name .Release.Namespace }}
+            port:
+              number: {{ .Values.api.service.port }}
+  {{- end }}
+{{- end }}
+{{- if and .Values.serviceMesh.egressGateway.enabled .Values.serviceMesh.egressGateway.hosts }}
+{{- range $host := .Values.serviceMesh.egressGateway.hosts }}
+---
+apiVersion: networking.istio.io/v1
+kind: ServiceEntry
+metadata:
+  name: {{ printf "%s-%s" (include "stat-api.fullname" $ctx) ($host | replace "." "-") | trunc 63 | trimSuffix "-" }}
+  labels:
+    {{- include "stat-api.labels" (dict "global" $ctx) | nindent 4 }}
+spec:
+  hosts:
+    - {{ $host | quote }}
+  ports:
+    - number: {{ $ctx.Values.serviceMesh.egressGateway.port }}
+      name: tls
+      protocol: TLS
+  resolution: DNS
+  location: MESH_EXTERNAL
+---
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: {{ printf "%s-egress-%s" (include "stat-api.fullname" $ctx) ($host | replace "." "-") | trunc 63 | trimSuffix "-" }}
+  labels:
+    {{- include "stat-api.labels" (dict "global" $ctx) | nindent 4 }}
+spec:
+  hosts:
+    - {{ $host | quote }}
+  gateways:
+    - mesh
+    - {{ include "stat-api.serviceMesh.egressGateway.name" $ctx }}
+  tls:
+    - match:
+        - gateways:
+            - mesh
+          port: {{ $ctx.Values.serviceMesh.egressGateway.port }}
+          sniHosts:
+            - {{ $host | quote }}
+      route:
+        - destination:
+            host: {{ printf "istio-egressgateway.%s.svc.cluster.local" $ctx.Release.Namespace }}
+            port:
+              number: {{ $ctx.Values.serviceMesh.egressGateway.port }}
+    - match:
+        - gateways:
+            - {{ include "stat-api.serviceMesh.egressGateway.name" $ctx }}
+          port: {{ $ctx.Values.serviceMesh.egressGateway.port }}
+          sniHosts:
+            - {{ $host | quote }}
+      route:
+        - destination:
+            host: {{ $host | quote }}
+            port:
+              number: {{ $ctx.Values.serviceMesh.egressGateway.port }}
+{{- end }}
+{{- end }}
+{{- end }}
