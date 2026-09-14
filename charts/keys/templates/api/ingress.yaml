@@ -1,25 +1,20 @@
 {{- if .Values.api.ingress.enabled -}}
+{{- include "keys.ingress.checks" (dict "ctx" $ "ingress" .Values.api.ingress "name" "api") -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: {{ include "keys.api.name" . }}
   labels:
     {{- include "keys.api.labels" . | nindent 4 }}
-  {{- with .Values.api.ingress.annotations }}
+  {{- with include "keys.ingress.annotations" (dict "ctx" $ "ingress" .Values.api.ingress) }}
   annotations:
-    {{- toYaml . | nindent 4 }}
+  {{- . | nindent 4 }}
   {{- end }}
 spec:
   ingressClassName: {{ .Values.api.ingress.className }}
-  {{- if .Values.api.ingress.tls }}
+  {{- with include "keys.ingress.tls" (dict "ctx" $ "ingress" .Values.api.ingress "secretName" (printf "%s-tls" (include "keys.api.name" $))) }}
   tls:
-    {{- range .Values.api.ingress.tls }}
-    - hosts:
-        {{- range .hosts }}
-        - {{ . | quote }}
-        {{- end }}
-      secretName: {{ .secretName }}
-    {{- end }}
+  {{- . | nindent 4 }}
   {{- end }}
   rules:
     {{- range .Values.api.ingress.hosts }}
@@ -29,23 +24,14 @@ spec:
           - path: "/service/v1"
             pathType: Prefix
             backend:
-              service:
-                name: {{ include "keys.serviceAPI.name" $ }}
-                port:
-                  number: {{ $.Values.serviceApi.service.port }}
+              {{- include "keys.ingress.backend" (dict "ctx" $ "name" (include "keys.serviceAPI.name" $) "port" $.Values.serviceApi.service.port) | nindent 14 }}
           - path: "/public/v1"
             pathType: Prefix
             backend:
-              service:
-                name: {{ include "keys.serviceAPI.name" $ }}
-                port:
-                  number: {{ $.Values.serviceApi.service.port }}
+              {{- include "keys.ingress.backend" (dict "ctx" $ "name" (include "keys.serviceAPI.name" $) "port" $.Values.serviceApi.service.port) | nindent 14 }}
           - path: "/"
             pathType: Prefix
             backend:
-              service:
-                name: {{ include "keys.api.name" $ }}
-                port:
-                  number: {{ $.Values.api.service.port }}
+              {{- include "keys.ingress.backend" (dict "ctx" $ "name" (include "keys.api.name" $) "port" $.Values.api.service.port) | nindent 14 }}
     {{- end }}
 {{- end }}

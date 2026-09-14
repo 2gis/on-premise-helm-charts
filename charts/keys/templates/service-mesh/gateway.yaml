@@ -1,0 +1,52 @@
+{{- if .Values.serviceMesh.enabled }}
+{{- $hosts := include "keys.serviceMesh.hostnames" . | fromYamlArray }}
+{{- if and .Values.serviceMesh.ingressGateway.enabled $hosts }}
+apiVersion: networking.istio.io/v1
+kind: Gateway
+metadata:
+  name: {{ include "keys.serviceMesh.gateway.name" . }}
+  labels:
+    {{- include "keys.labels" . | nindent 4 }}
+spec:
+  selector:
+    {{- toYaml .Values.serviceMesh.ingressGateway.selector | nindent 4 }}
+  servers:
+    - port:
+        number: {{ .Values.serviceMesh.ingressGateway.port }}
+        name: https
+        protocol: {{ if eq .Values.serviceMesh.ingressGateway.tls.mode "PASSTHROUGH" }}TLS{{ else }}HTTPS{{ end }}
+      hosts:
+        {{- range $hosts }}
+        - {{ . | quote }}
+        {{- end }}
+      tls:
+        mode: {{ .Values.serviceMesh.ingressGateway.tls.mode }}
+        {{- if ne .Values.serviceMesh.ingressGateway.tls.mode "PASSTHROUGH" }}
+        minProtocolVersion: {{ .Values.serviceMesh.mtls.minProtocolVersion }}
+        credentialName: {{ required "A valid .Values.serviceMesh.ingressGateway.tls.credentialName entry required for the selected TLS mode" .Values.serviceMesh.ingressGateway.tls.credentialName }}
+        {{- end }}
+{{- end }}
+{{- if and .Values.serviceMesh.egressGateway.enabled .Values.serviceMesh.egressGateway.hosts }}
+---
+apiVersion: networking.istio.io/v1
+kind: Gateway
+metadata:
+  name: {{ include "keys.serviceMesh.egressGateway.name" . }}
+  labels:
+    {{- include "keys.labels" . | nindent 4 }}
+spec:
+  selector:
+    {{- toYaml .Values.serviceMesh.egressGateway.selector | nindent 4 }}
+  servers:
+    - port:
+        number: {{ .Values.serviceMesh.egressGateway.port }}
+        name: tls-egress
+        protocol: TLS
+      hosts:
+        {{- range .Values.serviceMesh.egressGateway.hosts }}
+        - {{ . | quote }}
+        {{- end }}
+      tls:
+        mode: ISTIO_MUTUAL
+{{- end }}
+{{- end }}

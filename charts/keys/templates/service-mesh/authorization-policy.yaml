@@ -1,0 +1,29 @@
+{{- if and .Values.serviceMesh.enabled .Values.serviceMesh.authorizationPolicy.enabled }}
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: {{ include "keys.name" . }}
+  labels:
+    {{- include "keys.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  action: ALLOW
+  rules:
+    - from:
+        - source:
+            namespaces:
+              - {{ .Release.Namespace | quote }}
+              {{- range .Values.serviceMesh.authorizationPolicy.allowedNamespaces }}
+              - {{ . | quote }}
+              {{- end }}
+    {{- with .Values.serviceMesh.authorizationPolicy.allowedPrincipals }}
+    - from:
+        - source:
+            principals:
+              {{- range . }}
+              - {{ . | quote }}
+              {{- end }}
+    {{- end }}
+{{- end }}
