@@ -1,0 +1,17 @@
+{{- if .Values.serviceMesh.enabled }}
+{{- $ctx := . }}
+{{- range $service := include "keys.serviceMesh.services" . | fromYamlArray }}
+---
+apiVersion: networking.istio.io/v1
+kind: DestinationRule
+metadata:
+  name: {{ $service.name }}
+  labels:
+    {{- include "keys.labels" $ctx | nindent 4 }}
+spec:
+  host: {{ printf "%s.%s.svc.cluster.local" $service.name $ctx.Release.Namespace }}
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+{{- end }}
+{{- end }}

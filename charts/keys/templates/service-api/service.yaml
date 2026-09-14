@@ -2,13 +2,13 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "keys.serviceAPI.name" . }}
-  {{- with .Values.api.service.annotations }}
+  {{- with .Values.serviceApi.service.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
   {{- end }}
   labels:
     {{- include "keys.serviceAPI.labels" . | nindent 4 }}
-    {{- with .Values.api.service.labels }}
+    {{- with .Values.serviceApi.service.labels }}
     {{- toYaml . | nindent 4 }}
     {{- end }}
 spec:

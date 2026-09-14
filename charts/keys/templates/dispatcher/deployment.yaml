@@ -22,20 +22,26 @@ spec:
   template:
     metadata:
       annotations:
+        {{- with include "keys.podAnnotations" (dict "ctx" $ "component" .Values.dispatcher) }}
+        {{- . | nindent 8 }}
+        {{- end }}
         {{- if .Values.customCAs.bundle }}
         checksum/config: {{ include (print $.Template.BasePath "/configmap-deploys.yaml") . | sha256sum }}
         {{- end }}
         checksum/secret: {{ (include (print $.Template.BasePath "/secret-deploys.yaml") . | fromYaml).data | toYaml | sha256sum }}
-        {{- with .Values.dispatcher.podAnnotations }}
-        {{- toYaml . | nindent 8 }}
-        {{- end }}
       labels:
         {{- include "keys.dispatcher.labels" . | nindent 8 }}
         {{- with .Values.dispatcher.podLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
     spec:
-      {{- with include "keys.initTLS" . }}
+      automountServiceAccountToken: {{ .Values.automountServiceAccountToken }}
+      enableServiceLinks: {{ .Values.enableServiceLinks }}
+      {{- with include "keys.podSecurityContext" (dict "ctx" $ "component" .Values.dispatcher) }}
+      securityContext:
+      {{- . | nindent 8 }}
+      {{- end }}
+      {{- with include "keys.initTLS" (dict "ctx" $ "component" .Values.dispatcher) }}
       initContainers:
       {{- . | nindent 8 }}
       {{- end }}
@@ -43,6 +49,10 @@ spec:
         - name: dispatcher
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
+          {{- with include "keys.securityContext" (dict "ctx" $ "component" .Values.dispatcher) }}
+          securityContext:
+          {{- . | nindent 12 }}
+          {{- end }}
           command: [ "keys-dispatcher" ]
           resources:
             {{- toYaml .Values.dispatcher.resources | nindent 12 }}
