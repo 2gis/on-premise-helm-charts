@@ -22,6 +22,7 @@
   `secrets:`/`values:` routing in services templates
 - README: "Secrets" section (age/GPG/Vault), sandbox guide without environment
   variables, manifest pinning
+- Playgrounds for platform added
 
 ## [2026-09-09]
 
