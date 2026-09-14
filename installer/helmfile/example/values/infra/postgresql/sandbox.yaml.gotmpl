@@ -1,9 +1,6 @@
 global:
   security:
     allowInsecureImages: true
-  postgresql:
-    auth:
-      username: dbadmin
 
 image:
   repository: bitnamilegacy/postgresql
@@ -22,5 +19,3 @@ primary:
     enabled: true
     size: 8Gi
     storageClass: "standard"
-  initdb:
-    user: postgres

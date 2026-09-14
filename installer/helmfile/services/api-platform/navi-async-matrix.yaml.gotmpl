@@ -16,7 +16,10 @@ releases:
     values:
       - {{ .Values.basePath }}/values/dgctl.yaml.gotmpl
       - {{ .Values.basePath }}/values/api-platform/navi-async-matrix.yaml.gotmpl
-      - {{ .Values.valuesPath }}/values/api-platform/navi-async-matrix/{{ $.Environment.Name }}.yaml.gotmpl
+{{- $vp1 := printf "%s/values/api-platform/navi-async-matrix/%s.yaml.gotmpl" .Values.valuesPath $.Environment.Name -}}
+{{- if isFile $vp1 }}
+      - {{ $vp1 }}
+{{- end }}
 {{- $secretsPath := printf "%s/values/api-platform/navi-async-matrix/%s.secrets.yaml" $.Values.valuesPath $.Environment.Name -}}
 {{- if isFile $secretsPath }}
     secrets:

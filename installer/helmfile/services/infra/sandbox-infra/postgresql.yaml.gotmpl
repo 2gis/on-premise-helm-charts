@@ -19,7 +19,10 @@ releases:
       service: postgresql
     values:
       - {{ .Values.basePath }}/values/infra/postgresql.yaml.gotmpl
-      - {{ .Values.valuesPath }}/values/infra/postgresql/{{ .Environment.Name }}.yaml.gotmpl
+{{- $vp1 := printf "%s/values/infra/postgresql/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $vp1 }}
+      - {{ $vp1 }}
+{{- end }}
 {{- $secretsPath := printf "%s/values/infra/postgresql/%s.secrets.yaml" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $secretsPath }}
     secrets:

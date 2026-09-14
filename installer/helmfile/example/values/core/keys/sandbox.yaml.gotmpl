@@ -1,33 +1,5 @@
 # Keys override for the `sandbox` (kind) environment - in-cluster PostgreSQL, Kafka, Redis, Keycloak OIDC.
-postgres:
-  rw:
-    host: postgresql
-    port: 5432
-    timeout: 3s
-    name: keys
-    schema: ''
-    username: keys_rw
-  ro:
-    host: postgresql
-    port: 5432
-    timeout: 3s
-    name: keys
-    schema: ''
-    username: keys_ro
-
-kafka:
-  bootstrapServers: kafka-controller-headless:9092
-  username: admin
-  securityProtocol: SASL_PLAINTEXT
-  saslMechanism: SCRAM-SHA-512
-
-redis:
-  enabled: true
-  host: redis-master
-  db: 0
-
 api:
-  adminUsers: "admin:on-premise"
   replicas: 1
   oidc:
     enabled: true

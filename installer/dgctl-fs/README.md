@@ -52,9 +52,9 @@ mkdir values
 
 ### Редактируем конфигурационные файлы
 
-Конфиги лежат в `installer/helmfile/example/dgctl/`:
+Конфиги расположены в `installer/helmfile/example/dgctl/`:
 `dgctl-config-fs.yaml` (хост с интернетом) и `dgctl-config-s3.yaml` (закрытый контур).
-Заполните их кредами, прописать s3 и registry в СВОЕЙ копии репозитория,
+Заполните учётные данные, укажите s3 и registry в СВОЕЙ копии репозитория,
 зашифровав вашим sops-ключом (см. `installer/README.md`, раздел "Секреты").
 
 Скрипты берут конфиг из `$HELMFILE_VALUES/dgctl/` (если `HELMFILE_VALUES` не задан -

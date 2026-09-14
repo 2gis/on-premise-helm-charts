@@ -1,7 +1,7 @@
 environments:
   sandbox:
 {{- $valuesPath := env "HELMFILE_VALUES" | default (printf "%s/installer/helmfile/example" (env "PWD")) }}
-{{- $envSecrets := printf "%s/secrets/%s/secrets.yaml" $valuesPath .Environment.Name }}
+{{- $envSecrets := printf "%s/environments/%s.secrets.yaml" $valuesPath .Environment.Name }}
 {{- if isFile $envSecrets }}
     secrets:
     - {{ $envSecrets }}

@@ -3,11 +3,13 @@
 ## [2026-09-09] Release: Platform:2.58.0
 
   [CHANGELOG](changelogs/platform/PLATFORM-CHANGELOG.md)
+
   [INSTALLER CHANGELOG](installer/INSTALLER-CHANGELOG.md#2026-09-09)
 
 ## [2026-09-08] Release: Core:2.11.0
 
   [CHANGELOG](changelogs/core/CORE-CHANGELOG.md)
+
   [INSTALLER CHANGELOG](installer/INSTALLER-CHANGELOG.md#2026-09-08)
 
 ## [2026-08-31] Release: Platform:2.57.0

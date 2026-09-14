@@ -10,18 +10,10 @@
 | citylens     | 2.3.0   |
 
 #### Changes
-- Secret encryption: sops + helm-secrets support (`example/.sops.yaml` creation rules;
-  plaintext `*.secrets.yaml` per-service and environment files in `example/`,
-  encrypt before deploy, decrypt back)
-- dgctl configs moved to `example/dgctl/` (sandbox/staging/fs/s3); presets removed from
-  `installer/dgctl/`; `pull.sh` runs from any directory (config resolution
-  `$1` > `$HELMFILE_VALUES/dgctl/<name>` > example default; `auto_values` via `HELMFILE_BASE`)
-- `create_sandbox_key.sh` is sops-aware: decrypts sops-encrypted env secrets and
-  re-encrypts the written-back key
-- helmfile: `HELMFILE_VALUES`/`HELMFILE_BASE` path defaults in `common.yaml.gotmpl`,
-  `secrets:`/`values:` routing in services templates
-- README: "Secrets" section (age/GPG/Vault), sandbox guide without environment
-  variables, manifest pinning
+- Secret encryption: sops + helm-secrets support - secrets are stored in `*.secrets.yaml`(migration notes: README, "Secrets")
+- vals alternative: `ref+vault://` refs in regular values files, no encryption step (README, "Vault (vals)")
+- dgctl configs moved to `example/dgctl/`
+- Sandbox guide: deployment without `HELMFILE_BASE`/`HELMFILE_VALUES` variables
 - Playgrounds for platform added
 
 ## [2026-09-09]

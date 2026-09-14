@@ -149,22 +149,40 @@ Elasticsearch, ClickHouse, Cassandra.
 
 ## Секреты
 
-Секреты (пароли БД/Kafka, токены, лицензионный ключ) живут только в файлах `*.secrets.yaml` -
-открытые values (`*.yaml.gotmpl`) их не содержат.
+Для секретов выделен отдельный тип файлов - `*.secrets.yaml`. Открытые values-файлы
+(`*.yaml.gotmpl`) содержат только конфигурацию. Файлы комбинируются под требования:
 
-| Уровень | Файл | Содержимое |
+- **комбинация** (базовый вариант, так устроен `example/`) - конфигурация в
+  `*.yaml.gotmpl`, секретные блоки целиком в `*.secrets.yaml`;
+- **только открытые** - значения из secrets-файла переносятся в открытый values-файл,
+  secrets-файл удаляется (шифрование не требуется);
+- **только зашифрованные** - всё содержимое переносится в secrets-файл, открытый
+  файл удаляется.
+
+Чтобы добавить секреты сервису, создайте файл
+`<HELMFILE_VALUES>/values/<группа>/<сервис>/<env>.secrets.yaml`:
+
+```yaml
+# <HELMFILE_VALUES>/values/api-platform/styles/sandbox.secrets.yaml
+postgres:
+  host: postgresql
+  port: 5432
+  username: styles
+  password: styles_password
+```
+
+Подтипы файлов с секретами:
+
+| Тип | Файл | Что содержит |
 |---|---|---|
-| Окружение | `<HELMFILE_VALUES>/secrets/<env>/secrets.yaml` | `dgctlStorage`, партнёрский `key`, `license.key` |
-| Сервис | `<HELMFILE_VALUES>/values/**/<env>.secrets.yaml` | пароли PostgreSQL/Kafka/Redis/Cassandra/ClickHouse, сервисные токены keys |
-| dgctl | `<HELMFILE_VALUES>/dgctl/dgctl-config-<env>.yaml` | лицензионный ключ, креды S3 и registry |
+| Окружение | `<HELMFILE_VALUES>/environments/<env>.secrets.yaml` | секреты вне отдельных релизов (state-уровень, хуки): `dgctlStorage` - учётные данные S3, общие для всех сервисов; партнёрский `key`; `license.key` |
+| Сервис | `<HELMFILE_VALUES>/values/**/<env>.secrets.yaml` | блоки с учётными данными сервисов: PostgreSQL, Kafka, Redis, Cassandra, ClickHouse; сервисные токены keys |
+| dgctl | `<HELMFILE_VALUES>/dgctl/dgctl-config-<env>.yaml` | лицензионный ключ, учётные данные S3 и registry |
 
-Файлы подключаются через поле `secrets:` с проверкой `isFile` - отсутствие файла не ломает деплой,
-а значения из secrets-файла перекрывают открытые values (helmfile merge: позже в списке = приоритет).
-Расшифровка выполняется на лету через плагин [helm-secrets](https://github.com/jkroepke/helm-secrets);
-незашифрованные secrets-файлы он не принимает.
+### Шифрование
 
-> **Не хотите шифровать?** Перенесите значения из `*.secrets.yaml` в соответствующий открытый
-> values-файл и удалите secrets-файл - дальше деплой пойдёт как с обычными values.
+Расшифровка выполняется на лету плагином [helm-secrets](https://github.com/jkroepke/helm-secrets). Вариант без шифрования -
+[Vault (vals)](#vault-vals).
 
 ### Sandbox (age)
 
@@ -176,8 +194,6 @@ Elasticsearch, ClickHouse, Cassandra.
    `example/` не шифруются).
 3. Зашифруйте все секретные файлы (правила `.sops.yaml` применятся автоматически):
    ```bash
-   # 21 файл: per-service sandbox*.secrets.yaml + secrets/sandbox/secrets.yaml
-   #          + dgctl/dgctl-config-sandbox.yaml
    find $HELMFILE_VALUES -path '*sandbox*' -name '*.yaml' -exec sops --config $HELMFILE_VALUES/.sops.yaml -e -i {} \;
    ```
    > `sops -e -i` принимает один файл за раз - `-exec ... \;`, не `{} +`.
@@ -209,32 +225,36 @@ Vault Transit и др. Выбор - в правилах `.sops.yaml` (`age:`/`pg
 
 ### Vault (vals)
 
-Вместо шифрования sops секреты можно брать из удалённого хранилища (HashiCorp Vault,
-AWS Secrets Manager, Azure Key Vault и др.) через [vals](https://github.com/helmfile/vals):
+Секреты можно брать из удалённых хранилищ (HashiCorp Vault, AWS Secrets Manager, Azure Key
+Vault и др.) через [vals](https://github.com/helmfile/vals) - двумя способами; оба не требуют
+ни шифрования sops, ни файлов `*.secrets.yaml`.
+
+**Способ 1 - ссылки в обычных values-файлах (без плагина helm-secrets).** helmfile сам
+разворачивает `ref+...`-ссылки при рендере values - пишите их прямо в `*.yaml.gotmpl`:
+
+```yaml
+# values/api-platform/styles/<env>.yaml.gotmpl
+postgres:
+  host: postgresql
+  password: ref+vault://secret/2gis/styles#/db-password
+```
+
+```bash
+export VAULT_ADDR=... VAULT_TOKEN=...   # должны быть заданы на момент деплоя
+helmfile -e <env> -f $HELMFILE_VALUES/deploy/<env>.yaml.gotmpl apply --selector group=core
+```
+
+Файлы `*.secrets.yaml` (опциональные) в этом режиме просто удаляются.
+
+**Способ 2 - ссылки в secrets-файлах (через helm-secrets).** Держите `ref+...` в
+`*.secrets.yaml` (подключаются полем `secrets:`) и включите vals-бэкенд плагина:
 
 ```bash
 export HELM_SECRETS_BACKEND=vals   # vals >= 0.22.0 в PATH; для Vault - VAULT_ADDR/VAULT_TOKEN
 ```
 
-Файлы `*.secrets.yaml` остаются открытыми и коммитятся как есть - вместо значений ссылки:
-
-```yaml
-minio:
-  auth: ref+vault://secret/2gis/minio#/auth
-```
-
-Реальные значения подставляются в момент `template`/`sync`/`apply`: helm-secrets вызывает
-vals. Этап шифрования (sops, `.sops.yaml`, шаги 1-3 выше) не нужен вовсе.
-
-- файлы подключаются тем же полем `secrets:` - имена и маршрутизация не меняются;
-- бэкенды можно смешивать per-file префиксом (`vals!файл`, `sops!файл`);
-- Vault поддерживается и как бэкенд шифрования sops - правило `hc_vault:` в `.sops.yaml`,
-  ключи в Vault Transit (см. [Staging (любой бэкенд)](#staging-любой-бэкенд)): файлы тогда
-  остаются обычными зашифрованными sops-файлами, а не открытыми vals-файлами со ссылками;
-- **dgctl-конфиг вне этого конвейера**: `pull.sh` запускает docker dgctl напрямую,
-  без helm-secrets - `ref+vault://` он не поймёт. Оставьте dgctl-конфиг под sops
-  (с любым бэкендом sops, включая Vault Transit, - pull.sh расшифрует сам)
-  или подставьте значения вручную перед pull.
+Файлы остаются открытыми и коммитятся как есть - значения подставляются в момент
+`template`/`sync`/`apply`. Этап шифрования (sops, `.sops.yaml`, шаги 1-3 выше) не нужен.
 
 ---
 
@@ -409,7 +429,7 @@ helmfile -e <env> -f $HELMFILE_VALUES/deploy/<env>.yaml.gotmpl apply --selector 
 `installer/helmfile/example/environments/sandbox.yaml.gotmpl` + `deploy/sandbox.yaml.gotmpl` - быстрый
 kubernetes-ready пример API-платформы (infra + core + api-platform) для локального кластера `kind`.
 
-> Образы infra (bitnami: PostgreSQL, Kafka, MinIO, Cassandra, ClickHouse, Elasticsearch) тянутся из
+> Образы infra (bitnami: PostgreSQL, Kafka, MinIO, Cassandra, ClickHouse, Elasticsearch) загружаются из
 > публичного `docker.io`. Образы 2GIS (core, api-platform) - из локального registry `kind-registry:5000`,
 > который заполняется через `dgctl pull --apps-to-registry`.
 >
@@ -430,7 +450,7 @@ kubernetes-ready пример API-платформы (infra + core + api-platfor
 не нужны: без них helmfile и скрипты используют дефолт - `installer/helmfile/example`.
 
 1. **Заполните и зашифруйте секреты** - лицензионный ключ (`# sandbox-todo`) в
-   `installer/helmfile/example/secrets/sandbox/secrets.yaml` (`license.key`) и
+   `installer/helmfile/example/environments/sandbox.secrets.yaml` (`license.key`) и
    `installer/helmfile/example/dgctl/dgctl-config-sandbox.yaml` (`key`), затем зашифруйте
    файлы (см. [Секреты](#секреты)):
    ```bash

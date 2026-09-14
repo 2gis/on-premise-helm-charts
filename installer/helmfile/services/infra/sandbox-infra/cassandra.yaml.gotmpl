@@ -19,7 +19,10 @@ releases:
       service: cassandra
     values:
       - {{ .Values.basePath }}/values/infra/cassandra.yaml.gotmpl
-      - {{ .Values.valuesPath }}/values/infra/cassandra/{{ .Environment.Name }}.yaml.gotmpl
+{{- $vp1 := printf "%s/values/infra/cassandra/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $vp1 }}
+      - {{ $vp1 }}
+{{- end }}
 {{- $secretsPath := printf "%s/values/infra/cassandra/%s.secrets.yaml" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $secretsPath }}
     secrets:

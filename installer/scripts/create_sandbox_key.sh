@@ -6,7 +6,7 @@
 #   OP_NAMESPACE     - Kubernetes namespace (default: sandbox)
 #   OP_DOMAIN        - sandbox domain (default: sandbox)
 #   OP_ENV_FILE      - path to environments/sandbox.yaml.gotmpl (fallback target)
-#   OP_SECRETS_FILE  - path to secrets/sandbox/secrets.yaml (preferred target;
+#   OP_SECRETS_FILE  - path to environments/sandbox.secrets.yaml (preferred target;
 #                      overrides env values at render time, may be sops-encrypted)
 set -euo pipefail
 
@@ -23,7 +23,7 @@ CURL_RESOLVE="--resolve ${KEYS_HOST}:80:127.0.0.1"
 PARTNER_NAME="Sandbox Partner"
 
 # Target file to read/patch the partner key from:
-# secrets/<env>/secrets.yaml if present (it overrides env values), else the environments file.
+# environments/<env>.secrets.yaml if present (it overrides env values), else the environments file.
 TARGET=""
 if [ -n "${SECRETS_FILE}" ] && [ -f "${SECRETS_FILE}" ]; then
   TARGET="${SECRETS_FILE}"

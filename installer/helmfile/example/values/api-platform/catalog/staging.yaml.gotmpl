@@ -14,18 +14,8 @@ api:
       cpu: 500m
       memory: 4000Mi
   replicas: 1
-  postgres: &postgres
-    host: 'haproxy' # TODO
-    port: 5000 # TODO
-    username: catalog
-    name: catalog
-    poolSize:
-      api: 20
-    queryTimeout: 10
 
 importer:
-  postgres:
-    <<: *postgres
   cleaner:
     enabled: true
     versionLimit: 3

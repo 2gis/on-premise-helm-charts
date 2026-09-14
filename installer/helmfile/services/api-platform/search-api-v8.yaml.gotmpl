@@ -17,7 +17,15 @@ releases:
       - {{ .Values.basePath }}/../dgctl/auto_values/api-platform/general.yaml
       - {{ .Values.basePath }}/values/dgctl.yaml.gotmpl
       - {{ .Values.basePath }}/values/api-platform/search-api-v8.yaml.gotmpl
-      - {{ .Values.valuesPath }}/values/api-platform/search-api-v8/{{ .Environment.Name }}.yaml.gotmpl
+{{- $vp1 := printf "%s/values/api-platform/search-api-v8/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $vp1 }}
+      - {{ $vp1 }}
+{{- end }}
+{{- $secretsPath := printf "%s/values/api-platform/search-api-v8/%s.secrets.yaml" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $secretsPath }}
+    secrets:
+      - {{ $secretsPath }}
+{{- end }}
     hooks:
     - events: ["postsync"]
       showlogs: true

@@ -17,7 +17,15 @@ releases:
       - {{ .Values.basePath }}/../dgctl/auto_values/core/general.yaml
       - {{ .Values.basePath }}/values/dgctl.yaml.gotmpl
       - {{ .Values.basePath }}/values/core/license.yaml.gotmpl
-      - {{ .Values.valuesPath }}/values/core/license/{{ .Environment.Name }}.yaml.gotmpl
+{{- $vp1 := printf "%s/values/core/license/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $vp1 }}
+      - {{ $vp1 }}
+{{- end }}
+{{- $secretsPath := printf "%s/values/core/license/%s.secrets.yaml" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $secretsPath }}
+    secrets:
+      - {{ $secretsPath }}
+{{- end }}
     hooks:
     - events: ["postsync"]
       showlogs: true

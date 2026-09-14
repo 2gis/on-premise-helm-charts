@@ -17,9 +17,15 @@ releases:
       - {{ .Values.basePath }}/../dgctl/auto_values/core/general.yaml
       - {{ .Values.basePath }}/values/dgctl.yaml.gotmpl
       - {{ .Values.basePath }}/values/ingressAnnotations.yaml.gotmpl
-      - {{ .Values.valuesPath }}/values/ingressAnnotations/{{ .Environment.Name }}.yaml.gotmpl
+{{- $vp1 := printf "%s/values/ingressAnnotations/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $vp1 }}
+      - {{ $vp1 }}
+{{- end }}
       - {{ .Values.basePath }}/values/core/keys.yaml.gotmpl
-      - {{ .Values.valuesPath }}/values/core/keys/{{ .Environment.Name }}.yaml.gotmpl
+{{- $vp2 := printf "%s/values/core/keys/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $vp2 }}
+      - {{ $vp2 }}
+{{- end }}
 {{- $secretsPath := printf "%s/values/core/keys/%s.secrets.yaml" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $secretsPath }}
     secrets:

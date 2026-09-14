@@ -17,11 +17,20 @@ releases:
       - {{ .Values.basePath }}/../dgctl/auto_values/api-platform/general.yaml
       - {{ .Values.basePath }}/values/dgctl.yaml.gotmpl
       - {{ .Values.basePath }}/values/ingressAnnotations.yaml.gotmpl
-      - {{ .Values.valuesPath }}/values/ingressAnnotations/{{ .Environment.Name }}.yaml.gotmpl
+{{- $vp1 := printf "%s/values/ingressAnnotations/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $vp1 }}
+      - {{ $vp1 }}
+{{- end }}
       - {{ .Values.basePath }}/values/api-platform/tiles.yaml.gotmpl
-      - {{ .Values.valuesPath }}/values/api-platform/tiles/{{ .Environment.Name }}.yaml.gotmpl
+{{- $vp2 := printf "%s/values/api-platform/tiles/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $vp2 }}
+      - {{ $vp2 }}
+{{- end }}
       - {{ .Values.basePath }}/values/api-platform/tiles-multi.yaml.gotmpl
-      - {{ .Values.valuesPath }}/values/api-platform/tiles/multi/{{ .Environment.Name }}.yaml.gotmpl
+{{- $vp3 := printf "%s/values/api-platform/tiles/multi/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $vp3 }}
+      - {{ $vp3 }}
+{{- end }}
 {{- $secretsPathMulti := printf "%s/values/api-platform/tiles/%s.secrets.yaml" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $secretsPathMulti }}
     secrets:
@@ -55,11 +64,20 @@ releases:
       - {{ .Values.basePath }}/../dgctl/auto_values/api-platform/general.yaml
       - {{ .Values.basePath }}/values/dgctl.yaml.gotmpl
       - {{ .Values.basePath }}/values/ingressAnnotations.yaml.gotmpl
-      - {{ .Values.valuesPath }}/values/ingressAnnotations/{{ .Environment.Name }}.yaml.gotmpl
+{{- $vp4 := printf "%s/values/ingressAnnotations/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $vp4 }}
+      - {{ $vp4 }}
+{{- end }}
       - {{ .Values.basePath }}/values/api-platform/tiles.yaml.gotmpl
-      - {{ .Values.valuesPath }}/values/api-platform/tiles/{{ .Environment.Name }}.yaml.gotmpl
+{{- $vp5 := printf "%s/values/api-platform/tiles/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $vp5 }}
+      - {{ $vp5 }}
+{{- end }}
       - {{ .Values.basePath }}/values/api-platform/tiles-raster.yaml.gotmpl
-      - {{ .Values.valuesPath }}/values/api-platform/tiles/raster/{{ .Environment.Name }}.yaml.gotmpl
+{{- $vp6 := printf "%s/values/api-platform/tiles/raster/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $vp6 }}
+      - {{ $vp6 }}
+{{- end }}
 {{- $secretsPathRaster := printf "%s/values/api-platform/tiles/%s.secrets.yaml" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $secretsPathRaster }}
     secrets:
