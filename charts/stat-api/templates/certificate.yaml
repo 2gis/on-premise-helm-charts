@@ -1,0 +1,31 @@
+{{- if and .Values.certManager.enabled .Values.api.ingress.enabled }}
+{{- $name := include "stat-api.componentname" (dict "global" $ "component" "api") }}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ $name }}
+  labels:
+    {{- include "stat-api.labels" (dict "global" $ "component" "api") | nindent 4 }}
+  {{- with .Values.certManager.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  secretName: {{ $name }}-tls
+  duration: {{ .Values.certManager.duration }}
+  renewBefore: {{ .Values.certManager.renewBefore }}
+  privateKey:
+    algorithm: {{ .Values.certManager.privateKey.algorithm }}
+    size: {{ .Values.certManager.privateKey.size }}
+  issuerRef:
+    name: {{ .Values.certManager.issuer.name }}
+    kind: {{ .Values.certManager.issuer.kind }}
+    group: {{ .Values.certManager.issuer.group }}
+  dnsNames:
+    {{- range .Values.api.ingress.hosts }}
+    {{- if contains "*" (.host | toString) }}
+    {{- fail (printf "A wildcard hostname %s is not allowed: the certificates are issued for the exact hostnames only" .host) }}
+    {{- end }}
+    - {{ .host | quote }}
+    {{- end }}
+{{- end }}

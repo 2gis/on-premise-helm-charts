@@ -1,0 +1,69 @@
+{{- if .Values.networkPolicy.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "stat-api.componentname" (dict "global" $ "component" "deny-all") }}
+  labels:
+    {{- include "stat-api.labels" (dict "global" $) | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  policyTypes:
+    - Ingress
+    - Egress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "stat-api.componentname" (dict "global" $ "component" "allow") }}
+  labels:
+    {{- include "stat-api.labels" (dict "global" $) | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/instance: {{ .Release.Name }}
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: {{ .Release.Namespace | quote }}
+        {{- range .Values.networkPolicy.allowedNamespaces }}
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: {{ . | quote }}
+        {{- end }}
+        {{- range .Values.networkPolicy.allowedNamespaceSelectors }}
+        - namespaceSelector:
+            {{- toYaml . | nindent 12 }}
+        {{- end }}
+    {{- with .Values.networkPolicy.ingressRules }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  egress:
+    - to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/instance: {{ .Release.Name }}
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: {{ .Release.Namespace | quote }}
+    {{- with .Values.networkPolicy.dnsPorts }}
+    - ports:
+        {{- range . }}
+        - port: {{ . }}
+          protocol: UDP
+        - port: {{ . }}
+          protocol: TCP
+        {{- end }}
+    {{- end }}
+    {{- with .Values.networkPolicy.egressRules }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+{{- end }}

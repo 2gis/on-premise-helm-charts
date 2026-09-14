@@ -31,8 +31,8 @@ spec:
         {{- if .Values.clickhouse.tls.enabled }}
         checksum/secret-tls: {{ include (print $.Template.BasePath "/secret-clickhouse-tls.yaml") . | sha256sum }}
         {{- end }}
-        {{- with .Values.api.podAnnotations }}
-        {{- toYaml . | nindent 8 }}
+        {{- with include "stat-api.podAnnotations" (dict "global" $ "component" "api") }}
+        {{- . | nindent 8 }}
         {{- end }}
       labels:
         {{- include "stat-api.labels" (dict "global" $ "component" "api") | nindent 8 }}
@@ -45,7 +45,13 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ include "stat-api.serviceAccountName" . }}
-      {{- with include "stat-api.clickhouse.initTLS" . }}
+      automountServiceAccountToken: {{ .Values.automountServiceAccountToken }}
+      enableServiceLinks: {{ .Values.enableServiceLinks }}
+      {{- with include "stat-api.podSecurityContext" (dict "global" $ "component" "api") }}
+      securityContext:
+      {{- . | nindent 8 }}
+      {{- end }}
+      {{- with include "stat-api.clickhouse.initTLS" (dict "global" $ "component" "api") }}
       initContainers:
       {{- . | nindent 8 }}
       {{- end }}
@@ -53,6 +59,10 @@ spec:
         - name: api
           image: {{ include "stat-api.image" (dict "global" $ "component" "api") }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
+          {{- with include "stat-api.securityContext" (dict "global" $ "component" "api") }}
+          securityContext:
+          {{- . | nindent 12 }}
+          {{- end }}
           command: [ "api" ]
           ports:
             - name: http
@@ -74,11 +84,13 @@ spec:
           {{- include "stat-api.custom.ca.volumeMounts" . | nindent 12 }}
           {{- end }}
           {{- include "stat-api.clickhouse.volumeMount" . | nindent 12 }}
+          {{- include "stat-api.writable.volumeMounts" (dict "global" $ "component" "api") | nindent 12 }}
       volumes:
       {{- if .Values.customCAs.bundle }}
       {{- include "stat-api.custom.ca.volumes" . | nindent 8 }}
       {{- end }}
       {{- include "stat-api.clickhouse.volume" . | nindent 8 }}
+      {{- include "stat-api.writable.volumes" (dict "global" $ "component" "api") | nindent 8 }}
       {{- with .Values.api.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
