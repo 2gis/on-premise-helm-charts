@@ -1,0 +1,14 @@
+{{- if .Values.serviceMesh.enabled }}
+apiVersion: security.istio.io/v1
+kind: PeerAuthentication
+metadata:
+  name: {{ include "stat-api.fullname" . }}
+  labels:
+    {{- include "stat-api.labels" (dict "global" $) | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  mtls:
+    mode: {{ .Values.serviceMesh.mtls.mode }}
+{{- end }}

@@ -13,23 +13,46 @@ spec:
   template:
     metadata:
       name: {{ include "stat-api.componentname" (dict "global" $ "component" "migrate") }}
+      {{- with include "stat-api.podAnnotations" (dict "global" $ "component" "migrate" "job" true) }}
+      annotations:
+      {{- . | nindent 8 }}
+      {{- end }}
       labels:
         {{- include "stat-api.labels" (dict "global" $ "component" "migrate") | nindent 8 }}
     spec:
       restartPolicy: Never
+      serviceAccountName: {{ include "stat-api.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.automountServiceAccountToken }}
+      enableServiceLinks: {{ .Values.enableServiceLinks }}
+      {{- with include "stat-api.podSecurityContext" (dict "global" $ "component" "migrate") }}
+      securityContext:
+      {{- . | nindent 8 }}
+      {{- end }}
       initContainers:
       {{- if .Values.migrate.initialDelaySeconds }}
         - name: delay
           image: {{ include "stat-api.image" (dict "global" $ "component" "migrate") }}
+          {{- with include "stat-api.securityContext" (dict "global" $ "component" "migrate") }}
+          securityContext:
+          {{- . | nindent 12 }}
+          {{- end }}
           command: [ "sh", "-c", "sleep {{ .Values.migrate.initialDelaySeconds }}" ]
           resources:
             {{- toYaml .Values.migrate.resources | nindent 12 }}
+          {{- with include "stat-api.writable.volumeMounts" (dict "global" $ "component" "migrate") }}
+          volumeMounts:
+          {{- . | nindent 10 }}
+          {{- end }}
       {{- end }}
-      {{- include "stat-api.clickhouse.initTLS" . | nindent 8 }}
+      {{- include "stat-api.clickhouse.initTLS" (dict "global" $ "component" "migrate") | nindent 8 }}
       containers:
         - name: migrate
           image: {{ include "stat-api.image" (dict "global" $ "component" "migrate") }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
+          {{- with include "stat-api.securityContext" (dict "global" $ "component" "migrate") }}
+          securityContext:
+          {{- . | nindent 12 }}
+          {{- end }}
           command: [ "migrate" ]
           args:
             - "--command=up"
@@ -50,11 +73,13 @@ spec:
           {{- include "stat-api.custom.ca.volumeMounts" . | nindent 12 }}
           {{- end }}
           {{- include "stat-api.clickhouse.volumeMount" . | nindent 12 }}
+          {{- include "stat-api.writable.volumeMounts" (dict "global" $ "component" "migrate") | nindent 12 }}
       volumes:
       {{- if .Values.customCAs.bundle }}
       {{- include "stat-api.custom.ca.volumes" . | nindent 8 }}
       {{- end }}
       {{- include "stat-api.clickhouse.volume" . | nindent 8 }}
+      {{- include "stat-api.writable.volumes" (dict "global" $ "component" "migrate") | nindent 8 }}
       {{- with .Values.migrate.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
