@@ -17,6 +17,60 @@ dgctlDockerRegistry: ''
 imagePullSecrets: []
 imagePullPolicy: IfNotPresent
 
+
+# @section Security settings
+
+# @param podSecurityContext.enabled If the pod security context is enabled.
+# @param podSecurityContext.runAsNonRoot If the containers of the chart are not allowed to run as the root user.
+# @param podSecurityContext.runAsUser UID of a non-privileged user that exists in the images.
+# @param podSecurityContext.runAsGroup GID of a non-privileged group that exists in the images.
+# @param podSecurityContext.fsGroup GID applied to the mounted volumes.
+# @param securityContext.enabled If the container security context is enabled.
+# @param securityContext.privileged If the containers are run in the privileged mode.
+# @param securityContext.allowPrivilegeEscalation If a process of a container can gain more privileges than its parent process.
+# @param securityContext.readOnlyRootFilesystem If the root filesystem of the containers is read-only. See `writablePaths` for the directories the services still need to write to.
+# @param securityContext.runAsNonRoot If the containers are not allowed to run as the root user.
+# @param securityContext.runAsUser UID of a non-privileged user that exists in the images.
+# @param securityContext.runAsGroup GID of a non-privileged group that exists in the images.
+# @param securityContext.capabilities.drop Linux capabilities to drop. All the capabilities are dropped by default.
+# @param securityContext.seccompProfile.type Type of the [seccomp](https://kubernetes.io/docs/tutorials/security/seccomp/) profile. Can be `RuntimeDefault`, `Localhost` or `Unconfined`.
+# @param automountServiceAccountToken If the ServiceAccount API token is mounted into the pods of the chart. The services do not use the Kubernetes API, so the token is not mounted by default.
+# @param enableServiceLinks If the information about the services of the namespace is injected into the pods as environment variables.
+# @param writablePaths Paths mounted as `emptyDir` volumes when `securityContext.readOnlyRootFilesystem` is enabled. Can be overridden per service, e.g. by `admin.writablePaths`.
+
+# The settings below are applied to every workload of the chart and comply with the
+# [restricted](https://kubernetes.io/docs/concepts/security/pod-security-standards/#restricted) Pod Security Standard.
+# `runAsUser` and `runAsGroup` must refer to an existing non-privileged user and group of the images:
+# override them if your images are built with different IDs.
+
+podSecurityContext:
+  enabled: false
+  runAsNonRoot: true
+  runAsUser: 10001
+  runAsGroup: 10001
+  fsGroup: 10001
+
+securityContext:
+  enabled: false
+  privileged: false
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  runAsNonRoot: true
+  runAsUser: 10001
+  runAsGroup: 10001
+  capabilities:
+    drop:
+    - ALL
+  seccompProfile:
+    type: RuntimeDefault
+
+automountServiceAccountToken: false
+enableServiceLinks: false
+
+writablePaths:
+- /tmp
+
+
 # @section Flags for enabling/disabling certain features.
 
 featureFlags:
@@ -34,7 +88,7 @@ featureFlags:
 backend:
   image:
     repository: 2gis-on-premise/keys-backend
-    tag: 1.180.1
+    tag: 1.181.0
 
 # @section Admin service settings
 
@@ -94,6 +148,14 @@ admin:
   podAnnotations: {}
   podLabels: {}
 
+  # @param admin.podSecurityContext Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) for the service. Merged over the chart-wide `podSecurityContext`.
+  # @param admin.securityContext Kubernetes [container security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) for the service containers. Merged over the chart-wide `securityContext`.
+  # @param admin.writablePaths Paths mounted as `emptyDir` volumes when the read-only root filesystem is enabled. Overrides the chart-wide `writablePaths`.
+
+  podSecurityContext: {}
+  securityContext: {}
+  writablePaths: []
+
   # @param admin.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
   # @param admin.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
   # @param admin.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
@@ -117,6 +179,8 @@ admin:
 
   # @param admin.ingress.enabled If Ingress is enabled for the service.
   # @param admin.ingress.className Name of the Ingress controller class.
+  # @param admin.ingress.annotations Kubernetes [ingress annotations](https://kubernetes.io/docs/concepts/services-networking/ingress/).
+  # @param admin.ingress.sslPassthrough If the Ingress passes the TLS connection to the backend without decrypting it. Required when `admin.ingress.tls` is set.
   # @param admin.ingress.hosts[0].host Hostname for the Ingress service.
   # @param admin.ingress.hosts[0].paths[0].path Path of the host for the Ingress service.
   # @param admin.ingress.hosts[0].paths[0].pathType Type of the path for the Ingress service.
@@ -125,6 +189,8 @@ admin:
   ingress:
     enabled: false
     className: nginx
+    annotations: {}
+    sslPassthrough: true
     hosts:
     - host: keys-ui.example.com
       paths:
@@ -222,6 +288,14 @@ api:
   podAnnotations: {}
   podLabels: {}
 
+  # @param api.podSecurityContext Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) for the service. Merged over the chart-wide `podSecurityContext`.
+  # @param api.securityContext Kubernetes [container security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) for the service containers. Merged over the chart-wide `securityContext`.
+  # @param api.writablePaths Paths mounted as `emptyDir` volumes when the read-only root filesystem is enabled. Overrides the chart-wide `writablePaths`.
+
+  podSecurityContext: {}
+  securityContext: {}
+  writablePaths: []
+
   # @param api.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
   # @param api.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
   # @param api.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
@@ -244,12 +318,23 @@ api:
   # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
   # @param api.ingress.enabled If Ingress is enabled for the service.
+  # @param api.ingress.className Name of the Ingress controller class.
+  # @param api.ingress.annotations Kubernetes [ingress annotations](https://kubernetes.io/docs/concepts/services-networking/ingress/).
+  # @param api.ingress.sslPassthrough If the Ingress passes the TLS connection to the backend without decrypting it. Required when `api.ingress.tls` is set.
   # @param api.ingress.hosts[0].host Hostname for the Ingress service.
+  # @param api.ingress.tls TLS configuration
 
   ingress:
     enabled: false
+    className: nginx
+    annotations: {}
+    sslPassthrough: true
     hosts:
     - host: keys-api.host
+    tls: []
+    # - hosts:
+    #   - keys-api.host
+    #   secretName: secret.tls
 
 
   # @section Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
@@ -308,6 +393,14 @@ serviceApi:
 
   podAnnotations: {}
   podLabels: {}
+
+  # @param serviceApi.podSecurityContext Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) for the service. Merged over the chart-wide `podSecurityContext`.
+  # @param serviceApi.securityContext Kubernetes [container security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) for the service containers. Merged over the chart-wide `securityContext`.
+  # @param serviceApi.writablePaths Paths mounted as `emptyDir` volumes when the read-only root filesystem is enabled. Overrides the chart-wide `writablePaths`.
+
+  podSecurityContext: {}
+  securityContext: {}
+  writablePaths: []
 
   # @param serviceApi.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
   # @param serviceApi.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
@@ -372,6 +465,14 @@ import:
   # @param import.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
   tolerations: []
 
+  # @param import.podSecurityContext Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) for the service. Merged over the chart-wide `podSecurityContext`.
+  # @param import.securityContext Kubernetes [container security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) for the service containers. Merged over the chart-wide `securityContext`.
+  # @param import.writablePaths Paths mounted as `emptyDir` volumes when the read-only root filesystem is enabled. Overrides the chart-wide `writablePaths`.
+
+  podSecurityContext: {}
+  securityContext: {}
+  writablePaths: []
+
 # @section Migrate service settings
 
 migrate:
@@ -397,6 +498,14 @@ migrate:
 
   # @param migrate.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
   tolerations: []
+
+  # @param migrate.podSecurityContext Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) for the service. Merged over the chart-wide `podSecurityContext`.
+  # @param migrate.securityContext Kubernetes [container security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) for the service containers. Merged over the chart-wide `securityContext`.
+  # @param migrate.writablePaths Paths mounted as `emptyDir` volumes when the read-only root filesystem is enabled. Overrides the chart-wide `writablePaths`.
+
+  podSecurityContext: {}
+  securityContext: {}
+  writablePaths: []
 
 
 # @section Tasker service settings
@@ -443,6 +552,14 @@ tasker:
 
   podAnnotations: {}
   podLabels: {}
+
+  # @param tasker.podSecurityContext Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) for the service. Merged over the chart-wide `podSecurityContext`.
+  # @param tasker.securityContext Kubernetes [container security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) for the service containers. Merged over the chart-wide `securityContext`.
+  # @param tasker.writablePaths Paths mounted as `emptyDir` volumes when the read-only root filesystem is enabled. Overrides the chart-wide `writablePaths`.
+
+  podSecurityContext: {}
+  securityContext: {}
+  writablePaths: []
 
   # @param tasker.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
   # @param tasker.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
@@ -510,6 +627,14 @@ dispatcher:
   podAnnotations: {}
   podLabels: {}
 
+  # @param dispatcher.podSecurityContext Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) for the service. Merged over the chart-wide `podSecurityContext`.
+  # @param dispatcher.securityContext Kubernetes [container security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) for the service containers. Merged over the chart-wide `securityContext`.
+  # @param dispatcher.writablePaths Paths mounted as `emptyDir` volumes when the read-only root filesystem is enabled. Overrides the chart-wide `writablePaths`.
+
+  podSecurityContext: {}
+  securityContext: {}
+  writablePaths: []
+
   # @param dispatcher.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
   # @param dispatcher.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
   # @param dispatcher.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
@@ -553,6 +678,14 @@ dispatcher:
     # @param dispatcher.cleaner.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
 
     nodeSelector: {}
+
+    # @param dispatcher.cleaner.podSecurityContext Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) for the service. Merged over the chart-wide `podSecurityContext`.
+    # @param dispatcher.cleaner.securityContext Kubernetes [container security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) for the service containers. Merged over the chart-wide `securityContext`.
+    # @param dispatcher.cleaner.writablePaths Paths mounted as `emptyDir` volumes when the read-only root filesystem is enabled. Overrides the chart-wide `writablePaths`.
+
+    podSecurityContext: {}
+    securityContext: {}
+    writablePaths: []
 
 # @section Counter settings
 
@@ -651,6 +784,14 @@ counter:
 
   podAnnotations: {}
   podLabels: {}
+
+  # @param counter.podSecurityContext Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) for the service. Merged over the chart-wide `podSecurityContext`.
+  # @param counter.securityContext Kubernetes [container security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) for the service containers. Merged over the chart-wide `securityContext`.
+  # @param counter.writablePaths Paths mounted as `emptyDir` volumes when the read-only root filesystem is enabled. Overrides the chart-wide `writablePaths`.
+
+  podSecurityContext: {}
+  securityContext: {}
+  writablePaths: []
 
   # @param counter.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
   # @param counter.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
@@ -946,3 +1087,128 @@ customCAs:
     # ...
     # -----END CERTIFICATE-----
   certsPath: ''
+
+
+# @section cert-manager settings
+
+# @param certManager.enabled If [cert-manager](https://cert-manager.io/docs/) Certificate resources are created for the Ingress hostnames. Wildcard hostnames are not allowed.
+# @param certManager.issuer.name Name of the issuer that signs the certificates.
+# @param certManager.issuer.kind Kind of the issuer. Can be `ClusterIssuer` or `Issuer`.
+# @param certManager.issuer.group API group of the issuer.
+# @param certManager.duration Validity period of the certificates.
+# @param certManager.renewBefore Period before the expiration when the certificates are renewed.
+# @param certManager.privateKey.algorithm Private key algorithm. Can be `RSA`, `ECDSA` or `Ed25519`.
+# @param certManager.privateKey.size Private key size.
+# @param certManager.annotations Annotations of the Certificate resources, e.g. `helm.sh/hook` settings to issue the certificates before the other resources are deployed.
+
+certManager:
+  enabled: false
+  issuer:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+    group: cert-manager.io
+  duration: 2160h
+  renewBefore: 360h
+  privateKey:
+    algorithm: RSA
+    size: 2048
+  annotations: {}
+  # annotations:
+  #   helm.sh/hook: pre-install,pre-upgrade
+  #   helm.sh/hook-weight: '-20'
+
+
+# @section Service Mesh settings
+
+# @extra serviceMesh **[Istio](https://istio.io/latest/docs/) settings that implement the zero trust security model: mTLS between the pods and the edge gateways deployed in the release namespace.**
+
+# @param serviceMesh.enabled If the Istio resources are created for the services of the chart. Requires Istio to be installed in the cluster.
+# @param serviceMesh.sidecarInject If the Istio sidecar is injected into the pods. The sidecar is never injected into the Jobs and CronJobs of the chart.
+# @param serviceMesh.mtls.mode Mutual TLS mode for the pods of the chart. Can be `STRICT`, `PERMISSIVE` or `DISABLE`.
+# @param serviceMesh.mtls.minProtocolVersion Minimum TLS version accepted by the gateways. Can be `TLSV1_2` or `TLSV1_3`. The sidecar-to-sidecar minimum version is set by the mesh-wide Istio configuration.
+# @param serviceMesh.ingressGateway.enabled If the ingress Gateway and the VirtualServices that route the incoming traffic to the services are created.
+# @param serviceMesh.ingressGateway.selector.istio Label of the ingress gateway pods deployed in the release namespace.
+# @param serviceMesh.ingressGateway.port Port of the ingress gateway that serves the incoming traffic.
+# @param serviceMesh.ingressGateway.serviceName Name of the ingress gateway Service deployed in the release namespace. The Ingress resources of the chart send the traffic to this Service.
+# @param serviceMesh.ingressGateway.serviceApiHosts Hostnames routed to the Service API. The `api` hostnames are routed to the API service, so the Service API needs its own hostnames when the traffic is not decrypted by the gateway.
+# @param serviceMesh.ingressGateway.tls.mode TLS mode of the ingress gateway. `PASSTHROUGH` keeps the traffic encrypted up to the service, which is required by the passthrough-only policy.
+# @param serviceMesh.ingressGateway.tls.credentialName Name of the secret with the gateway certificate. Used by the `SIMPLE` and `MUTUAL` modes only.
+# @param serviceMesh.egressGateway.enabled If the egress Gateway and the VirtualServices that route the outgoing traffic through it are created.
+# @param serviceMesh.egressGateway.selector.istio Label of the egress gateway pods deployed in the release namespace.
+# @param serviceMesh.egressGateway.port Port of the egress gateway that serves the outgoing traffic.
+# @param serviceMesh.egressGateway.hosts External hostnames whose traffic is routed through the egress gateway.
+# @param serviceMesh.authorizationPolicy.enabled If the AuthorizationPolicy that allows the traffic from the authorized sources only is created.
+# @param serviceMesh.authorizationPolicy.allowedNamespaces Namespaces allowed to reach the services of the chart. The release namespace is always allowed.
+# @param serviceMesh.authorizationPolicy.allowedPrincipals Service account principals allowed to reach the services of the chart, ex: `cluster.local/ns/default/sa/client`.
+# @param serviceMesh.jwt.enabled If the incoming requests are authenticated by the JWT tokens on the gateway.
+# @param serviceMesh.jwt.issuer Issuer of the accepted JWT tokens.
+# @param serviceMesh.jwt.jwksUri URL of the JSON Web Key Set of the issuer.
+# @param serviceMesh.jwt.audiences Audiences of the accepted JWT tokens.
+# @param serviceMesh.jwt.forwardOriginalToken If the original token is forwarded to the service.
+# @param serviceMesh.externalAuth.enabled If the requests are authorized by an external authorization provider.
+# @param serviceMesh.externalAuth.provider Name of the `extensionProviders` entry defined in the Istio mesh configuration.
+# @param serviceMesh.externalAuth.rules Rules that define the requests sent to the external authorization provider. All the requests are sent by default.
+
+serviceMesh:
+  enabled: false
+  sidecarInject: true
+  mtls:
+    mode: STRICT
+    minProtocolVersion: TLSV1_2
+  ingressGateway:
+    enabled: true
+    selector:
+      istio: ingressgateway
+    port: 443
+    serviceName: istio-ingressgateway
+    serviceApiHosts: []
+    # - keys-service-api.example.com
+    tls:
+      mode: PASSTHROUGH
+      credentialName: ''
+  egressGateway:
+    enabled: false
+    selector:
+      istio: egressgateway
+    port: 443
+    hosts: []
+    # - external-api.example.com
+  authorizationPolicy:
+    enabled: true
+    allowedNamespaces: []
+    allowedPrincipals: []
+  jwt:
+    enabled: false
+    issuer: ''
+    jwksUri: ''
+    audiences: []
+    forwardOriginalToken: true
+  externalAuth:
+    enabled: false
+    provider: ''
+    rules: []
+
+
+# @section Kubernetes [Network Policy](https://kubernetes.io/docs/concepts/services-networking/network-policies/) settings
+
+# @param networkPolicy.enabled If the NetworkPolicy resources are created. A deny-all policy is applied to the pods of the chart, and the traffic is allowed for the sources listed below only.
+# @param networkPolicy.allowedNamespaces Names of the namespaces allowed to reach the services of the chart. The release namespace is always allowed.
+# @param networkPolicy.allowedNamespaceSelectors Additional [namespace selectors](https://kubernetes.io/docs/concepts/services-networking/network-policies/#behavior-of-to-and-from-selectors) of the allowed sources.
+# @param networkPolicy.dnsPorts[0] Port used to resolve DNS names. The egress traffic to these ports is always allowed.
+# @param networkPolicy.egressRules Additional [egress rules](https://kubernetes.io/docs/concepts/services-networking/network-policies/#behavior-of-to-and-from-selectors), ex: the rules that allow the traffic to the database, Redis and Kafka.
+# @param networkPolicy.ingressRules Additional [ingress rules](https://kubernetes.io/docs/concepts/services-networking/network-policies/#behavior-of-to-and-from-selectors).
+
+networkPolicy:
+  enabled: false
+  allowedNamespaces: []
+  allowedNamespaceSelectors: []
+  dnsPorts:
+  - 53
+  egressRules: []
+  # - to:
+  #   - ipBlock:
+  #       cidr: 10.0.0.0/8
+  #     ports:
+  #     - port: 5432
+  #       protocol: TCP
+  ingressRules: []
