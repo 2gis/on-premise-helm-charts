@@ -232,6 +232,7 @@ s3:
   # @param s3.secretKey S3 secret key. **Required**
   # @param s3.bucket S3 bucket name, for example 'styles'. **Required**
   # @param s3.publicDomain S3 public access domain. Uses https access. **Required**
+  # @param s3.publicSecure S3 use secure HTTPS protocol for public URLs. Default true.
   # @param s3.region S3 region name. Default empty.
   # @param s3.secure S3 use secure HTTPS protocol. Default false.
   # @param s3.verifySsl S3 verifySsl SSL connection. Default false.
@@ -244,6 +245,7 @@ s3:
   secretKey: ''
   bucket: ''
   publicDomain: ''
+  publicSecure: true
   region: ''
   secure: false
   verifySsl: false

@@ -130,6 +130,7 @@ Use this Helm chart to deploy API Styles service, which is a part of 2GIS's [On-
 | `s3.secretKey`       | S3 secret key. **Required**                                                         | `""`    |
 | `s3.bucket`          | S3 bucket name, for example 'styles'. **Required**                                  | `""`    |
 | `s3.publicDomain`    | S3 public access domain. Uses https access. **Required**                            | `""`    |
+| `s3.publicSecure`    | S3 use secure HTTPS protocol for public URLs. Default true.                         | `true`  |
 | `s3.region`          | S3 region name. Default empty.                                                      | `""`    |
 | `s3.secure`          | S3 use secure HTTPS protocol. Default false.                                        | `false` |
 | `s3.verifySsl`       | S3 verifySsl SSL connection. Default false.                                         | `false` |
