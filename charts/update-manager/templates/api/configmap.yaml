@@ -1,0 +1,107 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "update-manager.name" . }}
+  {{- with .Values.api.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "update-manager.labels" . | nindent 4 }}
+data:
+  api.yaml: |
+    log-level: {{ .Values.api.logLevel }}
+    log-format: {{ .Values.api.logFormat }}
+
+    api:
+      addr: "0.0.0.0:8080"
+
+    metrics:
+      addr: "0.0.0.0:9090"
+
+    db:
+      endpoint: {{ required "Valid .Values.postgres.host required!" .Values.postgres.host }}:{{ .Values.postgres.port }}
+      db-name: {{ required "Valid .Values.postgres.name required!" .Values.postgres.name }}
+      user: {{ required "Valid .Values.postgres.username required!" .Values.postgres.username }}
+      params:
+        {{- include "update-manager.psql.params" . | nindent 8 }}
+
+    storage:
+      type: s3
+      host: {{ required "Valid .Values.dgctlStorage.host required!" .Values.dgctlStorage.host }}
+      bucket: {{ required "Valid .Values.dgctlStorage.bucket required!" .Values.dgctlStorage.bucket }}
+      secure: {{ .Values.dgctlStorage.secure }}
+      region: {{ .Values.dgctlStorage.region | quote }}
+
+    keys-service-url: {{ required "Valid .Values.api.keys.url required!" .Values.api.keys.url }}
+
+    datagateway-url: {{ .Values.api.datagateway.url }}
+
+    dgctl:
+      image: {{ include "update-manager.dgctlImage" . }}
+      pull-policy: {{ .Values.api.dgctl.image.pullPolicy }}
+      configmap: {{ include "update-manager.name" . }}
+      secret: {{ include "update-manager.name" . }}
+      {{- if .Values.customCAs.bundle }}
+      configmap-ca: {{ include "update-manager.name" . }}-ca
+      {{- end }}
+
+    job:
+      active-deadline: "{{ .Values.api.job.activeDeadline }}"
+      backoff-limit: {{ .Values.api.job.backoffLimit }}
+      sync-interval: "{{ .Values.api.job.syncInterval }}"
+      start-timeout: "{{ .Values.api.job.startTimeout }}"
+      log-head: {{ .Values.api.job.logHead }}
+      log-tail: {{ .Values.api.job.logTail }}
+      log-pattern: {{ .Values.api.job.logPattern | quote }}
+
+    manifest-sync-interval: "{{ .Values.api.manifest.syncInterval }}"
+
+    helm:
+      timeout: "{{ .Values.api.helm.timeout }}"
+      chart-dir: /tmp/helm-charts
+
+    rollback-history-limit: {{ .Values.api.rollbackHistoryLimit }}
+    install-versions-limit: {{ .Values.api.installVersionsLimit }}
+    completed-task-offset: "{{ .Values.api.completedTaskOffset }}"
+    manifest-update-offset: "{{ .Values.api.manifestUpdateOffset }}"
+
+    components:
+      {{- $components := dict }}
+      {{- range $componentName, $componentValues := .Values.api.components }}
+        {{- $component := dict "version" $componentValues.version }}
+        {{- $releases := list }}
+        {{- range $chartName, $chartValues := $componentValues.charts }}
+          {{- if $chartValues.enabled }}
+            {{ $chartReleases := list }}
+            {{- range $i, $releaseValues := $chartValues.releases }}
+              {{- $path := print ".Values.api.components." $componentName ".charts." $chartName ".releases[" $i "]"}}
+
+              {{- $chartRef := print "oci://ghcr.io/2gis/charts/" $chartName ":" $componentValues.version }}
+              {{- if $chartValues.refOverride }}
+                {{- $chartRef = $chartValues.refOverride }}
+              {{- end }}
+
+              {{- $release := dict "name"         (required (print "Valid " $path ".name required!") $releaseValues.name)
+                                   "release-name" (required (print "Valid " $path ".releaseName required!") $releaseValues.releaseName)
+                                   "services"     $releaseValues.services
+                                   "chart-ref"    $chartRef
+              }}
+              {{- $chartReleases = append $chartReleases $release }}
+              {{- $releases = append $releases $release }}
+            {{- end }}
+          {{- if empty $chartReleases }}
+            {{- required (print "You should specify at least one release in the enabled chart .Values.api.components." $chartName) "" }}
+          {{- end }}
+          {{- end }}
+        {{- end }}
+        {{- if not (empty $releases) }}
+          {{- $component = set $component "releases" $releases }}
+          {{- $components = set $components $componentName $component }}
+        {{- end }}
+      {{- end }}
+      {{- if empty $components }}
+        {{- required "You should enable at least one chart in .Values.api.components" "" }}
+      {{- end }}
+      {{- toYaml $components | nindent 6 }}
