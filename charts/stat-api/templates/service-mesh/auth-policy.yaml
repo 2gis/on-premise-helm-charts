@@ -1,0 +1,47 @@
+{{- if and .Values.serviceMesh.enabled .Values.serviceMesh.jwt.enabled }}
+apiVersion: security.istio.io/v1
+kind: RequestAuthentication
+metadata:
+  name: {{ include "stat-api.componentname" (dict "global" $ "component" "gateway") }}
+  labels:
+    {{- include "stat-api.labels" (dict "global" $) | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- toYaml .Values.serviceMesh.ingressGateway.selector | nindent 6 }}
+  jwtRules:
+    - issuer: {{ required "A valid .Values.serviceMesh.jwt.issuer entry required when the JWT authentication is enabled" .Values.serviceMesh.jwt.issuer | quote }}
+      jwksUri: {{ required "A valid .Values.serviceMesh.jwt.jwksUri entry required when the JWT authentication is enabled" .Values.serviceMesh.jwt.jwksUri | quote }}
+      {{- with .Values.serviceMesh.jwt.audiences }}
+      audiences:
+        {{- range . }}
+        - {{ . | quote }}
+        {{- end }}
+      {{- end }}
+      forwardOriginalToken: {{ .Values.serviceMesh.jwt.forwardOriginalToken }}
+---
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: {{ include "stat-api.componentname" (dict "global" $ "component" "gateway") }}
+  labels:
+    {{- include "stat-api.labels" (dict "global" $) | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- toYaml .Values.serviceMesh.ingressGateway.selector | nindent 6 }}
+  action: ALLOW
+  rules:
+    - from:
+        - source:
+            requestPrincipals:
+              - {{ printf "%s/*" .Values.serviceMesh.jwt.issuer | quote }}
+      {{- with include "stat-api.serviceMesh.hostnames" . | fromYamlArray }}
+      to:
+        - operation:
+            hosts:
+              {{- range . }}
+              - {{ . | quote }}
+              {{- end }}
+      {{- end }}
+{{- end }}
