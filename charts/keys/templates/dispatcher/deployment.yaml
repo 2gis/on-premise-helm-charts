@@ -26,9 +26,9 @@ spec:
       {{- include "keys.dispatcher.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.dispatcher.podAnnotations }}
+      {{- with include "keys.podAnnotations" (dict "ctx" $ "component" .Values.dispatcher) }}
       annotations:
-        {{- toYaml . | nindent 8 }}
+      {{- . | nindent 8 }}
       {{- end }}
       labels:
         {{- include "keys.dispatcher.labels" . | nindent 8 }}
@@ -36,7 +36,13 @@ spec:
         {{- toYaml . | nindent 8 }}
         {{- end }}
     spec:
-      {{- with include "keys.initTLS" . }}
+      automountServiceAccountToken: {{ .Values.automountServiceAccountToken }}
+      enableServiceLinks: {{ .Values.enableServiceLinks }}
+      {{- with include "keys.podSecurityContext" (dict "ctx" $ "component" .Values.dispatcher) }}
+      securityContext:
+      {{- . | nindent 8 }}
+      {{- end }}
+      {{- with include "keys.initTLS" (dict "ctx" $ "component" .Values.dispatcher) }}
       initContainers:
       {{- . | nindent 8 }}
       {{- end }}
@@ -44,6 +50,10 @@ spec:
         - name: dispatcher
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
+          {{- with include "keys.securityContext" (dict "ctx" $ "component" .Values.dispatcher) }}
+          securityContext:
+          {{- . | nindent 12 }}
+          {{- end }}
           command: [ "keys-dispatcher" ]
           resources:
             {{- toYaml .Values.dispatcher.resources | nindent 12 }}
@@ -63,12 +73,18 @@ spec:
           {{- end }}
           {{- include "keys.psql.volumeMount" . | nindent 12 }}
           {{- include "keys.tls.kafka.volumeMount" . | nindent 12 }}
+          {{- with include "keys.writable.volumeMounts" (dict "ctx" $ "component" .Values.dispatcher) }}
+          {{- . | nindent 12 }}
+          {{- end }}
       volumes:
       {{- if .Values.customCAs.bundle }}
       {{- include "keys.custom.ca.deploys.volumes" . | nindent 8 }}
       {{- end }}
       {{- include "keys.psql.volume" . | nindent 8 }}
       {{- include "keys.tls.kafka.volume" . | nindent 8 }}
+      {{- with include "keys.writable.volumes" (dict "ctx" $ "component" .Values.dispatcher) }}
+      {{- . | nindent 8 }}
+      {{- end }}
       {{- with .Values.dispatcher.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

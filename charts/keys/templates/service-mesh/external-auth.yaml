@@ -1,0 +1,24 @@
+{{- if and .Values.serviceMesh.enabled .Values.serviceMesh.externalAuth.enabled }}
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: {{ include "keys.name" . }}-external-auth
+  labels:
+    {{- include "keys.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- toYaml .Values.serviceMesh.ingressGateway.selector | nindent 6 }}
+  action: CUSTOM
+  provider:
+    name: {{ required "A valid .Values.serviceMesh.externalAuth.provider entry required when the external authorization is enabled" .Values.serviceMesh.externalAuth.provider | quote }}
+  rules:
+    {{- with .Values.serviceMesh.externalAuth.rules }}
+    {{- toYaml . | nindent 4 }}
+    {{- else }}
+    - to:
+        - operation:
+            paths:
+              - /*
+    {{- end }}
+{{- end }}

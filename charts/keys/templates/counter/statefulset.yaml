@@ -20,10 +20,20 @@ spec:
       {{- include "keys.counter.selectorLabels" . | nindent 6 }}
   template:
     metadata:
+      {{- with include "keys.podAnnotations" (dict "ctx" $ "component" .Values.counter) }}
+      annotations:
+      {{- . | nindent 8 }}
+      {{- end }}
       labels:
         {{- include "keys.counter.selectorLabels" . | nindent 8 }}
     spec:
-      {{- with include "keys.initTLS" . }}
+      automountServiceAccountToken: {{ .Values.automountServiceAccountToken }}
+      enableServiceLinks: {{ .Values.enableServiceLinks }}
+      {{- with include "keys.podSecurityContext" (dict "ctx" $ "component" .Values.counter) }}
+      securityContext:
+      {{- . | nindent 8 }}
+      {{- end }}
+      {{- with include "keys.initTLS" (dict "ctx" $ "component" .Values.counter) }}
       initContainers:
       {{- . | nindent 8 }}
       {{- end }}
@@ -31,6 +41,10 @@ spec:
         - name: counter
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
+          {{- with include "keys.securityContext" (dict "ctx" $ "component" .Values.counter) }}
+          securityContext:
+          {{- . | nindent 12 }}
+          {{- end }}
           command: [ "keys-counter" ]
           ports:
             - name: http
@@ -49,12 +63,18 @@ spec:
             {{- end }}
             {{- include "keys.psql.volumeMount" . | nindent 12 }}
             {{- include "keys.tls.kafka.volumeMount" . | nindent 12 }}
+            {{- with include "keys.writable.volumeMounts" (dict "ctx" $ "component" .Values.counter) }}
+            {{- . | nindent 12 }}
+            {{- end }}
       volumes:
         {{- if .Values.customCAs.bundle }}
         {{- include "keys.custom.ca.deploys.volumes" . | nindent 8 }}
         {{- end }}
         {{- include "keys.psql.volume" . | nindent 8 }}
       {{- include "keys.tls.kafka.volume" . | nindent 8 }}
+      {{- with include "keys.writable.volumes" (dict "ctx" $ "component" .Values.counter) }}
+      {{- . | nindent 8 }}
+      {{- end }}
       {{- with .Values.counter.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
