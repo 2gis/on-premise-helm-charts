@@ -2,6 +2,8 @@
 s3:
   host: minio:9000
   secure: false
+  publicDomain: s3.{{ .Values.domain }}
+  publicSecure: false
 
 stylesImport:
   startOnDeploy: true
