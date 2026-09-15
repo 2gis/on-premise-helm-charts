@@ -8,7 +8,6 @@ releases:
     chart: {{ .Values.chartLocation }}/license
     namespace: {{ .Values.namespace  }}
     version: {{ .Values.versionCore }}
-    missingFileHandler: Warn
     kubeContext: {{ .Values.kubeContext }}
     labels:
       group: core

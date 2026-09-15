@@ -7,7 +7,6 @@ templates:
   default:
     namespace: {{ .Values.namespace  }}
     version: {{ .Values.versionPlatform }}
-    missingFileHandler: Warn
     timeout: {{ .Values.timeoutNaviBack }}
     kubeContext: {{ .Values.kubeContext }}
     values:

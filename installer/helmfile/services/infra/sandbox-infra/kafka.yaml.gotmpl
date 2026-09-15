@@ -16,7 +16,6 @@ releases:
     labels:
       group: infra
       service: kafka
-    missingFileHandler: Warn
     values:
       - {{ .Values.basePath }}/values/infra/kafka.yaml.gotmpl
 {{- $vp1 := printf "%s/values/infra/kafka/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
