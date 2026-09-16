@@ -45,4 +45,3 @@
 - Initial release of the helmfile installer: example environments
   (sandbox, staging), dgctl artifact pull scripts, helper scripts
   (`kind-up.sh`, `sandbox-hosts.sh`, `create_sandbox_key.sh`)
-
