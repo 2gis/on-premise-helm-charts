@@ -23,13 +23,13 @@ See the [documentation](https://docs.2gis.com/en/on-premise/keys) to learn about
 ### Common settings
 
 | Name                       | Description                       | Value                          |
-| -------------------------- | --------------------------------- | ------------------------------ |
+| -------------------------- | --------------------------------- |--------------------------------|
 | `imagePullSecrets`         | Kubernetes image pull secrets.    | `[]`                           |
 | `imagePullPolicy`          | Pull policy.                      | `IfNotPresent`                 |
 | `backend.image.repository` | Backend service image repository. | `2gis-on-premise/keys-backend` |
-| `backend.image.tag`        | Backend service image tag.        | `1.176.0`                      |
+| `backend.image.tag`        | Backend service image tag.        | `1.180.1`                      |
 | `admin.image.repository`   | Admin service image repository.   | `2gis-on-premise/keys-ui`      |
-| `admin.image.tag`          | Admin service image tag.          | `1.7.9`                        |
+| `admin.image.tag`          | Admin service image tag.          | `1.9.0`                        |
 
 ### Flags for enabling/disabling certain features.
 
