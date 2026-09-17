@@ -8,7 +8,7 @@ environments:
 {{- end }}
     values:
     - kubeContext: kind-2gis-on-premise
-    - chartLocation: oci://ghcr.io/2gis/charts
+    - chartLocation: {{ env "CHART_LOCATION" | default "oci://ghcr.io/2gis/charts" }}
     # для работы с локальными чартами
     # - chartLocation: ../../../../charts
     - chartLocationGrafana: oci://ghcr.io/grafana/helm-charts
