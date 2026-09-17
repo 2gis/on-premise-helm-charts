@@ -16,9 +16,20 @@ releases:
       - {{ .Values.basePath }}/../dgctl/auto_values/citylens/general.yaml
       - {{ .Values.basePath }}/values/dgctl.yaml.gotmpl
       - {{ .Values.basePath }}/values/ingressAnnotations.yaml.gotmpl
-      - {{ .Values.valuesPath }}/values/ingressAnnotations/{{ .Environment.Name }}.yaml.gotmpl
+{{- $vp1 := printf "%s/values/ingressAnnotations/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $vp1 }}
+      - {{ $vp1 }}
+{{- end }}
       - {{ .Values.basePath }}/values/citylens/citylens.yaml.gotmpl
-      - {{ .Values.valuesPath }}/values/citylens/citylens/{{ .Environment.Name }}.yaml.gotmpl
+{{- $vp2 := printf "%s/values/citylens/citylens/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $vp2 }}
+      - {{ $vp2 }}
+{{- end }}
+{{- $secretsPath := printf "%s/values/citylens/citylens/%s.secrets.yaml" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $secretsPath }}
+    secrets:
+      - {{ $secretsPath }}
+{{- end }}
     hooks:
     - events: ["postsync"]
       showlogs: true

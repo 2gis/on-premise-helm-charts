@@ -1,0 +1,24 @@
+# sandbox-todo: replace age1REPLACE-WITH-YOUR-PUBLIC-KEY with your age public key
+# (README, Secrets, steps 1-2). The placeholder is intentionally invalid -
+# sops refuses to encrypt until you insert your key.
+creation_rules:
+  # Primary rule: sandbox secrets files (README find command targets exactly these).
+  - path_regex: '.*sandbox.*secrets\.yaml$'
+    age:
+      - age1REPLACE-WITH-YOUR-PUBLIC-KEY
+  # Temp file of create_sandbox_key.sh (write-back re-encrypt, random suffix).
+  - path_regex: '.*sandbox-key-work.*\.yaml$'
+    age:
+      - age1REPLACE-WITH-YOUR-PUBLIC-KEY
+  # dgctl configs (env copies in example/dgctl/; upstream presets stay pristine).
+  - path_regex: '.*dgctl-config.*\.yaml$'
+    age:
+      - age1REPLACE-WITH-YOUR-PUBLIC-KEY
+  # Future staging backend: add its rule here (first match wins).
+  # - path_regex: '.*staging.*secrets\.yaml$'
+  #   age:
+  #     - age1xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+stores:
+  yaml:
+    indent: 2

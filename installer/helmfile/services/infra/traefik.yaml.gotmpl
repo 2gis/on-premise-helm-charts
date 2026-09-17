@@ -9,14 +9,21 @@ releases:
     version: 39.0.0
     namespace: {{ .Values.namespace }}
     kubeContext: {{ .Values.kubeContext }}
-    missingFileHandler: Warn
     timeout: 600
     labels:
       group: infra
       service: traefik
     values:
       - {{ .Values.basePath }}/values/infra/traefik.yaml.gotmpl
-      - {{ .Values.valuesPath }}/values/infra/traefik/{{ .Environment.Name }}.yaml.gotmpl
+{{- $vp1 := printf "%s/values/infra/traefik/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $vp1 }}
+      - {{ $vp1 }}
+{{- end }}
+{{- $secretsPath := printf "%s/values/infra/traefik/%s.secrets.yaml" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $secretsPath }}
+    secrets:
+      - {{ $secretsPath }}
+{{- end }}
     hooks:
     - events: ["postsync"]
       showlogs: true

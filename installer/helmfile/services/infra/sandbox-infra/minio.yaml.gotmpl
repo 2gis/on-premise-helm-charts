@@ -18,9 +18,20 @@ releases:
       service: minio
     values:
       - {{ .Values.basePath }}/values/ingressAnnotations.yaml.gotmpl
-      - {{ .Values.valuesPath }}/values/ingressAnnotations/{{ .Environment.Name }}.yaml.gotmpl
+{{- $vp1 := printf "%s/values/ingressAnnotations/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $vp1 }}
+      - {{ $vp1 }}
+{{- end }}
       - {{ .Values.basePath }}/values/infra/minio.yaml.gotmpl
-      - {{ .Values.valuesPath }}/values/infra/minio/{{ .Environment.Name }}.yaml.gotmpl
+{{- $vp2 := printf "%s/values/infra/minio/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $vp2 }}
+      - {{ $vp2 }}
+{{- end }}
+{{- $secretsPath := printf "%s/values/infra/minio/%s.secrets.yaml" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $secretsPath }}
+    secrets:
+      - {{ $secretsPath }}
+{{- end }}
     hooks:
 {{- $hooksPath := printf "%s/hooks/infra/minio/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $hooksPath }}

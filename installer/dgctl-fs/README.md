@@ -42,7 +42,7 @@ docker load -i /tmp/dgctl_3.tar
 
 ### Создаем необходимые директории
 
-Скрипты монтируют директории через `$(pwd)`, поэтому запускать их и держать данные нужно из каталога `installer/dgctl-fs/` (здесь же лежат конфиги и скрипты). В нём создайте следующие директории под своим пользователем:
+Скрипты монтируют артефактные директории рядом с собой (независимо от текущей директории запуска) - держите данные в каталоге `installer/dgctl-fs/`. В нём создайте следующие директории под своим пользователем:
 
 ```sh
 mkdir dgctl-source
@@ -52,9 +52,13 @@ mkdir values
 
 ### Редактируем конфигурационные файлы
 
-Нужно заполнить кредами, прописать s3 и registry
+Конфиги расположены в `installer/helmfile/example/dgctl/`:
+`dgctl-config-fs.yaml` (хост с интернетом) и `dgctl-config-s3.yaml` (закрытый контур).
+Заполните учётные данные, укажите s3 и registry в СВОЕЙ копии репозитория,
+зашифровав вашим sops-ключом (см. `installer/README.md`, раздел "Секреты").
 
-`dgctl-config-fs.yaml` и `dgctl-config-s3.yaml`
+Скрипты берут конфиг из `$HELMFILE_VALUES/dgctl/` (если `HELMFILE_VALUES` не задан -
+репозиторный `example`); путь можно передать первым аргументом.
 
 ### Запускаем dgctl pull
 
@@ -66,7 +70,7 @@ mkdir values
 
 ### Копируем данные на хост или на flash-disk
 
-Переносим на хост **и данные (`dgctl-source`), и сгенерированные значения (`values`)** — последние понадобятся для `auto_values`:
+Переносим на хост **и данные (`dgctl-source`), и сгенерированные значения (`values`)** - последние понадобятся для `auto_values`:
 
 ```sh
 scp -r dgctl-source host_without_internet:/tmp/dgctl-source
@@ -84,12 +88,12 @@ scp -r values host_without_internet:/tmp/values
 ### Импорт данных из S3
 
 Номер манифеста (какую порцию данных применять) helmfile читает из `installer/dgctl/auto_values/<component>/general.yaml`.
-Его генерирует `dgctl pull --generate-values` и сразу кладёт актуальный номер манифеста — вручную номер не правится.
+Его генерирует `dgctl pull --generate-values` и сразу кладёт актуальный номер манифеста - вручную номер не правится.
 
-Но в fs-схеме `pull` пишет сгенерированные значения в `values/` (см. шаг «Запускаем dgctl pull»), а не в `auto_values`,
+Но в fs-схеме `pull` пишет сгенерированные значения в `values/` (см. шаг "Запускаем dgctl pull"), а не в `auto_values`,
 а `restore` значения не генерирует. Поэтому на хосте, где выполняется обновление, один раз скопируйте их
 в каталог, который читает helmfile. Выполняйте из корня репозитория, для каждого обновляемого компонента
-(`<component>` — `core`, `api-platform`, `pro`, `citylens`):
+(`<component>` - `core`, `api-platform`, `pro`, `citylens`):
 
 ```bash
 cp installer/dgctl-fs/values/<component>/general.yaml installer/dgctl/auto_values/<component>/general.yaml

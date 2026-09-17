@@ -16,9 +16,20 @@ releases:
       - {{ .Values.basePath }}/../dgctl/auto_values/pro/general.yaml
       - {{ .Values.basePath }}/values/dgctl.yaml.gotmpl
       - {{ .Values.basePath }}/values/ingressAnnotations.yaml.gotmpl
-      - {{ .Values.valuesPath }}/values/ingressAnnotations/{{ .Environment.Name }}.yaml.gotmpl
+{{- $vp1 := printf "%s/values/ingressAnnotations/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $vp1 }}
+      - {{ $vp1 }}
+{{- end }}
       - {{ .Values.basePath }}/values/pro/pro-ui.yaml.gotmpl
-      - {{ .Values.valuesPath }}/values/pro/pro-ui/{{ .Environment.Name }}.yaml.gotmpl
+{{- $vp2 := printf "%s/values/pro/pro-ui/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $vp2 }}
+      - {{ $vp2 }}
+{{- end }}
+{{- $secretsPath := printf "%s/values/pro/pro-ui/%s.secrets.yaml" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $secretsPath }}
+    secrets:
+      - {{ $secretsPath }}
+{{- end }}
     hooks:
     - events: ["postsync"]
       showlogs: true

@@ -7,4 +7,5 @@
       export OP_NAMESPACE={{ .Values.namespace }}
       export OP_DOMAIN={{ .Values.domain }}
       export OP_ENV_FILE={{ .Values.valuesPath }}/environments/sandbox.yaml.gotmpl
+      export OP_SECRETS_FILE={{ .Values.valuesPath }}/environments/sandbox.secrets.yaml
       {{ .Values.basePath }}/../scripts/create_sandbox_key.sh

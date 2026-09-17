@@ -16,7 +16,15 @@ releases:
     values:
       - {{ .Values.basePath }}/values/dgctl.yaml.gotmpl
       - {{ .Values.basePath }}/values/api-platform/navi-restrictions.yaml.gotmpl
-      - {{ .Values.valuesPath }}/values/api-platform/navi-restrictions/{{ .Environment.Name }}.yaml.gotmpl
+{{- $vp1 := printf "%s/values/api-platform/navi-restrictions/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $vp1 }}
+      - {{ $vp1 }}
+{{- end }}
+{{- $secretsPath := printf "%s/values/api-platform/navi-restrictions/%s.secrets.yaml" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $secretsPath }}
+    secrets:
+      - {{ $secretsPath }}
+{{- end }}
     hooks:
     - events: ["postsync"]
       showlogs: true
