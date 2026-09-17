@@ -1,98 +1,101 @@
-{{- if .Values.worker.enabled }}
+{{- if .Values.unisearcher.enabled }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "search-api-v8.fullname" . }}-worker
+  name: {{ include "search-api-v8.fullname" . }}-unisearcher
   labels:
     {{- include "search-api-v8.labels" . | nindent 4 }}
-    search/part: worker
+    search/part: unisearcher
     {{- if (.Values.dgctlStorage).manifest }}
     {{- with (include "search-api-v8.manifestCode" .) }}
     manifest: {{ . | quote }}
     {{- end }}{{- /* include "search-api-v8.manifestCode" */}}
     {{- end }}{{- /* .Values.dgctlStorage */}}
 spec:
-  {{- if not .Values.worker.hpa.enabled }}
-  replicas: {{ .Values.worker.replicaCount }}
-  {{- end }}{{- /* not .Values.worker.hpa.enabled */}}
+  {{- if not .Values.unisearcher.hpa.enabled }}
+  replicas: {{ .Values.unisearcher.replicaCount }}
+  {{- end }}{{- /* not .Values.unisearcher.hpa.enabled */}}
   selector:
     matchLabels:
       {{- include "search-api-v8.selectorLabels" . | nindent 6 }}
-      search/part: worker
-    {{- with .Values.worker.matchLabels }}
+      search/part: unisearcher
+    {{- with .Values.unisearcher.matchLabels }}
       {{- toYaml . | nindent 6 }}
-    {{- end }}{{- /* .Values.worker.matchLabels */}}
+    {{- end }}{{- /* .Values.unisearcher.matchLabels */}}
   template:
     metadata:
       annotations:
-      {{- with .Values.worker.podAnnotations }}
+      {{- with .Values.unisearcher.podAnnotations }}
         {{- toYaml . | nindent 8 }}
-      {{- end }}{{- /* .Values.worker.podAnnotations */}}
+      {{- end }}{{- /* .Values.unisearcher.podAnnotations */}}
         checksum/config: {{ (include (print $.Template.BasePath "/common/configmap.yaml") . | fromYaml).data | toYaml | sha256sum }}
         prometheus.io/path: "/metrics"
         prometheus.io/port: {{ .Values.magg.ports.metrics | quote }}
         prometheus.io/scrape: "true"
       labels:
         {{- include "search-api-v8.labels" . | nindent 8 }}
-        search/part: worker
-        role: worker
-      {{- with .Values.worker.podLabels }}
+        search/part: unisearcher
+        role: unisearcher
+      {{- with .Values.unisearcher.podLabels }}
         {{- toYaml . | nindent 8 }}
-      {{- end }}{{- /* .Values.worker.podLabels */}}
+      {{- end }}{{- /* .Values.unisearcher.podLabels */}}
     spec:
       terminationGracePeriodSeconds: 120
-      {{- with .Values.worker.imagePullSecrets }}
+      {{- with .Values.unisearcher.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
-      {{- end }}{{- /* .Values.worker.imagePullSecrets */}}
+      {{- end }}{{- /* .Values.unisearcher.imagePullSecrets */}}
       serviceAccountName: {{ include "search-api-v8.serviceAccountName" . }}
       securityContext:
-        {{- toYaml .Values.worker.podSecurityContext | nindent 8 }}
+        {{- toYaml .Values.unisearcher.podSecurityContext | nindent 8 }}
       containers:
-        - name: worker
+        - name: unisearcher
           securityContext:
-            {{- toYaml .Values.worker.securityContext | nindent 12 }}
-          image: '{{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.worker.image.repository }}:{{ .Values.worker.image.tag | default .Chart.AppVersion }}'
-          imagePullPolicy: {{ .Values.worker.image.pullPolicy }}
+            {{- toYaml .Values.unisearcher.securityContext | nindent 12 }}
+          image: '{{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.unisearcher.image.repository }}:{{ .Values.unisearcher.image.tag | default .Chart.AppVersion }}'
+          imagePullPolicy: {{ .Values.unisearcher.image.pullPolicy }}
           {{- if .Values.customCAs.bundle }}
           env:
             {{- include "search-api-v8.env.custom.ca.path" . | nindent 12 }}
           {{- end }}{{- /* .Values.customCAs.bundle */}}
           ports:
             - name: http-port
-              containerPort: {{ .Values.worker.ports.http }}
+              containerPort: {{ .Values.unisearcher.ports.http }}
               protocol: TCP
             - name: grpc-port
-              containerPort: {{ .Values.worker.ports.grpc }}
+              containerPort: {{ .Values.unisearcher.ports.grpc }}
               protocol: TCP
             - name: http-syncer
               containerPort: {{ .Values.syncer.ports.http }}
               protocol: TCP
-          {{- if .Values.worker.livenessProbe.enabled }}
+            - name: http-metrics
+              containerPort: {{ .Values.unisearcher.ports.monitor }}
+              protocol: TCP
+          {{- if .Values.unisearcher.livenessProbe.enabled }}
           livenessProbe:
-            {{- include "common.tplvalues.render" (dict "value" (omit .Values.worker.livenessProbe "enabled") "context" $) | nindent 12 }}
-          {{- end }}{{- /* .Values.worker.livenessProbe.enabled */}}
-          {{- if .Values.worker.readinessProbe.enabled }}
+            {{- include "common.tplvalues.render" (dict "value" (omit .Values.unisearcher.livenessProbe "enabled") "context" $) | nindent 12 }}
+          {{- end }}{{- /* .Values.unisearcher.livenessProbe.enabled */}}
+          {{- if .Values.unisearcher.readinessProbe.enabled }}
           readinessProbe:
-            {{- include "common.tplvalues.render" (dict "value" (omit .Values.worker.readinessProbe "enabled") "context" $) | nindent 12 }}
-          {{- end -}}{{- /* .Values.worker.readinessProbe.enabled */}}
-          {{- if .Values.worker.startupProbe.enabled }}
+            {{- include "common.tplvalues.render" (dict "value" (omit .Values.unisearcher.readinessProbe "enabled") "context" $) | nindent 12 }}
+          {{- end -}}{{- /* .Values.unisearcher.readinessProbe.enabled */}}
+          {{- if .Values.unisearcher.startupProbe.enabled }}
           startupProbe:
-            {{- include "common.tplvalues.render" (dict "value" (omit .Values.worker.startupProbe "enabled") "context" $) | nindent 12 }}
-          {{- end -}}{{- /* .Values.worker.startupProbe.enabled */}}
+            {{- include "common.tplvalues.render" (dict "value" (omit .Values.unisearcher.startupProbe "enabled") "context" $) | nindent 12 }}
+          {{- end -}}{{- /* .Values.unisearcher.startupProbe.enabled */}}
           volumeMounts:
-            - name: worker-sentry
+            - name: unisearcher-sentry
               mountPath: {{ .Values.sentry.databasePath }}
-            - name: worker-data
+            - name: unisearcher-data
               mountPath: /data
-            - name: worker-config
-              mountPath: /app/worker_vars.yaml
-              subPath: worker_vars.yaml
+            - name: unisearcher-config
+              mountPath: /app/unisearcher_vars.yaml
+              subPath: unisearcher_vars.yaml
           {{- if .Values.customCAs.bundle }}
             {{- include "search-api-v8.custom.ca.volumeMounts" . | nindent 12 }}
           {{- end }}{{- /* .Values.customCAs.bundle */}}
           resources:
-            {{- toYaml .Values.worker.resources | nindent 12 }}
+            {{- toYaml .Values.unisearcher.resources | nindent 12 }}
         - name: syncer
           securityContext:
             {{- toYaml .Values.syncer.securityContext | nindent 12 }}
@@ -110,9 +113,9 @@ spec:
             {{- include "search-api-v8.env.custom.ca.path" . | nindent 12 }}
             {{- end }}{{- /* .Values.customCAs.bundle */}}
           volumeMounts:
-            - name: worker-data
+            - name: unisearcher-data
               mountPath: /data
-            - name: worker-config
+            - name: unisearcher-config
               mountPath: /app/config.yaml
               subPath: syncer-worker.yaml
             {{- if .Values.customCAs.bundle }}
@@ -126,7 +129,7 @@ spec:
             - name: METRICS_AGGREGATOR_PORT
               value: {{ .Values.magg.ports.metrics | quote }}
             - name: METRICS_AGGREGATOR_SOURCES
-              value: "http://127.0.0.1:{{ .Values.worker.ports.http }}/metrics,\
+              value: "http://127.0.0.1:{{ .Values.unisearcher.ports.monitor }}/metrics,\
                       http://127.0.0.1:{{ .Values.syncer.ports.http }}/metrics"
             - name: GOMAXPROCS
               value: "1"
@@ -143,39 +146,39 @@ spec:
             {{- toYaml .Values.magg.resources | nindent 12 }}
         {{ end }}{{- /* .Values.magg.enabled */}}
       volumes:
-        {{- if .Values.worker.data.persistent.enabled }}
-        - name: worker-data
+        {{- if .Values.unisearcher.data.persistent.enabled }}
+        - name: unisearcher-data
           ephemeral:
             volumeClaimTemplate:
               spec:
                 accessModes: [ "ReadWriteOnce" ]
-                storageClassName: {{ .Values.worker.data.storageClassName | quote }}
+                storageClassName: {{ .Values.unisearcher.data.storageClassName | quote }}
                 volumeMode: Filesystem
                 resources:
-                  {{- .Values.worker.data.resources | toYaml | nindent 18 }}
+                  {{- .Values.unisearcher.data.resources | toYaml | nindent 18 }}
         {{ else }}
-        - name: worker-data
+        - name: unisearcher-data
           emptyDir:
-            sizeLimit: {{ .Values.worker.data.resources.requests.storage }}
-        {{ end }}{{- /* .Values.worker.data.persistent.enabled */}}
-        - name: worker-sentry
+            sizeLimit: {{ .Values.unisearcher.data.resources.requests.storage }}
+        {{ end }}{{- /* .Values.unisearcher.data.persistent.enabled */}}
+        - name: unisearcher-sentry
           emptyDir:
             sizeLimit: {{ .Values.sentry.storageSize }}
-        - name: worker-config
+        - name: unisearcher-config
           configMap:
             name: {{ include "search-api-v8.fullname" . }}
-      {{- with .Values.worker.nodeSelector }}
+      {{- with .Values.unisearcher.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
-      {{- end }}{{- /* .Values.worker.nodeSelector */}}
-      {{- with .Values.worker.affinity }}
+      {{- end }}{{- /* .Values.unisearcher.nodeSelector */}}
+      {{- with .Values.unisearcher.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
-      {{- end }}{{- /* .Values.worker.affinity */}}
-      {{- with .Values.worker.tolerations }}
+      {{- end }}{{- /* .Values.unisearcher.affinity */}}
+      {{- with .Values.unisearcher.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
-      {{- end }}{{- /* .Values.worker.tolerations */}}
+      {{- end }}{{- /* .Values.unisearcher.tolerations */}}
   strategy:
-  {{- .Values.worker.strategy | toYaml | nindent 4 }}
-{{- end }}{{- /* .Values.worker.enabled */}}
+  {{- .Values.unisearcher.strategy | toYaml | nindent 4 }}
+{{- end }}{{- /* .Values.unisearcher.enabled */}}
