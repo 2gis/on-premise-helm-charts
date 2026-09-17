@@ -1,10 +1,10 @@
-## [UNRELEASED]
+## [2026-09-17]
 
 #### Supported versions
 
 | Component    | Version |
 | ------------ | ------- |
-| core         | 2.11.0  |
+| core         | 2.11.1  |
 | api-platform | 2.58.0  |
 | pro          | 2.5.0   |
 | citylens     | 2.3.0   |
@@ -15,6 +15,7 @@
 - dgctl configs moved to `example/dgctl/`
 - Sandbox guide: deployment without `HELMFILE_BASE`/`HELMFILE_VALUES` variables
 - Playgrounds for platform added
+- Bumped supported core version to 2.11.1
 
 ## [2026-09-09]
 
