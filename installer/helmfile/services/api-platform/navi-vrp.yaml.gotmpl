@@ -15,7 +15,15 @@ releases:
     values:
       - {{ .Values.basePath }}/values/dgctl.yaml.gotmpl
       - {{ .Values.basePath }}/values/api-platform/navi-vrp-solver.yaml.gotmpl
-      - {{ .Values.valuesPath }}/values/api-platform/navi-vrp-solver/{{ .Environment.Name }}.yaml.gotmpl
+{{- $vp1 := printf "%s/values/api-platform/navi-vrp-solver/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $vp1 }}
+      - {{ $vp1 }}
+{{- end }}
+{{- $secretsPathSolver := printf "%s/values/api-platform/navi-vrp-solver/%s.secrets.yaml" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $secretsPathSolver }}
+    secrets:
+      - {{ $secretsPathSolver }}
+{{- end }}
     hooks:
     - events: ["postsync"]
       showlogs: true
@@ -42,7 +50,15 @@ releases:
     values:
       - {{ .Values.basePath }}/values/dgctl.yaml.gotmpl
       - {{ .Values.basePath }}/values/api-platform/navi-vrp-task-manager.yaml.gotmpl
-      - {{ .Values.valuesPath }}/values/api-platform/navi-vrp-task-manager/{{ .Environment.Name }}.yaml.gotmpl
+{{- $vp2 := printf "%s/values/api-platform/navi-vrp-task-manager/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $vp2 }}
+      - {{ $vp2 }}
+{{- end }}
+{{- $secretsPathTaskManager := printf "%s/values/api-platform/navi-vrp-task-manager/%s.secrets.yaml" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $secretsPathTaskManager }}
+    secrets:
+      - {{ $secretsPathTaskManager }}
+{{- end }}
     hooks:
     - events: ["postsync"]
       showlogs: true

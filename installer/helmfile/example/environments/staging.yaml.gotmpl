@@ -1,5 +1,11 @@
 environments:
   staging:
+{{- $valuesPath := env "HELMFILE_VALUES" | default (printf "%s/installer/helmfile/example" (env "PWD")) }}
+{{- $envSecrets := printf "%s/environments/%s.secrets.yaml" $valuesPath .Environment.Name }}
+{{- if isFile $envSecrets }}
+    secrets:
+    - {{ $envSecrets }}
+{{- end }}
     values:
     - kubeContext: default # TODO
     # Public registry by default; override via CHART_LOCATION env for an internal mirror.
@@ -18,9 +24,4 @@ environments:
     - dgctlStorage:
         host: 's3.example.com'
         bucket: 'onpremise-artifacts-staging'  # TODO
-        accessKey: 'accessKey' # TODO
-        secretKey: 'secretKey' # TODO
         secure: false # TODO
-    - key: 'example-key-123456789' # TODO
-    - license:
-        key: "00000000-0000-0000-0000-000000000000" # TODO

@@ -17,7 +17,15 @@ releases:
     values:
       - {{ .Values.basePath }}/values/dgctl.yaml.gotmpl
       - {{ .Values.basePath }}/values/api-platform/traffic-proxy-navi.yaml.gotmpl
-      - {{ .Values.valuesPath }}/values/api-platform/traffic-proxy/navi/{{ .Environment.Name }}.yaml.gotmpl
+{{- $vp1 := printf "%s/values/api-platform/traffic-proxy/navi/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $vp1 }}
+      - {{ $vp1 }}
+{{- end }}
+{{- $secretsPath := printf "%s/values/api-platform/traffic-proxy/map/%s.secrets.yaml" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $secretsPath }}
+    secrets:
+      - {{ $secretsPath }}
+{{- end }}
     hooks:
     - events: ["postsync"]
       showlogs: true
@@ -47,7 +55,15 @@ releases:
     values:
       - {{ .Values.basePath }}/values/dgctl.yaml.gotmpl
       - {{ .Values.basePath }}/values/api-platform/traffic-proxy-map.yaml.gotmpl
-      - {{ .Values.valuesPath }}/values/api-platform/traffic-proxy/map/{{ .Environment.Name }}.yaml.gotmpl
+{{- $vp2 := printf "%s/values/api-platform/traffic-proxy/map/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $vp2 }}
+      - {{ $vp2 }}
+{{- end }}
+{{- $secretsPath2 := printf "%s/values/api-platform/traffic-proxy/navi/%s.secrets.yaml" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $secretsPath2 }}
+    secrets:
+      - {{ $secretsPath2 }}
+{{- end }}
     hooks:
     - events: ["postsync"]
       showlogs: true

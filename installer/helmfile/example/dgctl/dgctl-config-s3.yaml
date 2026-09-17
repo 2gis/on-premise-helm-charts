@@ -1,3 +1,8 @@
+# dgctl config for the CLOSED host (S3 + registry) in the isolated contour - copy and fill.
+# Plaintext in this repo: fill in the values, then encrypt with YOUR sops key in
+# your own copy of the repository (see installer/README.md, "Секреты").
+# Used by installer/dgctl-fs: dgctl-restore-fs.sh, dgctl-license-{1,3}-*.sh.
+
 key: 00000000-0000-0000-0000-000000000000 # TODO licence key
 log-format: json
 
@@ -8,8 +13,8 @@ storage:
   host: s3.example.com # TODO s3 host name
   secure: true # TODO true for https, false for http
   bucket: onprem-dgctl # TODO s3 bucket name
-  access-key: # TODO s3 access key
-  secret-key: # TODO s3 secret key
+  access-key: '' # TODO s3 access key
+  secret-key: '' # TODO s3 secret key
 
 docker:
   registry:
@@ -21,7 +26,7 @@ docker:
 # Для утилиты версии 3
 components:
   core:
-    version: 2.11.0
+    version: 2.11.1
   api-platform:
     version: 2.58.0
   pro:

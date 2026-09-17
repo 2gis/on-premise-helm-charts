@@ -1,4 +1,4 @@
-# Kafka override for the `sandbox` (kind) environment — small resources.
+# Kafka override for the `sandbox` (kind) environment - small resources.
 global:
   security:
     allowInsecureImages: true
@@ -13,13 +13,6 @@ listeners:
     protocol: PLAINTEXT
   interbroker:
     protocol: PLAINTEXT
-
-sasl:
-  client:
-    users:
-    - admin
-    passwords:
-    - admin
 
 controller:
   replicaCount: 3

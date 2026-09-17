@@ -1,11 +1,16 @@
-key: # TODO
+# dgctl config template for a staging environment (copy and fill).
+# Plaintext in this repo: fill in the values, then encrypt with YOUR sops key
+# in your own copy of the repository (see installer/README.md, "Секреты").
+# Pull (config: HELMFILE_VALUES/dgctl; auto_values: HELMFILE_BASE):
+#   ${HELMFILE_BASE}/../dgctl/pull.sh dgctl-config-staging.yaml
+key: '' # TODO: лицензионный ключ 2GIS
 log-format: text
 storage:
   type: s3
-  host: # TODO
+  host: '' # TODO
   bucket: onpremise-artifacts-staging # TODO
-  access-key: # TODO
-  secret-key: # TODO
+  access-key: '' # TODO
+  secret-key: '' # TODO
 docker:
   registry:
     username: ''
@@ -14,7 +19,7 @@ docker:
     image-prefix: /
 components:
   core:
-    version: 2.11.0
+    version: 2.11.1
   api-platform:
     version: 2.58.0
   pro:
