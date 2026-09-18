@@ -30,7 +30,7 @@ spec:
   template:
     metadata:
       annotations:
-        checksum/config: {{ include (print $.Template.BasePath "/api/configmap.yaml") . | sha256sum }}
+        checksum/config: {{ include "citylens.checksum" (merge (dict "path" "/api/configmap.yaml") $) }}
         checksum/custom-ca: {{ include "citylens.checksum" (merge (dict "path" "/custom-ca.configmap.yaml") $) }}
       {{- with .Values.api.podAnnotations }}
         {{- toYaml . | nindent 8 }}

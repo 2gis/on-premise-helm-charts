@@ -4,7 +4,9 @@ spec:
     metadata:
       annotations:
         checksum/configBase: {{ include (print $.Template.BasePath "/configmap-base.yaml") . | sha256sum }}
+        {{- if or .Values.serverBlock .Values.locationsBlock }}
         checksum/configExtra: {{ include (print $.Template.BasePath "/configmap-extra.yaml") . | sha256sum }}
+        {{- end }}
     spec:
       volumes:
       - name: {{ include "generic-chart.fullname" . }}-base
