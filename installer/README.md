@@ -57,7 +57,7 @@ Elasticsearch, ClickHouse, Cassandra.
 
 В `installer/helmfile/example` находятся примеры окружений:
 - `staging` - основной рабочий пример;
-- `sandbox` - минимальный готовый к запуску (kubernetes-ready) пример для быстрого развёртывания, например в kind.
+- `sandbox` - минимальный готовый к запуску (kubernetes-ready) пример для быстрого развёртывания, например в kind. Подробнее: [Sandbox-пример (kind)](#sandbox-пример-kind).
 
 1. Скопируйте директорию `installer/helmfile/example` в удобное место:
    ```bash
