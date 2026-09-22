@@ -72,6 +72,28 @@ Elasticsearch, ClickHouse, Cassandra.
    ```
 
    > Дальнейшие инструкции предполагают, что эти переменные заданы.
+
+   **Файлы окружений.** Один файл `$HELMFILE_VALUES/environments/<env>.yaml.gotmpl` = одно окружение -
+   плоская карта значений (`kubeContext`, `domain`, `dgctlStorage`, `releasePrefix` и т.д.). Окружение
+   выбирается флагом `-e <env>`; новое окружение добавляется созданием файла, без правок helmfile
+   (список доступных - `ls $HELMFILE_VALUES/environments/`). Поддерживаются расширения `.yaml.gotmpl`
+   (шаблонизируется: `env "CHART_LOCATION"` и т.п.) и `.yaml`. Файла окружения нет - `-e` завершится
+   ошибкой с указанием ожидаемого пути.
+   Секреты окружения - соседний файл `<env>.secrets.yaml` (helm-secrets/sops, опционален).
+
+   **Общий слой окружений (опционально).** Файл `$HELMFILE_VALUES/environments/_common.yaml.gotmpl`
+   подключается к каждому окружению ПЕРЕД его env-файлом: значения env-файла побеждают (deep-merge).
+   Место для значений, одинаковых у всех окружений values-каталога (домен, registry, S3-креды,
+   префиксы релизов/хостов). Секреты - соседний файл `_common.secrets.yaml` (sops, ниже
+   приоритетом `<env>.secrets.yaml`). Файлы `_common` отсутствуют - слои просто не подключаются.
+
+   **Дефолты инсталляции (опционально).** Файл `$HELMFILE_VALUES/values/{group}/{svc}/_common.yaml.gotmpl`
+   подключается ко всем релизам сервиса перед env-файлом (при наличии). Порядок приоритетов для ключа
+   (низкий → высокий): shared values инсталлятора → `_common.yaml.gotmpl` → `{env}.yaml.gotmpl` →
+   `{env}.secrets.yaml`. В `_common` - только то, чего инсталлятор знать не может (хосты БД, креды S3/Kafka -
+   удобно шаблонизировать через `.Environment.Name`); дублировать ключи, которые shared values уже задают
+   осмысленно (resources, feature-flags), не следует - иначе обновления платформы не будут доходить до окружения.
+
 3. Заполните все значения с комментарием `# TODO` в скопированных файлах. Секреты
    (пароли, токены, лицензионный ключ) - в `*.secrets.yaml` файлах. Перед деплоем эти файлы шифруются через sops;
    без шифрования - перенесите значения в открытый values и удалите secrets-файл.
@@ -104,26 +126,22 @@ Elasticsearch, ClickHouse, Cassandra.
 
    > **Фиксация/переключение манифестов.** Манифесты всех pull'ов аккумулируются в бакете
    > (`manifests/<компонент>/<номер>.json`), а `auto_values` всегда читает последний. Чтобы
-   > закрепить конкретный набор или откатиться, не трогая `auto_values`, добавьте карту
-   > в env-файл окружения (`$HELMFILE_VALUES/environments/<env>.yaml.gotmpl`, секция `values`)
-   > и пины в env-values сервисов:
+   > закрепить конкретный набор или откатиться, не трогая `auto_values`, задайте карту
+   > пинов `dgctlManifests` в env-файле окружения (или в `_common.yaml.gotmpl`, если пины
+   > общие):
    > ```yaml
-   > # $HELMFILE_VALUES/environments/<env>.yaml.gotmpl - state-карта по 4 компонентам
-   > - manifests:
-   >     core: manifests/core/1789109441.json
-   >     api-platform: manifests/api-platform/1789109441.json
-   >     citylens: manifests/citylens/1789109441.json
-   >     pro: manifests/pro/1789109441.json
+   > # $HELMFILE_VALUES/environments/<env>.yaml.gotmpl - пин манифеста на каждый компонент
+   > dgctlManifests:
+   >   core: manifests/core/1789109441.json
+   >   api-platform: manifests/api-platform/1789109441.json
+   >   citylens: manifests/citylens/1789109441.json
+   >   pro: manifests/pro/1789109441.json
    > ```
-   > ```gotmpl
-   > # $HELMFILE_VALUES/values/core/keys/<env>.yaml.gotmpl и аналогично остальным сервисам
-   > dgctlStorage:
-   >   manifest: {{ .Values.manifests.core }}
-   > ```
-   > Env-values стоят позже auto_values в списке `values:` релиза и перебивают его
-   > (helmfile merge: позже в списке = приоритет). Карта сервисов по компонентам:
-   > core - keys, license; api-platform - catalog, search, search-api-v8, tiles, styles;
-   > citylens - citylens, citylens-routes-ui; pro - pro-api, pro-ui.
+   > Числовое имя файла пинится в имена схем/кейспейсов/индексов БД - обновляйте осознанно.
+   > Резолв центральный: `values/dgctl.yaml.gotmpl` сопоставляет релиз компоненту по имени
+   > (keys, license → core; pro-api, pro-ui → pro; citylens* → citylens; остальное →
+   > api-platform) и подставляет `dgctlStorage.manifest`. Env-values стоят позже auto_values
+   > в списке `values:` релиза и перебивают его (helmfile merge: позже в списке = приоритет).
 
    **Изолированный контур.** Если хост не имеет одновременного доступа к публичной сети, реестру Docker и S3-хранилищу, используйте двуххостовую схему: загрузите артефакты через `dgctl pull` на хосте с доступом в интернет (с `storage.type: fs`), перенесите директорию на внутренний хост и выполните `dgctl restore`. Подробнее: [Fetch Installation Artifacts](https://docs.2gis.com/on-premise-api-platform/installation#fetch-artifacts).
 
@@ -144,6 +162,17 @@ Elasticsearch, ClickHouse, Cassandra.
      --docker-password=DOCKERregistryP@ssW0rd
    ```
    Укажите имя секрета в `imagePullSecrets` в values для каждого сервиса.
+
+**Префикс имён релизов (миграция легаси-окружений).** По умолчанию релизы именуются без
+префикса (`keys`, `catalog-api`). Для миграции легаси-окружений (in-place апгрейд существующих
+релизов `{env}-{service}`) задайте в файле окружения или общем слое `_common.yaml.gotmpl`
+`- releasePrefix: '{{ .Environment.Name }}-'`: релизы получатся `staging-keys`,
+`staging-catalog-api` и т.д.
+
+**Префикс ingress-хостов.** Аналогично, DNS-имена ingress строятся из `ingressHostPrefix`
+(по умолчанию пусто): `{ingressHostPrefix}search-api.{{ domain }}`. Для легаси-схемы с префиксом
+окружения (`staging-search-api.{{ domain }}`) задайте в файле окружения или `_common.yaml.gotmpl`
+`- ingressHostPrefix: '{{ .Environment.Name }}-'`.
 
 ---
 
@@ -176,6 +205,7 @@ postgres:
 | Тип | Файл | Что содержит |
 |---|---|---|
 | Окружение | `<HELMFILE_VALUES>/environments/<env>.secrets.yaml` | секреты вне отдельных релизов (state-уровень, хуки): `dgctlStorage` - учётные данные S3, общие для всех сервисов; партнёрский `key`; `license.key` |
+| Общий слой окружений | `<HELMFILE_VALUES>/environments/_common.secrets.yaml` | значения, одинаковые у всех окружений values-каталога (S3-креды `dgctlStorage`, лицензия); ниже приоритетом `<env>.secrets.yaml` |
 | Сервис | `<HELMFILE_VALUES>/values/**/<env>.secrets.yaml` | блоки с учётными данными сервисов: PostgreSQL, Kafka, Redis, Cassandra, ClickHouse; сервисные токены keys |
 | dgctl | `<HELMFILE_VALUES>/dgctl/dgctl-config-<env>.yaml` | лицензионный ключ, учётные данные S3 и registry |
 
@@ -659,10 +689,7 @@ values:
 
 ```yaml
 # HELMFILE_VALUES/environments/<env>.yaml.gotmpl
-environments:
-  <env>:
-    values:
-    - ingressController: traefik
+ingressController: traefik
 ```
 
 ---

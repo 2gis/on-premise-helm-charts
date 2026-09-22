@@ -54,8 +54,8 @@ map:
 
 api:
   licensing:
-    url: https://license
-  routesApiBaseUrl: http://citylens-routes-api
+    url: https://{{ .Values.releasePrefix }}license
+  routesApiBaseUrl: http://{{ .Values.releasePrefix }}citylens-routes-api
   auth:
     enabled: true
     authServerUrl: {{ $protocol }}://{{ .Values.keycloakIngress }}
@@ -133,12 +133,12 @@ routes:
     coverageRatioEnabled: true
     tasksAssetEnabled: true
   navi:
-    url: http://navi-front
+    url: http://{{ .Values.releasePrefix }}navi-front
     timeout: 180
     key: {{ .Values.key }}
 
   keys:
-    url: http://keys-api
+    url: http://{{ .Values.releasePrefix }}keys-api
 
   pro:
     authorizationToken: {{ .Values.key }}
@@ -160,7 +160,7 @@ routes:
     daysToLeaveData: 30
 
   realtimeData:
-    url: http://citylens-routes-realtime-data-api
+    url: http://{{ .Values.releasePrefix }}citylens-routes-realtime-data-api
 
   tasksAssetSettings:
     plannedTasksAssetId: user_dyn_citylens_planned_tasks

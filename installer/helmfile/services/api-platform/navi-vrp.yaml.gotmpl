@@ -4,7 +4,7 @@ bases:
 
 ---
 releases:
-  - name: navi-vrp-solver
+  - name: {{ .Values.releasePrefix }}navi-vrp-solver
     chart: {{ .Values.chartLocation }}/navi-vrp-solver
     namespace: {{ .Values.namespace  }}
     version: {{ .Values.versionPlatform }}
@@ -15,6 +15,10 @@ releases:
     values:
       - {{ .Values.basePath }}/values/dgctl.yaml.gotmpl
       - {{ .Values.basePath }}/values/api-platform/navi-vrp-solver.yaml.gotmpl
+{{- $dep := printf "%s/values/api-platform/navi-vrp-solver/_common.yaml.gotmpl" .Values.valuesPath -}}
+{{- if isFile $dep }}
+      - {{ $dep }}
+{{- end }}
 {{- $vp1 := printf "%s/values/api-platform/navi-vrp-solver/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $vp1 }}
       - {{ $vp1 }}
@@ -39,7 +43,7 @@ releases:
 {{- readFile $hooksPath | fromYaml | toYaml | nindent 4 }}
 {{- end }}
 
-  - name: navi-vrp-task-manager
+  - name: {{ .Values.releasePrefix }}navi-vrp-task-manager
     chart: {{ .Values.chartLocation }}/navi-vrp-task-manager
     namespace: {{ .Values.namespace  }}
     version: {{ .Values.versionPlatform }}
@@ -50,6 +54,10 @@ releases:
     values:
       - {{ .Values.basePath }}/values/dgctl.yaml.gotmpl
       - {{ .Values.basePath }}/values/api-platform/navi-vrp-task-manager.yaml.gotmpl
+{{- $dep := printf "%s/values/api-platform/navi-vrp-task-manager/_common.yaml.gotmpl" .Values.valuesPath -}}
+{{- if isFile $dep }}
+      - {{ $dep }}
+{{- end }}
 {{- $vp2 := printf "%s/values/api-platform/navi-vrp-task-manager/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $vp2 }}
       - {{ $vp2 }}

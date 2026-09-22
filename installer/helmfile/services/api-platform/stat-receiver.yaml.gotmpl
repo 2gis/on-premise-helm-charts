@@ -4,7 +4,7 @@ bases:
 
 ---
 releases:
-  - name: stat-receiver
+  - name: {{ .Values.releasePrefix }}stat-receiver
     chart: {{ .Values.chartLocation }}/stat-receiver
     version: {{ .Values.versionPlatform }}
     namespace: {{ .Values.namespace  }}
@@ -15,6 +15,10 @@ releases:
     values:
       - {{ .Values.basePath }}/values/dgctl.yaml.gotmpl
       - {{ .Values.basePath }}/values/api-platform/stat-receiver.yaml.gotmpl
+{{- $dep := printf "%s/values/api-platform/stat-receiver/_common.yaml.gotmpl" .Values.valuesPath -}}
+{{- if isFile $dep }}
+      - {{ $dep }}
+{{- end }}
 {{- $vp1 := printf "%s/values/api-platform/stat-receiver/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $vp1 }}
       - {{ $vp1 }}

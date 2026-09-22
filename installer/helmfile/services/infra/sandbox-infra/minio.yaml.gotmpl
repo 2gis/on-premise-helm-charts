@@ -4,7 +4,7 @@ bases:
 
 ---
 releases:
-  - name: minio
+  - name: {{ .Values.releasePrefix }}minio
     chart: {{ .Values.chartLocationBitnami }}/minio
     version: 17.0.21
     namespace: {{ .Values.namespace  }}
@@ -23,6 +23,10 @@ releases:
       - {{ $vp1 }}
 {{- end }}
       - {{ .Values.basePath }}/values/infra/minio.yaml.gotmpl
+{{- $dep := printf "%s/values/infra/minio/_common.yaml.gotmpl" .Values.valuesPath -}}
+{{- if isFile $dep }}
+      - {{ $dep }}
+{{- end }}
 {{- $vp2 := printf "%s/values/infra/minio/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $vp2 }}
       - {{ $vp2 }}

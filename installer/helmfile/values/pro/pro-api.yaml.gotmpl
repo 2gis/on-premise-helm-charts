@@ -1,14 +1,14 @@
 {{- $protocol := ternary "https" "http" .Values.ingressTls }}
 catalog:
-  url: 'http://catalog-api'
+  url: 'http://{{ .Values.releasePrefix }}catalog-api'
   key: '{{ .Values.key }}'
 
 navi:
-  url: 'http://navi-front'
+  url: 'http://{{ .Values.releasePrefix }}navi-front'
   key: '{{ .Values.key }}'
 
 search:
-  url: 'http://search-api'
+  url: 'http://{{ .Values.releasePrefix }}search-api'
 
 license:
   url: 'https://license'

@@ -5,7 +5,7 @@ bases:
 ---
 releases:
   {{- if has (lower .Values.proxyMode) (list "navi" "full") }}
-  - name: traffic-proxy-navi
+  - name: {{ .Values.releasePrefix }}traffic-proxy-navi
     chart: {{ .Values.chartLocation }}/traffic-proxy
     namespace: {{ .Values.namespace }}
     version: {{ .Values.versionPlatform }}
@@ -17,6 +17,10 @@ releases:
     values:
       - {{ .Values.basePath }}/values/dgctl.yaml.gotmpl
       - {{ .Values.basePath }}/values/api-platform/traffic-proxy-navi.yaml.gotmpl
+{{- $dep := printf "%s/values/api-platform/traffic-proxy/navi/_common.yaml.gotmpl" .Values.valuesPath -}}
+{{- if isFile $dep }}
+      - {{ $dep }}
+{{- end }}
 {{- $vp1 := printf "%s/values/api-platform/traffic-proxy/navi/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $vp1 }}
       - {{ $vp1 }}
@@ -43,7 +47,7 @@ releases:
   {{- end }}
 
   {{- if has (lower .Values.proxyMode) (list "map" "full") }}
-  - name: traffic-proxy-map
+  - name: {{ .Values.releasePrefix }}traffic-proxy-map
     chart: {{ .Values.chartLocation }}/traffic-proxy
     namespace: {{ .Values.namespace }}
     version: {{ .Values.versionPlatform }}
@@ -55,6 +59,10 @@ releases:
     values:
       - {{ .Values.basePath }}/values/dgctl.yaml.gotmpl
       - {{ .Values.basePath }}/values/api-platform/traffic-proxy-map.yaml.gotmpl
+{{- $dep := printf "%s/values/api-platform/traffic-proxy/map/_common.yaml.gotmpl" .Values.valuesPath -}}
+{{- if isFile $dep }}
+      - {{ $dep }}
+{{- end }}
 {{- $vp2 := printf "%s/values/api-platform/traffic-proxy/map/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $vp2 }}
       - {{ $vp2 }}

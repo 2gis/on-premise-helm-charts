@@ -4,7 +4,7 @@ bases:
 
 ---
 releases:
-  - name: keycloak
+  - name: {{ .Values.releasePrefix }}keycloak
     chart: {{ .Values.chartLocation }}/keycloak
     version: {{ .Values.versionCore }}
     namespace: {{ .Values.namespace  }}
@@ -20,6 +20,10 @@ releases:
       - {{ $vp1 }}
 {{- end }}
       - {{ .Values.basePath }}/values/core/keycloak.yaml.gotmpl
+{{- $dep := printf "%s/values/core/keycloak/_common.yaml.gotmpl" .Values.valuesPath -}}
+{{- if isFile $dep }}
+      - {{ $dep }}
+{{- end }}
 {{- $vp2 := printf "%s/values/core/keycloak/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $vp2 }}
       - {{ $vp2 }}

@@ -4,7 +4,7 @@ bases:
 
 ---
 releases:
-  - name: kibana
+  - name: {{ .Values.releasePrefix }}kibana
     chart: {{ .Values.chartLocationBitnami }}/kibana
     version: 11.5.2
     namespace: {{ .Values.namespace }}
@@ -15,6 +15,10 @@ releases:
       group: infra
     values:
       - {{ .Values.basePath }}/values/infra/kibana.yaml.gotmpl
+{{- $dep := printf "%s/values/infra/kibana/_common.yaml.gotmpl" .Values.valuesPath -}}
+{{- if isFile $dep }}
+      - {{ $dep }}
+{{- end }}
 {{- $vp1 := printf "%s/values/infra/kibana/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $vp1 }}
       - {{ $vp1 }}

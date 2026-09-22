@@ -4,7 +4,7 @@ bases:
 
 ---
 releases:
-  - name: pro-ui
+  - name: {{ .Values.releasePrefix }}pro-ui
     chart: {{ .Values.chartLocation }}/pro-ui
     version: {{ .Values.versionPro }}
     namespace: {{ .Values.namespace  }}
@@ -21,6 +21,10 @@ releases:
       - {{ $vp1 }}
 {{- end }}
       - {{ .Values.basePath }}/values/pro/pro-ui.yaml.gotmpl
+{{- $dep := printf "%s/values/pro/pro-ui/_common.yaml.gotmpl" .Values.valuesPath -}}
+{{- if isFile $dep }}
+      - {{ $dep }}
+{{- end }}
 {{- $vp2 := printf "%s/values/pro/pro-ui/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $vp2 }}
       - {{ $vp2 }}

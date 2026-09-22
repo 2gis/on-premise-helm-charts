@@ -4,7 +4,7 @@ bases:
 
 ---
 releases:
-  - name: mapgl
+  - name: {{ .Values.releasePrefix }}mapgl-js-api
     chart: {{ .Values.chartLocation }}/mapgl-js-api
     namespace: {{ .Values.namespace  }}
     version: {{ .Values.versionPlatform }}
@@ -20,6 +20,10 @@ releases:
       - {{ $vp1 }}
 {{- end }}
       - {{ .Values.basePath }}/values/api-platform/mapgl.yaml.gotmpl
+{{- $dep := printf "%s/values/api-platform/mapgl/_common.yaml.gotmpl" .Values.valuesPath -}}
+{{- if isFile $dep }}
+      - {{ $dep }}
+{{- end }}
 {{- $vp2 := printf "%s/values/api-platform/mapgl/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $vp2 }}
       - {{ $vp2 }}

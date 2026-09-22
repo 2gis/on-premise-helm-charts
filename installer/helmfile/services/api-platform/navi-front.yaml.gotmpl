@@ -4,7 +4,7 @@ bases:
 
 ---
 releases:
-  - name: navi-front
+  - name: {{ .Values.releasePrefix }}navi-front
     chart: {{ .Values.chartLocation }}/navi-front
     namespace: {{ .Values.namespace  }}
     version: {{ .Values.versionPlatform }}
@@ -15,6 +15,10 @@ releases:
     values:
       - {{ .Values.basePath }}/values/dgctl.yaml.gotmpl
       - {{ .Values.basePath }}/values/api-platform/navi-front.yaml.gotmpl
+{{- $dep := printf "%s/values/api-platform/navi-front/_common.yaml.gotmpl" .Values.valuesPath -}}
+{{- if isFile $dep }}
+      - {{ $dep }}
+{{- end }}
 {{- $vp1 := printf "%s/values/api-platform/navi-front/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $vp1 }}
       - {{ $vp1 }}

@@ -15,11 +15,76 @@ helmBinary: {{ env "HELMFILE_HELM_BINARY" | default "helm" | quote }}
 values:
   - valuesPath: {{ $valuesPath }}
   - basePath: {{ $basePath }}
+  - ingressHostPrefix: ''
 
-# здесь вставятся специфичные для окружения переменные
-# также можно переопределить helmDefaults, repositories и тд
-{{ $environmentPath := printf "%s/environments/%s.yaml.gotmpl" $valuesPath .Environment.Name }}
-{{ tpl (readFile $environmentPath) . }}
+# Окружения: один файл environments/<env>.yaml(.gotmpl) = одно окружение (плоская карта значений).
+# Блок окружений строится для выбранного окружения (ключ = {{ .Environment.Name }}): новое
+# окружение добавляется файлом без правок этого файла; список доступных окружений - ls environments/.
+# Секреты окружения: environments/<env>.secrets.yaml (опционально, helm-secrets/sops),
+# общий слой секретов: environments/_common.secrets.yaml (опционально, ниже env-секретов).
+# Общий слой окружений: environments/_common.yaml.gotmpl (опционально) подключается ниже
+# env-файла значения каждого окружения; в нём только literal-значения, общие всем окружениям.
+{{- $envDir := printf "%s/environments" $valuesPath }}
+{{- if isDir $envDir }}
+{{- $envCommon := printf "%s/environments/_common.yaml.gotmpl" $valuesPath }}
+{{- $envName := .Environment.Name }}
+{{- $envFile := printf "%s.yaml.gotmpl" $envName }}
+{{- $envYaml := printf "%s.yaml" $envName }}
+environments:
+  {{ $envName }}:
+    values:
+    {{- if isFile $envCommon }}
+    - {{ $envCommon }}
+    {{- end }}
+    {{- if isFile (printf "%s/%s" $envDir $envFile) }}
+    - {{ $envDir }}/{{ $envFile }}
+    {{- else if isFile (printf "%s/%s" $envDir $envYaml) }}
+    - {{ $envDir }}/{{ $envYaml }}
+    {{- else }}
+    {{- fail (printf "environment %q: no values file in %s" $envName $envDir) }}
+    {{- end }}
+    {{- $envSecrets := printf "%s/%s.secrets.yaml" $envDir $envName }}
+    {{- $envSecretsCommon := printf "%s/environments/_common.secrets.yaml" $valuesPath }}
+    {{- if or (isFile $envSecrets) (isFile $envSecretsCommon) }}
+    secrets:
+    {{- end }}
+    {{- if isFile $envSecretsCommon }}
+    - {{ $envSecretsCommon }}
+    {{- end }}
+    {{- if isFile $envSecrets }}
+    - {{ $envSecrets }}
+    {{- end }}
+{{- end }}
+
+{{- /* variant B: discovery via readDirEntries (shows all envs in build; same render output)
+{{- $envDir := printf "%s/environments" $valuesPath }}
+{{- if isDir $envDir }}
+{{- $envCommon := printf "%s/environments/_common.yaml.gotmpl" $valuesPath }}
+environments:
+{{- range $f := readDirEntries $envDir }}
+{{- $name := trimSuffix ".yaml" (trimSuffix ".yaml.gotmpl" $f.Name) }}
+{{- if and (not $f.IsDir) (ne $name "") (ne $name "_common") (not (contains ".secrets." $f.Name)) }}
+  {{ $name }}:
+    values:
+    {{- if isFile $envCommon }}
+    - {{ $envCommon }}
+    {{- end }}
+    - {{ $valuesPath }}/environments/{{ $f.Name }}
+    {{- $envSecrets := printf "%s/environments/%s.secrets.yaml" $valuesPath $name }}
+    {{- $envSecretsCommon := printf "%s/environments/_common.secrets.yaml" $valuesPath }}
+    {{- if or (isFile $envSecrets) (isFile $envSecretsCommon) }}
+    secrets:
+    {{- end }}
+    {{- if isFile $envSecretsCommon }}
+    - {{ $envSecretsCommon }}
+    {{- end }}
+    {{- if isFile $envSecrets }}
+    - {{ $envSecrets }}
+    {{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+*/}}
 
 ---
 # значения по умолчанию ниже приоритетом, чем переменные environment
@@ -31,6 +96,9 @@ values:
     versionPro: 2.5.0
     versionCitylens: 2.3.0
     kubeContext: default
+    # префикс имён helm-релизов {env}-{service}; по умолчанию пусто (релизы без префикса).
+    # Задать: - releasePrefix: '{{ .Environment.Name }}-' в файле окружения
+    releasePrefix: ''
     # chartLocation: ../../../on-premise-helm-charts/charts
     chartLocation: oci://ghcr.io/2gis/charts
 
@@ -39,42 +107,42 @@ values:
 
     ingressTls: true
 
-  - licenseIngress: license.{{ .Values.domain }}
-    keysApiIngress: keys-api.{{ .Values.domain }}
-    keysAdminIngress: keys-admin.{{ .Values.domain }}
-    catalogIngress: catalog-api.{{ .Values.domain }}
-    searchIngress: search-api.{{ .Values.domain }}
-    searchIngressV8: search-api-v8.{{ .Values.domain }}
-    rasterJsApiIngress: raster-js-api.{{ .Values.domain }}
-    tilesMultiIngress: tiles-api.{{ .Values.domain }}
-    tilesRasterIngress: tiles-api-raster.{{ .Values.domain }}
-    mapglIngress: mapgl-js-api.{{ .Values.domain }}
-    stylesIngress: styles-api.{{ .Values.domain }}
-    platformIngress: platform.{{ .Values.domain }}
-    naviFrontIngress: navi-front.{{ .Values.domain }}
-    naviAsyncIngress: navi-async.{{ .Values.domain }}
-    naviVrpIngress: navi-vrp.{{ .Values.domain }}
-    naviRestrictionsIngress: navi-restrictions.{{ .Values.domain }}
-    naviAsyncMatrixIngress: navi-async-matrix.{{ .Values.domain }}
-    naviCastleIngress: navi-castle.{{ .Values.domain }}
-    naviRouterIngress: navi-router.{{ .Values.domain }}
-    naviVrpSolverIngress: navi-vrp-solver.{{ .Values.domain }}
-    naviVrpTaskManagerIngress: navi-vrp-task-manager.{{ .Values.domain }}
-    keycloakIngress: keycloak.{{ .Values.domain }}
-    proPermissionsIngress: pro-api-permissions.{{ .Values.domain }}
-    proApiIngress: pro-api.{{ .Values.domain }}
-    proUiIngress: pro-ui.{{ .Values.domain }}
-    trafficProxyMapIngress: traffic-proxy-map.{{ .Values.domain }} # Прокси для online-пробок (map). Не используется если значение proxyMode `none` или `navi`
-    trafficProxyNaviIngress: traffic-proxy-navi.{{ .Values.domain }} # Прокси для online-пробок (navi). По умолчанию не используется
-    s3ProxyStylesIngress: s3-proxy-styles.{{ .Values.domain }}
-    staticmapsIngress: staticmaps.{{ .Values.domain }}
-    statApiIngress: stat-api.{{ .Values.domain }}
-    statReceiverIngress: stat-receiver-api.{{ .Values.domain }}
-    citylensIngress: citylens.{{ .Values.domain }}
-    citylensApiIngress: citylens-api.{{ .Values.domain }}
-    citylensRoutesApiIngress: citylens-routes-api.{{ .Values.domain }}
-    citylensRoutesUiIngress: citylens-routes-ui.{{ .Values.domain }}
-    kibanaIngress: kibana.{{ .Values.domain }}
+  - licenseIngress: {{ .Values.ingressHostPrefix }}license.{{ .Values.domain }}
+    keysApiIngress: {{ .Values.ingressHostPrefix }}keys-api.{{ .Values.domain }}
+    keysAdminIngress: {{ .Values.ingressHostPrefix }}keys-admin.{{ .Values.domain }}
+    catalogIngress: {{ .Values.ingressHostPrefix }}catalog-api.{{ .Values.domain }}
+    searchIngress: {{ .Values.ingressHostPrefix }}search-api.{{ .Values.domain }}
+    searchIngressV8: {{ .Values.ingressHostPrefix }}search-api-v8.{{ .Values.domain }}
+    rasterJsApiIngress: {{ .Values.ingressHostPrefix }}raster-js-api.{{ .Values.domain }}
+    tilesMultiIngress: {{ .Values.ingressHostPrefix }}tiles-api.{{ .Values.domain }}
+    tilesRasterIngress: {{ .Values.ingressHostPrefix }}tiles-api-raster.{{ .Values.domain }}
+    mapglIngress: {{ .Values.ingressHostPrefix }}mapgl-js-api.{{ .Values.domain }}
+    stylesIngress: {{ .Values.ingressHostPrefix }}styles-api.{{ .Values.domain }}
+    platformIngress: {{ .Values.ingressHostPrefix }}platform.{{ .Values.domain }}
+    naviFrontIngress: {{ .Values.ingressHostPrefix }}navi-front.{{ .Values.domain }}
+    naviAsyncIngress: {{ .Values.ingressHostPrefix }}navi-async.{{ .Values.domain }}
+    naviVrpIngress: {{ .Values.ingressHostPrefix }}navi-vrp.{{ .Values.domain }}
+    naviRestrictionsIngress: {{ .Values.ingressHostPrefix }}navi-restrictions.{{ .Values.domain }}
+    naviAsyncMatrixIngress: {{ .Values.ingressHostPrefix }}navi-async-matrix.{{ .Values.domain }}
+    naviCastleIngress: {{ .Values.ingressHostPrefix }}navi-castle.{{ .Values.domain }}
+    naviRouterIngress: {{ .Values.ingressHostPrefix }}navi-router.{{ .Values.domain }}
+    naviVrpSolverIngress: {{ .Values.ingressHostPrefix }}navi-vrp-solver.{{ .Values.domain }}
+    naviVrpTaskManagerIngress: {{ .Values.ingressHostPrefix }}navi-vrp-task-manager.{{ .Values.domain }}
+    keycloakIngress: {{ .Values.ingressHostPrefix }}keycloak.{{ .Values.domain }}
+    proPermissionsIngress: {{ .Values.ingressHostPrefix }}pro-api-permissions.{{ .Values.domain }}
+    proApiIngress: {{ .Values.ingressHostPrefix }}pro-api.{{ .Values.domain }}
+    proUiIngress: {{ .Values.ingressHostPrefix }}pro-ui.{{ .Values.domain }}
+    trafficProxyMapIngress: {{ .Values.ingressHostPrefix }}traffic-proxy-map.{{ .Values.domain }} # Прокси для online-пробок (map). Не используется если значение proxyMode `none` или `navi`
+    trafficProxyNaviIngress: {{ .Values.ingressHostPrefix }}traffic-proxy-navi.{{ .Values.domain }} # Прокси для online-пробок (navi). По умолчанию не используется
+    s3ProxyStylesIngress: {{ .Values.ingressHostPrefix }}s3-proxy-styles.{{ .Values.domain }}
+    staticmapsIngress: {{ .Values.ingressHostPrefix }}staticmaps.{{ .Values.domain }}
+    statApiIngress: {{ .Values.ingressHostPrefix }}stat-api.{{ .Values.domain }}
+    statReceiverIngress: {{ .Values.ingressHostPrefix }}stat-receiver-api.{{ .Values.domain }}
+    citylensIngress: {{ .Values.ingressHostPrefix }}citylens.{{ .Values.domain }}
+    citylensApiIngress: {{ .Values.ingressHostPrefix }}citylens-api.{{ .Values.domain }}
+    citylensRoutesApiIngress: {{ .Values.ingressHostPrefix }}citylens-routes-api.{{ .Values.domain }}
+    citylensRoutesUiIngress: {{ .Values.ingressHostPrefix }}citylens-routes-ui.{{ .Values.domain }}
+    kibanaIngress: {{ .Values.ingressHostPrefix }}kibana.{{ .Values.domain }}
 
     projectCity: null
     proxyMode: "none"  # none, full, map, navi

@@ -4,7 +4,7 @@ bases:
 
 ---
 releases:
-  - name: raster-js-api
+  - name: {{ .Values.releasePrefix }}raster-js-api
     chart: {{ .Values.chartLocation }}/raster-js-api
     namespace: {{ .Values.namespace  }}
     version: {{ .Values.versionPlatform }}
@@ -16,6 +16,10 @@ releases:
     values:
       - {{ .Values.basePath }}/values/dgctl.yaml.gotmpl
       - {{ .Values.basePath }}/values/api-platform/raster-js-api.yaml.gotmpl
+{{- $dep := printf "%s/values/api-platform/raster-js-api/_common.yaml.gotmpl" .Values.valuesPath -}}
+{{- if isFile $dep }}
+      - {{ $dep }}
+{{- end }}
 {{- $vp1 := printf "%s/values/api-platform/raster-js-api/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $vp1 }}
       - {{ $vp1 }}

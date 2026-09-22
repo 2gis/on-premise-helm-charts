@@ -3,12 +3,12 @@ navigroup: {{ .Environment.Name }}
 replicaCount: 1
 
 router:
-  castleUrl: http://navi-castle
+  castleUrl: http://{{ .Values.releasePrefix }}navi-castle
   logLevel: Warning
 
 keys:
   enabled: true
-  url: http://keys-service-api/service/v1/keys
+  url: http://{{ .Values.releasePrefix }}keys-service-api/service/v1/keys
 
 resources:
   limits:

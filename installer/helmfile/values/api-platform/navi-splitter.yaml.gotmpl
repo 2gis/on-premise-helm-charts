@@ -1,10 +1,10 @@
 navigroup: {{ .Environment.Name }}
 
 splitter:
-  ctxUrl: http://navi-back-distance-matrix-ctx/ctx/2.0/?source=distance_matrix
-  ctxBaseUrl: http://navi-back-distance-matrix-ctx/ctx/2.0
-  ctxV3BaseUrl: http://navi-back-distance-matrix-ctx/ctx/3.0
-  findPlatformUrl: http://navi-back-distance-matrix-ctx/find_platforms
+  ctxUrl: http://{{ .Values.releasePrefix }}navi-back-distance-matrix-ctx/ctx/2.0/?source=distance_matrix
+  ctxBaseUrl: http://{{ .Values.releasePrefix }}navi-back-distance-matrix-ctx/ctx/2.0
+  ctxV3BaseUrl: http://{{ .Values.releasePrefix }}navi-back-distance-matrix-ctx/ctx/3.0
+  findPlatformUrl: http://{{ .Values.releasePrefix }}navi-back-distance-matrix-ctx/find_platforms
   statHost: '-'
 
 attractor:

@@ -4,7 +4,7 @@ bases:
 
 ---
 releases:
-  - name: manifest-cleaner
+  - name: {{ .Values.releasePrefix }}manifest-cleaner
     chart: {{ .Values.chartLocation }}/manifest-cleaner
     version: 0.2.0
     namespace: {{ .Values.namespace }}
@@ -14,6 +14,10 @@ releases:
       service: manifest-cleaner
     values:
       - {{ .Values.basePath }}/values/manifest-cleaner.yaml.gotmpl
+{{- $dep := printf "%s/values/manifest-cleaner/_common.yaml.gotmpl" .Values.valuesPath -}}
+{{- if isFile $dep }}
+      - {{ $dep }}
+{{- end }}
 {{- $vp1 := printf "%s/values/manifest-cleaner/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $vp1 }}
       - {{ $vp1 }}

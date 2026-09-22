@@ -30,7 +30,7 @@ releases:
 {{- $vals := tpl (readFile $path) . | fromYaml -}}
 {{- range $service := $vals.rules }}
 
-  - name: navi-back-{{ $service.name }}
+  - name: {{ $.Values.releasePrefix }}navi-back-{{ $service.name }}
     inherit:
     - template: default
     chart: {{ $.Values.chartLocation }}/navi-back
@@ -41,7 +41,7 @@ releases:
       - name: naviback.appRule
         value: {{ $service.name }}
       - name: remoteAttractor.host
-        value: navi-attr-{{ $service.name }}
+        value: {{ $.Values.releasePrefix }}navi-attr-{{ $service.name }}
       - name: remoteAttractor.enabled
         value: true
       {{- if or (mustHas "get_dist_matrix" $service.queries) (mustHas "get_pairs" $service.queries) }}
@@ -54,6 +54,10 @@ releases:
       {{- end }}
     values:
       - {{ $.Values.basePath }}/values/api-platform/navi-back.yaml.gotmpl
+{{- $dep := printf "%s/values/api-platform/navi-back/_common.yaml.gotmpl" $.Values.valuesPath -}}
+{{- if isFile $dep }}
+      - {{ $dep }}
+{{- end }}
 {{- $vp1 := printf "%s/values/api-platform/navi-back/%s.yaml.gotmpl" $.Values.valuesPath $.Environment.Name -}}
 {{- if isFile $vp1 }}
       - {{ $vp1 }}
@@ -77,7 +81,7 @@ releases:
 {{- readFile $hooksPath | fromYaml | toYaml | nindent 4 }}
 {{- end }}
 
-  - name: navi-attr-{{ $service.name }}
+  - name: {{ $.Values.releasePrefix }}navi-attr-{{ $service.name }}
     inherit:
     - template: default
     chart: {{ $.Values.chartLocation }}/navi-attractor
@@ -89,6 +93,10 @@ releases:
         value: {{ $service.name }}
     values:
       - {{ $.Values.basePath }}/values/api-platform/navi-attractor.yaml.gotmpl
+{{- $dep := printf "%s/values/api-platform/navi-attractor/_common.yaml.gotmpl" $.Values.valuesPath -}}
+{{- if isFile $dep }}
+      - {{ $dep }}
+{{- end }}
 {{- $vp4 := printf "%s/values/api-platform/navi-attractor/%s.yaml.gotmpl" $.Values.valuesPath $.Environment.Name -}}
 {{- if isFile $vp4 }}
       - {{ $vp4 }}
@@ -113,7 +121,7 @@ releases:
 {{- end }}
 
     {{- if or (mustHas "get_dist_matrix" $service.queries) (mustHas "get_pairs" $service.queries) }}
-  - name: navi-splitter-{{ $service.name }}
+  - name: {{ $.Values.releasePrefix }}navi-splitter-{{ $service.name }}
     inherit:
       - template: default
     chart: {{ $.Values.chartLocation }}/navi-splitter
@@ -124,21 +132,25 @@ releases:
       - name: splitter.appRule
         value: {{ $service.name }}
       - name: attractor.host
-        value: navi-attr-{{ $service.name }}
+        value: {{ $.Values.releasePrefix }}navi-attr-{{ $service.name }}
       - name: oneToMany.host
-        value: navi-back-{{ $service.name }}-headless
+        value: {{ $.Values.releasePrefix }}navi-back-{{ $service.name }}-headless
       - name: passThrough.host
-        value: navi-back-{{ $service.name }}
+        value: {{ $.Values.releasePrefix }}navi-back-{{ $service.name }}
       - name: splitter.ctxUrl
-        value: http://navi-back-{{ $service.name }}/ctx/2.0/?source=distance_matrix
+        value: http://{{ $.Values.releasePrefix }}navi-back-{{ $service.name }}/ctx/2.0/?source=distance_matrix
       - name: splitter.ctxBaseUrl
-        value: http://navi-back-{{ $service.name }}/ctx/2.0
+        value: http://{{ $.Values.releasePrefix }}navi-back-{{ $service.name }}/ctx/2.0
       - name: splitter.ctxV3BaseUrl
-        value: http://navi-back-{{ $service.name }}/ctx/3.0
+        value: http://{{ $.Values.releasePrefix }}navi-back-{{ $service.name }}/ctx/3.0
       - name: splitter.findPlatformUrl
-        value: http://navi-back-{{ $service.name }}/find_platforms
+        value: http://{{ $.Values.releasePrefix }}navi-back-{{ $service.name }}/find_platforms
     values:
     - {{ $.Values.basePath }}/values/api-platform/navi-splitter.yaml.gotmpl
+{{- $dep := printf "%s/values/api-platform/navi-splitter/_common.yaml.gotmpl" $.Values.valuesPath -}}
+{{- if isFile $dep }}
+    - {{ $dep }}
+{{- end }}
 {{- $vp7 := printf "%s/values/api-platform/navi-splitter/%s.yaml.gotmpl" $.Values.valuesPath $.Environment.Name -}}
 {{- if isFile $vp7 }}
     - {{ $vp7 }}
@@ -172,7 +184,7 @@ releases:
 {{- end }}
 {{- range $service := $async }}
 
-  - name: navi-back-{{ $service.name }}
+  - name: {{ $.Values.releasePrefix }}navi-back-{{ $service.name }}
     inherit:
     - template: default
     chart: {{ $.Values.chartLocation }}/navi-back
@@ -205,7 +217,7 @@ releases:
       # attractorFromRule: если задано - используем аттрактор родительского правила, иначе свой
       {{- $attractorName := index $service "attractorFromRule" | default $service.name }}
       - name: remoteAttractor.host
-        value: navi-attr-{{ $attractorName }}
+        value: {{ $.Values.releasePrefix }}navi-attr-{{ $attractorName }}
       - name: remoteAttractor.enabled
         value: true
       {{- else }}
@@ -231,6 +243,10 @@ releases:
         value: navi.{{ $.Environment.Name }}.cancel.topic
     values:
       - {{ $.Values.basePath }}/values/api-platform/navi-back.yaml.gotmpl
+{{- $depAsyncBase := printf "%s/values/api-platform/navi-back/_common.yaml.gotmpl" $.Values.valuesPath -}}
+{{- if isFile $depAsyncBase }}
+      - {{ $depAsyncBase }}
+{{- end }}
 {{- $vp8 := printf "%s/values/api-platform/navi-back/%s.yaml.gotmpl" $.Values.valuesPath $.Environment.Name -}}
 {{- if isFile $vp8 }}
       - {{ $vp8 }}
@@ -256,7 +272,7 @@ releases:
 
   # Асинхронный аттрактор (не деплоим для find-platform - он использует аттрактор ctx-правила)
   {{- if not (index $service "attractorFromRule") }}
-  - name: navi-attr-{{ $service.name }}
+  - name: {{ $.Values.releasePrefix }}navi-attr-{{ $service.name }}
     inherit:
     - template: default
     chart: {{ $.Values.chartLocation }}/navi-attractor
@@ -292,6 +308,10 @@ releases:
         value: navi.{{ $.Environment.Name }}.cancel.topic
     values:
       - {{ $.Values.basePath }}/values/api-platform/navi-attractor.yaml.gotmpl
+{{- $depAttrAsyncBase := printf "%s/values/api-platform/navi-attractor/_common.yaml.gotmpl" $.Values.valuesPath -}}
+{{- if isFile $depAttrAsyncBase }}
+      - {{ $depAttrAsyncBase }}
+{{- end }}
 {{- $vp11 := printf "%s/values/api-platform/navi-attractor/%s.yaml.gotmpl" $.Values.valuesPath $.Environment.Name -}}
 {{- if isFile $vp11 }}
       - {{ $vp11 }}

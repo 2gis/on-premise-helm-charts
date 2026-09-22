@@ -4,7 +4,7 @@ bases:
 
 ---
 releases:
-  - name: navi-castle
+  - name: {{ .Values.releasePrefix }}navi-castle
     chart: {{ .Values.chartLocation }}/navi-castle
     namespace: {{ .Values.namespace  }}
     version: {{ .Values.versionPlatform }}
@@ -16,6 +16,10 @@ releases:
     values:
       - {{ .Values.basePath }}/values/dgctl.yaml.gotmpl
       - {{ .Values.basePath }}/values/api-platform/navi-castle.yaml.gotmpl
+{{- $dep := printf "%s/values/api-platform/navi-castle/_common.yaml.gotmpl" .Values.valuesPath -}}
+{{- if isFile $dep }}
+      - {{ $dep }}
+{{- end }}
 {{- $vp1 := printf "%s/values/api-platform/navi-castle/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $vp1 }}
       - {{ $vp1 }}

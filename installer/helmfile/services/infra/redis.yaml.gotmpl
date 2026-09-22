@@ -4,7 +4,7 @@ bases:
 
 ---
 releases:
-  - name: redis
+  - name: {{ .Values.releasePrefix }}redis
     chart: {{ .Values.chartLocationBitnami }}/redis
     version: 23.1.1
     namespace: {{ .Values.namespace }}
@@ -14,6 +14,10 @@ releases:
       service: redis
     values:
       - {{ .Values.basePath }}/values/infra/redis.yaml.gotmpl
+{{- $dep := printf "%s/values/infra/redis/_common.yaml.gotmpl" .Values.valuesPath -}}
+{{- if isFile $dep }}
+      - {{ $dep }}
+{{- end }}
 {{- $vp1 := printf "%s/values/infra/redis/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $vp1 }}
       - {{ $vp1 }}

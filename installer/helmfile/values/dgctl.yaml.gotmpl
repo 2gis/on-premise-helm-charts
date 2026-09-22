@@ -8,3 +8,20 @@ dgctlStorage:
   secretKey: {{ .Values.dgctlStorage.secretKey }}
 #  verifySsl: false
   secure: {{ .Values.dgctlStorage.secure }}
+{{- /* Манифест данных компонента — инсталляционный аналог легаси template/separatedManifests.gotmpl
+       (keys -> core, pro -> pro, citylens -> citylens, остальное -> api-platform).
+       Пины задаются на уровне окружения ключом dgctlManifests; ключ или компонент отсутствуют —
+       манифест не задаётся. */}}
+{{- $component := "api-platform" }}
+{{- if contains "keys" .Release.Name }}
+{{- $component = "core" }}
+{{- end }}
+{{- if contains "pro" .Release.Name }}
+{{- $component = "pro" }}
+{{- end }}
+{{- if contains "citylens" .Release.Name }}
+{{- $component = "citylens" }}
+{{- end }}
+{{- if and (hasKey .Values "dgctlManifests") (hasKey .Values.dgctlManifests $component) }}
+  manifest: {{ index .Values.dgctlManifests $component }}
+{{- end }}

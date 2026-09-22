@@ -4,7 +4,7 @@ bases:
 
 ---
 releases:
-  - name: elasticsearch
+  - name: {{ .Values.releasePrefix }}elasticsearch
     chart: {{ .Values.chartLocationBitnami }}/elasticsearch
     version: 21.6.3
     namespace: {{ .Values.namespace  }}
@@ -18,6 +18,10 @@ releases:
       service: elasticsearch
     values:
       - {{ .Values.basePath }}/values/infra/elasticsearch.yaml.gotmpl
+{{- $dep := printf "%s/values/infra/elasticsearch/_common.yaml.gotmpl" .Values.valuesPath -}}
+{{- if isFile $dep }}
+      - {{ $dep }}
+{{- end }}
 {{- $vp1 := printf "%s/values/infra/elasticsearch/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $vp1 }}
       - {{ $vp1 }}

@@ -4,7 +4,7 @@ bases:
 
 ---
 releases:
-  - name: navi-async-matrix
+  - name: {{ .Values.releasePrefix }}navi-async-matrix
     chart: {{ .Values.chartLocation }}/navi-async-matrix
     namespace: {{ .Values.namespace  }}
     version: {{ .Values.versionPlatform }}
@@ -16,6 +16,10 @@ releases:
     values:
       - {{ .Values.basePath }}/values/dgctl.yaml.gotmpl
       - {{ .Values.basePath }}/values/api-platform/navi-async-matrix.yaml.gotmpl
+{{- $dep := printf "%s/values/api-platform/navi-async-matrix/_common.yaml.gotmpl" $.Values.valuesPath -}}
+{{- if isFile $dep }}
+      - {{ $dep }}
+{{- end }}
 {{- $vp1 := printf "%s/values/api-platform/navi-async-matrix/%s.yaml.gotmpl" .Values.valuesPath $.Environment.Name -}}
 {{- if isFile $vp1 }}
       - {{ $vp1 }}

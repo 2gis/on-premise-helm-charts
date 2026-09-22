@@ -1,8 +1,8 @@
 search:
-  url: http://search-api
+  url: http://{{ .Values.releasePrefix }}search-api
 
 keys:
-  url: http://keys-service-api
+  url: http://{{ .Values.releasePrefix }}keys-service-api
 
 license:
   url: https://license

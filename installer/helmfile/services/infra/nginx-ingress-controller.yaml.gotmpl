@@ -4,7 +4,7 @@ bases:
 
 ---
 releases:
-  - name: nginx-ingress-controller
+  - name: {{ .Values.releasePrefix }}nginx-ingress-controller
     chart: {{ .Values.chartLocationBitnami }}/nginx-ingress-controller
     version: 12.0.7
     kubeContext: {{ .Values.kubeContext }}
@@ -17,6 +17,10 @@ releases:
       group: infra
     values:
       - {{ .Values.basePath }}/values/infra/nginx-ingress-controller.yaml.gotmpl
+{{- $dep := printf "%s/values/infra/nginx-ingress-controller/_common.yaml.gotmpl" .Values.valuesPath -}}
+{{- if isFile $dep }}
+      - {{ $dep }}
+{{- end }}
 {{- $vp1 := printf "%s/values/infra/nginx-ingress-controller/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $vp1 }}
       - {{ $vp1 }}

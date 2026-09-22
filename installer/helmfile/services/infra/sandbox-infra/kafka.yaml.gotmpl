@@ -4,7 +4,7 @@ bases:
 
 ---
 releases:
-  - name: kafka
+  - name: {{ .Values.releasePrefix }}kafka
     chart: {{ .Values.chartLocationBitnami }}/kafka
     version: 31.5.0
     namespace: {{ .Values.namespace  }}
@@ -18,6 +18,10 @@ releases:
       service: kafka
     values:
       - {{ .Values.basePath }}/values/infra/kafka.yaml.gotmpl
+{{- $dep := printf "%s/values/infra/kafka/_common.yaml.gotmpl" .Values.valuesPath -}}
+{{- if isFile $dep }}
+      - {{ $dep }}
+{{- end }}
 {{- $vp1 := printf "%s/values/infra/kafka/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $vp1 }}
       - {{ $vp1 }}

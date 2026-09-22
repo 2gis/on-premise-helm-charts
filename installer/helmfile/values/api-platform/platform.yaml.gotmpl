@@ -8,7 +8,7 @@ ui:
     search: "Catalog API={{ $protocol }}://{{ .Values.catalogIngress }},Search API={{ $protocol }}://{{ .Values.searchIngress }}/v2/status"
     navi: "Castle={{ $protocol }}://{{ .Values.naviCastleIngress }}/cities.conf,Routing={{ $protocol }}://{{ .Values.naviFrontIngress }}/healthcheck"
     pro: "PRO UI={{ $protocol }}://{{ .Values.proUiIngress }}/api/healthcheck/app,PRO API={{ $protocol }}://{{ .Values.proApiIngress }}/health/live,PRO Permissions API={{ $protocol }}://{{ .Values.proPermissionsIngress }}"
-    keys: "Keys UI={{ $protocol }}://{{ .Values.keysAdminIngress }},Keys API=http://keys-api/healthcheck,Keys Service API=http://keys-service-api/healthcheck"
+    keys: "Keys UI={{ $protocol }}://{{ .Values.keysAdminIngress }},Keys API=http://{{ .Values.releasePrefix }}keys-api/healthcheck,Keys Service API=http://{{ .Values.releasePrefix }}keys-service-api/healthcheck"
     mapStyles: "{{ $protocol }}://{{ .Values.stylesIngress }}/healthcheck"
 
   mapgl:
@@ -42,7 +42,7 @@ ui:
     entryPageUrl: https://docs.2gis.com/on-premise
 
   license:
-    url: http://license
+    url: http://{{ .Values.releasePrefix }}license
 
   ingress:
     enabled: true

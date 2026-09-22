@@ -4,7 +4,7 @@ bases:
 
 ---
 releases:
-  - name: catalog-api
+  - name: {{ .Values.releasePrefix }}catalog-api
     chart: {{ .Values.chartLocation }}/catalog-api
     namespace: {{ .Values.namespace  }}
     version: {{ .Values.versionPlatform }}
@@ -22,6 +22,10 @@ releases:
       - {{ $vp1 }}
 {{- end }}
       - {{ .Values.basePath }}/values/api-platform/catalog.yaml.gotmpl
+{{- $dep := printf "%s/values/api-platform/catalog/_common.yaml.gotmpl" .Values.valuesPath -}}
+{{- if isFile $dep }}
+      - {{ $dep }}
+{{- end }}
 {{- $vp2 := printf "%s/values/api-platform/catalog/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $vp2 }}
       - {{ $vp2 }}

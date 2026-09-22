@@ -4,7 +4,7 @@ bases:
 
 ---
 releases:
-  - name: navi-router
+  - name: {{ .Values.releasePrefix }}navi-router
     chart: {{ .Values.chartLocation }}/navi-router
     namespace: {{ .Values.namespace  }}
     version: {{ .Values.versionPlatform }}
@@ -15,6 +15,10 @@ releases:
     values:
       - {{ .Values.basePath }}/values/dgctl.yaml.gotmpl
       - {{ .Values.basePath }}/values/api-platform/navi-router.yaml.gotmpl
+{{- $dep := printf "%s/values/api-platform/navi-router/_common.yaml.gotmpl" .Values.valuesPath -}}
+{{- if isFile $dep }}
+      - {{ $dep }}
+{{- end }}
 {{- $vp1 := printf "%s/values/api-platform/navi-router/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $vp1 }}
       - {{ $vp1 }}

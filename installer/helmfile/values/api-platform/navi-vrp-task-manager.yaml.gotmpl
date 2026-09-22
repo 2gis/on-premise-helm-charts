@@ -8,13 +8,13 @@ resources:
 
 dm:
   key: {{ .Values.key }}
-  url: http://navi-async-matrix/create_task/get_dist_matrix
+  url: http://{{ .Values.releasePrefix }}navi-async-matrix/create_task/get_dist_matrix
 
 keys:
-  url: http://keys-service-api/service/v1/keys
+  url: http://{{ .Values.releasePrefix }}keys-service-api/service/v1/keys
 
 cities:
-  linkToCitiesFile: http://navi-castle/cities.conf
+  linkToCitiesFile: http://{{ .Values.releasePrefix }}navi-castle/cities.conf
 
 kafka:
   # shared with solver

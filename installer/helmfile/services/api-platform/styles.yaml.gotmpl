@@ -4,7 +4,7 @@ bases:
 
 ---
 releases:
-  - name: styles-api
+  - name: {{ .Values.releasePrefix }}styles-api
     chart: {{ .Values.chartLocation }}/styles-api
     namespace: {{ .Values.namespace  }}
     version: {{ .Values.versionPlatform }}
@@ -21,6 +21,10 @@ releases:
       - {{ $vp1 }}
 {{- end }}
       - {{ .Values.basePath }}/values/api-platform/styles.yaml.gotmpl
+{{- $dep := printf "%s/values/api-platform/styles/_common.yaml.gotmpl" .Values.valuesPath -}}
+{{- if isFile $dep }}
+      - {{ $dep }}
+{{- end }}
 {{- $vp2 := printf "%s/values/api-platform/styles/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $vp2 }}
       - {{ $vp2 }}

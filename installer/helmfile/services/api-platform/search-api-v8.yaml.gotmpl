@@ -4,7 +4,7 @@ bases:
 
 ---
 releases:
-  - name: search-api-v8
+  - name: {{ .Values.releasePrefix }}search-api-v8
     chart: {{ .Values.chartLocation }}/search-api-v8
     namespace: {{ .Values.namespace }}
     version: {{ .Values.versionPlatform }}
@@ -17,6 +17,10 @@ releases:
       - {{ .Values.basePath }}/../dgctl/auto_values/api-platform/general.yaml
       - {{ .Values.basePath }}/values/dgctl.yaml.gotmpl
       - {{ .Values.basePath }}/values/api-platform/search-api-v8.yaml.gotmpl
+{{- $dep := printf "%s/values/api-platform/search-api-v8/_common.yaml.gotmpl" .Values.valuesPath -}}
+{{- if isFile $dep }}
+      - {{ $dep }}
+{{- end }}
 {{- $vp1 := printf "%s/values/api-platform/search-api-v8/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $vp1 }}
       - {{ $vp1 }}

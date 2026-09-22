@@ -1,10 +1,13 @@
+# Общие дефолты релизных цепочек tiles (tiles-api / tiles-api-raster) из
+# services/api-platform/tiles.yaml.gotmpl. Per-release overrides: tiles-multi.yaml.gotmpl /
+# tiles-raster.yaml.gotmpl; per-env слоты: valuesPath values/api-platform/tiles/{multi,raster}/.
 cassandra:
   consistencyLevelRead: LOCAL_QUORUM
   consistencyLevelWrite: LOCAL_QUORUM
 
 proxy:
   access:
-    url: http://keys-service-api
+    url: http://{{ .Values.releasePrefix }}keys-service-api
 
 importer:
   enabled: true
@@ -34,7 +37,7 @@ api:
       memory: 64Mi
 
 license:
-  url: https://license
+  url: https://{{ .Values.releasePrefix }}license
 
 logLevel: info  # Allowed options: info|warn|debug|error.
 logFormat: json # Allowed options: text|json.

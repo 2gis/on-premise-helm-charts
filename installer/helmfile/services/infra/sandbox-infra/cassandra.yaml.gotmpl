@@ -4,7 +4,7 @@ bases:
 
 ---
 releases:
-  - name: cassandra
+  - name: {{ .Values.releasePrefix }}cassandra
     chart: {{ .Values.chartLocationBitnami }}/cassandra
     version: 11.4.2
     namespace: {{ .Values.namespace }}
@@ -19,6 +19,10 @@ releases:
       service: cassandra
     values:
       - {{ .Values.basePath }}/values/infra/cassandra.yaml.gotmpl
+{{- $dep := printf "%s/values/infra/cassandra/_common.yaml.gotmpl" .Values.valuesPath -}}
+{{- if isFile $dep }}
+      - {{ $dep }}
+{{- end }}
 {{- $vp1 := printf "%s/values/infra/cassandra/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $vp1 }}
       - {{ $vp1 }}

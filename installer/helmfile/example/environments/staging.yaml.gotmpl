@@ -1,27 +1,20 @@
-environments:
-  staging:
-{{- $valuesPath := env "HELMFILE_VALUES" | default (printf "%s/installer/helmfile/example" (env "PWD")) }}
-{{- $envSecrets := printf "%s/environments/%s.secrets.yaml" $valuesPath .Environment.Name }}
-{{- if isFile $envSecrets }}
-    secrets:
-    - {{ $envSecrets }}
-{{- end }}
-    values:
-    - kubeContext: default # TODO
-    # Public registry by default; override via CHART_LOCATION env for an internal mirror.
-    - chartLocation: {{ env "CHART_LOCATION" | default "oci://ghcr.io/2gis/charts" }}
-    - chartLocationGrafana: oci://ghcr.io/grafana/helm-charts
-    - chartLocationVector: oci://ghcr.io/vectordotdev/helm-charts
-    - chartLocationPrometheus: oci://ghcr.io/prometheus-community/charts
-    - domain: 'example.com' # TODO
-    - namespace: staging # TODO
-    - ingressController: nginx # TODO nginx/traefik
-    # - traefikVpnAllowList: # TODO: IP-диапазоны VPN для traefik middleware allow-vpn-office (актуально только для traefik)
-    #   - 10.0.0.0/8 # TODO
-    - monitoringNamespace: prometheus # TODO
-    - tlsSecret: secret-tls # TODO
-    - dgctlDockerRegistry: 'registry.example.com' # TODO
-    - dgctlStorage:
-        host: 's3.example.com'
-        bucket: 'onpremise-artifacts-staging'  # TODO
-        secure: false # TODO
+kubeContext: default # TODO
+# Релизы без префикса окружения (отказ от дефолта '{env}-')
+# Ingress-хосты без префикса окружения
+# Public registry by default; override via CHART_LOCATION env for an internal mirror.
+chartLocation: {{ env "CHART_LOCATION" | default "oci://ghcr.io/2gis/charts" }}
+chartLocationGrafana: oci://ghcr.io/grafana/helm-charts
+chartLocationVector: oci://ghcr.io/vectordotdev/helm-charts
+chartLocationPrometheus: oci://ghcr.io/prometheus-community/charts
+domain: 'example.com' # TODO
+namespace: staging # TODO
+ingressController: nginx # TODO nginx/traefik
+# traefikVpnAllowList: # TODO: IP-диапазоны VPN для traefik middleware allow-vpn-office (актуально только для traefik)
+#   - 10.0.0.0/8 # TODO
+monitoringNamespace: prometheus # TODO
+tlsSecret: secret-tls # TODO
+dgctlDockerRegistry: 'registry.example.com' # TODO
+dgctlStorage:
+  host: 's3.example.com'
+  bucket: 'onpremise-artifacts-staging'  # TODO
+  secure: false # TODO

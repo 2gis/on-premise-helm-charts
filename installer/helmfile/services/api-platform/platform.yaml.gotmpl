@@ -4,7 +4,7 @@ bases:
 
 ---
 releases:
-  - name: platform
+  - name: {{ .Values.releasePrefix }}platform
     chart: {{ .Values.chartLocation }}/platform
     namespace: {{ .Values.namespace  }}
     version: {{ .Values.versionPlatform }}
@@ -20,6 +20,10 @@ releases:
       - {{ $vp1 }}
 {{- end }}
       - {{ .Values.basePath }}/values/api-platform/platform.yaml.gotmpl
+{{- $dep := printf "%s/values/api-platform/platform/_common.yaml.gotmpl" .Values.valuesPath -}}
+{{- if isFile $dep }}
+      - {{ $dep }}
+{{- end }}
 {{- $vp2 := printf "%s/values/api-platform/platform/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $vp2 }}
       - {{ $vp2 }}

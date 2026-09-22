@@ -1,5 +1,5 @@
 dm:
-  citiesUrl: "http://navi-castle/cities.conf"
+  citiesUrl: "http://{{ .Values.releasePrefix }}navi-castle/cities.conf"
   compositeTaskTimeoutSec: 3600
   taskSplitSize: 100
   merger:
@@ -14,7 +14,7 @@ dm:
         memory: 512Mi
 
 keys:
-  url: 'http://keys-service-api/service/v1/keys'
+  url: 'http://{{ .Values.releasePrefix }}keys-service-api/service/v1/keys'
 
 kafka:
   enabled: true

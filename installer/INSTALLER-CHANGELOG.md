@@ -1,3 +1,31 @@
+## [UNRELEASED]
+
+#### Supported versions
+
+| Component    | Version |
+| ------------ | ------- |
+| core         | 2.11.1  |
+| api-platform | 2.58.0  |
+| pro          | 2.5.0   |
+| citylens     | 2.3.0   |
+
+#### Breaking changes
+- Environment values files are now a flat map of values: `$HELMFILE_VALUES/environments/<env>.yaml(.gotmpl)`;
+  the `environments:/values:` wrapper is no longer supported (migration: unwrap the file)
+
+#### Changes
+- Environment block is generated for the selected environment (`-e`): a new environment is added by
+  creating `$HELMFILE_VALUES/environments/<env>.yaml(.gotmpl)`, no helmfile edits; a missing env file
+  fails with the expected path
+- Shared environment layer (optional): `environments/_common.yaml.gotmpl` (below env-file priority)
+  and `environments/_common.secrets.yaml` (sops)
+- Per-service shared values slot: `values/{group}/{svc}/_common.yaml.gotmpl` is loaded for every release
+  of the service before the env file, if present (opt-out by absence); also wired into multi-release
+  services (tiles multi/raster, navi-back async chains)
+- Manifest pinning moved to the environment level: `dgctlManifests` map (core/api-platform/pro/citylens)
+  resolved centrally in `values/dgctl.yaml.gotmpl` by release name; per-service `dgctlStorage.manifest`
+  overrides are no longer needed (README, "Фиксация/переключение манифестов")
+
 ## [2026-09-17]
 
 #### Supported versions

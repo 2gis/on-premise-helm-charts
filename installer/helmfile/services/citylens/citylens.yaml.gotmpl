@@ -4,7 +4,7 @@ bases:
 
 ---
 releases:
-  - name: citylens
+  - name: {{ .Values.releasePrefix }}citylens
     chart: {{ .Values.chartLocation }}/citylens
     version: {{ .Values.versionCitylens }}
     namespace: {{ .Values.namespace  }}
@@ -21,6 +21,10 @@ releases:
       - {{ $vp1 }}
 {{- end }}
       - {{ .Values.basePath }}/values/citylens/citylens.yaml.gotmpl
+{{- $dep := printf "%s/values/citylens/citylens/_common.yaml.gotmpl" .Values.valuesPath -}}
+{{- if isFile $dep }}
+      - {{ $dep }}
+{{- end }}
 {{- $vp2 := printf "%s/values/citylens/citylens/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $vp2 }}
       - {{ $vp2 }}

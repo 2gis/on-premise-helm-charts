@@ -4,7 +4,7 @@ bases:
 
 ---
 releases:
-  - name: clickhouse
+  - name: {{ .Values.releasePrefix }}clickhouse
     chart: {{ .Values.chartLocationBitnami }}/clickhouse
     version: 9.2.7
     namespace: {{ .Values.namespace  }}
@@ -18,6 +18,10 @@ releases:
       service: clickhouse
     values:
       - {{ .Values.basePath }}/values/infra/clickhouse.yaml.gotmpl
+{{- $dep := printf "%s/values/infra/clickhouse/_common.yaml.gotmpl" .Values.valuesPath -}}
+{{- if isFile $dep }}
+      - {{ $dep }}
+{{- end }}
 {{- $vp1 := printf "%s/values/infra/clickhouse/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $vp1 }}
       - {{ $vp1 }}

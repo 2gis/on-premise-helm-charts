@@ -4,7 +4,7 @@ bases:
 
 ---
 releases:
-  - name: tiles-api
+  - name: {{ .Values.releasePrefix }}tiles-api
     chart: {{ .Values.chartLocation }}/tiles-api
     namespace: {{ .Values.namespace  }}
     version: {{ .Values.versionPlatform }}
@@ -21,12 +21,21 @@ releases:
 {{- if isFile $vp1 }}
       - {{ $vp1 }}
 {{- end }}
+      # общие дефолты обеих цепочек tiles
       - {{ .Values.basePath }}/values/api-platform/tiles.yaml.gotmpl
+{{- $dep := printf "%s/values/api-platform/tiles/_common.yaml.gotmpl" .Values.valuesPath -}}
+{{- if isFile $dep }}
+      - {{ $dep }}
+{{- end }}
 {{- $vp2 := printf "%s/values/api-platform/tiles/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $vp2 }}
       - {{ $vp2 }}
 {{- end }}
       - {{ .Values.basePath }}/values/api-platform/tiles-multi.yaml.gotmpl
+{{- $dep := printf "%s/values/api-platform/tiles/multi/_common.yaml.gotmpl" .Values.valuesPath -}}
+{{- if isFile $dep }}
+      - {{ $dep }}
+{{- end }}
 {{- $vp3 := printf "%s/values/api-platform/tiles/multi/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $vp3 }}
       - {{ $vp3 }}
@@ -51,7 +60,7 @@ releases:
 {{- readFile $hooksPathMulti | fromYaml | toYaml | nindent 4 }}
 {{- end }}
 
-  - name: tiles-api-raster
+  - name: {{ .Values.releasePrefix }}tiles-api-raster
     chart: {{ .Values.chartLocation }}/tiles-api
     namespace: {{ .Values.namespace  }}
     version: {{ .Values.versionPlatform }}
@@ -68,12 +77,21 @@ releases:
 {{- if isFile $vp4 }}
       - {{ $vp4 }}
 {{- end }}
+      # общие дефолты обеих цепочек tiles
       - {{ .Values.basePath }}/values/api-platform/tiles.yaml.gotmpl
+{{- $depRasterBase := printf "%s/values/api-platform/tiles/_common.yaml.gotmpl" .Values.valuesPath -}}
+{{- if isFile $depRasterBase }}
+      - {{ $depRasterBase }}
+{{- end }}
 {{- $vp5 := printf "%s/values/api-platform/tiles/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $vp5 }}
       - {{ $vp5 }}
 {{- end }}
       - {{ .Values.basePath }}/values/api-platform/tiles-raster.yaml.gotmpl
+{{- $dep := printf "%s/values/api-platform/tiles/raster/_common.yaml.gotmpl" .Values.valuesPath -}}
+{{- if isFile $dep }}
+      - {{ $dep }}
+{{- end }}
 {{- $vp6 := printf "%s/values/api-platform/tiles/raster/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $vp6 }}
       - {{ $vp6 }}

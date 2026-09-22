@@ -4,7 +4,7 @@ bases:
 
 ---
 releases:
-  - name: staticmaps
+  - name: {{ .Values.releasePrefix }}staticmaps
     chart: {{ .Values.chartLocation }}/staticmaps
     version: {{ .Values.versionPlatform }}
     namespace: {{ .Values.namespace }}
@@ -20,6 +20,10 @@ releases:
       - {{ $vp1 }}
 {{- end }}
       - {{ .Values.basePath }}/values/api-platform/staticmaps.yaml.gotmpl
+{{- $dep := printf "%s/values/api-platform/staticmaps/_common.yaml.gotmpl" .Values.valuesPath -}}
+{{- if isFile $dep }}
+      - {{ $dep }}
+{{- end }}
 {{- $vp2 := printf "%s/values/api-platform/staticmaps/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $vp2 }}
       - {{ $vp2 }}

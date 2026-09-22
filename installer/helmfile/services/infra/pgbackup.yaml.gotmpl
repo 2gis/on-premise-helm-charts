@@ -4,16 +4,20 @@ bases:
 
 ---
 releases:
-  - name: pgbackup
+  - name: {{ .Values.releasePrefix }}pgbackup
     chart: {{ .Values.chartLocation }}/pgbackup
     version: 0.0.15
     namespace: {{ .Values.namespace }}
     kubeContext: {{ .Values.kubeContext }}
     labels:
-        service: pgbackup
-        group: infra
+      service: pgbackup
+      group: infra
     values:
       - {{ .Values.basePath }}/values/infra/pgbackup.yaml.gotmpl
+{{- $dep := printf "%s/values/infra/pgbackup/_common.yaml.gotmpl" .Values.valuesPath -}}
+{{- if isFile $dep }}
+      - {{ $dep }}
+{{- end }}
 {{- $vp1 := printf "%s/values/infra/pgbackup/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $vp1 }}
       - {{ $vp1 }}

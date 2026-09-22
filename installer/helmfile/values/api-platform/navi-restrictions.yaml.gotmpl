@@ -1,6 +1,6 @@
 replicaCount: 1
 
-naviCastleHost: navi-castle
+naviCastleHost: {{ .Values.releasePrefix }}navi-castle
 
 api:
   key: {{ .Values.key }}

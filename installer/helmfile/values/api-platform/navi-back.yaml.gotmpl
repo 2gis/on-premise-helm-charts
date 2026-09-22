@@ -4,12 +4,12 @@ readinessProbeDelay: 10
 navigroup: {{ .Environment.Name }}
 
 naviback:
-  castleUrl: http://navi-castle
+  castleUrl: http://{{ .Values.releasePrefix }}navi-castle
   {{- if has (lower .Values.proxyMode) (list "navi" "full") }}
-  castleUrlProxy: http://traffic-proxy-navi/navi-castle
-  ecaUrl: http://traffic-proxy-navi/eca
-  forecastUrl: http://traffic-proxy-navi/forecast
-  longForecastUrl: http://traffic-proxy-navi/long-forecast
+  castleUrlProxy: http://{{ .Values.releasePrefix }}traffic-proxy-navi/navi-castle
+  ecaUrl: http://{{ .Values.releasePrefix }}traffic-proxy-navi/eca
+  forecastUrl: http://{{ .Values.releasePrefix }}traffic-proxy-navi/forecast
+  longForecastUrl: http://{{ .Values.releasePrefix }}traffic-proxy-navi/long-forecast
   indices:
     etaCorrectionCores:
       enabled: true
@@ -45,7 +45,7 @@ resources:
     memory: 4000Mi
 
 license:
-  url: https://license
+  url: https://{{ .Values.releasePrefix }}license
 
 ingress:
   enabled: true

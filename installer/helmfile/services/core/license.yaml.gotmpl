@@ -4,7 +4,7 @@ bases:
 
 ---
 releases:
-  - name: license
+  - name: {{ .Values.releasePrefix }}license
     chart: {{ .Values.chartLocation }}/license
     namespace: {{ .Values.namespace  }}
     version: {{ .Values.versionCore }}
@@ -16,6 +16,10 @@ releases:
       - {{ .Values.basePath }}/../dgctl/auto_values/core/general.yaml
       - {{ .Values.basePath }}/values/dgctl.yaml.gotmpl
       - {{ .Values.basePath }}/values/core/license.yaml.gotmpl
+{{- $dep := printf "%s/values/core/license/_common.yaml.gotmpl" .Values.valuesPath -}}
+{{- if isFile $dep }}
+      - {{ $dep }}
+{{- end }}
 {{- $vp1 := printf "%s/values/core/license/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $vp1 }}
       - {{ $vp1 }}

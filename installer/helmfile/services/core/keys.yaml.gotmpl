@@ -4,7 +4,7 @@ bases:
 
 ---
 releases:
-  - name: keys
+  - name: {{ .Values.releasePrefix }}keys
     chart: {{ .Values.chartLocation }}/keys
     namespace: {{ .Values.namespace  }}
     version: {{ .Values.versionCore }}
@@ -22,6 +22,10 @@ releases:
       - {{ $vp1 }}
 {{- end }}
       - {{ .Values.basePath }}/values/core/keys.yaml.gotmpl
+{{- $dep := printf "%s/values/core/keys/_common.yaml.gotmpl" .Values.valuesPath -}}
+{{- if isFile $dep }}
+      - {{ $dep }}
+{{- end }}
 {{- $vp2 := printf "%s/values/core/keys/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $vp2 }}
       - {{ $vp2 }}

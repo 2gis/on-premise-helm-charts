@@ -1,26 +1,19 @@
-environments:
-  sandbox:
-{{- $valuesPath := env "HELMFILE_VALUES" | default (printf "%s/installer/helmfile/example" (env "PWD")) }}
-{{- $envSecrets := printf "%s/environments/%s.secrets.yaml" $valuesPath .Environment.Name }}
-{{- if isFile $envSecrets }}
-    secrets:
-    - {{ $envSecrets }}
-{{- end }}
-    values:
-    - kubeContext: kind-2gis-on-premise
-    - chartLocation: {{ env "CHART_LOCATION" | default "oci://ghcr.io/2gis/charts" }}
-    # для работы с локальными чартами
-    # - chartLocation: ../../../../charts
-    - chartLocationGrafana: oci://ghcr.io/grafana/helm-charts
-    - chartLocationVector: oci://ghcr.io/vectordotdev/helm-charts
-    - chartLocationPrometheus: oci://ghcr.io/prometheus-community/charts
-    - chartLocationBitnami: oci://registry-1.docker.io/bitnamicharts
-    - domain: sandbox
-    - namespace: sandbox
-    - ingressController: traefik
-    - ingressTls: false
-    - dgctlDockerRegistry: 'kind-registry:5000'
-    - dgctlStorage:
-        host: 's3.sandbox'
-        bucket: 'sandbox-dgctl'
-        secure: false
+# Релизы без префикса окружения (отказ от дефолта '{env}-')
+# Ingress-хосты без префикса окружения
+kubeContext: kind-2gis-on-premise
+chartLocation: {{ env "CHART_LOCATION" | default "oci://ghcr.io/2gis/charts" }}
+# для работы с локальными чартами
+# chartLocation: ../../../../charts
+chartLocationGrafana: oci://ghcr.io/grafana/helm-charts
+chartLocationVector: oci://ghcr.io/vectordotdev/helm-charts
+chartLocationPrometheus: oci://ghcr.io/prometheus-community/charts
+chartLocationBitnami: oci://registry-1.docker.io/bitnamicharts
+domain: sandbox
+namespace: sandbox
+ingressController: traefik
+ingressTls: false
+dgctlDockerRegistry: 'kind-registry:5000'
+dgctlStorage:
+  host: 's3.sandbox'
+  bucket: 'sandbox-dgctl'
+  secure: false

@@ -29,14 +29,14 @@ ingress:
   {{- end }}
 
 tiles:
-  url: http://tiles-api-raster
+  url: http://{{ .Values.releasePrefix }}tiles-api-raster
   key: {{ .Values.key }}
 
 license:
-  url: https://license
+  url: https://{{ .Values.releasePrefix }}license
 
 keys:
-  url: http://keys-service-api
+  url: http://{{ .Values.releasePrefix }}keys-service-api
 
 app:
   log:
@@ -46,4 +46,4 @@ app:
     enabled: true
     stat:
       enabled: false
-      url: 'http://stat-receiver-api/bss/3'
+      url: 'http://{{ .Values.releasePrefix }}stat-receiver-api/bss/3'
