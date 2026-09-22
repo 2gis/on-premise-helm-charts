@@ -69,8 +69,6 @@
   value: {{ .Values.ui.appInitialMapCenter | quote }}
 - name: SUPPORT_DOCUMENTATION_LINK
   value: {{ .Values.ui.supportDocumentationLink | quote }}
-- name: IMMERSIVE_MODELS
-  value: {{ .Values.ui.immersiveModels | quote }}
 - name: HOME
   value: "/tmp"
 - name: SERVER_PORT
