@@ -1,16 +1,6 @@
 # 2GIS GIS Platform service
 
-Use this Helm chart to deploy the GIS Platform service, which is a part of 2GIS's [On-Premise solution](https://docs.2gis.com/en/on-premise/overview).
-
-See the [documentation](https://docs.2gis.com/en/on-premise/gis-platform) to learn about:
-
-- Architecture of the service.
-
-- Installing the service.
-
-    When filling in the keys for `values-gis-platform.yaml` configuration file, refer to the documentation and the list of keys below.
-
-- Updating the service.
+This Helm chart deploys the **GIS Platform service**, which is a component of the 2GIS [On-Premise](https://docs.2gis.com/en/on-premise-api-platform/overview/summary).
 
 ## Values
 
