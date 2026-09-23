@@ -122,11 +122,11 @@ api:
     #   - stat-api.example.com
     #   secretName: secret.tls
 
-  # @section Kubernetes [HTTPRoute](https://gateway-api.sigs.k8s.io/api-types/httproute/) settings
+  # @section Kubernetes [HTTPRoute](https://gateway-api.sigs.k8s.io/reference/api-types/httproute/) settings
 
   # @param api.httpRoute.enabled If HTTPRoute is enabled for the service.
-  # @param api.httpRoute.hostnames Array of [Hostnames](https://gateway-api.sigs.k8s.io/reference/spec/#hostname) for the HTTPRoute [spec](https://gateway-api.sigs.k8s.io/reference/spec/#httproutespec).
-  # @param api.httpRoute.parentRefs Array of [ParentReferences](https://gateway-api.sigs.k8s.io/reference/spec/#parentreference) for the HTTPRoute [spec](https://gateway-api.sigs.k8s.io/reference/spec/#httproutespec).
+  # @param api.httpRoute.hostnames Array of [Hostnames](https://gateway-api.sigs.k8s.io/reference/api-spec/1.6/spec/#hostname) for the HTTPRoute [spec](https://gateway-api.sigs.k8s.io/reference/api-spec/1.6/spec/#httproutespec).
+  # @param api.httpRoute.parentRefs Array of [ParentReferences](https://gateway-api.sigs.k8s.io/reference/api-spec/1.6/spec/#parentreference) for the HTTPRoute [spec](https://gateway-api.sigs.k8s.io/reference/api-spec/1.6/spec/#httproutespec).
 
   httpRoute:
     enabled: false

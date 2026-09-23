@@ -67,13 +67,13 @@ To learn more about configuration, architecture, and requirements, see the offic
 | `api.ingress.hosts[0].paths[0].pathType` | Type of the path for the Ingress service. | `Prefix`        |
 | `api.ingress.tls`                        | TLS configuration                         | `[]`            |
 
-### Kubernetes [HTTPRoute](https://gateway-api.sigs.k8s.io/api-types/httproute/) settings
+### Kubernetes [HTTPRoute](https://gateway-api.sigs.k8s.io/reference/api-types/httproute/) settings
 
-| Name                       | Description                                                                                                                                                                           | Value   |
-| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `api.httpRoute.enabled`    | If HTTPRoute is enabled for the service.                                                                                                                                              | `false` |
-| `api.httpRoute.hostnames`  | Array of [Hostnames](https://gateway-api.sigs.k8s.io/reference/spec/#hostname) for the HTTPRoute [spec](https://gateway-api.sigs.k8s.io/reference/spec/#httproutespec).               | `[]`    |
-| `api.httpRoute.parentRefs` | Array of [ParentReferences](https://gateway-api.sigs.k8s.io/reference/spec/#parentreference) for the HTTPRoute [spec](https://gateway-api.sigs.k8s.io/reference/spec/#httproutespec). | `[]`    |
+| Name                       | Description                                                                                                                                                                                                     | Value   |
+| -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `api.httpRoute.enabled`    | If HTTPRoute is enabled for the service.                                                                                                                                                                        | `false` |
+| `api.httpRoute.hostnames`  | Array of [Hostnames](https://gateway-api.sigs.k8s.io/reference/api-spec/1.6/spec/#hostname) for the HTTPRoute [spec](https://gateway-api.sigs.k8s.io/reference/api-spec/1.6/spec/#httproutespec).               | `[]`    |
+| `api.httpRoute.parentRefs` | Array of [ParentReferences](https://gateway-api.sigs.k8s.io/reference/api-spec/1.6/spec/#parentreference) for the HTTPRoute [spec](https://gateway-api.sigs.k8s.io/reference/api-spec/1.6/spec/#httproutespec). | `[]`    |
 
 ### Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
 
