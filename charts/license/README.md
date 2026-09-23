@@ -1,14 +1,10 @@
 # 2GIS License service
 
-Read more about the On-Premise solution [here](https://docs.2gis.com/en/on-premise/overview).
+This Helm chart deploys the **License service**, a core component of the 2GIS [On-Premise](https://docs.2gis.com/en/on-premise-api-platform/overview/summary#core-services).
 
-See the [documentation](https://docs.2gis.com/en/on-premise/architecture/services/license) to learn about:
-
-- Architecture of the service.
-
-- Installing the service.
-
-- Updating the service.
+To learn more about configuration, architecture, and requirements, see the official documentation:
+* [On-Premise API Platform Overview](https://docs.2gis.com/en/on-premise-api-platform/overview/summary)
+* [License Service Documentation](https://docs.2gis.com/en/on-premise-api-platform/architecture/license)
 
 ## Values
 

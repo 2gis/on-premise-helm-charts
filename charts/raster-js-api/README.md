@@ -1,20 +1,10 @@
 # 2GIS MapsAPI 2.0 (Raster Map) service
 
-Use this Helm chart to deploy MapsAPI 2.0 service (Leaflet-based raster map), which is a part of 2GIS's [On-Premise Maps services](https://docs.2gis.com/en/on-premise/map).
+This Helm chart deploys the **MapsAPI 2.0 (Raster Map) service**, a component of the 2GIS [On-Premise](https://docs.2gis.com/en/on-premise-api-platform/overview/summary#maps).
 
-Read more about the On-Premise solution [here](https://docs.2gis.com/en/on-premise/overview).
-
-> **Note:** This chart deploys the **raster** map (MapsAPI 2.0, based on Leaflet). For the **WebGL** map (MapGL JS API), see the [mapgl-js-api](../mapgl-js-api) chart.
-
-See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
-
-- Architecture of the service.
-
-- Installing the service.
-
-    When filling in the keys for `values-raster-js-api.yaml` configuration file, refer to the documentation and the list of keys below.
-
-- Updating the service.
+To learn more about configuration, architecture, and requirements, see the official documentation:
+* [On-Premise API Platform Overview](https://docs.2gis.com/en/on-premise-api-platform/overview/summary)
+* [Maps API Documentation](https://docs.2gis.com/en/on-premise-api-platform/architecture/maps#rasterjs-api)
 
 ## Values
 
@@ -30,7 +20,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
 | `enableServiceLinks`            | Services injection into containers environment [Accessing the Service](https://kubernetes.io/docs/tutorials/services/connect-applications-service/#accessing-the-service) | `true` |
 | `replicaCount`                  | A replica count for the pod.                                                                                                                                              | `1`    |
-| `revisionHistoryLimit`          | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).                            | `3`    |
+| `revisionHistoryLimit`          | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment). | `3`    |
 | `terminationGracePeriodSeconds` | Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/)                                                          | `30`   |
 | `imagePullSecrets`              | Kubernetes image pull secrets.                                                                                                                                            | `[]`   |
 | `nameOverride`                  | Base name to use in all the Kubernetes entities deployed by this chart.                                                                                                   | `""`   |
@@ -108,7 +98,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | `ingress.hosts[0].paths[0].pathType` | Type of the path for the Ingress service. | `Prefix`                    |
 | `ingress.tls`                        | TLS configuration                         | `[]`                        |
 
-### [HTTPRoute](https://gateway-api.sigs.k8s.io/api-types/httproute/) configuration
+### [HTTPRoute](https://gateway-api.sigs.k8s.io/reference/api-types/httproute/) configuration
 
 | Name                   | Description                                         | Value   |
 | ---------------------- | --------------------------------------------------- | ------- |

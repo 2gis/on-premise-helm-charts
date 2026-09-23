@@ -1,18 +1,10 @@
 # 2GIS Tiles API service
 
-Use this Helm chart to deploy Tiles API service, which is a part of 2GIS's [On-Premise Maps services](https://docs.2gis.com/en/on-premise/map).
+This Helm chart deploys the **Tiles API service**, a component of the 2GIS [On-Premise](https://docs.2gis.com/en/on-premise-api-platform/overview/summary#maps).
 
-Read more about the On-Premise solution [here](https://docs.2gis.com/en/on-premise/overview).
-
-See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
-
-- Architecture of the service.
-
-- Installing the service.
-
-    When filling in the keys for `values-tiles.yaml` configuration file, refer to the documentation and the list of keys below.
-
-- Updating the service.
+To learn more about configuration, architecture, and requirements, see the official documentation:
+* [On-Premise API Platform Overview](https://docs.2gis.com/en/on-premise-api-platform/overview/summary)
+* [Maps API Documentation](https://docs.2gis.com/en/on-premise-api-platform/architecture/maps#tiles-api)
 
 ## Values
 
@@ -30,15 +22,15 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 
 ### Deployment Artifacts Storage settings
 
-| Name                     | Description                                                                                                                                                                                                                                                           | Value   |
-| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `dgctlStorage.host`      | S3 endpoint. Format: `host:port`. **Required**                                                                                                                                                                                                                        | `""`    |
-| `dgctlStorage.secure`    | Set to `true` if dgctlStorage.host must be accessed via https. **Required**                                                                                                                                                                                           | `false` |
-| `dgctlStorage.bucket`    | S3 bucket name. **Required**                                                                                                                                                                                                                                          | `""`    |
-| `dgctlStorage.region`    | AuthenticationRegion property for S3 client. Used in AWS4 request signing, this is an optional property                                                                                                                                                               | `""`    |
-| `dgctlStorage.accessKey` | S3 access key for accessing the bucket. **Required**                                                                                                                                                                                                                  | `""`    |
-| `dgctlStorage.secretKey` | S3 secret key for accessing the bucket. **Required**                                                                                                                                                                                                                  | `""`    |
-| `dgctlStorage.manifest`  | The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json`.<br> This file contains the description of pieces of data that the service requires to operate. **Required** | `""`    |
+| Name                     | Description                                                                                                                                                                                                                                                             | Value   |
+| ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `dgctlStorage.host`      | S3 endpoint. Format: `host:port`. **Required**                                                                                                                                                                                                                          | `""`    |
+| `dgctlStorage.secure`    | Set to `true` if dgctlStorage.host must be accessed via https. **Required**                                                                                                                                                                                             | `false` |
+| `dgctlStorage.bucket`    | S3 bucket name. **Required**                                                                                                                                                                                                                                            | `""`    |
+| `dgctlStorage.region`    | AuthenticationRegion property for S3 client. Used in AWS4 request signing, this is an optional property                                                                                                                                                                 | `""`    |
+| `dgctlStorage.accessKey` | S3 access key for accessing the bucket. **Required**                                                                                                                                                                                                                    | `""`    |
+| `dgctlStorage.secretKey` | S3 secret key for accessing the bucket. **Required**                                                                                                                                                                                                                    | `""`    |
+| `dgctlStorage.manifest`  | The path to the [manifest file](https://docs.2gis.com/en/on-premise-api-platform/installation#artifacts). Format: `manifests/api-platform/0000000000.json`.<br> This file contains the description of pieces of data that the service requires to operate. **Required** | `""`    |
 
 ### Tiles API configuration
 
@@ -156,7 +148,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | `proxy.image.tag`                                    | Docker image tag.                                                                                                                                                                                                    | `4.91.0`                          |
 | `proxy.image.pullPolicy`                             | Kubernetes pull policy for the service's Docker image.                                                                                                                                                               | `IfNotPresent`                    |
 | `proxy.access`                                       | **API Keys service access settings**                                                                                                                                                                                 |                                   |
-| `proxy.access.enabled`                               | If access to the [API Keys service](https://docs.2gis.com/en/on-premise/keys) is enabled.                                                                                                                            | `false`                           |
+| `proxy.access.enabled`                               | If access to the [API Keys service](https://docs.2gis.com/en/on-premise-api-platform/overview/summary#api-keys-service) is enabled.                                                                                  | `false`                           |
 | `proxy.access.url`                                   | API Keys endpoint url, ex: http://keys-service-api.svc. **Required**                                                                                                                                                 | `""`                              |
 | `proxy.access.syncPeriod`                            | Proxy sync period.                                                                                                                                                                                                   | `2m`                              |
 | `proxy.access.raster.token`                          | Service key for raster data in Keys API. Used for key validation. If Keys API is unavailable or token is empty/invalid, tile service will continue to work without key validation (with warning in logs).            | `""`                              |

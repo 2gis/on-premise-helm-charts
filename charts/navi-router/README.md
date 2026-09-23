@@ -1,18 +1,10 @@
 # 2GIS Navi-Router service
 
-Use this Helm chart to deploy Navi-Router service, which is a part of 2GIS's [On-Premise Navigation services](https://docs.2gis.com/en/on-premise/navigation).
+This Helm chart deploys the **Navi-Router service**, a component of the 2GIS [On-Premise](https://docs.2gis.com/en/on-premise-api-platform/overview/summary#navigation).
 
-Read more about the On-Premise solution [here](https://docs.2gis.com/en/on-premise/overview).
-
-See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn about:
-
-- Architecture of the service.
-
-- Installing the service.
-
-    When filling in the keys for `values-router.yaml` configuration file, refer to the documentation and the list of keys below.
-
-- Updating the service.
+To learn more about configuration, architecture, and requirements, see the official documentation:
+* [On-Premise API Platform Overview](https://docs.2gis.com/en/on-premise-api-platform/overview/summary)
+* [Navigation API Documentation](https://docs.2gis.com/en/on-premise-api-platform/architecture/navigation)
 
 ## Values
 
@@ -24,22 +16,22 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Common settings
 
-| Name                            | Description                                                                                                                                   | Value |
-| ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| `replicaCount`                  | A replica count for the pod                                                                                                                   | `1`   |
-| `revisionHistoryLimit`          | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment) | `3`   |
-| `imagePullSecrets`              | Kubernetes image pull secrets                                                                                                                 | `[]`  |
-| `nameOverride`                  | Base name to use in all the Kubernetes entities deployed by this chart                                                                        | `""`  |
-| `fullnameOverride`              | Base fullname to use in all the Kubernetes entities deployed by this chart                                                                    | `""`  |
-| `podAnnotations`                | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)                                  | `{}`  |
-| `podSecurityContext`            | Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)                                 | `{}`  |
-| `securityContext`               | Kubernetes [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)                                     | `{}`  |
-| `nodeSelector`                  | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)                            | `{}`  |
-| `tolerations`                   | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings                              | `[]`  |
-| `affinity`                      | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)                    | `{}`  |
-| `preStopDelay`                  | Delay in seconds before terminating container                                                                                                 | `5`   |
-| `terminationGracePeriodSeconds` | Grace period for container shutdown, refer to [Pod Lifecycle](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/) for details  | `60`  |
-| `timezone`                      | Timezone for the router container. Refer to inline comments for details                                                                       | `UTC` |
+| Name                            | Description                                                                                                                                                              | Value |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
+| `replicaCount`                  | A replica count for the pod                                                                                                                                              | `1`   |
+| `revisionHistoryLimit`          | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment) | `3`   |
+| `imagePullSecrets`              | Kubernetes image pull secrets                                                                                                                                            | `[]`  |
+| `nameOverride`                  | Base name to use in all the Kubernetes entities deployed by this chart                                                                                                   | `""`  |
+| `fullnameOverride`              | Base fullname to use in all the Kubernetes entities deployed by this chart                                                                                               | `""`  |
+| `podAnnotations`                | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)                                                             | `{}`  |
+| `podSecurityContext`            | Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)                                                            | `{}`  |
+| `securityContext`               | Kubernetes [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)                                                                | `{}`  |
+| `nodeSelector`                  | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)                                                       | `{}`  |
+| `tolerations`                   | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings                                                         | `[]`  |
+| `affinity`                      | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)                                               | `{}`  |
+| `preStopDelay`                  | Delay in seconds before terminating container                                                                                                                            | `5`   |
+| `terminationGracePeriodSeconds` | Grace period for container shutdown, refer to [Pod Lifecycle](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/) for details                             | `60`  |
+| `timezone`                      | Timezone for the router container. Refer to inline comments for details                                                                                                  | `UTC` |
 
 ### Deployment settings
 
@@ -51,42 +43,42 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Navi-Router service settings
 
-| Name                                                       | Description                                                                                                                                                  | Value                                    |
-| ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------- |
-| `router.appPort`                                           | Navi-Router service HTTP port                                                                                                                                | `8080`                                   |
-| `router.logLevel`                                          | Logging level, one of: Verbose, Info, Warning, Error, Fatal. Default: `Warning`                                                                              | `Warning`                                |
-| `router.logMessageField`                                   | Field name in logs                                                                                                                                           | `custom.navi_msg`                        |
-| `router.additionalSections`                                | Additional configurations sections for the Navi-Router service                                                                                               | `""`                                     |
-| `router.castleUrl`                                         | URL of Navi-Castle service. <br> This URL should be accessible from all the pods within your Kubernetes cluster                                              | `""`                                     |
-| `router.citiesFilename`                                    | Name of the cities file on Castle                                                                                                                            | `cities.conf.zip`                        |
-| `router.sentry.enabled`                                    | If sending crash dumps to Sentry needed                                                                                                                      | `false`                                  |
-| `router.sentry.address`                                    | Sentry URL                                                                                                                                                   | `sentry.local`                           |
-| `router.sentry.project`                                    | Sentry project ID                                                                                                                                            | `router`                                 |
-| `router.sentry.username`                                   | Sentry username                                                                                                                                              | `navi`                                   |
-| `router.sentry.printMessages`                              | If outgoing messages needed                                                                                                                                  | `false`                                  |
-| `router.sentry.debug`                                      | Debugging switch                                                                                                                                             | `false`                                  |
-| `router.sentry.environment`                                | Environment name                                                                                                                                             | `""`                                     |
-| `router.sentry.reportPath`                                 | Local directory to dump                                                                                                                                      | `/tmp/sentry`                            |
-| `router.sentry.handler`                                    | Handler file location                                                                                                                                        | `/usr/sbin/2gis/mosesd/crashpad_handler` |
-| `router.sentry.minSeverityLevel`                           | Minimal severity level to log in sentry                                                                                                                      | `error`                                  |
-| `router.sentry.logsBufferSize`                             | Size of buffer to send to sentry                                                                                                                             | `100`                                    |
-| `router.telemetry.enabled`                                 | Send telemetry to Opentelemetry server                                                                                                                       | `false`                                  |
-| `router.telemetry.host`                                    | Telemetry host                                                                                                                                               | `telemetry.server`                       |
-| `router.telemetry.port`                                    | Telemetry port                                                                                                                                               | `4318`                                   |
-| `router.telemetry.maxQueueSize`                            | Max number of buffered spans                                                                                                                                 | `2048`                                   |
-| `router.telemetry.scheduleDelayMillis`                     | Interval of export of the buffered spans, ms                                                                                                                 | `500`                                    |
-| `router.telemetry.maxExportBatchSize`                      | Max number of spans sent to the exporter in a single export call                                                                                             | `512`                                    |
-| `router.localRestrictions.distanceBetweenPointsKm`         | Max allowed distance between points                                                                                                                          |                                          |
-| `router.localRestrictions.pointsCount`                     | Max allowed points count                                                                                                                                     |                                          |
-| `router.localRestrictions.matrixSize`                      | Max allowed matrix size                                                                                                                                      |                                          |
-| `router.localRestrictions.privateRoutingWalkingDistanceKm` | Max allowed distance between points in different projects in pedestrian mode **FOR FUTURE RELEASE**                                                          |                                          |
-| `router.backupPorts`                                       | Optional creation of backup ports duplicating the service                                                                                                    |                                          |
-| `router.backupPorts.base`                                  | Backup ports start with `base` and assignd sequentially up                                                                                                   | `50000`                                  |
-| `router.backupPorts.number`                                | Number of backup ports created                                                                                                                               | `0`                                      |
-| `router.rulesUrl`                                          | URL of the rules file                                                                                                                                        |                                          |
-| `navigroup`                                                | Service group identifier, allows multiple stacks deployed to the same namespace                                                                              | `""`                                     |
-| `rules`                                                    | List of routing rules, refer to full [documentation](https://docs.2gis.com/en/on-premise/deployment/navigation#nav-lvl1--3._Create_a_rules_file) for details | `[]`                                     |
-| `abTestOptions`                                            | AB test options for routing rules, passed as JSON object. If set, mounted as router_rules_ab_test_options.json                                               | `{}`                                     |
+| Name                                                       | Description                                                                                                                                | Value                                    |
+| ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------- |
+| `router.appPort`                                           | Navi-Router service HTTP port                                                                                                              | `8080`                                   |
+| `router.logLevel`                                          | Logging level, one of: Verbose, Info, Warning, Error, Fatal. Default: `Warning`                                                            | `Warning`                                |
+| `router.logMessageField`                                   | Field name in logs                                                                                                                         | `custom.navi_msg`                        |
+| `router.additionalSections`                                | Additional configurations sections for the Navi-Router service                                                                             | `""`                                     |
+| `router.castleUrl`                                         | URL of Navi-Castle service. <br> This URL should be accessible from all the pods within your Kubernetes cluster                            | `""`                                     |
+| `router.citiesFilename`                                    | Name of the cities file on Castle                                                                                                          | `cities.conf.zip`                        |
+| `router.sentry.enabled`                                    | If sending crash dumps to Sentry needed                                                                                                    | `false`                                  |
+| `router.sentry.address`                                    | Sentry URL                                                                                                                                 | `sentry.local`                           |
+| `router.sentry.project`                                    | Sentry project ID                                                                                                                          | `router`                                 |
+| `router.sentry.username`                                   | Sentry username                                                                                                                            | `navi`                                   |
+| `router.sentry.printMessages`                              | If outgoing messages needed                                                                                                                | `false`                                  |
+| `router.sentry.debug`                                      | Debugging switch                                                                                                                           | `false`                                  |
+| `router.sentry.environment`                                | Environment name                                                                                                                           | `""`                                     |
+| `router.sentry.reportPath`                                 | Local directory to dump                                                                                                                    | `/tmp/sentry`                            |
+| `router.sentry.handler`                                    | Handler file location                                                                                                                      | `/usr/sbin/2gis/mosesd/crashpad_handler` |
+| `router.sentry.minSeverityLevel`                           | Minimal severity level to log in sentry                                                                                                    | `error`                                  |
+| `router.sentry.logsBufferSize`                             | Size of buffer to send to sentry                                                                                                           | `100`                                    |
+| `router.telemetry.enabled`                                 | Send telemetry to Opentelemetry server                                                                                                     | `false`                                  |
+| `router.telemetry.host`                                    | Telemetry host                                                                                                                             | `telemetry.server`                       |
+| `router.telemetry.port`                                    | Telemetry port                                                                                                                             | `4318`                                   |
+| `router.telemetry.maxQueueSize`                            | Max number of buffered spans                                                                                                               | `2048`                                   |
+| `router.telemetry.scheduleDelayMillis`                     | Interval of export of the buffered spans, ms                                                                                               | `500`                                    |
+| `router.telemetry.maxExportBatchSize`                      | Max number of spans sent to the exporter in a single export call                                                                           | `512`                                    |
+| `router.localRestrictions.distanceBetweenPointsKm`         | Max allowed distance between points                                                                                                        |                                          |
+| `router.localRestrictions.pointsCount`                     | Max allowed points count                                                                                                                   |                                          |
+| `router.localRestrictions.matrixSize`                      | Max allowed matrix size                                                                                                                    |                                          |
+| `router.localRestrictions.privateRoutingWalkingDistanceKm` | Max allowed distance between points in different projects in pedestrian mode **FOR FUTURE RELEASE**                                        |                                          |
+| `router.backupPorts`                                       | Optional creation of backup ports duplicating the service                                                                                  |                                          |
+| `router.backupPorts.base`                                  | Backup ports start with `base` and assignd sequentially up                                                                                 | `50000`                                  |
+| `router.backupPorts.number`                                | Number of backup ports created                                                                                                             | `0`                                      |
+| `router.rulesUrl`                                          | URL of the rules file                                                                                                                      |                                          |
+| `navigroup`                                                | Service group identifier, allows multiple stacks deployed to the same namespace                                                            | `""`                                     |
+| `rules`                                                    | List of routing rules, refer to full [documentation](https://docs.2gis.com/en/on-premise-api-platform/installation#rules-file) for details | `[]`                                     |
+| `abTestOptions`                                            | AB test options for routing rules, passed as JSON object. If set, mounted as router_rules_ab_test_options.json                             | `{}`                                     |
 
 ### Key management service settings
 

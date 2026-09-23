@@ -1,18 +1,10 @@
 # 2GIS Navi-Front service
 
-Use this Helm chart to deploy Navi-Front service, which is a part of 2GIS's [On-Premise Navigation services](https://docs.2gis.com/en/on-premise/navigation).
+This Helm chart deploys the **Navi-Front service**, a component of the 2GIS [On-Premise](https://docs.2gis.com/en/on-premise-api-platform/overview/summary#navigation).
 
-Read more about the On-Premise solution [here](https://docs.2gis.com/en/on-premise/overview).
-
-See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn about:
-
-- Architecture of the service.
-
-- Installing the service.
-
-    When filling in the keys for `values-front.yaml` configuration file, refer to the documentation and the list of keys below.
-
-- Updating the service.
+To learn more about configuration, architecture, and requirements, see the official documentation:
+* [On-Premise API Platform Overview](https://docs.2gis.com/en/on-premise-api-platform/overview/summary)
+* [Navigation API Documentation](https://docs.2gis.com/en/on-premise-api-platform/architecture/navigation)
 
 ## Values
 
@@ -28,7 +20,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
 | `enableServiceLinks`                 | Services injection into containers environment [Accessing the Service](https://kubernetes.io/docs/tutorials/services/connect-applications-service/#accessing-the-service) | `false` |
 | `replicaCount`                       | A replica count for the pod.                                                                                                                                              | `1`     |
-| `revisionHistoryLimit`               | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).                            | `3`     |
+| `revisionHistoryLimit`               | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment). | `3`     |
 | `imagePullSecrets`                   | Kubernetes image pull secrets.                                                                                                                                            | `[]`    |
 | `nameOverride`                       | Base name to use in all the Kubernetes entities deployed by this chart.                                                                                                   | `""`    |
 | `fullnameOverride`                   | Base fullname to use in all the Kubernetes entities deployed by this chart.                                                                                               | `""`    |
@@ -117,7 +109,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 | `ingress.hosts[0].paths[0].pathType` | Type of the path for the Ingress service. | `Prefix`                 |
 | `ingress.tls`                        | TLS configuration                         | `[]`                     |
 
-### [HTTPRoute](https://gateway-api.sigs.k8s.io/api-types/httproute/) configuration
+### [HTTPRoute](https://gateway-api.sigs.k8s.io/reference/api-types/httproute/) configuration
 
 | Name                   | Description                                                                                                           | Value   |
 | ---------------------- | --------------------------------------------------------------------------------------------------------------------- | ------- |

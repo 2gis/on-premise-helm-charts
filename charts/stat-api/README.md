@@ -1,6 +1,10 @@
-# Stat API Helm Chart
+# 2GIS Stat API service
 
-Use this Helm chart to deploy API Stat service, which is a part of 2GIS's [On-Premise solution](https://docs.2gis.com/en/on-premise/overview).
+This Helm chart deploys the **Stat API service**, a component of the 2GIS [On-Premise](https://docs.2gis.com/en/on-premise-api-platform/overview/summary#statistics).
+
+To learn more about configuration, architecture, and requirements, see the official documentation:
+* [On-Premise API Platform Overview](https://docs.2gis.com/en/on-premise-api-platform/overview/summary)
+* [Statistics Collection Service Documentation](https://docs.2gis.com/en/on-premise-api-platform/architecture/statreceiver)
 
 ## Values
 
@@ -37,7 +41,7 @@ Use this Helm chart to deploy API Stat service, which is a part of 2GIS's [On-Pr
 | `api.logLevel`                              | Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.                                                                                                                | `warning`       |
 | `api.clickhouse.clientName`                 | Name that will be used in client requests to ClickHouse.                                                                                                                                                 | `stat-api`      |
 | `api.replicas`                              | A replica count for the pod.                                                                                                                                                                             | `1`             |
-| `api.revisionHistoryLimit`                  | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).                                                           | `3`             |
+| `api.revisionHistoryLimit`                  | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment).                                | `3`             |
 | `api.strategy.type`                         | Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.                                                                                                                                     | `RollingUpdate` |
 | `api.strategy.rollingUpdate.maxUnavailable` | Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment). | `0`             |
 | `api.strategy.rollingUpdate.maxSurge`       | Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.                     | `1`             |
@@ -63,13 +67,13 @@ Use this Helm chart to deploy API Stat service, which is a part of 2GIS's [On-Pr
 | `api.ingress.hosts[0].paths[0].pathType` | Type of the path for the Ingress service. | `Prefix`        |
 | `api.ingress.tls`                        | TLS configuration                         | `[]`            |
 
-### Kubernetes [HTTPRoute](https://gateway-api.sigs.k8s.io/api-types/httproute/) settings
+### Kubernetes [HTTPRoute](https://gateway-api.sigs.k8s.io/reference/api-types/httproute/) settings
 
-| Name                       | Description                                                                                                                                                                           | Value   |
-| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `api.httpRoute.enabled`    | If HTTPRoute is enabled for the service.                                                                                                                                              | `false` |
-| `api.httpRoute.hostnames`  | Array of [Hostnames](https://gateway-api.sigs.k8s.io/reference/spec/#hostname) for the HTTPRoute [spec](https://gateway-api.sigs.k8s.io/reference/spec/#httproutespec).               | `[]`    |
-| `api.httpRoute.parentRefs` | Array of [ParentReferences](https://gateway-api.sigs.k8s.io/reference/spec/#parentreference) for the HTTPRoute [spec](https://gateway-api.sigs.k8s.io/reference/spec/#httproutespec). | `[]`    |
+| Name                       | Description                                                                                                                                                                                                     | Value   |
+| -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `api.httpRoute.enabled`    | If HTTPRoute is enabled for the service.                                                                                                                                                                        | `false` |
+| `api.httpRoute.hostnames`  | Array of [Hostnames](https://gateway-api.sigs.k8s.io/reference/api-spec/1.6/spec/#hostname) for the HTTPRoute [spec](https://gateway-api.sigs.k8s.io/reference/api-spec/1.6/spec/#httproutespec).               | `[]`    |
+| `api.httpRoute.parentRefs` | Array of [ParentReferences](https://gateway-api.sigs.k8s.io/reference/api-spec/1.6/spec/#parentreference) for the HTTPRoute [spec](https://gateway-api.sigs.k8s.io/reference/api-spec/1.6/spec/#httproutespec). | `[]`    |
 
 ### Kubernetes [Horizontal Pod Autoscaling](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/) settings
 
