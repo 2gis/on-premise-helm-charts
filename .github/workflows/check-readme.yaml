@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v6
 
       - name: Install Node.js and npm
         uses: actions/setup-node@v6
@@ -31,3 +31,21 @@ jobs:
 
       - name: Run script
         run: .github/scripts/check-readme.sh
+
+  readme-links:
+    name: Check readme links
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Check links
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: >-
+            --verbose
+            --no-progress
+            --exclude '^https?://(.*\.(host|svc)|[a-zA-Z0-9_-]+)(/.*)?$|.*example.*'
+            "charts/*/README.md"
+          fail: true

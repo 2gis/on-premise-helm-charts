@@ -46,7 +46,7 @@ jobs:
 
       # ШАГ 3. Checkout репозитория на указанный тег
       - name: Checkout repository at specified tag
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: ${{ env.RAW_TAG }}
 
