@@ -1,10 +1,9 @@
 # License override for the `sandbox` (kind) environment.
 # License key comes from environments/sandbox.yaml.gotmpl (license.key).
-api:
-  resources:
-    requests:
-      cpu: 50m
-      memory: 128Mi
-    limits:
-      cpu: 500m
-      memory: 512Mi
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  limits:
+    cpu: 250m
+    memory: 128Mi
