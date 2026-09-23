@@ -39,7 +39,7 @@ ui:
 
   image:
     repository: 2gis-on-premise/platform-ui
-    tag: 1.46.0
+    tag: 1.49.1
 
   # @section UI service settings
 
@@ -53,7 +53,6 @@ ui:
   # @param ui.publicPages A list of pages available in the application for unauthenticated users, delimited by commas. Subset of 'ui.pages'. When no values are specified and authentication is enabled, all pages will require authentication.
   # @param ui.playgrounds A list of playgrounds available on the playground page, delimited by commas. Possible values: `"mapgl"` (requires `ui.mapgl.url`), `"geocoder"` (requires `ui.catalog.url`), `"directions"` (requires `ui.navi.url`), "static"` (requires `ui.static.url`).
   # @skip ui.googleAnalyticsId
-  # @skip ui.googleTagManagerId
   # @param ui.redirectSafeDomains A regular expression used to determine whether a domain is safe for redirection.
   # @param ui.bffSecure A flag that determines whether to enable or disable HTTPS for backend for frontend related cookies. Possible values are: `true` or `false`.
 
@@ -63,7 +62,6 @@ ui:
   publicPages: ''
   playgrounds: ''
   googleAnalyticsId: ''
-  googleTagManagerId: ''
   redirectSafeDomains: ''
   bffSecure: true
 
@@ -199,8 +197,8 @@ ui:
 
   # @section Static Map settings
 
-  # @param ui.static.url URL for Static API, ex:https://staticmaps.example.com.
-  # @param ui.static.key Access key to Static API.
+  # @param ui.static.url URL for [Static API](https://static.maps.2gis.com).
+  # @param ui.static.key Access key to [Static API](https://static.maps.2gis.com).
   static:
     url: ''
     key: ''
