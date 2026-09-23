@@ -1,11 +1,4 @@
 api:
-  resources:
-    limits:
-      cpu: 250m
-      memory: 256Mi
-    requests:
-      cpu: 50m
-      memory: 64Mi
   ingress:
     enabled: true
     className: {{ .Values.ingressClassName }}
@@ -35,12 +28,3 @@ api:
       - {{ .Values.tilesRasterIngress }}
       secretName: {{ .Values.tlsSecret }}
     {{- end }}
-
-importer:
-  resources:
-    limits:
-      cpu: 1000m
-      memory: 512Mi
-    requests:
-      cpu: 50m
-      memory: 128Mi

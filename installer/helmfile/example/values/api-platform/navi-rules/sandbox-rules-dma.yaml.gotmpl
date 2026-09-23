@@ -1,4 +1,7 @@
-rules:
-  - name: async-car
-    queries: ["get_dist_matrix"]
-    routing: ["driving"]
+# DM Async API (опц.). Раскомментируйте правило, чтобы включить navi-back-async-car.
+# Требует Kafka и navi-async-matrix (в deploy/sandbox.yaml.gotmpl они закомментированы).
+rules: []
+# rules:
+#   - name: async-car
+#     queries: ["get_dist_matrix"]
+#     routing: ["driving"]

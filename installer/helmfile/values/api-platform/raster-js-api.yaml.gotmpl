@@ -27,11 +27,3 @@ ingress:
     - {{ .Values.rasterJsApiIngress }}
     secretName: {{ .Values.tlsSecret }}
   {{- end }}
-
-resources:
-  requests:
-    cpu: 30m
-    memory: 32Mi
-  limits:
-    cpu: 100m
-    memory: 128Mi

@@ -75,11 +75,3 @@ ui:
           - {{ .Values.platformIngress }}
         secretName: {{ .Values.tlsSecret }}
     {{- end }}
-
-  resources:
-    limits:
-      cpu: 250m
-      memory: 384Mi
-    requests:
-      cpu: 100m
-      memory: 256Mi

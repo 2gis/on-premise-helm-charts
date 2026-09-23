@@ -27,7 +27,7 @@ releases:
 {{- if isFile $vp2 }}
       - {{ $vp2 }}
 {{- end }}
-{{- $secretsPath := printf "%s/values/api-platform/navi-rules/%s.secrets.yaml" .Values.valuesPath .Environment.Name -}}
+{{- $secretsPath := printf "%s/values/api-platform/navi-router/%s.secrets.yaml" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $secretsPath }}
     secrets:
       - {{ $secretsPath }}

@@ -1,4 +1,5 @@
-replicaCount: 1
+# replicas: see chart defaults
+# replicaCount: 1
 
 api:
   # TODO (опционально): переопределить параметры ниже, если нужны отдельные эндпоинты/ключ
@@ -8,10 +9,11 @@ api:
   # webApiKey: '' # отдельный ключ для Catalog API, если не совпадает с основным
   webApiKey: '{{ .Values.key }}'
 
-resources:
-  requests:
-    cpu: 10m
-    memory: 24Mi
-  limits:
-    cpu: 700m
-    memory: 256Mi
+# resources: see chart defaults
+# resources:
+#   requests:
+#     cpu: 10m
+#     memory: 24Mi
+#   limits:
+#     cpu: 700m
+#     memory: 256Mi

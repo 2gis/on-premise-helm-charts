@@ -1,12 +1,5 @@
 api:
   logLevel: warning   # Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.
-  resources:
-    limits:
-      cpu: 100m
-      memory: 128Mi
-    requests:
-      cpu: 50m
-      memory: 64Mi
   ingress:
     enabled: true
     className: {{ .Values.ingressClassName }}
@@ -23,14 +16,6 @@ api:
     {{- end }}
 
 admin:
-  logLevel: warning   # Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.
-  resources:
-    limits:
-      cpu: 100m
-      memory: 192Mi
-    requests:
-      cpu: 50m
-      memory: 128Mi
   ingress:
     enabled: true
     className: {{ .Values.ingressClassName }}
@@ -68,9 +53,6 @@ tasker:
   logLevel: warning   # Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.
 
 dispatcher:
-  logLevel: warning   # Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.
-
-cleaner:
   logLevel: warning   # Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.
 
 kafka:

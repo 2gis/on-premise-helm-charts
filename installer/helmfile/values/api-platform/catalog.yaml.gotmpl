@@ -9,13 +9,6 @@ license:
 
 api:
   logLevel: info
-  resources:
-    limits:
-      cpu: "1"
-      memory: 4Gi
-    requests:
-      cpu: 100m
-      memory: 2Gi
   ingress:
     enabled: true
     className: {{ .Values.ingressClassName }}

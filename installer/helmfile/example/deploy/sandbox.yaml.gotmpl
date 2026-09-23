@@ -5,14 +5,27 @@ bases:
 ---
 helmfiles:
 - path: {{ .Values.basePath }}/services/infra/traefik.yaml.gotmpl
-- path: {{ .Values.basePath }}/services/infra/sandbox-infra
-- path: {{ .Values.basePath }}/services/infra/redis.yaml.gotmpl
-- path: {{ .Values.basePath }}/services/core
-- path: {{ .Values.basePath }}/services/api-platform/stat-receiver.yaml.gotmpl
-- path: {{ .Values.basePath }}/services/api-platform/stat-api.yaml.gotmpl
+# Минимальный профиль sandbox: postgresql, cassandra, minio.
+# Опциональные компоненты закомментированы
+- path: {{ .Values.basePath }}/services/infra/sandbox-infra/postgresql.yaml.gotmpl
+- path: {{ .Values.basePath }}/services/infra/sandbox-infra/cassandra.yaml.gotmpl
+# - path: {{ .Values.basePath }}/services/infra/sandbox-infra/kafka.yaml.gotmpl
+- path: {{ .Values.basePath }}/services/infra/sandbox-infra/minio.yaml.gotmpl
+# - path: {{ .Values.basePath }}/services/infra/sandbox-infra/elasticsearch.yaml.gotmpl
+# - path: {{ .Values.basePath }}/services/infra/sandbox-infra/clickhouse.yaml.gotmpl
+# - path: {{ .Values.basePath }}/services/infra/redis.yaml.gotmpl
+# Keycloak (опц.; в минимальном профиле не ставится, OIDC keys отключён):
+# - path: {{ .Values.basePath }}/services/core/keycloak.yaml.gotmpl
+- path: {{ .Values.basePath }}/services/core/license.yaml.gotmpl
+- path: {{ .Values.basePath }}/services/core/keys.yaml.gotmpl
+# Сбор статистики (необязателен; ClickHouse + Kafka):
+# - path: {{ .Values.basePath }}/services/api-platform/stat-receiver.yaml.gotmpl
+# - path: {{ .Values.basePath }}/services/api-platform/stat-api.yaml.gotmpl
+# Пробки (необязательны, docs):
+# - path: {{ .Values.basePath }}/services/api-platform/traffic-proxy.yaml.gotmpl
+# Стили (необязательны):
+# - path: {{ .Values.basePath }}/services/api-platform/styles.yaml.gotmpl
 - path: {{ .Values.basePath }}/services/api-platform/platform.yaml.gotmpl
-- path: {{ .Values.basePath }}/services/api-platform/traffic-proxy.yaml.gotmpl
-- path: {{ .Values.basePath }}/services/api-platform/styles.yaml.gotmpl
 - path: {{ .Values.basePath }}/services/api-platform/mapgl.yaml.gotmpl
 - path: {{ .Values.basePath }}/services/api-platform/search.yaml.gotmpl
 - path: {{ .Values.basePath }}/services/api-platform/raster-js-api.yaml.gotmpl
@@ -21,8 +34,10 @@ helmfiles:
 - path: {{ .Values.basePath }}/services/api-platform/staticmaps.yaml.gotmpl
 - path: {{ .Values.basePath }}/services/api-platform/navi-castle.yaml.gotmpl
 - path: {{ .Values.basePath }}/services/api-platform/navi-back.yaml.gotmpl
-- path: {{ .Values.basePath }}/services/api-platform/navi-restrictions.yaml.gotmpl
+# Navi Restrictions (необязателен, docs):
+# - path: {{ .Values.basePath }}/services/api-platform/navi-restrictions.yaml.gotmpl
 - path: {{ .Values.basePath }}/services/api-platform/navi-router.yaml.gotmpl
 - path: {{ .Values.basePath }}/services/api-platform/navi-front.yaml.gotmpl
-- path: {{ .Values.basePath }}/services/api-platform/navi-async-matrix.yaml.gotmpl
-- path: {{ .Values.basePath }}/services/api-platform/navi-vrp.yaml.gotmpl
+# DM Async API и VRP (необязательны, docs; требуют Kafka):
+# - path: {{ .Values.basePath }}/services/api-platform/navi-async-matrix.yaml.gotmpl
+# - path: {{ .Values.basePath }}/services/api-platform/navi-vrp.yaml.gotmpl

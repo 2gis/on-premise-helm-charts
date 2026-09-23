@@ -21,7 +21,6 @@ s3:
   resourcesBucket: '{{ .Environment.Name }}-pro-resources'
 
 assetImporter:
-  enabled: true          # cronjob
   startOnDeploy: true    # deploy hook (job)
   settings:
     maxParallelJobs: 3
@@ -76,7 +75,6 @@ api:
 
 permissions:
   settings:
-    enabled: true
     auth:
       apiKey: {{ .Values.key }}
       uiRequiredRoles:
@@ -86,7 +84,6 @@ permissions:
       openProUi: true
       assets: ['*']
       territories: ['*']
-      analytics: ['*']
       addUserAssets:
         allow: true
         quantity: 1000

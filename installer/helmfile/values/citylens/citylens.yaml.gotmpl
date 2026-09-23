@@ -86,9 +86,6 @@ routes:
       database: hangfire
     realtimeDataApi:
       database: realtime_data
-  hangfire:
-    postgres:
-      database: hangfire
   api:
     ingress:
       enabled: true
@@ -144,15 +141,6 @@ routes:
     authorizationToken: {{ .Values.key }}
 
   realtimeDataApi:
-    replicaCount: 1
-
-    postgres:
-      database: realtime_data
-      timeout: 15
-      commandTimeout: 30
-      poolSize:
-        min: 1
-        max: 30
 
     logging:
       level: information

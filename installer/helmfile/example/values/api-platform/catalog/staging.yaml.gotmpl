@@ -5,15 +5,17 @@ search:
   # При её использовании укажите:
   # url: http://search-api-v8-ingress-router:9092
 
-api:
-  resources:
-    limits:
-      cpu: 6
-      memory: 8000Mi
-    requests:
-      cpu: 500m
-      memory: 4000Mi
-  replicas: 1
+# api:
+  # resources: see chart defaults
+  # resources:
+  #   limits:
+  #     cpu: 6
+  #     memory: 8000Mi
+  #   requests:
+  #     cpu: 500m
+  #     memory: 4000Mi
+  # replicas: see chart defaults
+  # replicas: 1
 
 importer:
   cleaner:

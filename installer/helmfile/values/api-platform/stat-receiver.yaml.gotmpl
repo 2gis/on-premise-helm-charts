@@ -3,15 +3,6 @@ initializeTopics:
 
 topicsPrefix: "stat.{{ .Environment.Name }}."
 
-streams:
-  resources:
-    requests:
-      cpu: 500m
-      memory: 1024Mi
-    limits:
-      cpu: 1
-      memory: 2048Mi
-
 ingress:
   className: {{ .Values.ingressClassName }}
   enabled: true

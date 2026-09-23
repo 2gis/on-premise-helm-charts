@@ -59,6 +59,9 @@ Elasticsearch, ClickHouse, Cassandra.
 - `staging` - основной рабочий пример;
 - `sandbox` - минимальный готовый к запуску (kubernetes-ready) пример для быстрого развёртывания, например в kind. Подробнее: [Sandbox-пример (kind)](#sandbox-пример-kind).
 
+> Для staging окружения рекомендуемые `resources` (requests/limits) и реплики сервисов платформы заданы в дефолтах
+> Helm-чартов (`charts/`).
+
 1. Скопируйте директорию `installer/helmfile/example` в удобное место:
    ```bash
    cp -r installer/helmfile/example /path/to/my-values
@@ -319,7 +322,7 @@ helmfile -e <env> -f $HELMFILE_VALUES/deploy/<env>.yaml.gotmpl apply --selector 
 |---|---|---|---|
 | License | Управление лицензиями 2GIS | S3 | - |
 | Keys | Управление API-ключами | PostgreSQL, S3, Redis (опц.), Kafka (опц.) | Keycloak (опц.) |
-| Keycloak | Аутентификация пользователей (OIDC) | PostgreSQL | - |
+| Keycloak (опц.) | Аутентификация пользователей (OIDC) | PostgreSQL | - |
 
 Установите группу `core` (keys и keycloak не зависят от лицензии):
 
@@ -355,25 +358,25 @@ helmfile -e <env> -f $HELMFILE_VALUES/deploy/<env>.yaml.gotmpl apply --selector 
 
 | Сервис | Описание | Инфраструктура | Сервисы |
 |---|---|---|---|
-| Stat Receiver + Stat API | Сбор статистики вызовов API | ClickHouse, Kafka | - |
-| Traffic Proxy | Прокси для API пробок | - | - |
+| Stat Receiver + Stat API (опц.) | Сбор статистики вызовов API | ClickHouse, Kafka | - |
+| Traffic Proxy (опц.) | Прокси для API пробок | - | - |
 | MapGL JS API | API картографических движков | - | Keys API, Traffic Proxy (опц.) |
 | Tiles API | Тайловый сервер | S3, Cassandra | License, Keys API, Stat Receiver (опц.) |
-| Static API | Статические изображения карт | - | Tiles API, License, Keys API (опц.) |
-| Styles API | Управление стилями карт | PostgreSQL, S3 | - |
+| Static API (опц.) | Статические изображения карт | - | Tiles API, License, Keys API (опц.) |
+| Styles API (опц.) | Управление стилями карт | PostgreSQL, S3 | - |
 | Search API | Поиск мест, геокодирование, подсказки | S3 | - |
-| Search API v8 (опционально) | Новая версия Search API | S3 | - |
+| Search API v8 (опц.) | Новая версия Search API | S3 | - |
 | Raster JS API | Растровые карты (Leaflet) | - | Tiles API, Catalog API, Keys API |
 | Catalog API | Каталог данных | PostgreSQL + PostGIS, S3 | License |
 | Navi-Castle | Распределение данных для маршрутизации | S3, Kafka (опц.) | - |
 | Navi-Back | Построение маршрутов | Kafka (опц.), S3 (опц.) | Navi-Castle, License, Traffic Proxy (опц.) |
 | Navi-Attractor | Привязка точек к графику (генерируется из navi-rules) | Kafka (опц.), S3 (опц.) | Navi-Back |
-| Navi-Splitter | Разделение маршрутов (генерируется из navi-rules) | - | Navi-Back |
+| Navi-Splitter (опц.) | Разделение маршрутов (генерируется из navi-rules) | - | Navi-Back |
 | Navi-Router | Проксирование запросов навигации | - | Navi-Back, Keys API |
 | Navi-Front | Frontend для API навигации | - | Navi-Router |
-| Navi Async Matrix | Асинхронная матрица расстояний | PostgreSQL, Kafka, S3 | Navi-Castle, Keys API |
-| Navi VRP Solver + VRP Task Manager | Решение задачи маршрутизации транспорта | PostgreSQL, Kafka, S3 | Navi-Castle, Navi-Front, Keys API |
-| Navi Restrictions | Ограничения проезда | PostgreSQL | Navi-Castle, Navi-Back |
+| Navi Async Matrix (опц.) | Асинхронная матрица расстояний | PostgreSQL, Kafka, S3 | Navi-Castle, Keys API |
+| Navi VRP Solver + VRP Task Manager (опц.) | Решение задачи маршрутизации транспорта | PostgreSQL, Kafka, S3 | Navi-Castle, Navi-Front, Keys API |
+| Navi Restrictions (опц.) | Ограничения проезда | PostgreSQL | Navi-Castle, Navi-Back |
 | Platform Manager | Веб-интерфейс управления платформой | - | Keycloak (OIDC), Keys API, License |
 
 ```bash
@@ -458,6 +461,13 @@ helmfile -e <env> -f $HELMFILE_VALUES/deploy/<env>.yaml.gotmpl apply --selector 
 
 `installer/helmfile/example/environments/sandbox.yaml.gotmpl` + `deploy/sandbox.yaml.gotmpl` - быстрый
 kubernetes-ready пример API-платформы (infra + core + api-platform) для локального кластера `kind`.
+
+### Минимальные системные требования (sandbox)
+
+Хост для минимальной конфигурации в kind: **4 vCPU**, **16 GB RAM**.
+
+Диск: на небольшой территории ~25-30 GB (образы в registry ~5 GB +
+распакованные в kind ~12 GB + БД/данные ~9 GB); размер данных будет увеличиваться в зависимости от подключенных территорий.
 
 > Образы infra (bitnami: PostgreSQL, Kafka, MinIO, Cassandra, ClickHouse, Elasticsearch) загружаются из
 > публичного `docker.io`. Образы 2GIS (core, api-platform) - из локального registry `kind-registry:5000`,

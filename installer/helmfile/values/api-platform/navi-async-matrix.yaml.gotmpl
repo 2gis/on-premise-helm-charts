@@ -1,10 +1,7 @@
 dm:
   citiesUrl: "http://{{ .Values.releasePrefix }}navi-castle/cities.conf"
   compositeTaskTimeoutSec: 3600
-  taskSplitSize: 100
   merger:
-    fetchLogs: true
-    enabled: true
     resources:
       requests:
         cpu: 100m
@@ -17,10 +14,8 @@ keys:
   url: 'http://{{ .Values.releasePrefix }}keys-service-api/service/v1/keys'
 
 kafka:
-  enabled: true
   groupId: navi_{{ .Environment.Name }}_async
   mergerGroupId: navi_{{ .Environment.Name }}_matrix_merger
-  handlersNumber: 2
   fileProperties: {}
 
   mergerStatusTopic: navi.{{ .Environment.Name }}.merger.status.topic

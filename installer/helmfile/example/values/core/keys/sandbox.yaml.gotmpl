@@ -1,8 +1,7 @@
-# Keys override for the `sandbox` (kind) environment - in-cluster PostgreSQL, Kafka, Redis, Keycloak OIDC.
 api:
   replicas: 1
   oidc:
-    enabled: true
+    enabled: false
     enableSinglePartnerMode: true
     enableExternalProvider: true
     url: http://{{ .Values.keycloakIngress }}/realms/Platform

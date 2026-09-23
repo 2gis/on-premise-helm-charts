@@ -1,4 +1,3 @@
-replicaCount: 1
 
 naviCastleHost: {{ .Values.releasePrefix }}navi-castle
 
@@ -27,18 +26,3 @@ cron:
   schedule: '1 * * * *'
   concurrencyPolicy: Forbid
   successfulJobsHistoryLimit: 1
-  resources:
-    limits:
-      cpu: 250m
-      memory: 256Mi
-    requests:
-      cpu: 50m
-      memory: 64Mi
-
-resources:
-  limits:
-    cpu: 250m
-    memory: 256Mi
-  requests:
-    cpu: 50m
-    memory: 64Mi

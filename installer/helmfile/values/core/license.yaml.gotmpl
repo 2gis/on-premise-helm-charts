@@ -14,14 +14,6 @@ persistence:
   accessKey: {{ .Values.dgctlStorage.accessKey }}
   secretKey: {{ .Values.dgctlStorage.secretKey }}
 
-resources:
-  limits:
-    cpu: 250m
-    memory: 128Mi
-  requests:
-    cpu: 50m
-    memory: 64Mi
-
 ingress:
   enabled: true
   className: {{ .Values.ingressClassName }}
