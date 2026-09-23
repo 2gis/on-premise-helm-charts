@@ -308,7 +308,7 @@ pdb:
 # @param navigroup Service group identifier, allows multiple stacks deployed to the same namespace.
 # @param appProject Do not use, configure with `rules` and `app_rule` instead.
 # @extra app_project DEPRECATED see `appProject`
-# @param rules List of routing rules configured on this instance, refer to full [documentation](https://docs.2gis.com/en/on-premise/deployment/navigation#nav-lvl1--3._Create_a_rules_file) for details
+# @param rules List of routing rules configured on this instance, refer to full [documentation](https://docs.2gis.com/en/on-premise-api-platform/installation#rules-file) for details
 
 attractor:
   appPort: 8080

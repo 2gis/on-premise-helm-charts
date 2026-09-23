@@ -1,9 +1,10 @@
-# Navi async-grpc-proxy Helm Chart
-## Описание
+# 2GIS Navi Async gRPC Proxy service
 
-Чарт разворачивает Async GRPC Proxy:
-https://gitlab.2gis.ru/traffic/async-grpc-proxy
+This Helm chart deploys the **Navi Async gRPC Proxy service**, a component of the 2GIS [On-Premise](https://docs.2gis.com/en/on-premise-api-platform/overview/summary#navigation).
 
+To learn more about configuration, architecture, and requirements, see the official documentation:
+* [On-Premise API Platform Overview](https://docs.2gis.com/en/on-premise-api-platform/overview/summary)
+* [Navigation API Documentation](https://docs.2gis.com/en/on-premise-api-platform/architecture/navigation#async-distance-matrix-api)
 
 ## Values
 

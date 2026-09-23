@@ -18,7 +18,7 @@ imagePullSecrets: []
 # @param dgctlStorage.region AuthenticationRegion property for S3 client. Used in AWS4 request signing, this is an optional property
 # @param dgctlStorage.accessKey S3 access key for accessing the bucket. **Required**
 # @param dgctlStorage.secretKey S3 secret key for accessing the bucket. **Required**
-# @param dgctlStorage.manifest The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json`.<br> This file contains the description of pieces of data that the service requires to operate. **Required**
+# @param dgctlStorage.manifest The path to the [manifest file](https://docs.2gis.com/en/on-premise-api-platform/installation#artifacts). Format: `manifests/api-platform/0000000000.json`.<br> This file contains the description of pieces of data that the service requires to operate. **Required**
 
 dgctlStorage:
   host: ''
@@ -148,7 +148,7 @@ cassandra:
 # @param tilegen.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
 # @param tilegen.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
 # @param tilegen.replicaCount A replica count for the pod.
-# @param tilegen.revisionHistory Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+# @param tilegen.revisionHistory Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment).
 # @param tilegen.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
 # @param tilegen.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
 
@@ -158,7 +158,7 @@ cassandra:
 # @param tilegen.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
 # @param tilegen.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
 
-# @extra tilegen.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
+# @extra tilegen.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision)**
 # @param tilegen.resources.requests.cpu A CPU request.
 # @param tilegen.resources.requests.memory A memory request.
 # @param tilegen.resources.limits.cpu A CPU limit.
@@ -243,7 +243,7 @@ tilegen:
     annotations: {}
     labels: {}
 
-  # @extra tilegen.workerResources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) for the workers**
+  # @extra tilegen.workerResources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) for the workers**
   # @param tilegen.workerResources.requests.cpu A CPU request.
   # @param tilegen.workerResources.requests.memory A memory request.
   # @param tilegen.workerResources.limits.cpu A CPU limit.
@@ -265,7 +265,7 @@ tilegen:
 # @param proxy.containerPort Port the proxy listens on.
 # @param proxy.timeout Proxy timeout, in seconds.
 
-# @extra proxy.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
+# @extra proxy.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision)**
 # @param proxy.resources.requests.cpu A CPU request.
 # @param proxy.resources.requests.memory A memory request.
 # @param proxy.resources.limits.cpu A CPU limit.
@@ -277,7 +277,7 @@ tilegen:
 # @param proxy.image.pullPolicy Kubernetes pull policy for the service's Docker image.
 
 # @extra proxy.access **API Keys service access settings**
-# @param proxy.access.enabled If access to the [API Keys service](https://docs.2gis.com/en/on-premise/keys) is enabled.
+# @param proxy.access.enabled If access to the [API Keys service](https://docs.2gis.com/en/on-premise-api-platform/overview/summary#api-keys-service) is enabled.
 # @param proxy.access.url API Keys endpoint url, ex: http://keys-service-api.svc. **Required**
 # @param proxy.access.syncPeriod Proxy sync period.
 # @param proxy.access.raster.token Service key for raster data in Keys API. Used for key validation. If Keys API is unavailable or token is empty/invalid, tile service will continue to work without key validation (with warning in logs).
@@ -346,9 +346,9 @@ proxy:
 # @param api.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
 
 # @param api.replicaCount A replica count for the pod.
-# @param api.revisionHistory Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+# @param api.revisionHistory Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment).
 
-# @extra api.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
+# @extra api.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision)**
 # @param api.resources.requests.cpu A CPU request.
 # @param api.resources.requests.memory A memory request.
 # @param api.resources.limits.cpu A CPU limit.
@@ -508,7 +508,7 @@ api:
 # @param importer.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
 # @param importer.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
 
-# @extra importer.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
+# @extra importer.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision)**
 # @param importer.resources.requests.cpu A CPU request.
 # @param importer.resources.requests.memory A memory request.
 # @param importer.resources.limits.cpu A CPU limit.
@@ -563,7 +563,7 @@ importer:
   # @param importer.cleaner.enabled Enables deletion of obsolete tilesets before making new imports.
   # @param importer.cleaner.limit Limit on the number of old tilesets to leave untouched when cleaning, minimum 1.
 
-  # @extra importer.workerResources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) for the cleaner process**
+  # @extra importer.workerResources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) for the cleaner process**
   # @param importer.cleaner.resources.requests.cpu A CPU request.
   # @param importer.cleaner.resources.requests.memory A memory request.
   # @param importer.cleaner.resources.limits.cpu A CPU limit.
@@ -579,7 +579,7 @@ importer:
   tolerations: []
   nodeSelector: {}
 
-  # @extra importer.workerResources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) for the workers**
+  # @extra importer.workerResources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) for the workers**
   # @param importer.workerResources.requests.cpu A CPU request.
   # @param importer.workerResources.requests.memory A memory request.
   # @param importer.workerResources.limits.cpu A CPU limit.

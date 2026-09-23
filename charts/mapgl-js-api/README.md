@@ -1,18 +1,10 @@
 # 2GIS MapGL JS API service
 
-Use this Helm chart to deploy MapGL JS API service, which is a part of 2GIS's [On-Premise Maps services](https://docs.2gis.com/en/on-premise/map).
+This Helm chart deploys the **MapGL JS API service**, a component of the 2GIS [On-Premise](https://docs.2gis.com/en/on-premise-api-platform/overview/summary#maps).
 
-Read more about the On-Premise solution [here](https://docs.2gis.com/en/on-premise/overview).
-
-See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
-
-- Architecture of the service.
-
-- Installing the service.
-
-    When filling in the keys for `values-mapgl.yaml` configuration file, refer to the documentation and the list of keys below.
-
-- Updating the service.
+To learn more about configuration, architecture, and requirements, see the official documentation:
+* [On-Premise API Platform Overview](https://docs.2gis.com/en/on-premise-api-platform/overview/summary)
+* [Maps API Documentation](https://docs.2gis.com/en/on-premise-api-platform/architecture/maps)
 
 ## Values
 
@@ -28,7 +20,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/map) to learn about:
 | ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
 | `enableServiceLinks`            | Services injection into containers environment [Accessing the Service](https://kubernetes.io/docs/tutorials/services/connect-applications-service/#accessing-the-service) | `true` |
 | `replicaCount`                  | A replica count for the pod.                                                                                                                                              | `1`    |
-| `revisionHistoryLimit`          | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).                            | `3`    |
+| `revisionHistoryLimit`          | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment). | `3`    |
 | `terminationGracePeriodSeconds` | Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/)                                                          | `30`   |
 | `imagePullSecrets`              | Kubernetes image pull secrets.                                                                                                                                            | `[]`   |
 | `nameOverride`                  | Base name to use in all the Kubernetes entities deployed by this chart.                                                                                                   | `""`   |

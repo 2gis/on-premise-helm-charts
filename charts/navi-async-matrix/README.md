@@ -1,18 +1,10 @@
-# 2GIS Distance Matrix Async API
+# 2GIS Distance Matrix Async API service
 
-Use this Helm chart to deploy Distance Matrix Async API, which is a part of 2GIS's [On-Premise Navigation services](https://docs.2gis.com/en/on-premise/navigation).
+This Helm chart deploys the **Distance Matrix Async API service**, a component of the 2GIS [On-Premise](https://docs.2gis.com/en/on-premise-api-platform/overview/summary#navigation).
 
-Read more about the On-Premise solution [here](https://docs.2gis.com/en/on-premise/overview).
-
-See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-matrix) to learn about:
-
-- Architecture of the service.
-
-- Installing the service.
-
-    When filling in the keys for `values-navi-async-matrix.yaml` configuration file, refer to the documentation and the list of keys below.
-
-- Updating the service.
+To learn more about configuration, architecture, and requirements, see the official documentation:
+* [On-Premise API Platform Overview](https://docs.2gis.com/en/on-premise-api-platform/overview/summary)
+* [Navigation API Documentation](https://docs.2gis.com/en/on-premise-api-platform/architecture/navigation#async-distance-matrix-api)
 
 ## Values
 
@@ -192,7 +184,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation/distance-
 | `cronjob.cleanup.failedJobsHistoryLimit`     | How many failed Jobs should be kept.                                                                                                                 | `1`         |
 | `cronjob.cleanup.successfulJobsHistoryLimit` | How many completed Jobs should be kept.                                                                                                              | `0`         |
 | `cronjob.cleanup.suffix`                     | Suffix for CronJob name.                                                                                                                             | `cleanup`   |
-| `cronjob.cleanup.resources`                  | Container [resources](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) structure.                                     | `{}`        |
+| `cronjob.cleanup.resources`                  | Container [resources](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) structure.          | `{}`        |
 | `cronjob.cleanup.resources.requests.cpu`     | CPU request, recommended value `100m`.                                                                                                               | `undefined` |
 | `cronjob.cleanup.resources.requests.memory`  | Memory request, recommended value `512Mi`.                                                                                                           | `undefined` |
 | `cronjob.cleanup.resources.limits.cpu`       | CPU limit, recommended value `1000m`.                                                                                                                | `undefined` |

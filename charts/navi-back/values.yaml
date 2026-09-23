@@ -119,12 +119,12 @@ image:
 
 # @section Navi-Back application settings
 
-# @extra naviback.ecaHost DEPRECATED: Use naviback.ecaUrl. Domain name of the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster
-# @extra naviback.ecaUrl URL of the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster
-# @extra naviback.forecastHost DEPRECATED: naviback.forecastUrl. Use URL of Traffic forecast service. See the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster
-# @extra naviback.forecastUrl URL of Traffic forecast service. See the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster
+# @extra naviback.ecaHost DEPRECATED: Use naviback.ecaUrl. Domain name of the [Traffic Proxy service](https://docs.2gis.com/en/on-premise-api-platform/overview/summary#traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster
+# @extra naviback.ecaUrl URL of the [Traffic Proxy service](https://docs.2gis.com/en/on-premise-api-platform/overview/summary#traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster
+# @extra naviback.forecastHost DEPRECATED: naviback.forecastUrl. Use URL of Traffic forecast service. See the [Traffic Proxy service](https://docs.2gis.com/en/on-premise-api-platform/overview/summary#traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster
+# @extra naviback.forecastUrl URL of Traffic forecast service. See the [Traffic Proxy service](https://docs.2gis.com/en/on-premise-api-platform/overview/summary#traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster
 # @extra naviback.forecastFilename Filename of the forecast
-# @extra naviback.longForecastUrl URL of Traffic long forecast service. See the [Traffic Proxy service](https://docs.2gis.com/en/on-premise/traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster
+# @extra naviback.longForecastUrl URL of Traffic long forecast service. See the [Traffic Proxy service](https://docs.2gis.com/en/on-premise-api-platform/overview/summary#traffic-proxy). <br> This URL should be accessible from all the pods within your Kubernetes cluster
 # @extra naviback.longforecastFilename Filename of the long forecast
 # @extra naviback.walkingUserSpeedsUrl URL of walking user speeds
 # @extra naviback.routeAsUsualUrl URL of route as usual
@@ -271,7 +271,7 @@ image:
 # @param navigroup Service group identifier, allows multiple stacks deployed to the same namespace.
 # @param appProject Do not use, configure with `rules` and `appRule` instead.
 # @extra app_project DEPRECATED see `appProect`
-# @param rules List of routing rules configured on this instance, refer to full [documentation](https://docs.2gis.com/en/on-premise/deployment/navigation#nav-lvl1--3._Create_a_rules_file) for details
+# @param rules List of routing rules configured on this instance, refer to full [documentation](https://docs.2gis.com/en/on-premise-api-platform/installation#rules-file) for details
 
 naviback:
   appPort: 8080

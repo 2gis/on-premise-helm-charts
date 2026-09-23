@@ -303,7 +303,7 @@ dm:
 # @param cronjob.cleanup.failedJobsHistoryLimit How many failed Jobs should be kept.
 # @param cronjob.cleanup.successfulJobsHistoryLimit How many completed Jobs should be kept.
 # @param cronjob.cleanup.suffix Suffix for CronJob name.
-# @param cronjob.cleanup.resources Container [resources](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) structure.
+# @param cronjob.cleanup.resources Container [resources](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) structure.
 # @param cronjob.cleanup.resources.requests.cpu [nullable] CPU request, recommended value `100m`.
 # @param cronjob.cleanup.resources.requests.memory [nullable] Memory request, recommended value `512Mi`.
 # @param cronjob.cleanup.resources.limits.cpu [nullable] CPU limit, recommended value `1000m`.

@@ -12,7 +12,7 @@ ui:
   # @section Common settings
 
   # @param ui.replicas A replica count for a pod.
-  # @param ui.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+  # @param ui.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment).
   # @param ui.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
   # @param ui.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
   # @param ui.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
@@ -114,7 +114,7 @@ ui:
 
   # @section Platform
 
-  # @param ui.platform.api.url URL to [API Keys service](https://docs.2gis.com/en/on-premise/core/overview#api-keys-service) host. Must be a public address accessible from the user's browser.
+  # @param ui.platform.api.url URL to [API Keys service](https://docs.2gis.com/en/on-premise-api-platform/overview/summary#api-keys-service) host. Must be a public address accessible from the user's browser.
 
   platform:
     api:
@@ -122,9 +122,9 @@ ui:
 
   # @section MapGL JS API settings
 
-  # @param ui.mapgl.url URL to [MapGL JS API](https://docs.2gis.com/en/on-premise/api-platform/admin-guide/architecture/maps) host. Must be a public address accessible from the user's browser, as the MapGL script is loaded directly by the client.
-  # @param ui.mapgl.scriptPath URL path to [MapGL JS API](https://docs.2gis.com/en/on-premise/api-platform/admin-guide/architecture/maps) init script relative to `ui.mapgl.url`.
-  # @param ui.mapgl.key A key to the [MapGL JS API](https://docs.2gis.com/en/on-premise/api-platform/admin-guide/architecture/maps) service.
+  # @param ui.mapgl.url URL to [MapGL JS API](https://docs.2gis.com/en/on-premise-api-platform/architecture/maps#mapgl-js-api-service) host. Must be a public address accessible from the user's browser, as the MapGL script is loaded directly by the client.
+  # @param ui.mapgl.scriptPath URL path to [MapGL JS API](https://docs.2gis.com/en/on-premise-api-platform/architecture/maps#mapgl-js-api-service) init script relative to `ui.mapgl.url`.
+  # @param ui.mapgl.key A key to the [MapGL JS API](https://docs.2gis.com/en/on-premise-api-platform/architecture/maps#mapgl-js-api-service) service.
   # @param ui.mapgl.initCenter Optional default map coordinates. Contains of two numbers in an array: `[lon,lat]` (e.g., `"[55.27,25.2]"` stands for Dubai, `"[37.64,55.74]"` — for Moscow).
 
   mapgl:
@@ -181,8 +181,8 @@ ui:
 
   # @section Search API settings
 
-  # @param ui.catalog.url URL for [Search API](https://docs.2gis.com/en/on-premise/api-platform/admin-guide/architecture/search). Can be an internal Kubernetes service address (e.g., `http://<svc-name>.<namespace>.svc`), since requests to this URL are made server-side by the platform service itself, but a public address can be used as well.
-  # @param ui.catalog.key Access key to [Search API](https://docs.2gis.com/en/on-premise/api-platform/admin-guide/architecture/search).
+  # @param ui.catalog.url URL for [Search API](https://docs.2gis.com/en/on-premise-api-platform/architecture/search#architecture). Can be an internal Kubernetes service address (e.g., `http://<svc-name>.<namespace>.svc`), since requests to this URL are made server-side by the platform service itself, but a public address can be used as well.
+  # @param ui.catalog.key Access key to [Search API](https://docs.2gis.com/en/on-premise-api-platform/architecture/search#architecture).
 
   catalog:
     url: ''
@@ -190,8 +190,8 @@ ui:
 
   # @section Navigation API settings
 
-  # @param ui.navi.url URL for [Navigation API](https://docs.2gis.com/en/on-premise/api-platform/admin-guide/architecture/navigation). Can be an internal Kubernetes service address (e.g., `http://<svc-name>.<namespace>.svc`), since requests to this URL are made server-side by the platform service itself, but a public address can be used as well.
-  # @param ui.navi.key Access key to [Navigation API](https://docs.2gis.com/en/on-premise/api-platform/admin-guide/architecture/navigation).
+  # @param ui.navi.url URL for [Navigation API](https://docs.2gis.com/en/on-premise-api-platform/architecture/navigation#architecture). Can be an internal Kubernetes service address (e.g., `http://<svc-name>.<namespace>.svc`), since requests to this URL are made server-side by the platform service itself, but a public address can be used as well.
+  # @param ui.navi.key Access key to [Navigation API](https://docs.2gis.com/en/on-premise-api-platform/architecture/navigation#architecture).
 
   navi:
     url: ''

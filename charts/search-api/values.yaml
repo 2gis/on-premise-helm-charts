@@ -11,7 +11,7 @@ dgctlDockerRegistry: ''
 # @param podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
 # @param podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
 # @param replicaCount A replica count for the pod
-# @param revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+# @param revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment).
 # @param terminationGracePeriodSeconds Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/)
 # @param nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
 # @param affinity Kubernetes [pod affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)
@@ -37,7 +37,7 @@ imagePullSecrets: []
 # @param dgctlStorage.bucket S3 bucket name
 # @param dgctlStorage.accessKey S3 access key for accessing the bucket
 # @param dgctlStorage.secretKey S3 secret key for accessing the bucket
-# @param dgctlStorage.manifest The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json` <br> This file contains the description of pieces of data that the service requires to operate
+# @param dgctlStorage.manifest The path to the [manifest file](https://docs.2gis.com/en/on-premise-api-platform/installation#artifacts). Format: `manifests/api-platform/0000000000.json` <br> This file contains the description of pieces of data that the service requires to operate
 # @param dgctlStorage.secure If S3 uses https.
 # @param dgctlStorage.region S3 region
 
@@ -181,7 +181,7 @@ ingress:
   #   secretName: secret.tls
 
 
-# @section api.resources Kubernetes [resource management](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) settings
+# @section api.resources Kubernetes [resource management](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) settings
 
 # @param api.resources **Limits for the API service**
 # @extra api.resources.requests.cpu A CPU request, e.g., `100m`

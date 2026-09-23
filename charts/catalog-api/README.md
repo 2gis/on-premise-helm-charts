@@ -1,18 +1,11 @@
 # 2GIS Catalog API service
 
-Use this Helm chart to deploy Catalog API service, which is a part of 2GIS's [On-Premise Search services](https://docs.2gis.com/en/on-premise/search).
+This Helm chart deploys the **Catalog API service**, which is a component of the 2GIS [On-Premise](https://docs.2gis.com/en/on-premise-api-platform/overview/summary).
 
-Read more about the On-Premise solution [here](https://docs.2gis.com/en/on-premise/overview).
+To learn more about configuration, architecture, and requirements, see the official documentation:
+* [On-Premise API Platform Overview](https://docs.2gis.com/en/on-premise-api-platform/overview/summary)
+* [Search API Documentation](https://docs.2gis.com/en/on-premise-api-platform/overview/summary#search)
 
-See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn about:
-
-- Architecture of the service.
-
-- Installing the service.
-
-    When filling in the keys for `values-catalog.yaml` configuration file, refer to the documentation and the list of keys below.
-
-- Updating the service.
 
 ## Values
 
@@ -45,16 +38,16 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 
 ### Deployment Artifacts Storage settings
 
-| Name                     | Description                                                                                                                                                                                                                                                           | Value   |
-| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `dgctlStorage.host`      | S3 host. Format: `host:port`. **Required**                                                                                                                                                                                                                            | `""`    |
-| `dgctlStorage.region`    | S3 region name.                                                                                                                                                                                                                                                       | `""`    |
-| `dgctlStorage.secure`    | Set to `true` if dgctlStorage.host must be accessed via https. **Required**                                                                                                                                                                                           | `false` |
-| `dgctlStorage.verifySsl` | Set to `false` if dgctlStorage.host must be accessed via https without certificate validation. **Required**                                                                                                                                                           | `true`  |
-| `dgctlStorage.bucket`    | S3 bucket name. **Required**                                                                                                                                                                                                                                          | `""`    |
-| `dgctlStorage.accessKey` | S3 access key for accessing the bucket. **Required**                                                                                                                                                                                                                  | `""`    |
-| `dgctlStorage.secretKey` | S3 secret key for accessing the bucket. **Required**                                                                                                                                                                                                                  | `""`    |
-| `dgctlStorage.manifest`  | The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json` <br> This file contains the description of pieces of data that the service requires to operate. **Required** | `""`    |
+| Name                     | Description                                                                                                                                                                                                                                                             | Value   |
+| ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `dgctlStorage.host`      | S3 host. Format: `host:port`. **Required**                                                                                                                                                                                                                              | `""`    |
+| `dgctlStorage.region`    | S3 region name.                                                                                                                                                                                                                                                         | `""`    |
+| `dgctlStorage.secure`    | Set to `true` if dgctlStorage.host must be accessed via https. **Required**                                                                                                                                                                                             | `false` |
+| `dgctlStorage.verifySsl` | Set to `false` if dgctlStorage.host must be accessed via https without certificate validation. **Required**                                                                                                                                                             | `true`  |
+| `dgctlStorage.bucket`    | S3 bucket name. **Required**                                                                                                                                                                                                                                            | `""`    |
+| `dgctlStorage.accessKey` | S3 access key for accessing the bucket. **Required**                                                                                                                                                                                                                    | `""`    |
+| `dgctlStorage.secretKey` | S3 secret key for accessing the bucket. **Required**                                                                                                                                                                                                                    | `""`    |
+| `dgctlStorage.manifest`  | The path to the [manifest file](https://docs.2gis.com/en/on-premise-api-platform/installation#artifacts). Format: `manifests/api-platform/0000000000.json` <br> This file contains the description of pieces of data that the service requires to operate. **Required** | `""`    |
 
 ### Strategy settings
 
@@ -66,11 +59,11 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 
 ### API settings
 
-| Name                       | Description                                                                                                                                    | Value  |
-| -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `api.replicas`             | Number of replicas of API pods                                                                                                                 | `1`    |
-| `api.logLevel`             | Log level                                                                                                                                      | `info` |
-| `api.revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`    |
+| Name                       | Description                                                                                                                                                               | Value  |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `api.replicas`             | Number of replicas of API pods                                                                                                                                            | `1`    |
+| `api.logLevel`             | Log level                                                                                                                                                                 | `info` |
+| `api.revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment). | `3`    |
 
 ### api.image **Deployment settings**
 
@@ -92,7 +85,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `api.hpa.targetCPUUtilizationPercentage`      | Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used       | `80`    |
 | `api.hpa.targetMemoryUtilizationPercentage`   | Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used | `""`    |
 
-### api.resources Kubernetes [resource management](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) settings
+### api.resources Kubernetes [resource management](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) settings
 
 | Name                            | Description      | Value    |
 | ------------------------------- | ---------------- | -------- |
@@ -256,7 +249,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `importer.emptyDir.medium`               | The medium field controls where emptyDir volumes are stored                                                         | `""`                |
 | `importer.emptyDir.sizeLimit`            | Volume size                                                                                                         | `""`                |
 
-### importer.resources **Kubernetes [resource management](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) settings**
+### importer.resources **Kubernetes [resource management](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) settings**
 
 | Name                                 | Description      | Value    |
 | ------------------------------------ | ---------------- | -------- |
@@ -272,7 +265,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `importer.cleaner.enabled`      | If clean schemes is enabled for the service | `true` |
 | `importer.cleaner.versionLimit` | Number of backup schemes                    | `2`    |
 
-### importer.cleaner.resources **Kubernetes [resource management](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) settings**
+### importer.cleaner.resources **Kubernetes [resource management](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) settings**
 
 | Name                                         | Description      | Value   |
 | -------------------------------------------- | ---------------- | ------- |

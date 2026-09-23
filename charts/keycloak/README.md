@@ -4,12 +4,6 @@ Keycloak is a high performance Java-based identity and access management solutio
 
 [Overview of Keycloak](https://www.keycloak.org/)
 
-See the [documentation](https://docs.2gis.com/en/on-premise/deployment/auth) to learn about:
-
-- Installing the service.
-
-- Updating the service.
-
 ## Notes
 
 This is modified [bitnami keycloak chart](https://github.com/bitnami/charts/tree/main/bitnami/keycloak).

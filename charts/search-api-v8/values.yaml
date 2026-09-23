@@ -36,7 +36,7 @@ dgctlDockerRegistry: ''
 
 # @param worker.securityContext Kubernetes [SecurityContext](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
 
-# @skip worker.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
+# @skip worker.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision)**
 # @extra worker.resources.requests.cpu A CPU request, recommended value `1400m`
 # @extra worker.resources.requests.memory A memory request, recommended value `3840Mi`
 # @extra worker.resources.limits.cpu A CPU limit, recommended value `6000m`
@@ -101,7 +101,7 @@ dgctlDockerRegistry: ''
 # @param worker.strategy.type Kubernetes deployment strategy. Can be `Recreate` or `RollingUpdate`. See [Strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy)
 # @param worker.strategy.rollingUpdate.maxUnavailable Maximum number of pods that can be unavailable during a [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment)
 # @param worker.strategy.rollingUpdate.maxSurge Maximum number of extra pods that can be created during a [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment)
-# @param worker.revisionHistoryLimit Number of old ReplicaSets to retain for [rollback](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)
+# @param worker.revisionHistoryLimit Number of old ReplicaSets to retain for [rollback](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision)
 # @param worker.gracefulShutdownInterval Interval (in seconds) used by the application to finish processing current requests before shutting down
 # @param worker.syncer.includeProjectKeyRegexp A regular expression that the project keys must match to be included in the synchronization
 # @param worker.syncer.excludeProjectKeyRegexp A regular expression that the project keys must match to be excluded from the synchronization
@@ -241,7 +241,7 @@ head:
 # @param head.head.ports.monitor TCP port for service endpoints such as /metrics, etc.
 # @param head.head.securityContext Kubernetes [SecurityContext](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
 
-# @skip head.head.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
+# @skip head.head.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision)**
 # @extra head.head.resources.requests.cpu CPU request; recommended value: `900m`
 # @extra head.head.resources.requests.memory Memory request; recommended value: `4600Mi`
 # @extra head.head.resources.limits.cpu CPU limit; recommended value: `2000m`
@@ -397,7 +397,7 @@ head:
 # @param head.envoy.ports.http HTTP port used by Envoy
 # @param head.envoy.securityContext Kubernetes [SecurityContext](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
 
-# @skip head.envoy.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
+# @skip head.envoy.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision)**
 # @extra head.envoy.resources.requests.cpu CPU request; recommended value: `200m`
 # @extra head.envoy.resources.requests.memory Memory request; recommended value: `128Mi`
 # @extra head.envoy.resources.limits.cpu CPU limit; recommended value: `800m`
@@ -609,7 +609,7 @@ head:
       maxUnavailable: 5%
       maxSurge: 5%
 
-# @param head.revisionHistoryLimit Number of old ReplicaSets to retain for [rollback](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) purposes
+# @param head.revisionHistoryLimit Number of old ReplicaSets to retain for [rollback](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) purposes
   revisionHistoryLimit: 10
 
 # @param indexerServices.externalFilesStorageUrl Enable and define the external index storage URL; if empty, a custom indexing and storage system will be deployed
@@ -633,7 +633,7 @@ indexerServices:
 # @param filesStorage.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings
 # @param filesStorage.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)
 
-# @skip filesStorage.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
+# @skip filesStorage.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision)**
 # @extra filesStorage.resources.requests.cpu CPU request; recommended value: `500m`
 # @extra filesStorage.resources.requests.memory Memory request; recommended value: `2Gi`
 # @extra filesStorage.resources.limits.cpu CPU limit; recommended value: `8000m`
@@ -729,7 +729,7 @@ filesStorage:
 # @param dataAdapter.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings
 # @param dataAdapter.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)
 
-# @skip dataAdapter.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
+# @skip dataAdapter.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision)**
 # @extra dataAdapter.resources.requests.cpu CPU request; recommended value: `100m`
 # @extra dataAdapter.resources.requests.memory Memory request; recommended value: `50Mi`
 # @extra dataAdapter.resources.limits.cpu CPU limit; recommended value: `200m`
@@ -909,7 +909,7 @@ portal:
 # @param controller.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings
 # @param controller.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)
 
-# @skip controller.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
+# @skip controller.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision)**
 # @extra controller.resources.requests.cpu CPU request; recommended value: `100m`
 # @extra controller.resources.requests.memory Memory request; recommended value: `50Mi`
 # @extra controller.resources.limits.cpu CPU limit; recommended value: `200m`
@@ -1045,7 +1045,7 @@ controller:
 # @param indexer.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings
 # @param indexer.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)
 
-# @skip indexer.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
+# @skip indexer.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision)**
 # @extra indexer.resources.requests.cpu CPU request; recommended value: `500m`
 # @extra indexer.resources.requests.memory Memory request; recommended value: `2Gi`
 # @extra indexer.resources.limits.cpu CPU limit; recommended value: `4000m`
@@ -1181,13 +1181,13 @@ s3:
 # @param syncer.image.tag Docker image tag
 # @param syncer.securityContext Kubernetes [SecurityContext](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
 
-# @skip syncer.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
+# @skip syncer.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision)**
 # @extra syncer.resources.requests.cpu CPU request; recommended value: `20m`
 # @extra syncer.resources.requests.memory Memory request; recommended value: `128Mi`
 # @extra syncer.resources.limits.cpu CPU limit; recommended value: `100m`
 # @extra syncer.resources.limits.memory Memory limit; recommended value: `256Mi`
 
-# @skip syncer.initResources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
+# @skip syncer.initResources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision)**
 # @extra syncer.initResources.requests.cpu CPU request for the syncer init container; recommended value: `500m`
 # @extra syncer.initResources.requests.memory Memory request for the syncer init container; recommended value: `128Mi`
 # @extra syncer.initResources.limits.cpu CPU limit for the syncer init container; recommended value: `2000m`
@@ -1240,7 +1240,7 @@ GINMODE: release
 # @param magg.image.tag Docker image tag
 # @param magg.ports.metrics HTTP port for Prometheus to scrape metrics
 
-# @skip magg.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
+# @skip magg.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision)**
 # @extra magg.resources.requests.cpu CPU request; recommended value: `10m`
 # @extra magg.resources.requests.memory Memory request; recommended value: `32Mi`
 # @extra magg.resources.limits.cpu CPU limit; recommended value: `100m`
@@ -1353,7 +1353,7 @@ service:
 # @param ingressRouter.logLevel Log level; can be `trace`, `debug`, `info`, `warning`, `error`, or `critical`
 # @param ingressRouter.logFormat Log format; Userver supports `tskv`, `ltsv`, `raw`, `json`, `json_yadeploy`. Recommended: `json`
 
-# @skip ingressRouter.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
+# @skip ingressRouter.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision)**
 # @extra ingressRouter.resources.requests.cpu CPU request; recommended value: `1`
 # @extra ingressRouter.resources.requests.memory Memory request; recommended value: `400Mi`
 # @extra ingressRouter.resources.limits.cpu CPU limit; recommended value: `2`
@@ -1390,7 +1390,7 @@ service:
 # @param ingressRouter.envoy.image.repository Docker image repository
 # @param ingressRouter.envoy.image.pullPolicy Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy)
 # @param ingressRouter.envoy.image.tag Docker image tag
-# @skip ingressRouter.envoy.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
+# @skip ingressRouter.envoy.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision)**
 # @extra ingressRouter.envoy.resources.requests.cpu CPU request; recommended value: `200m`
 # @extra ingressRouter.envoy.resources.requests.memory Memory request; recommended value: `128Mi`
 # @extra ingressRouter.envoy.resources.limits.cpu CPU limit; recommended value: `800m`
@@ -1616,7 +1616,7 @@ ingressRouter:
 # @param segmentDetector.ports.server gRPC server port
 # @param segmentDetector.ports.monitor Port for Prometheus metrics
 
-# @skip segmentDetector.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
+# @skip segmentDetector.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision)**
 # @extra segmentDetector.resources.requests.cpu CPU request; recommended value: `1`
 # @extra segmentDetector.resources.requests.memory Memory request; recommended value: `4000Mi`
 # @extra segmentDetector.resources.limits.cpu CPU limit; recommended value: `2`
@@ -1844,7 +1844,7 @@ sentry:
 # @param dgctlStorage.bucket S3 bucket name
 # @param dgctlStorage.accessKey S3 access key for accessing the bucket
 # @param dgctlStorage.secretKey S3 secret key for accessing the bucket
-# @param dgctlStorage.manifest The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json` <br> This file contains the description of pieces of data that the service requires to operate
+# @param dgctlStorage.manifest The path to the [manifest file](https://docs.2gis.com/en/on-premise-api-platform/installation#artifacts). Format: `manifests/api-platform/0000000000.json` <br> This file contains the description of pieces of data that the service requires to operate
 # @param dgctlStorage.secure If S3 uses https.
 # @param dgctlStorage.region S3 region
 

@@ -51,7 +51,7 @@ api:
   # @param api.pod.podSecurityContext Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
   # @param api.pod.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
   # @param api.pod.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
-  # @param api.pod.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+  # @param api.pod.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment).
   # @extra api.pod.resources **Limits for the application service**
   # @param api.pod.resources.requests.cpu A CPU request.
   # @param api.pod.resources.requests.memory A memory request.
@@ -235,7 +235,7 @@ permissions:
   # @param permissions.pod.podSecurityContext Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
   # @param permissions.pod.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
   # @param permissions.pod.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
-  # @param permissions.pod.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+  # @param permissions.pod.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment).
   # @extra permissions.pod.resources **Limits for the application service**
   # @param permissions.pod.resources.requests.cpu A CPU request.
   # @param permissions.pod.resources.requests.memory A memory request.
@@ -383,7 +383,7 @@ tasks:
   # @param tasks.pod.podSecurityContext Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
   # @param tasks.pod.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
   # @param tasks.pod.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
-  # @param tasks.pod.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+  # @param tasks.pod.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment).
   # @extra tasks.pod.resources **Limits for the application service**
   # @param tasks.pod.resources.requests.cpu A CPU request.
   # @param tasks.pod.resources.requests.memory A memory request.
@@ -529,7 +529,7 @@ pagerenderer:
   # @param pagerenderer.pod.podSecurityContext Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
   # @param pagerenderer.pod.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
   # @param pagerenderer.pod.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
-  # @param pagerenderer.pod.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+  # @param pagerenderer.pod.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment).
   # @extra pagerenderer.pod.resources **Limits for the application service**
   # @param pagerenderer.pod.resources.requests.cpu A CPU request.
   # @param pagerenderer.pod.resources.requests.memory A memory request.
@@ -702,7 +702,7 @@ dgctlDockerRegistry: ''
 # @param dgctlStorage.bucket S3 bucket name. **Required**
 # @param dgctlStorage.accessKey S3 access key for accessing the bucket. **Required**
 # @param dgctlStorage.secretKey S3 secret key for accessing the bucket. **Required**
-# @param dgctlStorage.manifest The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json`.<br> This file contains the description of pieces of data that the service requires to operate. **Required**
+# @param dgctlStorage.manifest The path to the [manifest file](https://docs.2gis.com/en/on-premise-api-platform/installation#artifacts). Format: `manifests/pro/0000000000.json`.<br> This file contains the description of pieces of data that the service requires to operate. **Required**
 # @param dgctlStorage.region AuthenticationRegion property for S3 client. Used in AWS4 request signing, this is an optional property
 # @param dgctlStorage.disablePayloadSigning Turns off payload signing, this is an optional property. Should be TRUE for Oracle S3 storage
 
@@ -949,7 +949,7 @@ digger:
 
 # @section Catalog API settings
 
-# @param catalog.url URL for [Catalog API](https://docs.2gis.com/en/on-premise/search). Example: http://catalog-api.svc
+# @param catalog.url URL for [Catalog API](https://docs.2gis.com/en/on-premise-api-platform/architecture/search#architecture). Example: http://catalog-api.svc
 # @param catalog.key Client access key for the Catalog API, issued by Keys API. The key must have the **search** feature enabled.
 
 catalog:
@@ -959,7 +959,7 @@ catalog:
 
 # @section Navigation API settings
 
-# @param navi.url URL for [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview). Example: http://navi-front.svc
+# @param navi.url URL for [Navigation API](https://docs.2gis.com/en/on-premise-api-platform/architecture/navigation#architecture). Example: http://navi-front.svc
 # @param navi.key Client access key for the Navigation API, issued by Keys API. The key must have the **isochrone** feature enabled.
 
 
@@ -978,7 +978,7 @@ license:
 
 # @section Search API settings
 
-# @param search.url URL for [Search API](https://docs.2gis.com/en/on-premise/search). Example: http://search-api.svc
+# @param search.url URL for [Search API](https://docs.2gis.com/en/on-premise-api-platform/architecture/search#architecture). Example: http://search-api.svc
 
 search:
   url: ''

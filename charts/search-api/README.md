@@ -1,18 +1,10 @@
 # 2GIS Search API service
 
-Use this Helm chart to deploy Search API service, which is a part of 2GIS's [On-Premise Search services](https://docs.2gis.com/en/on-premise/search).
+This Helm chart deploys the **Search API service**, a component of the 2GIS [On-Premise](https://docs.2gis.com/en/on-premise-api-platform/overview/summary#search).
 
-Read more about the On-Premise solution [here](https://docs.2gis.com/en/on-premise/overview).
-
-See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn about:
-
-- Architecture of the service.
-
-- Installing the service.
-
-    When filling in the keys for `values-search.yaml` configuration file, refer to the documentation and the list of keys below.
-
-- Updating the service.
+To learn more about configuration, architecture, and requirements, see the official documentation:
+* [On-Premise API Platform Overview](https://docs.2gis.com/en/on-premise-api-platform/overview/summary)
+* [Search API Documentation](https://docs.2gis.com/en/on-premise-api-platform/architecture/search)
 
 ## Values
 
@@ -30,7 +22,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `podAnnotations`                | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)                                                              | `{}`   |
 | `podLabels`                     | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)                                                                        | `{}`   |
 | `replicaCount`                  | A replica count for the pod                                                                                                                                               | `1`    |
-| `revisionHistoryLimit`          | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).                            | `3`    |
+| `revisionHistoryLimit`          | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment). | `3`    |
 | `terminationGracePeriodSeconds` | Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/)                                                          | `30`   |
 | `nodeSelector`                  | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)                                                        | `{}`   |
 | `affinity`                      | Kubernetes [pod affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)                                                         | `{}`   |
@@ -40,15 +32,15 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 
 ### Deployment Artifacts Storage settings
 
-| Name                     | Description                                                                                                                                                                                                                                             | Value   |
-| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `dgctlStorage.host`      | S3 endpoint. Format: `host:port`                                                                                                                                                                                                                        | `""`    |
-| `dgctlStorage.bucket`    | S3 bucket name                                                                                                                                                                                                                                          | `""`    |
-| `dgctlStorage.accessKey` | S3 access key for accessing the bucket                                                                                                                                                                                                                  | `""`    |
-| `dgctlStorage.secretKey` | S3 secret key for accessing the bucket                                                                                                                                                                                                                  | `""`    |
-| `dgctlStorage.manifest`  | The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json` <br> This file contains the description of pieces of data that the service requires to operate | `""`    |
-| `dgctlStorage.secure`    | If S3 uses https.                                                                                                                                                                                                                                       | `false` |
-| `dgctlStorage.region`    | S3 region                                                                                                                                                                                                                                               | `""`    |
+| Name                     | Description                                                                                                                                                                                                                                               | Value   |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `dgctlStorage.host`      | S3 endpoint. Format: `host:port`                                                                                                                                                                                                                          | `""`    |
+| `dgctlStorage.bucket`    | S3 bucket name                                                                                                                                                                                                                                            | `""`    |
+| `dgctlStorage.accessKey` | S3 access key for accessing the bucket                                                                                                                                                                                                                    | `""`    |
+| `dgctlStorage.secretKey` | S3 secret key for accessing the bucket                                                                                                                                                                                                                    | `""`    |
+| `dgctlStorage.manifest`  | The path to the [manifest file](https://docs.2gis.com/en/on-premise-api-platform/installation#artifacts). Format: `manifests/api-platform/0000000000.json` <br> This file contains the description of pieces of data that the service requires to operate | `""`    |
+| `dgctlStorage.secure`    | If S3 uses https.                                                                                                                                                                                                                                         | `false` |
+| `dgctlStorage.region`    | S3 region                                                                                                                                                                                                                                                 | `""`    |
 
 ### Deployment settings
 
@@ -126,7 +118,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/search) to learn abo
 | `ingress.hosts[0].paths[0].pathType` | Type of the path for the Ingress service. | `Prefix`                 |
 | `ingress.tls`                        | TLS configuration                         | `[]`                     |
 
-### api.resources Kubernetes [resource management](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) settings
+### api.resources Kubernetes [resource management](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) settings
 
 | Name                              | Description                      | Value |
 | --------------------------------- | -------------------------------- | ----- |
