@@ -1,0 +1,16 @@
+apps:
+  license:
+    repo: 2gis-on-premise
+    chart: license
+
+  keys:
+    repo: 2gis-on-premise
+    chart: keys
+
+  traffic-proxy-first:
+    repo: 2gis-on-premise
+    chart: traffic-proxy
+
+  traffic-proxy-second:
+    repo: 2gis-on-premise
+    chart: traffic-proxy

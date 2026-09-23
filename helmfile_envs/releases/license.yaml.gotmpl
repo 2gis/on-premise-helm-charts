@@ -1,0 +1,30 @@
+dgctlDockerRegistry: {{ .Values.global.dgctlDockerRegistry }}
+dgctlStorage:
+  host: {{ .Values.global.s3Storage.host }}
+  secure: {{ .Values.global.s3Storage.secure }}
+  region: {{ .Values.global.s3Storage.region }}
+  bucket: {{ .Values.global.dgctlStorage.bucket }}
+  accessKey: {{ .Values.global.s3Storage.accessKey }}
+  secretKey: {{ .Values.global.s3Storage.secretKey }}
+
+license:
+  type: ''
+  retryPeriod: 30s
+  softBlockPeriod: 2w
+  statusPort: 8080
+  apiPort: 8443
+
+{{ $IsIngressEnabled :=  .Values.apps | get "license.ingress.enabled" false -}}
+{{- $ingressData := dict "name" "license" "Values" $.Values "isEnabled" $IsIngressEnabled -}}
+
+ingress:
+  {{- include "ingress" $ingressData | nindent 2 }}
+
+persistence:
+  host: {{ .Values.global.s3Storage.host }}
+  secure: {{ .Values.global.s3Storage.secure }}
+  region: {{ .Values.global.s3Storage.region }}
+  bucket: ''
+  root: ''
+  accessKey: {{ .Values.global.s3Storage.accessKey }}
+  secretKey: {{ .Values.global.s3Storage.secretKey }}

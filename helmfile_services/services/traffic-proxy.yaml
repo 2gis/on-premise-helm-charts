@@ -1,0 +1,29 @@
+---
+bases:
+- ../common.yaml
+---
+
+releases:
+  {{- $envName := .Environment.Name }}
+  {{- $envNS := .Values.namespace }}
+  {{- $envKubeContext := .Values.kubeContext }}
+  {{- $envVersion := .Values.version }}
+  {{- $domain := .Values.domain }}
+  {{- $tlsSecret := .Values.tlsSecret }}
+  {{- range $proxy := .Values.trafficProxy }}
+  - name: "traffic-proxy-{{ $proxy }}"
+    chart: 2gis-on-premise/traffic-proxy
+    #chart: ../../charts/traffic-proxy
+    namespace: {{ $envNS }}
+    kubeContext: {{ $envKubeContext }}
+    version: {{ $envVersion }}
+    missingFileHandler: Info
+    labels:
+      service: traffic-proxy-{{ $proxy }}
+      proxyName: {{ $envName }}-traffic-proxy-{{ $proxy }}
+    values:
+      - ../values/dgctl/_common.gotmpl
+      - ../values/dgctl/{{ $envName }}.yaml
+      - ../values/traffic-proxy/_common.gotmpl
+      - ../values/traffic-proxy/{{ $envName }}-{{ $proxy }}.yaml
+  {{ end }}
