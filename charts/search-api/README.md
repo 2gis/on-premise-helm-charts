@@ -118,7 +118,7 @@ To learn more about configuration, architecture, and requirements, see the offic
 | `ingress.hosts[0].paths[0].pathType` | Type of the path for the Ingress service. | `Prefix`                 |
 | `ingress.tls`                        | TLS configuration                         | `[]`                     |
 
-### api.resources Kubernetes [resource management](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) settings
+### api.resources Kubernetes [resource management](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) settings
 
 | Name                              | Description                      | Value |
 | --------------------------------- | -------------------------------- | ----- |

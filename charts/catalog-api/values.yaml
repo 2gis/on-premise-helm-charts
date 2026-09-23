@@ -114,7 +114,7 @@ api:
     targetMemoryUtilizationPercentage: ''
 
 
-  # @section api.resources Kubernetes [resource management](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) settings
+  # @section api.resources Kubernetes [resource management](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) settings
 
   # @param api.resources.requests.cpu A CPU request
   # @param api.resources.requests.memory A memory request
@@ -404,7 +404,7 @@ importer:
     medium: ''
     sizeLimit: ''
 
-  # @section importer.resources **Kubernetes [resource management](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) settings**
+  # @section importer.resources **Kubernetes [resource management](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) settings**
   # @param importer.resources.requests.cpu A CPU request
   # @param importer.resources.requests.memory A memory request
   # @param importer.resources.limits.cpu A CPU limit
@@ -427,7 +427,7 @@ importer:
     enabled: true
     versionLimit: 2
 
-    # @section importer.cleaner.resources **Kubernetes [resource management](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) settings**
+    # @section importer.cleaner.resources **Kubernetes [resource management](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) settings**
     # @param importer.cleaner.resources.requests.cpu A CPU request
     # @param importer.cleaner.resources.requests.memory A memory request
     # @param importer.cleaner.resources.limits.cpu A CPU limit

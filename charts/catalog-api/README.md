@@ -85,7 +85,7 @@ To learn more about configuration, architecture, and requirements, see the offic
 | `api.hpa.targetCPUUtilizationPercentage`      | Target average CPU utilization (represented as a percentage of requested CPU) over all the pods; if not specified the default autoscaling policy will be used       | `80`    |
 | `api.hpa.targetMemoryUtilizationPercentage`   | Target average memory utilization (represented as a percentage of requested memory) over all the pods; if not specified the default autoscaling policy will be used | `""`    |
 
-### api.resources Kubernetes [resource management](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) settings
+### api.resources Kubernetes [resource management](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) settings
 
 | Name                            | Description      | Value    |
 | ------------------------------- | ---------------- | -------- |
@@ -249,7 +249,7 @@ To learn more about configuration, architecture, and requirements, see the offic
 | `importer.emptyDir.medium`               | The medium field controls where emptyDir volumes are stored                                                         | `""`                |
 | `importer.emptyDir.sizeLimit`            | Volume size                                                                                                         | `""`                |
 
-### importer.resources **Kubernetes [resource management](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) settings**
+### importer.resources **Kubernetes [resource management](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) settings**
 
 | Name                                 | Description      | Value    |
 | ------------------------------------ | ---------------- | -------- |
@@ -265,7 +265,7 @@ To learn more about configuration, architecture, and requirements, see the offic
 | `importer.cleaner.enabled`      | If clean schemes is enabled for the service | `true` |
 | `importer.cleaner.versionLimit` | Number of backup schemes                    | `2`    |
 
-### importer.cleaner.resources **Kubernetes [resource management](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) settings**
+### importer.cleaner.resources **Kubernetes [resource management](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) settings**
 
 | Name                                         | Description      | Value   |
 | -------------------------------------------- | ---------------- | ------- |

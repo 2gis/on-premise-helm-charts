@@ -181,7 +181,7 @@ ingress:
   #   secretName: secret.tls
 
 
-# @section api.resources Kubernetes [resource management](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) settings
+# @section api.resources Kubernetes [resource management](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) settings
 
 # @param api.resources **Limits for the API service**
 # @extra api.resources.requests.cpu A CPU request, e.g., `100m`

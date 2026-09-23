@@ -33,7 +33,7 @@ To learn more about configuration, architecture, and requirements, see the offic
 | `api.replicas`                              | A replica count for the pod.                                                                                                                                                                             | `1`             |
 | `api.revisionHistoryLimit`                  | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment).                                | `3`             |
 
-### api.resources **Kubernetes [resource management](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) settings**
+### api.resources **Kubernetes [resource management](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) settings**
 
 | Name                                                                  | Description                                                                                                                                                          | Value                                                    |
 | --------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
@@ -73,7 +73,7 @@ To learn more about configuration, architecture, and requirements, see the offic
 | ---------------------------- | ---------------------------------------- | ----- |
 | `worker.initialDelaySeconds` | Delay in seconds at the service startup. | `5`   |
 
-### worker.resources **Kubernetes [resource management](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) settings**
+### worker.resources **Kubernetes [resource management](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) settings**
 
 | Name                               | Description                                                                                                                 | Value   |
 | ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | ------- |
@@ -95,7 +95,7 @@ To learn more about configuration, architecture, and requirements, see the offic
 | ----------------------------- | ---------------------------------------- | ----- |
 | `migrate.initialDelaySeconds` | Delay in seconds at the service startup. | `5`   |
 
-### migrate.resources **Kubernetes [resource management](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) settings**
+### migrate.resources **Kubernetes [resource management](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) settings**
 
 | Name                                | Description                                                                                                         | Value  |
 | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------ |

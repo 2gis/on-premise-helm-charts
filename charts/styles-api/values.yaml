@@ -37,7 +37,7 @@ api:
   replicas: 1
   revisionHistoryLimit: 3
 
-  # @section api.resources **Kubernetes [resource management](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) settings**
+  # @section api.resources **Kubernetes [resource management](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) settings**
   # @param api.resources.requests.cpu A CPU request.
   # @param api.resources.requests.memory A memory request.
   # @param api.resources.limits.cpu A CPU limit.
@@ -130,7 +130,7 @@ worker:
 
   initialDelaySeconds: 5
 
-  # @section worker.resources **Kubernetes [resource management](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) settings**
+  # @section worker.resources **Kubernetes [resource management](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) settings**
   # @param worker.resources.requests.cpu A CPU request.
   # @param worker.resources.requests.memory A memory request.
   # @param worker.resources.limits.cpu A CPU limit.
@@ -172,7 +172,7 @@ migrate:
 
   initialDelaySeconds: 5
 
-  # @section migrate.resources **Kubernetes [resource management](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) settings**
+  # @section migrate.resources **Kubernetes [resource management](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) settings**
   # @param migrate.resources.requests.cpu A CPU request.
   # @param migrate.resources.requests.memory A memory request.
   # @param migrate.resources.limits.cpu A CPU limit.
