@@ -845,7 +845,7 @@ authProvider:
   enabled: false
   host: ''
   schema: ''
-  allowedHosts : []
+  allowedHosts: []
   basic:
     users:
       - username: ''
