@@ -174,7 +174,7 @@ spec:
             - name: Common__FilterByZoneCodes
               value: {{ .Values.api.settings.filterByZoneCodes | quote }}
             - name: Common__DataCenterId
-              value: {{ .Values.api.settings.dataCenterId | quote }}
+              value: {{ .Values.clusters.current | quote }}
             - name: Postgres__ConnectionString
               value: {{ include "pro-api.connectionString" . }}
             - name: Postgres__ConnectionStringReadonly
@@ -254,9 +254,6 @@ spec:
               value: {{ $.Values.kafka.useReplicaTopics | quote }}
             - name: Auth__Type
               value: {{ required "A valid .Values.api.settings.auth.type entry required" $.Values.api.settings.auth.type }}
-            {{- if and (ne $.Values.api.settings.auth.type "none") (not $.Values.api.settings.auth.apiKey) }}
-            {{- fail "A valid .Values.api.settings.auth.apiKey entry required when api.settings.auth.type is not 'none'" }}
-            {{- end }}
             - name: Auth__Url
               value: {{ required "A valid .Values.api.settings.auth.url entry required" $.Values.api.settings.auth.url }}
             - name: Auth__ClientId
@@ -283,7 +280,7 @@ spec:
                   key: apiKey
                   name: {{ include "pro-api.secretName" . }}
             {{- end }}
-            {{- if .Values.permissions.settings.auth.enabled }}
+            {{- if .Values.permissions.settings.auth.apiKey }}
             - name: Auth__PermissionsApiKey
               valueFrom:
                 secretKeyRef:
@@ -353,7 +350,7 @@ spec:
               value: {{ .Values.permissions.service.port | quote }}
             - name: PermissionsApi__GrpcPort
               value: {{ .Values.permissions.settings.grpcPort | quote }}
-            {{- if .Values.permissions.settings.auth.enabled }}
+            {{- if .Values.permissions.settings.auth.apiKey }}
             - name: PermissionsApi__Key
               valueFrom:
                 secretKeyRef:
