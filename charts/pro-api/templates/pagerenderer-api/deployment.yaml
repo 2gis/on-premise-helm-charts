@@ -131,6 +131,16 @@ spec:
               value: {{ .Values.pagerenderer.settings.logging.format | quote }}
             - name: Common__Logging__Targets
               value: {{ .Values.pagerenderer.settings.logging.targets | quote }}
+            - name: Common__MaxParallelRenders
+              value: {{ .Values.pagerenderer.settings.maxParallelRenders | quote }}
+            - name: Common__RenderMemoryBudgetMb
+              value: {{ .Values.pagerenderer.settings.renderMemoryBudgetMb | quote }}
+            - name: Common__MemorySafetyFactor
+              value: {{ .Values.pagerenderer.settings.memorySafetyFactor | quote }}
+            - name: Common__MemoryAdmissionTimeoutSeconds
+              value: {{ .Values.pagerenderer.settings.memoryAdmissionTimeoutSeconds | quote }}
+            - name: Common__ReleaseWebGlAfterMapScreen
+              value: {{ .Values.pagerenderer.settings.releaseWebGlAfterMapScreen | quote }}
             - name: LD_LIBRARY_PATH
               value: "/usr/lib/x86_64-linux-gnu:/usr/local/nvidia/lib64:/usr/local/nvidia/lib"
             - name: LIBGL_ALWAYS_SOFTWARE

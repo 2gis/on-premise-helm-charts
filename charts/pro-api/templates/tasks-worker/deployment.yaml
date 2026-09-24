@@ -132,6 +132,8 @@ spec:
               value: {{ $.Values.tasks.settings.features.assetDataPreparation.enabled | quote }}
             - name: FeatureManagement__AuditLogging
               value: {{ $.Values.tasks.settings.features.auditLogging.enabled | quote }}
+            - name: FeatureManagement__AssetChangesNotification
+              value: {{ $.Values.tasks.settings.features.assetChangesNotification.enabled | quote }}
             - name: FeatureManagement__CleanCitylensFrames
               value: {{ $.Values.tasks.settings.features.cleanCitylensFrames.enabled | quote }}
             - name: FeatureManagement__RemoveUnusedUserAssetFiles
@@ -241,18 +243,16 @@ spec:
                 secretKeyRef:
                   key: apiKey
                   name: {{ include "pro-api.secretName" . }}
-            - name: Common__DataCenterId
-              value: {{ .Values.api.settings.dataCenterId | quote }}
+            - name: Common__Cluster
+              value: {{ .Values.clusters.current | quote }}
 
             - name: PermissionsApi__Url
               value: {{ include "pro-api.permissions-url" . }}
-            {{- if .Values.permissions.settings.auth.enabled }}
             - name: PermissionsApi__Key
               valueFrom:
                 secretKeyRef:
                   key: permissionsApiKey
                   name: {{ include "pro-api.secretName" . }}
-            {{- end }}
             {{- if .Values.tasks.settings.features.assetDataPreparation.enabled }}
             - name: AssetDataPreparation__Segments
               value: {{ .Values.tasks.settings.features.assetDataPreparation.segments | quote }}
@@ -278,13 +278,13 @@ spec:
             - name: MailerSenderClient__ApiKey
               value: {{ .Values.mailerSender.apiKey | quote }}
 
-            {{- if .Values.pagerenderer.settings.enabled }}
             - name: PageRendererApi__Url
-            {{- if .Values.pagerenderer.settings.grpcRoute.enabled }}
-              value: https://{{ index .Values.pagerenderer.settings.grpcRoute.hostnames 0 | toString }}:{{ .Values.pagerenderer.settings.grpcRoute.port }}
+            {{- if .Values.pagerenderer.settings.grpcRouteHost }}
+              value: https://{{ .Values.pagerenderer.settings.grpcRouteHost }}:{{ .Values.pagerenderer.settings.grpcRoutePort }}
             {{- else }}
               value: http://{{ include "pro-api.pagerenderer-name" . }}:{{ .Values.pagerenderer.settings.grpcPort }}
             {{- end }}
+            {{- if .Values.pagerenderer.settings.enabled }}
             - name: PageRendererApi__ApiKey
               valueFrom:
                 secretKeyRef:
