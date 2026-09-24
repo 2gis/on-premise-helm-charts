@@ -12,101 +12,102 @@ owner: ''
 
 dgctlDockerRegistry: ''
 
-# @section Worker settings
+# @section UniSearcher settings
 
-# @param worker.enabled Enable worker service
-# @param worker.replicaCount Number of worker replicas (used if HPA is disabled)
-# @param worker.matchLabels Selector match labels
-# @param worker.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
-# @param worker.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
-# @param worker.podSecurityContext Kubernetes [podSecurityContext](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
-# @param worker.imagePullSecrets Kubernetes image pull secrets
-# @param worker.image.repository Image Repository
-# @param worker.image.pullPolicy Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy)
-# @param worker.image.tag Image Tag
-# @param worker.ports.http HTTP port used by the worker
-# @param worker.ports.grpc gRPC port used by the worker
-# @param worker.logLevel Log level of the worker app; can be `trace`, `debug`, `info`, `warning`, `error`, or `critical`
-# @param worker.logFormat Log format used by the worker; Userver supports `tskv`, `ltsv`, `raw`, `json`, `json_yadeploy`. We recommend using `json`
-# @param worker.workerMainThreads Number of main task processor threads
-# @param worker.workerFbThreads Number of fallback task processor threads
-# @param worker.dataUpdateFrequencySec Frequency (in seconds) at which the worker updates data (indexes and RTW)
-# @param worker.rtw.lifeTime Lifetime of Real-Time Weights (in seconds)
-# @param worker.queueLimit Maximum number of tasks in the main task processor queue. If exceeded, tasks are sent to the fallback processor
+# @param unisearcher.enabled Enable unisearcher service
+# @param unisearcher.replicaCount Number of unisearcher replicas (used if HPA is disabled)
+# @param unisearcher.matchLabels Selector match labels
+# @param unisearcher.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
+# @param unisearcher.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
+# @param unisearcher.podSecurityContext Kubernetes [podSecurityContext](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
+# @param unisearcher.imagePullSecrets Kubernetes image pull secrets
+# @param unisearcher.image.repository Image Repository
+# @param unisearcher.image.pullPolicy Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy)
+# @param unisearcher.image.tag Image Tag
+# @param unisearcher.ports.http HTTP port used by the unisearcher
+# @param unisearcher.ports.grpc gRPC port used by the unisearcher
+# @param unisearcher.ports.monitor HTTP port used by the unisearcher monitor
+# @param unisearcher.logLevel Log level of the unisearcher app; can be `trace`, `debug`, `info`, `warning`, `error`, or `critical`
+# @param unisearcher.logFormat Log format used by the unisearcher; Userver supports `tskv`, `ltsv`, `raw`, `json`, `json_yadeploy`. We recommend using `json`
+# @param unisearcher.unisearcherMainThreads Number of main task processor threads
+# @param unisearcher.unisearcherFbThreads Number of fallback task processor threads
+# @param unisearcher.dataUpdateFrequencySec Frequency (in seconds) at which the unisearcher updates data (indexes and RTW)
+# @param unisearcher.rtw.lifeTime Lifetime of Real-Time Weights (in seconds)
+# @param unisearcher.queueLimit Maximum number of tasks in the main task processor queue. If exceeded, tasks are sent to the fallback processor
 
-# @param worker.securityContext Kubernetes [SecurityContext](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
+# @param unisearcher.securityContext Kubernetes [SecurityContext](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
 
-# @skip worker.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
-# @extra worker.resources.requests.cpu A CPU request, recommended value `1400m`
-# @extra worker.resources.requests.memory A memory request, recommended value `3840Mi`
-# @extra worker.resources.limits.cpu A CPU limit, recommended value `6000m`
-# @extra worker.resources.limits.memory A memory limit, recommended value `6Gi`
+# @skip unisearcher.resources **Kubernetes [resource management settings](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)**
+# @extra unisearcher.resources.requests.cpu A CPU request, recommended value `1400m`
+# @extra unisearcher.resources.requests.memory A memory request, recommended value `3840Mi`
+# @extra unisearcher.resources.limits.cpu A CPU limit, recommended value `6000m`
+# @extra unisearcher.resources.limits.memory A memory limit, recommended value `6Gi`
 
-# @param worker.livenessProbe.enabled Enable of livenessProbe
-# @param worker.livenessProbe.httpGet.path HTTP path for livenessProbe
-# @param worker.livenessProbe.httpGet.port HTTP port for livenessProbe
-# @param worker.livenessProbe.httpGet.scheme Scheme for livenessProbe
-# @param worker.livenessProbe.timeoutSeconds Timeout (in seconds) for the liveness probe
-# @param worker.livenessProbe.periodSeconds Interval (in seconds) between liveness probe checks
-# @param worker.livenessProbe.successThreshold Minimum consecutive successes for the readiness probe to be considered successful
-# @param worker.livenessProbe.failureThreshold Number of failures before the readiness probe is considered failed
+# @param unisearcher.livenessProbe.enabled Enable of livenessProbe
+# @param unisearcher.livenessProbe.httpGet.path HTTP path for livenessProbe
+# @param unisearcher.livenessProbe.httpGet.port HTTP port for livenessProbe
+# @param unisearcher.livenessProbe.httpGet.scheme Scheme for livenessProbe
+# @param unisearcher.livenessProbe.timeoutSeconds Timeout (in seconds) for the liveness probe
+# @param unisearcher.livenessProbe.periodSeconds Interval (in seconds) between liveness probe checks
+# @param unisearcher.livenessProbe.successThreshold Minimum consecutive successes for the readiness probe to be considered successful
+# @param unisearcher.livenessProbe.failureThreshold Number of failures before the readiness probe is considered failed
 
-# @param worker.readinessProbe.enabled Enable readiness probe
-# @param worker.readinessProbe.httpGet.path HTTP path for the readiness probe
-# @param worker.readinessProbe.httpGet.port HTTP port for the readiness probe
-# @param worker.readinessProbe.httpGet.scheme HTTP scheme for the readiness probe
-# @param worker.readinessProbe.timeoutSeconds Timeout (in seconds) for the readiness probe
-# @param worker.readinessProbe.periodSeconds Interval (in seconds) between readiness probe checks
-# @param worker.readinessProbe.successThreshold Minimum consecutive successes for the readiness probe to be considered successful
-# @param worker.readinessProbe.failureThreshold Number of failures before the readiness probe is considered failed
+# @param unisearcher.readinessProbe.enabled Enable readiness probe
+# @param unisearcher.readinessProbe.httpGet.path HTTP path for the readiness probe
+# @param unisearcher.readinessProbe.httpGet.port HTTP port for the readiness probe
+# @param unisearcher.readinessProbe.httpGet.scheme HTTP scheme for the readiness probe
+# @param unisearcher.readinessProbe.timeoutSeconds Timeout (in seconds) for the readiness probe
+# @param unisearcher.readinessProbe.periodSeconds Interval (in seconds) between readiness probe checks
+# @param unisearcher.readinessProbe.successThreshold Minimum consecutive successes for the readiness probe to be considered successful
+# @param unisearcher.readinessProbe.failureThreshold Number of failures before the readiness probe is considered failed
 
-# @param worker.startupProbe.enabled Enable startup probe
-# @param worker.startupProbe.httpGet.path HTTP path for the startup probe
-# @param worker.startupProbe.httpGet.port HTTP port for the startup probe
-# @param worker.startupProbe.httpGet.scheme HTTP scheme for the startup probe
-# @param worker.startupProbe.initialDelaySeconds Initial delay (in seconds) before starting the startup probe
-# @param worker.startupProbe.timeoutSeconds Timeout (in seconds) for the startup probe
-# @param worker.startupProbe.periodSeconds Interval (in seconds) between startup probe checks
-# @param worker.startupProbe.successThreshold Minimum consecutive successes for the startup probe to be considered successful
-# @param worker.startupProbe.failureThreshold Number of failures before the startup probe is considered failed
+# @param unisearcher.startupProbe.enabled Enable startup probe
+# @param unisearcher.startupProbe.httpGet.path HTTP path for the startup probe
+# @param unisearcher.startupProbe.httpGet.port HTTP port for the startup probe
+# @param unisearcher.startupProbe.httpGet.scheme HTTP scheme for the startup probe
+# @param unisearcher.startupProbe.initialDelaySeconds Initial delay (in seconds) before starting the startup probe
+# @param unisearcher.startupProbe.timeoutSeconds Timeout (in seconds) for the startup probe
+# @param unisearcher.startupProbe.periodSeconds Interval (in seconds) between startup probe checks
+# @param unisearcher.startupProbe.successThreshold Minimum consecutive successes for the startup probe to be considered successful
+# @param unisearcher.startupProbe.failureThreshold Number of failures before the startup probe is considered failed
 
-# @param worker.hpa.enabled Enable or disable Horizontal Pod Autoscaler (HPA)
-# @param worker.hpa.minReplicas Lower limit for the number of replicas to which the autoscaler can scale down
-# @param worker.hpa.maxReplicas Upper limit for the number of replicas to which the autoscaler can scale up
-# @param worker.hpa.averageCPUValue Target average CPU utilization (represented as a direct value of requested CPU); if not specified the default autoscaling policy will be used
-# @param worker.hpa.behavior.scaleDown.policies[0].periodSeconds Indicates the length of time in the past for which the policy must hold true
-# @param worker.hpa.behavior.scaleDown.policies[0].type The type of amount by which the pod count should be reduced; This can be a percentage of the current pod count or a specific number of pods
-# @param worker.hpa.behavior.scaleDown.policies[0].value The amount by which the pod count should be increased
-# @param worker.hpa.behavior.scaleDown.stabilizationWindowSeconds The stabilization window is used to restrict the flapping of replica count when the metrics used for scaling keep fluctuating
-# @param worker.hpa.behavior.scaleUp.selectPolicy By setting the value to Min which would select the policy which allows the smallest change in the replica count; Setting the value to Disabled completely disables scaling in that direction
-# @param worker.hpa.behavior.scaleUp.policies[0].periodSeconds Indicates the length of time in the past for which the policy must hold true
-# @param worker.hpa.behavior.scaleUp.policies[0].type The type of amount by which the pod count should be increased; This can be a percentage of the current pod count or a specific number of pods
-# @param worker.hpa.behavior.scaleUp.policies[0].value The amount by which the pod count should be increased
-# @param worker.hpa.behavior.scaleUp.policies[1].type The type of amount by which the pod count should be increased; This can be a percentage of the current pod count or a specific number of pods
-# @param worker.hpa.behavior.scaleUp.policies[1].value The amount by which the pod count should be increased
-# @param worker.hpa.behavior.scaleUp.policies[1].periodSeconds Indicates the length of time in the past for which the policy must hold true
-# @param worker.hpa.behavior.scaleUp.stabilizationWindowSeconds The stabilization window is used to restrict the flapping of replica count when the metrics used for scaling keep fluctuating
+# @param unisearcher.hpa.enabled Enable or disable Horizontal Pod Autoscaler (HPA)
+# @param unisearcher.hpa.minReplicas Lower limit for the number of replicas to which the autoscaler can scale down
+# @param unisearcher.hpa.maxReplicas Upper limit for the number of replicas to which the autoscaler can scale up
+# @param unisearcher.hpa.averageCPUValue Target average CPU utilization (represented as a direct value of requested CPU); if not specified the default autoscaling policy will be used
+# @param unisearcher.hpa.behavior.scaleDown.policies[0].periodSeconds Indicates the length of time in the past for which the policy must hold true
+# @param unisearcher.hpa.behavior.scaleDown.policies[0].type The type of amount by which the pod count should be reduced; This can be a percentage of the current pod count or a specific number of pods
+# @param unisearcher.hpa.behavior.scaleDown.policies[0].value The amount by which the pod count should be increased
+# @param unisearcher.hpa.behavior.scaleDown.stabilizationWindowSeconds The stabilization window is used to restrict the flapping of replica count when the metrics used for scaling keep fluctuating
+# @param unisearcher.hpa.behavior.scaleUp.selectPolicy By setting the value to Min which would select the policy which allows the smallest change in the replica count; Setting the value to Disabled completely disables scaling in that direction
+# @param unisearcher.hpa.behavior.scaleUp.policies[0].periodSeconds Indicates the length of time in the past for which the policy must hold true
+# @param unisearcher.hpa.behavior.scaleUp.policies[0].type The type of amount by which the pod count should be increased; This can be a percentage of the current pod count or a specific number of pods
+# @param unisearcher.hpa.behavior.scaleUp.policies[0].value The amount by which the pod count should be increased
+# @param unisearcher.hpa.behavior.scaleUp.policies[1].type The type of amount by which the pod count should be increased; This can be a percentage of the current pod count or a specific number of pods
+# @param unisearcher.hpa.behavior.scaleUp.policies[1].value The amount by which the pod count should be increased
+# @param unisearcher.hpa.behavior.scaleUp.policies[1].periodSeconds Indicates the length of time in the past for which the policy must hold true
+# @param unisearcher.hpa.behavior.scaleUp.stabilizationWindowSeconds The stabilization window is used to restrict the flapping of replica count when the metrics used for scaling keep fluctuating
 
-# @param worker.vpa.enabled Enable or disable Vertical Pod Autoscaler (VPA)
-# @param worker.vpa.updateMode VPA operating mode: `Off` means VPA will not automatically change resource requests
+# @param unisearcher.vpa.enabled Enable or disable Vertical Pod Autoscaler (VPA)
+# @param unisearcher.vpa.updateMode VPA operating mode: `Off` means VPA will not automatically change resource requests
 
-# @param worker.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
-# @param worker.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings
-# @param worker.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)
+# @param unisearcher.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
+# @param unisearcher.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings
+# @param unisearcher.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)
 
-# @param worker.data.persistent.enabled Enable persistent volume for the service
-# @param worker.data.storageClassName Storage class to use. See Kubernetes [storageClassName](https://kubernetes.io/docs/concepts/storage/storage-classes/)
-# @param worker.data.resources.requests.storage Storage volume size
+# @param unisearcher.data.persistent.enabled Enable persistent volume for the service
+# @param unisearcher.data.storageClassName Storage class to use. See Kubernetes [storageClassName](https://kubernetes.io/docs/concepts/storage/storage-classes/)
+# @param unisearcher.data.resources.requests.storage Storage volume size
 
-# @param worker.strategy.type Kubernetes deployment strategy. Can be `Recreate` or `RollingUpdate`. See [Strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy)
-# @param worker.strategy.rollingUpdate.maxUnavailable Maximum number of pods that can be unavailable during a [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment)
-# @param worker.strategy.rollingUpdate.maxSurge Maximum number of extra pods that can be created during a [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment)
-# @param worker.revisionHistoryLimit Number of old ReplicaSets to retain for [rollback](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)
-# @param worker.gracefulShutdownInterval Interval (in seconds) used by the application to finish processing current requests before shutting down
-# @param worker.syncer.includeProjectKeyRegexp A regular expression that the project keys must match to be included in the synchronization
-# @param worker.syncer.excludeProjectKeyRegexp A regular expression that the project keys must match to be excluded from the synchronization
+# @param unisearcher.strategy.type Kubernetes deployment strategy. Can be `Recreate` or `RollingUpdate`. See [Strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy)
+# @param unisearcher.strategy.rollingUpdate.maxUnavailable Maximum number of pods that can be unavailable during a [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment)
+# @param unisearcher.strategy.rollingUpdate.maxSurge Maximum number of extra pods that can be created during a [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment)
+# @param unisearcher.revisionHistoryLimit Number of old ReplicaSets to retain for [rollback](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/)
+# @param unisearcher.gracefulShutdownInterval Interval (in seconds) used by the application to finish processing current requests before shutting down
+# @param unisearcher.syncer.includeProjectKeyRegexp A regular expression that the project keys must match to be included in the synchronization
+# @param unisearcher.syncer.excludeProjectKeyRegexp A regular expression that the project keys must match to be excluded from the synchronization
 
-worker:
+unisearcher:
   enabled: true
   replicaCount: 2
   matchLabels: {}
@@ -115,16 +116,17 @@ worker:
   podSecurityContext: {}
   imagePullSecrets: []
   image:
-    repository: 2gis-on-premise/search-api-v8-worker
+    repository: 2gis-on-premise/search-api-v8-unisearcher
     pullPolicy: IfNotPresent
-    tag: 8.30.0
+    tag: 8.34.0
   ports:
     http: 8092
     grpc: 8091
+    monitor: 8093
   logLevel: info
   logFormat: json
-  workerMainThreads: 4
-  workerFbThreads: 4
+  unisearcherMainThreads: 4
+  unisearcherFbThreads: 4
   dataUpdateFrequencySec: 60
   rtw:
     lifeTime: 1800
@@ -280,15 +282,15 @@ head:
 
 # @param head.head.prestopHook.enabled Enable or disable the container lifecycle preStop hook
 
-# @param head.head.workerQueriesCount Number of parts into which a request is split before being sent to workers (map operation in map-reduce)
-# @param head.head.workerRetryAttempts Number of retry attempts to contact a worker
-# @param head.head.workerTimeoutMs Timeout (in milliseconds) for waiting for a response from a worker
+# @param head.head.unisearcherQueriesCount Number of parts into which a request is split before being sent to unisearchers (map operation in map-reduce)
+# @param head.head.unisearcherRetryAttempts Number of retry attempts to contact a unisearcher
+# @param head.head.unisearcherTimeoutMs Timeout (in milliseconds) for waiting for a response from a unisearcher
 # @param head.head.adsEnable Enable or disable advertising
 # @param head.head.bigSearchMode.enabled Enable or disable big search (true, false)
 # @param head.head.bigSearchSearchers List of searchers for which big search is enabled. If empty, the search will work as V7, despite the bigSearchMode being enabled.
 # @param head.head.segmentDetectorClientTimeoutMs Timeout (ms) for SegmentDetector client
 # @skip head.head.bigSearchExcludeSegments List of projects to exclude from indexing
-# @skip head.head.ignoreSubtaskError Enable to ignore worker subtask error
+# @skip head.head.ignoreSubtaskError Enable to ignore unisearcher subtask error
 # @param head.head.aiSuggestedQueries.enabled Enable or disable AI Suggested Queries
 
 # @param head.head.throttle.enabled Enable or disable big search throttling
@@ -306,7 +308,7 @@ head:
     image:
       repository: 2gis-on-premise/search-api-v8-head
       pullPolicy: IfNotPresent
-      tag: 8.30.0
+      tag: 8.34.0
     ports:
       grpc: 9010
       http: 9090
@@ -354,9 +356,9 @@ head:
       failureThreshold: 200
     prestopHook:
       enabled: true
-    workerQueriesCount: 32
-    workerRetryAttempts: 1
-    workerTimeoutMs: 2000
+    unisearcherQueriesCount: 32
+    unisearcherRetryAttempts: 1
+    unisearcherTimeoutMs: 2000
     adsEnable: false
     bigSearchMode:
       enabled: true
@@ -407,7 +409,7 @@ head:
 # @param head.envoy.policy Load balancing policy; can be `ROUND_ROBIN`, `LEAST_REQUEST`, or `RANDOM`
 
 # @param head.envoy.faultInjection.enabled Enables or disables the fault injection feature in Envoy for testing service resilience.
-# @param head.envoy.faultInjection.clients.worker Specifies the fault injection settings for the worker client; see [Envoy Fault Injection](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/filters/http/fault/v3/fault.proto#extensions-filters-http-fault-v3-httpfault).
+# @param head.envoy.faultInjection.clients.unisearcher Specifies the fault injection settings for the unisearcher client; see [Envoy Fault Injection](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/filters/http/fault/v3/fault.proto#extensions-filters-http-fault-v3-httpfault).
 # @param head.envoy.faultInjection.clients.qt Specifies the fault injection settings for the query transformer client; see [Envoy Fault Injection](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/filters/http/fault/v3/fault.proto#extensions-filters-http-fault-v3-httpfault).
 # @param head.envoy.faultInjection.clients.ai Specifies the fault injection settings for the AI vector search client; see [Envoy Fault Injection](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/filters/http/fault/v3/fault.proto#extensions-filters-http-fault-v3-httpfault).
 # @param head.envoy.faultInjection.clients.recsys Specifies the fault injection settings for the recsys ranker client; see [Envoy Fault Injection](https://www.envoyproxy.io/docs/envoy/latest/api-v3/extensions/filters/http/fault/v3/fault.proto#extensions-filters-http-fault-v3-httpfault).
@@ -435,7 +437,7 @@ head:
     faultInjection:
       enabled: false
       clients:
-        worker: {}
+        unisearcher: {}
         qt: {}
         ai: {}
         recsys: {}
@@ -673,7 +675,7 @@ filesStorage:
   image:
     repository: 2gis-on-premise/search-api-v8-files-storage
     pullPolicy: IfNotPresent
-    tag: 8.30.0
+    tag: 8.34.0
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -772,7 +774,7 @@ dataAdapter:
   image:
     repository: 2gis-on-premise/search-api-v8-data-adapter
     pullPolicy: IfNotPresent
-    tag: 8.30.0
+    tag: 8.34.0
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -865,7 +867,7 @@ portal:
   image:
     repository: 2gis-on-premise/search-api-v8-portal
     pullPolicy: IfNotPresent
-    tag: 8.30.0
+    tag: 8.34.0
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -967,7 +969,7 @@ controller:
   image:
     repository: 2gis-on-premise/search-api-v8-controller
     pullPolicy: IfNotPresent
-    tag: 8.30.0
+    tag: 8.34.0
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -1099,7 +1101,7 @@ indexer:
   image:
     repository: 2gis-on-premise/search-api-v8-indexer
     pullPolicy: IfNotPresent
-    tag: 8.30.0
+    tag: 8.34.0
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -1204,7 +1206,7 @@ syncer:
   image:
     repository: 2gis-on-premise/search-api-v8-syncer
     pullPolicy: IfNotPresent
-    tag: 8.30.0
+    tag: 8.34.0
   securityContext: {}
   resources:
     requests:
@@ -1251,7 +1253,7 @@ magg:
   image:
     repository: 2gis-on-premise/search-api-v8-metrics-aggregator
     pullPolicy: IfNotPresent
-    tag: 0.1.0
+    tag: 0.1.1
   ports:
     metrics: 9999
   resources:
@@ -1273,7 +1275,7 @@ serviceAccount:
   annotations: {}
   name: ''
 
-# @param service.worker.port Service (svc) port for the worker
+# @param service.unisearcher.port Service (svc) port for the unisearcher
 # @param service.head.ports.grpc Service (svc) grpc port for the head component
 # @param service.head.ports.http Service (svc) http port for the head component
 
@@ -1291,7 +1293,7 @@ serviceAccount:
 # @param service.segmentDetector.port Service (svc) port for the segment-detector component
 
 service:
-  worker:
+  unisearcher:
     port: 8091
   head:
     ports:
@@ -1538,7 +1540,7 @@ ingressRouter:
   image:
     repository: 2gis-on-premise/search-api-v8-ingress-router
     pullPolicy: IfNotPresent
-    tag: 8.30.0
+    tag: 8.34.0
   imagePullSecrets: []
   matchLabels: {}
   podLabels: {}
@@ -1701,7 +1703,7 @@ segmentDetector:
   image:
     repository: 2gis-on-premise/search-api-v8-segment-detector
     pullPolicy: IfNotPresent
-    tag: 8.30.0
+    tag: 8.34.0
   imagePullSecrets: []
   segmentDetectorGrpcThreads: 2
   dataUpdateFrequencySec: 60
@@ -1814,7 +1816,7 @@ onpremise: true
 # @section Sentry settings
 #
 # @param sentry.enabled Enable/disable Sentry component loading in services
-# @param sentry.workerDsn Sentry DSN for worker service. Empty string disables Sentry initialization for worker
+# @param sentry.unisearcherDsn Sentry DSN for unisearcher service. Empty string disables Sentry initialization for unisearcher
 # @param sentry.headDsn Sentry DSN for head service. Empty string disables Sentry initialization for head
 # @param sentry.ingressRouterDsn Sentry DSN for ingress-router service. Empty string disables Sentry initialization for ingress-router
 # @param sentry.segmentDetectorDsn Sentry DSN for segment-detector service. Empty string disables Sentry initialization for segment-detector
@@ -1827,7 +1829,7 @@ onpremise: true
 
 sentry:
   enabled: false
-  workerDsn: ''
+  unisearcherDsn: ''
   headDsn: ''
   ingressRouterDsn: ''
   segmentDetectorDsn: ''
