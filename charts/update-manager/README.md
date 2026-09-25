@@ -3,13 +3,7 @@
 Use this Helm chart to deploy Update Manager service, which is a part of
 2GIS's [On-Premise solution](https://docs.2gis.com/en/on-premise/overview).
 
-See the [documentation](https://docs.2gis.com/en/on-premise/TODO) to learn about:
-
-- Architecture of the service.
-
-- Installing the service.
-
-- Updating the service.
+> Update Manager documentation is under development.
 
 ## Values
 
@@ -26,7 +20,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/TODO) to learn about
 | `imagePullSecrets` | Kubernetes image pull secrets. | `[]`                             |
 | `imagePullPolicy`  | Pull policy.                   | `IfNotPresent`                   |
 | `image.repository` | Service image repository.      | `2gis-on-premise/update-manager` |
-| `image.tag`        | Service image tag.             | `1.0.0`                          |
+| `image.tag`        | Service image tag.             | `3.7.0`                          |
 
 ### API service settings
 
@@ -38,7 +32,7 @@ See the [documentation](https://docs.2gis.com/en/on-premise/TODO) to learn about
 | `api.datagateway.url`                       | URL of the DataGateway instance.                                                                                                                                                                         | `https://datagateway.api.2gis.com` |
 | `api.datagateway.apiKey`                    | API key for the DataGateway instance. **Required**                                                                                                                                                       | `""`                               |
 | `api.dgctl.image.registry`                  | DGCTL image registry.                                                                                                                                                                                    | `""`                               |
-| `api.dgctl.image.repository`                | DGCTL image repository.                                                                                                                                                                                  | `2gis/dgctl`                       |
+| `api.dgctl.image.repository`                | DGCTL image repository.                                                                                                                                                                                  | `2gis-on-premise/dgctl`            |
 | `api.dgctl.image.tag`                       | DGCTL image tag.                                                                                                                                                                                         | `3`                                |
 | `api.dgctl.image.pullPolicy`                | Pull policy for the DGCTL image used in download jobs.                                                                                                                                                   | `IfNotPresent`                     |
 | `api.job.activeDeadline`                    | Active deadline for the created jobs.                                                                                                                                                                    | `2h`                               |
