@@ -738,12 +738,17 @@ Return the appropriate apiVersion for Horizontal Pod Autoscaler.
 {{- end -}}
 
 {{- define "keys.psql.initTLS" -}}
+{{- $ctx := .ctx -}}
 {{- if or
-  (has .Values.postgres.ro.tls.mode (list "verify-ca" "verify-full"))
-  (has .Values.postgres.rw.tls.mode (list "verify-ca" "verify-full"))
+  (has $ctx.Values.postgres.ro.tls.mode (list "verify-ca" "verify-full"))
+  (has $ctx.Values.postgres.rw.tls.mode (list "verify-ca" "verify-full"))
 -}}
 - name: copy-certs
-  image: {{ .Values.dgctlDockerRegistry }}/{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}
+  image: {{ $ctx.Values.dgctlDockerRegistry }}/{{ $ctx.Values.backend.image.repository }}:{{ $ctx.Values.backend.image.tag }}
+  {{- with include "keys.securityContext" . }}
+  securityContext:
+  {{- . | nindent 4 }}
+  {{- end }}
   command:
     - /bin/sh
     - -c
@@ -763,17 +768,25 @@ Return the appropriate apiVersion for Horizontal Pod Autoscaler.
       mountPath: /tls
     - name: tls
       mountPath: /etc/ssl/psql
+    {{- with include "keys.writable.volumeMounts" . }}
+    {{- . | nindent 4 }}
+    {{- end }}
 {{- end -}}
 {{- end -}}
 
 {{- define "keys.initTLS" -}}
+{{- $ctx := .ctx -}}
 {{- if or
-    (has .Values.kafka.securityProtocol (list "SSL" "SASL_SSL"))
-    (has .Values.postgres.ro.tls.mode (list "verify-ca" "verify-full"))
-    (has .Values.postgres.rw.tls.mode (list "verify-ca" "verify-full"))
+    (has $ctx.Values.kafka.securityProtocol (list "SSL" "SASL_SSL"))
+    (has $ctx.Values.postgres.ro.tls.mode (list "verify-ca" "verify-full"))
+    (has $ctx.Values.postgres.rw.tls.mode (list "verify-ca" "verify-full"))
 }}
 - name: copy-certs
-  image: {{ .Values.dgctlDockerRegistry }}/{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}
+  image: {{ $ctx.Values.dgctlDockerRegistry }}/{{ $ctx.Values.backend.image.repository }}:{{ $ctx.Values.backend.image.tag }}
+  {{- with include "keys.securityContext" . }}
+  securityContext:
+  {{- . | nindent 4 }}
+  {{- end }}
   command:
     - /bin/sh
     - -c
@@ -792,20 +805,89 @@ Return the appropriate apiVersion for Horizontal Pod Autoscaler.
       memory: 16Mi
   volumeMounts:
   {{ if or
-      (has .Values.postgres.ro.tls.mode (list "verify-ca" "verify-full"))
-      (has .Values.postgres.rw.tls.mode (list "verify-ca" "verify-full"))
+      (has $ctx.Values.postgres.ro.tls.mode (list "verify-ca" "verify-full"))
+      (has $ctx.Values.postgres.rw.tls.mode (list "verify-ca" "verify-full"))
   }}
     - name: tls-raw
       mountPath: /tls/psql
     - name: tls
       mountPath: /etc/ssl/psql
   {{- end }}
-  {{ if (has .Values.kafka.securityProtocol (list "SSL" "SASL_SSL")) }}
+  {{ if (has $ctx.Values.kafka.securityProtocol (list "SSL" "SASL_SSL")) }}
     - name: tls-kafka-raw
       mountPath: /tls/kafka
     - name: tls-kafka
       mountPath: /etc/ssl/private
   {{- end }}
+  {{- with include "keys.writable.volumeMounts" . }}
+  {{- . | nindent 4 }}
+  {{- end }}
+{{- end }}
+{{- end -}}
+
+{{/*
+Security settings.
+All the helpers below expect a dict as a context: `(dict "ctx" $ "component" .Values.<service>)`,
+where the service-level settings are merged over the chart-wide ones.
+*/}}
+
+{{- define "keys.podSecurityContext.settings" -}}
+{{- $global := default (dict) .ctx.Values.podSecurityContext -}}
+{{- $component := default (dict) (.component).podSecurityContext -}}
+{{- $settings := mergeOverwrite (deepCopy $global) $component -}}
+{{- if (default true $settings.enabled) -}}
+{{- toYaml (omit $settings "enabled") -}}
+{{- end -}}
+{{- end -}}
+
+{{- define "keys.podSecurityContext" -}}
+{{- $settings := fromYaml (include "keys.podSecurityContext.settings" .) -}}
+{{- with $settings -}}
+{{- toYaml . -}}
+{{- end -}}
+{{- end -}}
+
+{{- define "keys.securityContext.settings" -}}
+{{- $global := default (dict) .ctx.Values.securityContext -}}
+{{- $component := default (dict) (.component).securityContext -}}
+{{- $settings := mergeOverwrite (deepCopy $global) $component -}}
+{{- if (default true $settings.enabled) -}}
+{{- toYaml (omit $settings "enabled") -}}
+{{- end -}}
+{{- end -}}
+
+{{- define "keys.securityContext" -}}
+{{- $settings := fromYaml (include "keys.securityContext.settings" .) -}}
+{{- with $settings -}}
+{{- toYaml . -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Writable directories mounted as `emptyDir` volumes for the containers
+running with the read-only root filesystem.
+*/}}
+{{- define "keys.writable.paths" -}}
+{{- $settings := fromYaml (include "keys.securityContext.settings" .) -}}
+{{- if $settings.readOnlyRootFilesystem -}}
+{{- $paths := (.component).writablePaths | default .ctx.Values.writablePaths | default (list) -}}
+{{- toYaml $paths -}}
+{{- else -}}
+[]
+{{- end -}}
+{{- end -}}
+
+{{- define "keys.writable.volumeMounts" -}}
+{{- range $index, $path := (include "keys.writable.paths" . | fromYamlArray) }}
+- name: writable-{{ $index }}
+  mountPath: {{ $path | quote }}
+{{- end }}
+{{- end -}}
+
+{{- define "keys.writable.volumes" -}}
+{{- range $index, $path := (include "keys.writable.paths" . | fromYamlArray) }}
+- name: writable-{{ $index }}
+  emptyDir: {}
 {{- end }}
 {{- end -}}
 
@@ -834,3 +916,142 @@ Manifest name
     fieldRef:
       fieldPath: status.podIP
 {{- end }}
+
+{{/*
+Pod annotations, including the Istio sidecar injection control.
+The sidecar is never injected into the Jobs and CronJobs: the injected proxy
+does not stop on its own and the job would never be completed.
+*/}}
+{{- define "keys.podAnnotations" -}}
+{{- $annotations := default (dict) (.component).podAnnotations -}}
+{{- if (.ctx.Values.serviceMesh).enabled -}}
+{{- $inject := "false" -}}
+{{- if and .ctx.Values.serviceMesh.sidecarInject (not .job) -}}
+{{- $inject = "true" -}}
+{{- end -}}
+{{- $annotations = merge (deepCopy $annotations) (dict "sidecar.istio.io/inject" $inject) -}}
+{{- end -}}
+{{- with $annotations -}}
+{{- toYaml . -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Ingress settings.
+All the helpers below expect a dict as a context:
+`(dict "ctx" $ "ingress" .Values.<service>.ingress "name" "<service>" "secretName" "<secret>")`.
+*/}}
+
+{{- define "keys.ingress.checks" -}}
+{{- $ingress := .ingress -}}
+{{- if and $ingress.tls (not $ingress.sslPassthrough) -}}
+{{- fail (printf "Set .Values.%s.ingress.sslPassthrough to true: the TLS traffic must be passed to the service without being decrypted by the Ingress" .name) -}}
+{{- end -}}
+{{- range $ingress.hosts -}}
+{{- if contains "*" (.host | toString) -}}
+{{- fail (printf "A wildcard hostname %s is not allowed in .Values.%s.ingress.hosts: use the exact hostnames" .host $.name) -}}
+{{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{- define "keys.ingress.annotations" -}}
+{{- $annotations := default (dict) .ingress.annotations -}}
+{{- if .ingress.sslPassthrough -}}
+{{- $annotations = merge (deepCopy $annotations) (dict
+  "nginx.ingress.kubernetes.io/ssl-passthrough" "true"
+  "nginx.ingress.kubernetes.io/backend-protocol" "HTTPS"
+) -}}
+{{- end -}}
+{{- with $annotations -}}
+{{- toYaml . -}}
+{{- end -}}
+{{- end -}}
+
+{{- define "keys.ingress.tls" -}}
+{{- if .ingress.tls -}}
+{{- toYaml .ingress.tls -}}
+{{- else if .ctx.Values.certManager.enabled -}}
+{{- $hosts := list -}}
+{{- range .ingress.hosts -}}
+{{- $hosts = append $hosts .host -}}
+{{- end -}}
+{{- list (dict "hosts" $hosts "secretName" .secretName) | toYaml -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Service Mesh settings.
+*/}}
+
+{{- define "keys.ingress.hostnames" -}}
+{{- $hosts := list -}}
+{{- if .enabled -}}
+{{- range .hosts -}}
+{{- $hosts = append $hosts .host -}}
+{{- end -}}
+{{- end -}}
+{{- toYaml $hosts -}}
+{{- end -}}
+
+{{/*
+Services of the chart that are exposed through the mesh: the name, the service port
+and the hostnames served by the ingress gateway.
+*/}}
+{{- define "keys.serviceMesh.services" -}}
+{{- $services := list
+  (dict
+    "name" (include "keys.admin.name" .)
+    "port" (int .Values.admin.service.port)
+    "hosts" (include "keys.ingress.hostnames" .Values.admin.ingress | fromYamlArray))
+  (dict
+    "name" (include "keys.api.name" .)
+    "port" (int .Values.api.service.port)
+    "hosts" (include "keys.ingress.hostnames" .Values.api.ingress | fromYamlArray))
+  (dict
+    "name" (include "keys.serviceAPI.name" .)
+    "port" (int .Values.serviceApi.service.port)
+    "hosts" (default (list) .Values.serviceMesh.ingressGateway.serviceApiHosts))
+-}}
+{{- toYaml $services -}}
+{{- end -}}
+
+{{- define "keys.serviceMesh.gateway.name" -}}
+{{ include "keys.name" . }}-ingress
+{{- end -}}
+
+{{- define "keys.serviceMesh.egressGateway.name" -}}
+{{ include "keys.name" . }}-egress
+{{- end -}}
+
+{{/*
+Hostnames served by the ingress gateway of the release.
+*/}}
+{{- define "keys.serviceMesh.hostnames" -}}
+{{- $hosts := list -}}
+{{- range include "keys.serviceMesh.services" . | fromYamlArray -}}
+{{- range .hosts -}}
+{{- $hosts = append $hosts . -}}
+{{- end -}}
+{{- end -}}
+{{- toYaml ($hosts | uniq) -}}
+{{- end -}}
+
+{{/*
+Backend of an Ingress rule. When the Service Mesh is enabled, the traffic is sent to the
+ingress gateway of the release namespace instead of the service itself.
+*/}}
+{{- define "keys.ingress.backend" -}}
+{{- $ctx := .ctx -}}
+{{- $mesh := $ctx.Values.serviceMesh -}}
+{{- if and $mesh.enabled $mesh.ingressGateway.enabled -}}
+service:
+  name: {{ $mesh.ingressGateway.serviceName }}
+  port:
+    number: {{ $mesh.ingressGateway.port }}
+{{- else -}}
+service:
+  name: {{ .name }}
+  port:
+    number: {{ .port }}
+{{- end -}}
+{{- end -}}

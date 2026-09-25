@@ -26,9 +26,9 @@ spec:
       {{- include "keys.admin.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.admin.podAnnotations }}
+      {{- with include "keys.podAnnotations" (dict "ctx" $ "component" .Values.admin) }}
       annotations:
-        {{- toYaml . | nindent 8 }}
+      {{- . | nindent 8 }}
       {{- end }}
       labels:
         {{- include "keys.admin.labels" . | nindent 8 }}
@@ -36,7 +36,13 @@ spec:
         {{- toYaml . | nindent 8 }}
         {{- end }}
     spec:
-      {{- with include "keys.psql.initTLS" . }}
+      automountServiceAccountToken: {{ .Values.automountServiceAccountToken }}
+      enableServiceLinks: {{ .Values.enableServiceLinks }}
+      {{- with include "keys.podSecurityContext" (dict "ctx" $ "component" .Values.admin) }}
+      securityContext:
+      {{- . | nindent 8 }}
+      {{- end }}
+      {{- with include "keys.psql.initTLS" (dict "ctx" $ "component" .Values.admin) }}
       initContainers:
       {{- . | nindent 8 }}
       {{- end }}
@@ -44,6 +50,10 @@ spec:
         - name: keys-admin
           image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.admin.image.repository }}:{{ .Values.admin.image.tag }}
           imagePullPolicy: {{ .Values.imagePullPolicy }}
+          {{- with include "keys.securityContext" (dict "ctx" $ "component" .Values.admin) }}
+          securityContext:
+          {{- . | nindent 12 }}
+          {{- end }}
           ports:
             - name: http
               containerPort: 3000
@@ -64,11 +74,17 @@ spec:
           {{- include "keys.custom.ca.volumeMounts" . | nindent 12 }}
           {{- end }}
           {{- include "keys.psql.volumeMount" . | nindent 12 }}
+          {{- with include "keys.writable.volumeMounts" (dict "ctx" $ "component" .Values.admin) }}
+          {{- . | nindent 12 }}
+          {{- end }}
       volumes:
       {{- if .Values.customCAs.bundle }}
       {{- include "keys.custom.ca.deploys.volumes" . | nindent 8 }}
       {{- end }}
       {{- include "keys.psql.volume" . | nindent 8 }}
+      {{- with include "keys.writable.volumes" (dict "ctx" $ "component" .Values.admin) }}
+      {{- . | nindent 8 }}
+      {{- end }}
       {{- with .Values.admin.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

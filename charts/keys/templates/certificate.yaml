@@ -1,0 +1,39 @@
+{{- if .Values.certManager.enabled }}
+{{- $ctx := . }}
+{{- range $service := list
+  (dict "name" (include "keys.admin.name" $) "labels" (include "keys.admin.labels" $) "ingress" $.Values.admin.ingress)
+  (dict "name" (include "keys.api.name" $) "labels" (include "keys.api.labels" $) "ingress" $.Values.api.ingress)
+}}
+{{- if $service.ingress.enabled }}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ $service.name }}
+  labels:
+    {{- $service.labels | nindent 4 }}
+  {{- with $ctx.Values.certManager.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  secretName: {{ printf "%s-tls" $service.name }}
+  duration: {{ $ctx.Values.certManager.duration }}
+  renewBefore: {{ $ctx.Values.certManager.renewBefore }}
+  privateKey:
+    algorithm: {{ $ctx.Values.certManager.privateKey.algorithm }}
+    size: {{ $ctx.Values.certManager.privateKey.size }}
+  issuerRef:
+    name: {{ required "A valid .Values.certManager.issuer.name entry required" $ctx.Values.certManager.issuer.name }}
+    kind: {{ $ctx.Values.certManager.issuer.kind }}
+    group: {{ $ctx.Values.certManager.issuer.group }}
+  dnsNames:
+    {{- range $service.ingress.hosts }}
+    {{- if contains "*" (.host | toString) }}
+    {{- fail (printf "A wildcard hostname %s cannot be used with cert-manager: use the exact hostnames" .host) }}
+    {{- end }}
+    - {{ .host | quote }}
+    {{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
