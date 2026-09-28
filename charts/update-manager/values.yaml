@@ -49,7 +49,7 @@ api:
     image:
       registry: ''
       repository: 2gis-on-premise/dgctl
-      tag: 3  # TODO: точная версия
+      tag: 3.7.0
       pullPolicy: IfNotPresent
 
   # @param api.job.activeDeadline Active deadline for the created jobs.
@@ -94,7 +94,7 @@ api:
 
   components:
     core:
-      version: 2.9.0
+      version: ''
       charts:
         keys:
           enabled: true
@@ -105,7 +105,7 @@ api:
               services:
                 - keys
     api-platform:
-      version: 2.56.0
+      version: ''
       charts:
         tiles-api:
           enabled: false
@@ -159,7 +159,7 @@ api:
               services:
                 - twins
     pro:
-      version: 2.5.0
+      version: ''
       charts:
         pro-ui:
           enabled: false
@@ -178,7 +178,7 @@ api:
               services:
                 - pro
     citylens:
-      version: 2.3.0
+      version: ''
       charts:
         citylens:
           enabled: false
