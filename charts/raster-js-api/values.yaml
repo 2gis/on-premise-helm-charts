@@ -56,7 +56,7 @@ sidecars: []
 
 image:
   repository: 2gis-on-premise/raster-js-api
-  tag: 4.1.0
+  tag: 4.2.1
   pullPolicy: IfNotPresent
 
 
@@ -65,11 +65,8 @@ image:
 # @param api.publicHost **required** Host on which the service will be available, e.g. 'maps-raster.ingress.host'.
 # @param api.protocol Protocol to use: `http:`, `https:`.
 # @param api.tileServerUrl URL of the tile server, e.g. 'https://tiles-api.ingress.host'.
-# @param api.trafficTileServerUrl URL of the traffic tiles server, e.g. 'https://traffic-tiles-api.ingress.host'.
-# @param api.trafficTimestampServerUrl URL of the traffic timestamps server, e.g. 'https://traffic-score.ingress.host'.
-# @param api.trafficScoreServerUrl URL of the traffic scores server, e.g. 'https://traffic-score.ingress.host'.
-# @param api.webApiServerUrl URL of the Catalog API service, e.g. 'https://catalog-api.ingress.host'.
-# @param api.webApiKey API key for the Catalog API service. Stored in a Kubernetes Secret and mounted into the container via `secretKeyRef`.
+# @param api.catalogApiServerUrl URL of the Catalog API service, e.g. 'https://catalog-api.ingress.host'.
+# @param api.catalogApiKey API key for the Catalog API service. Stored in a Kubernetes Secret and mounted into the container via `secretKeyRef`.
 # @param api.key Optional API key that will be included in tile requests. Stored in a Kubernetes Secret and mounted into the container via `secretKeyRef`.
 # @param api.keyServerUrl Keys-api service URL, e.g. 'https://keys-api.ingress.host/public/v1/keys/'
 
@@ -77,11 +74,8 @@ api:
   publicHost: ''
   protocol: 'https:'
   tileServerUrl: ''
-  trafficTileServerUrl: ''
-  trafficTimestampServerUrl: ''
-  trafficScoreServerUrl: ''
-  webApiServerUrl: ''
-  webApiKey: ''
+  catalogApiServerUrl: ''
+  catalogApiKey: ''
   key: ''
   keyServerUrl: ''
 

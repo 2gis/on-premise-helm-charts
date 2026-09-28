@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "generic-chart.fullname" . }}-config
+  labels:
+    {{- include "generic-chart.labels" . | nindent 4 }}
+data:
+  config.json: |
+    {
+      "protocol": {{ .Values.api.protocol | quote }},
+      "baseUrl": {{ printf "//%s" .Values.api.publicHost | quote }},
+      "tileServer": {{ print .Values.api.tileServerUrl "/tiles?x={x}&y={y}&z={z}" | quote }},
+      "retinaTileServer": {{ print .Values.api.tileServerUrl "/tiles?x={x}&y={y}&z={z}" | quote }},
+      "previewTileServer": {{ print .Values.api.tileServerUrl "/tiles?x={x}&y={y}&z={z}" | quote }},
+      "previewRetinaTileServer": {{ print .Values.api.tileServerUrl "/tiles?x={x}&y={y}&z={z}" | quote }},
+      "arabicTileServer": {{ print .Values.api.tileServerUrl "/tiles?x={x}&y={y}&z={z}" | quote }},
+      "arabicRetinaTileServer": {{ print .Values.api.tileServerUrl "/tiles?x={x}&y={y}&z={z}" | quote }},
+      "arabicPreviewTileServer": {{ print .Values.api.tileServerUrl "/tiles?x={x}&y={y}&z={z}" | quote }},
+      "arabicPreviewRetinaTileServer": {{ print .Values.api.tileServerUrl "/tiles?x={x}&y={y}&z={z}" | quote }},
+      "keyServer": {{ .Values.api.keyServerUrl | quote }},
+      "webApiServer": {{ .Values.api.catalogApiServerUrl | quote }},
+      "poiMetaServer": "disabled",
+      "retinaPoiMetaServer": "disabled",
+      "arabicPoiMetaServer": "disabled",
+      "arabicRetinaPoiMetaServer": "disabled",
+      "trafficTileServer": "disabled",
+      "retinaTrafficTileServer": "disabled",
+      "trafficMetaServer": "disabled",
+      "retinaTrafficMetaServer": "disabled",
+      "trafficTimestampServer": "disabled",
+      "trafficScoreServer": "disabled"
+    }

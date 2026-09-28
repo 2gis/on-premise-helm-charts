@@ -1,5 +1,12 @@
 # Platform Breaking-Changes
 
+## [2.xx.xx]
+
+### raster-js-api
+
+- Renamed `webApiKey` to `catalogApiKey`
+- Renamed `webApiServerUrl` to `catalogApiServerUrl`
+
 ## [2.55.0]
 
 ### search-api-v8

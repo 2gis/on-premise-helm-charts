@@ -27,6 +27,7 @@ spec:
   template:
     metadata:
       annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
         checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
         {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
@@ -48,12 +49,29 @@ spec:
       securityContext:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- if .Values.customCAs.bundle }}
       volumes:
+        - name: {{ include "generic-chart.fullname" . }}-config
+          configMap:
+            name: {{ include "generic-chart.fullname" . }}-config
+        {{- if or .Values.api.catalogApiKey .Values.api.key }}
+        - name: {{ include "generic-chart.fullname" . }}-secret
+          secret:
+            secretName: {{ include "generic-chart.fullname" . }}
+            items:
+              {{- if .Values.api.key }}
+              - key: key
+                path: apiKey
+              {{- end }}
+              {{- if .Values.api.catalogApiKey }}
+              - key: webApiKey
+                path: webApiKey
+              {{- end }}
+        {{- end }}
+        {{- if .Values.customCAs.bundle }}
         - name: {{ include "generic-chart.fullname" . }}-configmap-ca
           configMap:
             name: {{ include "generic-chart.fullname" . }}-configmap-ca
-      {{- end }}
+        {{- end }}
       {{- with .Values.priorityClassName }}
       priorityClassName: {{ . }}
       {{- end }}
@@ -70,68 +88,34 @@ spec:
             {{- toYaml . | nindent 12 }}
           {{- end }}
           env:
-            - name: PUBLIC_HOST
-              value: {{ required "A valid .Values.api.publicHost entry required" .Values.api.publicHost | quote }}
-            - name: MAPSAPI2_PROTOCOL
-              value: {{ .Values.api.protocol | quote }}
-            {{- if .Values.api.tileServerUrl }}
-            - name: MAPSAPI2_TILE_SERVER
-              value: {{ print .Values.api.tileServerUrl "/tiles?x={x}&y={y}&z={z}" | quote }}
-            {{- end }}
-            {{- if .Values.api.trafficTileServerUrl }}
-            - name: MAPSAPI2_TRAFFIC_TILE_SERVER
-              value: {{ print .Values.api.trafficTileServerUrl "/{projectCode}/traffic/{z}/{x}/{y}/speed/{period}/{timestampString}" | quote }}
-            {{- end }}
-            {{- if .Values.api.trafficTimestampServerUrl }}
-            - name: MAPSAPI2_TRAFFIC_TIMESTAMP_SERVER
-              value: {{ print .Values.api.trafficTimestampServerUrl "/{projectCode}/meta/speed/time/" | quote }}
-            {{- end }}
-            {{- if .Values.api.trafficScoreServerUrl }}
-            - name: MAPSAPI2_TRAFFIC_SCORE_SERVER
-              value: {{ print .Values.api.trafficScoreServerUrl "/{projectCode}/meta/score/0/" | quote }}
-            {{- end }}
-            {{- if .Values.api.webApiServerUrl }}
-            - name: MAPSAPI2_WEB_API_SERVER
-              value: {{ .Values.api.webApiServerUrl | quote }}
-            {{- end }}
-            {{- if .Values.api.webApiKey }}
-            - name: MAPSAPI2_WEB_API_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "generic-chart.fullname" . }}
-                  key: webApiKey
-            {{- end }}
+            - name: MAPSAPI2_CONFIG_FILE
+              value: "/config/config.json"
             {{- if .Values.api.key }}
-            - name: MAPSAPI2_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "generic-chart.fullname" . }}
-                  key: key
+            - name: MAPSAPI2_KEY_FILE
+              value: "/secretes/apiKey"
             {{- end }}
-            - name: MAPSAPI2_KEY_SERVER
-              value: {{ .Values.api.keyServerUrl | quote }}
-            {{- if .Values.customCAs.bundle }}
-            - name: SSL_CERT_FILE
-              value: {{ include "custom.ca.mountPath" . }}/custom-ca.crt
-            {{- end }}
-            {{- if .Values.api.publicHost }}
-            - name: MAPSAPI2_POI_META_SERVER
-              value: {{ .Values.api.publicHost | quote }}
-            - name: MAPSAPI2_RETINA_POI_META_SERVER
-              value: {{ .Values.api.publicHost | quote }}
-            - name: MAPSAPI2_RETINA_TILE_SERVER
-              value: {{ print .Values.api.tileServerUrl "/tiles?x={x}&y={y}&z={z}" | quote }}
-            {{- end }}
+            {{- if .Values.api.catalogApiKey }}
+            - name: MAPSAPI2_WEB_API_KEY_FILE
+              value: "/secretes/webApiKey"
+              {{- end }}
           ports:
             - name: http
               containerPort: 3000
               protocol: TCP
-          {{- if .Values.customCAs.bundle }}
           volumeMounts:
+            - name: {{ include "generic-chart.fullname" . }}-config
+              mountPath: /config
+              readOnly: true
+            {{- if or .Values.api.catalogApiKey .Values.api.key }}
+            - name: {{ include "generic-chart.fullname" . }}-secret
+              mountPath: /secretes
+              readOnly: true
+            {{- end }}
+            {{- if .Values.customCAs.bundle }}
             - name: {{ include "generic-chart.fullname" . }}-configmap-ca
               mountPath: {{ include "custom.ca.mountPath" . }}/custom-ca.crt
               subPath: custom-ca.crt
-          {{- end }}
+            {{- end }}
           livenessProbe:
             httpGet:
               path: /healthcheck
