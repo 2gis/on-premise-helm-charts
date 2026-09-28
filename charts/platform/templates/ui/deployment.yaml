@@ -123,8 +123,6 @@ spec:
             {{- end }}
             - name: GOOGLE_ANALYTICS_ID
               value: {{ .Values.ui.googleAnalyticsId | quote}}
-            - name: GOOGLE_TAG_MANAGER_ID
-              value: {{ .Values.ui.googleTagManagerId | quote }}
             - name: CATALOG_API_URL
               value: {{ .Values.ui.catalog.url | quote }}
             - name: NAVI_API_URL
