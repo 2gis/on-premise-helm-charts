@@ -135,6 +135,8 @@ spec:
 
             - name: Auth__Enabled
               value: {{ .Values.permissions.settings.auth.enabled | quote }}
+
+            {{- if .Values.permissions.settings.auth.enabled }}
             - name: Auth__ApiKey
               valueFrom:
                 secretKeyRef:
@@ -150,6 +152,7 @@ spec:
             {{- range $i, $r := .Values.permissions.settings.auth.uiRequiredRoles }}
             - name: Auth__UiRequiredRoles__{{$i}}
               value: {{ $r | quote }}
+            {{- end }}
             {{- end }}
 
             - name: BackgroundJobs__InitOnStartupJob__Enabled
@@ -248,7 +251,6 @@ spec:
             - name: AuthProvider__AllowedHosts__{{ $hostIndex }}
               value: {{ $host | quote }}
             {{- end }}
-            {{- end }}
 
             # Basic Auth
             {{- if eq (default "" .Values.authProvider.schema) "Basic" }}
@@ -282,6 +284,7 @@ spec:
               value: {{ .Values.authProvider.oidc.nameClaim | quote }}
             - name: AuthProvider__Oidc__RoleClaim
               value: {{ .Values.authProvider.oidc.roleClaim | quote }}
+            {{- end }}
             {{- end }}
 
             - name: Security__SecretKey

@@ -292,7 +292,6 @@ permissions:
   # @skip permissions.settings.backgroundJobs.enableActualizePermissionsJob
   # @param permissions.settings.httpPort Http port for interaction via the rest api
   # @param permissions.settings.grpcPort Grpc port for interaction via the grpc api
-  # @param permissions.settings.default_permissions.open_pro_ui Allow access to the PRO UI for all users. If false, only users with the `open_pro_ui` permission will be able to access the PRO UI.
   # @param permissions.settings.allowPermissionsToAnyAsset Allow using '*' resource in asset resource type in Permissions UI.
   # @param permissions.settings.auth.enabled Enables or disables authentication **Required**
  # @param permissions.settings.auth.apiKey Api key for service to service calls. **Required**
@@ -1025,6 +1024,6 @@ security:
 
 # @skip clusters
 clusters:
-  current: 'default'
+  current: default
   known:
-    - 'default'
+    - default

@@ -279,8 +279,8 @@ spec:
               value: {{ .Values.mailerSender.apiKey | quote }}
 
             - name: PageRendererApi__Url
-            {{- if .Values.pagerenderer.settings.grpcRouteHost }}
-              value: https://{{ .Values.pagerenderer.settings.grpcRouteHost }}:{{ .Values.pagerenderer.settings.grpcRoutePort }}
+            {{- if .Values.pagerenderer.settings.grpcRoute }}
+              value: https://{{ .Values.pagerenderer.settings.grpcRoute }}:{{ .Values.pagerenderer.settings.grpcRoutePort }}
             {{- else }}
               value: http://{{ include "pro-api.pagerenderer-name" . }}:{{ .Values.pagerenderer.settings.grpcPort }}
             {{- end }}

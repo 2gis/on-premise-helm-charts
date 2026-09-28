@@ -1,14 +1,13 @@
 ﻿{{- if .Values.pagerenderer.settings.enabled }}
-{{- if .Values.pagerenderer.settings.grpcRouteHost }}
+{{- if .Values.pagerenderer.settings.grpcRoute }}
 
 apiVersion: gateway.networking.k8s.io/v1
 kind: GRPCRoute
 metadata:
   name: {{ include "pro-api.pagerenderer-name" . }}
-  namespace: urbigeo
 spec:
   hostnames:
-    - {{ .Values.pagerenderer.settings.grpcRouteHost }}
+    - {{ .Values.pagerenderer.settings.grpcRoute | quote }}
   parentRefs:
     - group: gateway.networking.k8s.io
       kind: Gateway

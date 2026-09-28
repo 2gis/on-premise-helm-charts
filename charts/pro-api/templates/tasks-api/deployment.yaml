@@ -178,7 +178,7 @@ spec:
             - name: Common__Cluster
               value: {{ .Values.clusters.current | quote }}
             {{- range $i, $c := .Values.clusters.known }}
-            - name: Common__KnownClusters__{{$i}}
+            - name: Common__KnownClusters__{{ $i }}
               value: {{ $c | quote }}
             {{- end }}
 
@@ -201,7 +201,7 @@ spec:
             {{- fail "A valid .Values.tasks.settings.auth.adminRequiredRoles entry required when tasks.settings.auth.enabled is true" }}
             {{- end }}
             {{- range $i, $r := .Values.tasks.settings.auth.adminRequiredRoles }}
-            - name: Auth__AdminRequiredRoles__{{$i}}
+            - name: Auth__AdminRequiredRoles__{{ $i }}
               value: {{ $r | quote }}
             {{- end }}
             {{- end }}
@@ -221,8 +221,8 @@ spec:
             {{- end }}
 
             - name: PageRendererApi__Url
-            {{- if .Values.pagerenderer.settings.grpcRouteHost }}
-              value: https://{{ .Values.pagerenderer.settings.grpcRouteHost }}:{{ .Values.pagerenderer.settings.grpcRoutePort }}
+            {{- if .Values.pagerenderer.settings.grpcRoute }}
+              value: https://{{ .Values.pagerenderer.settings.grpcRoute }}:{{ .Values.pagerenderer.settings.grpcRoutePort }}
             {{- else }}
               value: http://{{ include "pro-api.pagerenderer-name" . }}:{{ .Values.pagerenderer.settings.grpcPort }}
             {{- end }}
