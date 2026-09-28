@@ -92,11 +92,11 @@ spec:
               value: "/config/config.json"
             {{- if .Values.api.key }}
             - name: MAPSAPI2_KEY_FILE
-              value: "/secretes/apiKey"
+              value: "/secrets/apiKey"
             {{- end }}
             {{- if .Values.api.catalogApiKey }}
             - name: MAPSAPI2_WEB_API_KEY_FILE
-              value: "/secretes/webApiKey"
+              value: "/secrets/webApiKey"
               {{- end }}
           ports:
             - name: http
@@ -108,7 +108,7 @@ spec:
               readOnly: true
             {{- if or .Values.api.catalogApiKey .Values.api.key }}
             - name: {{ include "generic-chart.fullname" . }}-secret
-              mountPath: /secretes
+              mountPath: /secrets
               readOnly: true
             {{- end }}
             {{- if .Values.customCAs.bundle }}
