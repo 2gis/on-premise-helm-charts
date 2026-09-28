@@ -118,17 +118,17 @@
 
 ### Kubernetes [Pod Disruption Budget](https://kubernetes.io/docs/concepts/workloads/pods/disruptions/#pod-disruption-budgets) settings
 
-| Name                                                   | Description                                                                                                                                                     | Value   |
-| ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `permissions.pdb.enabled`                              | If PDB is enabled for the service.                                                                                                                              | `false` |
-| `permissions.pdb.minAvailable`                         | How many pods must be available after the eviction.                                                                                                             | `1`     |
-| `permissions.pdb.maxUnavailable`                       | How many pods can be unavailable after the eviction.                                                                                                            | `""`    |
-| `permissions.settings.httpPort`                        | Http port for interaction via the rest api                                                                                                                      | `8091`  |
-| `permissions.settings.grpcPort`                        | Grpc port for interaction via the grpc api                                                                                                                      | `8092`  |
-| `permissions.settings.allowPermissionsToAnyAsset`      | Allow using '*' resource in asset resource type in Permissions UI.                                                                                              | `false` |
-| `permissions.settings.auth.enabled`                    | Enables or disables authentication **Required**                                                                                                                 | `false` |
-| `permissions.settings.auth.apiKey`                     | Api key for service to service calls. **Required**                                                                                                              | `""`    |
-| `permissions.settings.auth.uiRequiredRoles`            | Roles required to access Permission UI. The values must match the roles defined in the authProvider configuration. **Required if** `authProvider.enabled: true` | `[]`    |
+| Name                                              | Description                                                                                                                                                     | Value   |
+| ------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `permissions.pdb.enabled`                         | If PDB is enabled for the service.                                                                                                                              | `false` |
+| `permissions.pdb.minAvailable`                    | How many pods must be available after the eviction.                                                                                                             | `1`     |
+| `permissions.pdb.maxUnavailable`                  | How many pods can be unavailable after the eviction.                                                                                                            | `""`    |
+| `permissions.settings.httpPort`                   | Http port for interaction via the rest api                                                                                                                      | `8091`  |
+| `permissions.settings.grpcPort`                   | Grpc port for interaction via the grpc api                                                                                                                      | `8092`  |
+| `permissions.settings.allowPermissionsToAnyAsset` | Allow using '*' resource in asset resource type in Permissions UI.                                                                                              | `false` |
+| `permissions.settings.auth.enabled`               | Enables or disables authentication **Required**                                                                                                                 | `false` |
+| `permissions.settings.auth.apiKey`                | Api key for service to service calls. **Required**                                                                                                              | `""`    |
+| `permissions.settings.auth.uiRequiredRoles`       | Roles required to access Permission UI. The values must match the roles defined in the authProvider configuration. **Required if** `authProvider.enabled: true` | `[]`    |
 
 ### Default permissions for new users
 
