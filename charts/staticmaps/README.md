@@ -70,7 +70,7 @@ To learn more about configuration, architecture, and requirements, see the offic
 | Name               | Description  | Value                        |
 | ------------------ | ------------ | ---------------------------- |
 | `image.repository` | Repository.  | `2gis-on-premise/staticmaps` |
-| `image.tag`        | Tag.         | `1.0.3`                      |
+| `image.tag`        | Tag.         | `1.0.4`                      |
 | `image.pullPolicy` | Pull Policy. | `IfNotPresent`               |
 
 ### Service settings
