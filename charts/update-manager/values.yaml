@@ -40,14 +40,12 @@ api:
     url: https://datagateway.api.2gis.com
     apiKey: ''
 
-  # @param api.dgctl.image.registry DGCTL image registry.
   # @param api.dgctl.image.repository DGCTL image repository.
   # @param api.dgctl.image.tag DGCTL image tag.
   # @param api.dgctl.image.pullPolicy Pull policy for the DGCTL image used in download jobs.
 
   dgctl:
     image:
-      registry: ''
       repository: 2gis-on-premise/dgctl
       tag: 3.7.0
       pullPolicy: IfNotPresent
