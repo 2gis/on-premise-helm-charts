@@ -1,5 +1,28 @@
 # PRO Breaking-Changes
 
+## [2.6.0]
+
+### pro-api
+
+- `pagerenderer.settings.grpcRoute` changed from a plain string to an object with `enabled`, `hostnames`, `port` and `parentRefs`. The GRPCRoute is now rendered only when `pagerenderer.settings.grpcRoute.enabled: true`, and `parentRefs` are configurable (previously the `canary` and `stable` gateways in `istio-gateways` were hardcoded). Migrate an existing hostname:
+
+  ```yaml
+  # before
+  pagerenderer.settings.grpcRoute: pro-pagerenderer.example.com
+  # after
+  pagerenderer.settings.grpcRoute:
+    enabled: true
+    hostnames: [pro-pagerenderer.example.com]
+    port: 443
+    parentRefs:
+      - group: gateway.networking.k8s.io
+        kind: Gateway
+        name: canary
+        namespace: istio-gateways
+  ```
+
+- `pagerenderer.settings.grpcRoutePort` was replaced with `pagerenderer.settings.grpcRoute.port`.
+
 ## [2.5.0]
 
 ### pro-api
