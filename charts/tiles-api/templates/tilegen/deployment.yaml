@@ -45,6 +45,7 @@ spec:
 
       annotations:
         checksum/config: {{ include "tiles.checksum" (merge (dict "path" "/tilegen/configmap.yaml") $) }}
+        checksum/secret: {{ include "tiles.checksum" (merge (dict "path" "/tilegen/secret.yaml") $) }}
 
       {{- with .podAnnotations }}
         {{- toYaml . | nindent 8 }}
