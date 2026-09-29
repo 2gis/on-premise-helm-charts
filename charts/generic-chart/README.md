@@ -189,7 +189,7 @@ Chart is tested using [pipeline](https://gitlab.2gis.ru/traffic/cicd-pipelines/-
 | `networkPolicy.egress.enabled`                     | Enable creation of NetworkPolicy resources for egress rules  | `false` |
 | `networkPolicy.egress.config`                      | Array of egress rules                                        | `[]`    |
 
-### [HTTPRoute](https://gateway-api.sigs.k8s.io/api-types/httproute/) configuration
+### [HTTPRoute](https://gateway-api.sigs.k8s.io/reference/api-types/httproute/) configuration
 
 | Name                                | Description                                                                                                             | Value            |
 | ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ---------------- |
@@ -203,7 +203,7 @@ Chart is tested using [pipeline](https://gitlab.2gis.ru/traffic/cicd-pipelines/-
 | `httpRoute.parentRefs[1].name`      | Name for the second parentRef                                                                                           | `stable`         |
 | `httpRoute.parentRefs[1].namespace` | Namespace for the second parentRef                                                                                      | `istio-gateways` |
 
-### [GRPCRoute](https://gateway-api.sigs.k8s.io/api-types/grpcroute/) configuration
+### [GRPCRoute](https://gateway-api.sigs.k8s.io/reference/api-types/grpcroute/) configuration
 
 | Name                                | Description                                                                                                             | Value            |
 | ----------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ---------------- |

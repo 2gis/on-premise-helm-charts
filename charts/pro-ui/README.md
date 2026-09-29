@@ -1,6 +1,10 @@
 # 2GIS Pro UI service
 
-Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On-Premise solution](https://docs.2gis.com/en/on-premise/overview).
+This Helm chart deploys the **Pro UI service**, a component of the 2GIS [On-Premise](https://docs.2gis.com/en/on-premise-pro/overview/summary).
+
+To learn more about configuration, architecture, and requirements, see the official documentation:
+* [On-Premise API Platform Overview](https://docs.2gis.com/en/on-premise-api-platform/overview/summary)
+* [2GIS Pro Documentation](https://docs.2gis.com/en/on-premise-pro/overview/summary)
 
 ## Values
 
@@ -29,21 +33,21 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 
 ### Common deployment settings
 
-| Name                            | Description                                                                                                                                                          | Value   |
-| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `replicas`                      | A replica count for the pod.                                                                                                                                         | `1`     |
-| `revisionHistoryLimit`          | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).                       | `3`     |
-| `terminationGracePeriodSeconds` | Seconds pod needs to [terminate](https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods) gracefully                                             | `60`    |
-| `nodeSelector`                  | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                                  | `{}`    |
-| `affinity`                      | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).                                          | `{}`    |
-| `tolerations`                   | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                    | `[]`    |
-| `podAnnotations`                | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                        | `{}`    |
-| `podLabels`                     | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                  | `{}`    |
-| `annotations`                   | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                            | `{}`    |
-| `labels`                        | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                      | `{}`    |
-| `readinessProbe.enabled`        | Enable [readinessProbe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes) on PRO UI containers | `true`  |
-| `livenessProbe.enabled`         | Enable [livenessProbe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes) on PRO UI containers  | `false` |
-| `containerPort`                 | Port on which application listen connection in container                                                                                                             | `3000`  |
+| Name                            | Description                                                                                                                                                               | Value   |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `replicas`                      | A replica count for the pod.                                                                                                                                              | `1`     |
+| `revisionHistoryLimit`          | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment). | `3`     |
+| `terminationGracePeriodSeconds` | Seconds pod needs to [terminate](https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods) gracefully                                                  | `60`    |
+| `nodeSelector`                  | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                                       | `{}`    |
+| `affinity`                      | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).                                               | `{}`    |
+| `tolerations`                   | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                         | `[]`    |
+| `podAnnotations`                | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                             | `{}`    |
+| `podLabels`                     | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                       | `{}`    |
+| `annotations`                   | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                 | `{}`    |
+| `labels`                        | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                           | `{}`    |
+| `readinessProbe.enabled`        | Enable [readinessProbe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes) on PRO UI containers      | `true`  |
+| `livenessProbe.enabled`         | Enable [livenessProbe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes) on PRO UI containers       | `false` |
+| `containerPort`                 | Port on which application listen connection in container                                                                                                                  | `3000`  |
 
 ### UI service settings
 
@@ -80,15 +84,15 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 
 ### MapGL JS API settings
 
-| Name                      | Description                                                                                                                                                                                          | Value            |
-| ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
-| `ui.mapgl.host`           | FQDN (domain or IP) for the [MapGL JS API](https://docs.2gis.com/en/on-premise/map) service with or without protocol. Without protocol we will put App's protocol.                                   | `mapgl-api.host` |
-| `ui.mapgl.key`            | A key to the [MapGL JS API](https://docs.2gis.com/en/on-premise/map) service.                                                                                                                        | `""`             |
-| `ui.mapgl.styleUrl`       | Optional URL for [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) `style.json` folder, e.g., '//mapgl.ingress.host/style'. ui.mapgl.styleUrl has priority over ui.mapgl.styleId. | `""`             |
-| `ui.mapgl.styleIconsUrl`  | Optional URL for [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) icons folder, e.g., '//mapgl.ingress.host/style/icons'                                                         | `""`             |
-| `ui.mapgl.styleFontsUrl`  | Optional URL for [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) fonts folder, e.g., '//mapgl.ingress.host/style/fonts'                                                         | `""`             |
-| `ui.mapgl.stylePreview`   | URL to image for ui.mapgl.styleUrl or ui.mapgl.styleId. It needs for preview in manager styles.                                                                                                      | `""`             |
-| `ui.mapgl.styleModelsUrl` | Optional URL for [MapGL Style](https://docs.2gis.com/en/mapgl/styles/overview/editor) models folder, e.g., '//mapgl.ingress.host/style/models'                                                       | `""`             |
+| Name                      | Description                                                                                                                                                                                                                     | Value            |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| `ui.mapgl.host`           | FQDN (domain or IP) for the [MapGL JS API](https://docs.2gis.com/en/on-premise-api-platform/architecture/maps#mapgl-js-api-service) service with or without protocol. Without protocol we will put App's protocol.              | `mapgl-api.host` |
+| `ui.mapgl.key`            | A key to the [MapGL JS API](https://docs.2gis.com/en/on-premise-api-platform/architecture/maps#mapgl-js-api-service) service.                                                                                                   | `""`             |
+| `ui.mapgl.styleUrl`       | Optional URL for [MapGL Style](https://docs.2gis.com/en/on-premise-api-platform/installation#install-styles-api) `style.json` folder, e.g., '//mapgl.ingress.host/style'. ui.mapgl.styleUrl has priority over ui.mapgl.styleId. | `""`             |
+| `ui.mapgl.styleIconsUrl`  | Optional URL for [MapGL Style](https://docs.2gis.com/en/on-premise-api-platform/installation#install-styles-api) icons folder, e.g., '//mapgl.ingress.host/style/icons'                                                         | `""`             |
+| `ui.mapgl.styleFontsUrl`  | Optional URL for [MapGL Style](https://docs.2gis.com/en/on-premise-api-platform/installation#install-styles-api) fonts folder, e.g., '//mapgl.ingress.host/style/fonts'                                                         | `""`             |
+| `ui.mapgl.stylePreview`   | URL to image for ui.mapgl.styleUrl or ui.mapgl.styleId. It needs for preview in manager styles.                                                                                                                                 | `""`             |
+| `ui.mapgl.styleModelsUrl` | Optional URL for [MapGL Style](https://docs.2gis.com/en/on-premise-api-platform/installation#install-styles-api) models folder, e.g., '//mapgl.ingress.host/style/models'                                                       | `""`             |
 
 ### Mapbox style config settings
 
@@ -171,16 +175,16 @@ Use this Helm chart to deploy 2GIS Pro UI service, which is a part of 2GIS's [On
 
 ### Artifacts Storage settings
 
-| Name                                 | Description                                                                                                                                                                                                                                                           | Value   |
-| ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `dgctlStorage.host`                  | S3 endpoint. Format: `host:port`. **Required**                                                                                                                                                                                                                        | `""`    |
-| `dgctlStorage.secure`                | Set to `true` if dgctlStorage.host must be accessed via https. **Required**                                                                                                                                                                                           | `false` |
-| `dgctlStorage.bucket`                | S3 bucket name. **Required**                                                                                                                                                                                                                                          | `""`    |
-| `dgctlStorage.accessKey`             | S3 access key for accessing the bucket. **Required**                                                                                                                                                                                                                  | `""`    |
-| `dgctlStorage.secretKey`             | S3 secret key for accessing the bucket. **Required**                                                                                                                                                                                                                  | `""`    |
-| `dgctlStorage.manifest`              | The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json`.<br> This file contains the description of pieces of data that the service requires to operate. **Required** | `""`    |
-| `dgctlStorage.region`                | AuthenticationRegion property for S3 client. Used in AWS4 request signing, this is an optional property                                                                                                                                                               | `""`    |
-| `dgctlStorage.disablePayloadSigning` | Turns off payload signing, this is an optional property. Should be TRUE for Oracle S3 storage                                                                                                                                                                         | `false` |
+| Name                                 | Description                                                                                                                                                                                                                                                    | Value   |
+| ------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `dgctlStorage.host`                  | S3 endpoint. Format: `host:port`. **Required**                                                                                                                                                                                                                 | `""`    |
+| `dgctlStorage.secure`                | Set to `true` if dgctlStorage.host must be accessed via https. **Required**                                                                                                                                                                                    | `false` |
+| `dgctlStorage.bucket`                | S3 bucket name. **Required**                                                                                                                                                                                                                                   | `""`    |
+| `dgctlStorage.accessKey`             | S3 access key for accessing the bucket. **Required**                                                                                                                                                                                                           | `""`    |
+| `dgctlStorage.secretKey`             | S3 secret key for accessing the bucket. **Required**                                                                                                                                                                                                           | `""`    |
+| `dgctlStorage.manifest`              | The path to the [manifest file](https://docs.2gis.com/en/on-premise-api-platform/installation#artifacts). Format: `manifests/pro/0000000000.json`.<br> This file contains the description of pieces of data that the service requires to operate. **Required** | `""`    |
+| `dgctlStorage.region`                | AuthenticationRegion property for S3 client. Used in AWS4 request signing, this is an optional property                                                                                                                                                        | `""`    |
+| `dgctlStorage.disablePayloadSigning` | Turns off payload signing, this is an optional property. Should be TRUE for Oracle S3 storage                                                                                                                                                                  | `false` |
 
 ### Import job settings
 

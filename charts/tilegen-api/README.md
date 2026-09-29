@@ -1,5 +1,11 @@
 # 2GIS TILEGEN API Service
 
+This Helm chart deploys the **TILEGEN API service**, a component of the 2GIS [On-Premise](https://docs.2gis.com/en/on-premise-api-platform/overview/summary#maps).
+
+To learn more about configuration, architecture, and requirements, see the official documentation:
+* [On-Premise API Platform Overview](https://docs.2gis.com/en/on-premise-api-platform/overview/summary)
+* [Maps API Documentation](https://docs.2gis.com/en/on-premise-api-platform/architecture/maps)
+
 ## Values
 
 ### Docker Registry settings
@@ -26,7 +32,7 @@
 | `podLabels`                               | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                                                      | `{}`                                |
 | `annotations`                             | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                                                | `{}`                                |
 | `labels`                                  | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                                                          | `{}`                                |
-| `revisionHistoryLimit`                    | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).                                                           | `3`                                 |
+| `revisionHistoryLimit`                    | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment).                                | `3`                                 |
 | `Strategy`                                | settings                                                                                                                                                                                                 |                                     |
 | `strategy.type`                           | Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.                                                                                                                                     | `RollingUpdate`                     |
 | `strategy.rollingUpdate.maxUnavailable`   | Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment). | `0`                                 |

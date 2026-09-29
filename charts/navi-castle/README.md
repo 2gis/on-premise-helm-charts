@@ -1,18 +1,10 @@
 # 2GIS Navi-Castle service
 
-Use this Helm chart to deploy Navi-Castle service, which is a part of 2GIS's [On-Premise Navigation services](https://docs.2gis.com/en/on-premise/navigation).
+This Helm chart deploys the **Navi-Castle service**, a component of the 2GIS [On-Premise](https://docs.2gis.com/en/on-premise-api-platform/overview/summary#navigation).
 
-Read more about the On-Premise solution [here](https://docs.2gis.com/en/on-premise/overview).
-
-See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn about:
-
-- Architecture of the service.
-
-- Installing the service.
-
-    When filling in the keys for `values-castle.yaml` configuration file, refer to the documentation and the list of keys below.
-
-- Updating the service.
+To learn more about configuration, architecture, and requirements, see the official documentation:
+* [On-Premise API Platform Overview](https://docs.2gis.com/en/on-premise-api-platform/overview/summary)
+* [Navigation API Documentation](https://docs.2gis.com/en/on-premise-api-platform/architecture/navigation)
 
 ## Values
 
@@ -24,15 +16,15 @@ See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn
 
 ### Deployment Artifacts Storage settings
 
-| Name                     | Description                                                                                                                                                                                                                                              | Value   |
-| ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `dgctlStorage.host`      | S3 endpoint. Format: `host:port`.                                                                                                                                                                                                                        | `""`    |
-| `dgctlStorage.secure`    | If S3 uses https.                                                                                                                                                                                                                                        | `false` |
-| `dgctlStorage.region`    | S3 region.                                                                                                                                                                                                                                               | `""`    |
-| `dgctlStorage.bucket`    | S3 bucket name.                                                                                                                                                                                                                                          | `""`    |
-| `dgctlStorage.accessKey` | S3 access key for accessing the bucket.                                                                                                                                                                                                                  | `""`    |
-| `dgctlStorage.secretKey` | S3 secret key for accessing the bucket.                                                                                                                                                                                                                  | `""`    |
-| `dgctlStorage.manifest`  | The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json`.<br> This file contains the description of pieces of data that the service requires to operate. | `""`    |
+| Name                     | Description                                                                                                                                                                                                                                                | Value   |
+| ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `dgctlStorage.host`      | S3 endpoint. Format: `host:port`.                                                                                                                                                                                                                          | `""`    |
+| `dgctlStorage.secure`    | If S3 uses https.                                                                                                                                                                                                                                          | `false` |
+| `dgctlStorage.region`    | S3 region.                                                                                                                                                                                                                                                 | `""`    |
+| `dgctlStorage.bucket`    | S3 bucket name.                                                                                                                                                                                                                                            | `""`    |
+| `dgctlStorage.accessKey` | S3 access key for accessing the bucket.                                                                                                                                                                                                                    | `""`    |
+| `dgctlStorage.secretKey` | S3 secret key for accessing the bucket.                                                                                                                                                                                                                    | `""`    |
+| `dgctlStorage.manifest`  | The path to the [manifest file](https://docs.2gis.com/en/on-premise-api-platform/installation#artifacts). Format: `manifests/api-platform/0000000000.json`.<br> This file contains the description of pieces of data that the service requires to operate. | `""`    |
 
 ### Common settings
 

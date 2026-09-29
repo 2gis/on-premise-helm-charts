@@ -40,7 +40,7 @@ imagePullSecrets: []
 # @section API settings
 
 # @param replicas Number of replicas of API pods
-# @param revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+# @param revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment).
 
 replicas: 1
 revisionHistoryLimit: 3
@@ -162,7 +162,7 @@ resources:
 # @param app.markers.cacheExpire Duration for which cached markers are considered valid.
 
 # @extra app.access **API Keys service access settings**
-# @param app.access.enabled If access to the [API Keys service](https://docs.2gis.com/en/on-premise/keys) is enabled.
+# @param app.access.enabled If access to the [API Keys service](https://docs.2gis.com/en/on-premise-api-platform/overview/summary#api-keys-service) is enabled.
 
 # @extra app.access.stat **Statistics receiver settings**
 # @param app.access.stat.enabled If statistics receiver is enabled.

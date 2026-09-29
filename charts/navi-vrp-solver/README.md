@@ -1,14 +1,10 @@
-# VRP Solver Helm Chart
+# 2GIS VRP Solver service
 
-## Описание
+This Helm chart deploys the **VRP Solver service**, a component of the 2GIS [On-Premise](https://docs.2gis.com/en/on-premise-api-platform/overview/summary#navigation).
 
-Данный helm-чарт предназначен для установки экземпляра VRP Sovler.
-
-Для работы сервиса требутся:
-
-- s3
-- kafka
-- dm async
+To learn more about configuration, architecture, and requirements, see the official documentation:
+* [On-Premise API Platform Overview](https://docs.2gis.com/en/on-premise-api-platform/overview/summary)
+* [Navigation API Documentation](https://docs.2gis.com/en/on-premise-api-platform/architecture/navigation#tsp-api)
 
 ## Values
 
