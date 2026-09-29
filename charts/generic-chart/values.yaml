@@ -241,7 +241,7 @@ networkPolicy:
     enabled: false
     config: []
 
-# @section [HTTPRoute](https://gateway-api.sigs.k8s.io/api-types/httproute/) configuration
+# @section [HTTPRoute](https://gateway-api.sigs.k8s.io/reference/api-types/httproute/) configuration
 
 # @param httpRoute.enabled If HTTPRoute is enabled for the service
 # @param httpRoute.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) for HTTPRoute.
@@ -272,7 +272,7 @@ httpRoute:
       name: stable
       namespace: istio-gateways
 
-# @section [GRPCRoute](https://gateway-api.sigs.k8s.io/api-types/grpcroute/) configuration
+# @section [GRPCRoute](https://gateway-api.sigs.k8s.io/reference/api-types/grpcroute/) configuration
 
 # @param grpcRoute.enabled If GRPCRoute is enabled for the service.
 # @param grpcRoute.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/) for GRPCRoute.
