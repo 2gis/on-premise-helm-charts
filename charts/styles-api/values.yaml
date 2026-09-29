@@ -32,7 +32,7 @@ api:
       maxSurge: 1
 
   # @param api.replicas A replica count for the pod.
-  # @param api.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+  # @param api.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment).
 
   replicas: 1
   revisionHistoryLimit: 3
@@ -231,7 +231,8 @@ s3:
   # @param s3.accessKey S3 access key. **Required**
   # @param s3.secretKey S3 secret key. **Required**
   # @param s3.bucket S3 bucket name, for example 'styles'. **Required**
-  # @param s3.publicDomain S3 public access domain. Uses https access. **Required**
+  # @param s3.publicDomain S3 public access domain. The public URL scheme is controlled by the `s3.publicSecure` parameter. **Required**
+  # @param s3.publicSecure S3 use secure HTTPS protocol for public URLs. Default true.
   # @param s3.region S3 region name. Default empty.
   # @param s3.secure S3 use secure HTTPS protocol. Default false.
   # @param s3.verifySsl S3 verifySsl SSL connection. Default false.
@@ -244,6 +245,7 @@ s3:
   secretKey: ''
   bucket: ''
   publicDomain: ''
+  publicSecure: true
   region: ''
   secure: false
   verifySsl: false
@@ -287,7 +289,7 @@ customCAs:
 # @param dgctlStorage.accessKey S3 access key. **Required** if `stylesImport.startOnDeploy` is `true`.
 # @param dgctlStorage.secretKey S3 secret key. **Required** if `stylesImport.startOnDeploy` is `true`.
 # @param dgctlStorage.region S3 region name. Optional.
-# @param dgctlStorage.manifest The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/api-platform/0000000000.json`. **Required** if `stylesImport.startOnDeploy` is `true`.
+# @param dgctlStorage.manifest The path to the [manifest file](https://docs.2gis.com/en/on-premise-api-platform/installation#artifacts). Format: `manifests/api-platform/0000000000.json`. **Required** if `stylesImport.startOnDeploy` is `true`.
 
 dgctlStorage:
   host: ''

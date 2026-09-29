@@ -51,25 +51,25 @@ data:
                             - match:
                                 prefix: "/"
                               route:
-                                cluster: workers
+                                cluster: unisearchers
                                 auto_host_rewrite: true
                       {{- else }}
                         - name: local_service
                           domains: [ "*" ]
                           routes:
                             - match:
-                                prefix: "/unisearch.proto.Worker/"
+                                prefix: "/unisearch.proto.UniSearcher/"
                               route:
-                                cluster: workers
+                                cluster: unisearchers
                                 auto_host_rewrite: true
                                 retry_policy:
                                   retry_on: "connect-failure,refused-stream,reset,unavailable,resource-exhausted,cancelled,internal"
-                                  num_retries: {{ .Values.head.head.workerRetryAttempts }}
-                            {{- if (and (index .Values.head.envoy.faultInjection.clients "worker") (.Values.head.envoy.faultInjection.enabled)) }}
+                                  num_retries: {{ .Values.head.head.unisearcherRetryAttempts }}
+                            {{- if (and (index .Values.head.envoy.faultInjection.clients "unisearcher") (.Values.head.envoy.faultInjection.enabled)) }}
                               typed_per_filter_config:
                                 envoy.filters.http.fault:
                                   "@type": type.googleapis.com/envoy.extensions.filters.http.fault.v3.HTTPFault
-                                  {{- toYaml .Values.head.envoy.faultInjection.clients.worker | nindent 34 }}
+                                  {{- toYaml .Values.head.envoy.faultInjection.clients.unisearcher | nindent 34 }}
                             {{- end }}
                             - match:
                                 prefix: "/querytransformer.QueryTransformer/"
@@ -187,7 +187,7 @@ data:
       {{- end }}{{- /* Values.configDistributor.enabled */}}
       {{- end }}{{- /* not .Values.onpremise */}}
       clusters:
-        - name: workers
+        - name: unisearchers
           connect_timeout: 1s
           type: STRICT_DNS
           dns_lookup_family: V4_ONLY
@@ -198,14 +198,14 @@ data:
               interval: 15s
               timeout: 5s
           load_assignment:
-            cluster_name: workers
+            cluster_name: unisearchers
             endpoints:
               - lb_endpoints:
                   - endpoint:
                       address:
                         socket_address:
-                          port_value: {{ .Values.worker.ports.grpc }}
-                          address: {{ include "search-api-v8.fullname" . }}-worker
+                          port_value: {{ .Values.unisearcher.ports.grpc }}
+                          address: {{ include "search-api-v8.fullname" . }}-unisearcher
       {{- if .Values.segmentDetector.enabled }}
         - name: segmentdetector
           connect_timeout: 1s
@@ -387,9 +387,9 @@ data:
     big-search-mode-update-frequency-sec: 30
     ignore-subtask-error: {{ .Values.head.head.ignoreSubtaskError }}
     search-default-timeout-ms: 5000
-    search-worker-url: '127.0.0.1:{{ .Values.head.envoy.ports.grpc }}'
-    search-worker-queries-count: {{ .Values.head.head.workerQueriesCount }}
-    search-worker-timeout-ms: {{ .Values.head.head.workerTimeoutMs }}
+    unisearcher-url: '127.0.0.1:{{ .Values.head.envoy.ports.grpc }}'
+    unisearcher-queries-count: {{ .Values.head.head.unisearcherQueriesCount }}
+    unisearcher-timeout-ms: {{ .Values.head.head.unisearcherTimeoutMs }}
     search-grpc-client-factory-name: 'grpc-client-factory'
     search-global-search-mode: {{ ternary "on" "off" .Values.head.head.bigSearchMode.enabled }}
     testsuite-enabled: false
@@ -482,30 +482,32 @@ data:
 
     graceful-shutdown-interval: {{ .Values.head.head.gracefulShutdownInterval }}
 
-  worker_vars.yaml: |
-    server-grpc-port: {{ .Values.worker.ports.grpc }}
-    worker-grpc-threads: 2
-    server-port: {{ .Values.worker.ports.http }}
-    worker-main-threads: {{ .Values.worker.workerMainThreads }}
-    worker-fb-threads: {{ .Values.worker.workerFbThreads }}
-    worker-fs-threads: 2
-    worker-bg-threads: 1
-    logger-level: {{ .Values.worker.logLevel }}
-    logger-format: {{ .Values.worker.logFormat }}
-    data-update-frequency-sec: {{ .Values.worker.dataUpdateFrequencySec }}
-    sentry-dsn: {{ .Values.sentry.workerDsn | quote }}
+  unisearcher_vars.yaml: |
+    server-grpc-port: {{ .Values.unisearcher.ports.grpc }}
+    unisearcher-grpc-threads: 2
+    server-port: {{ .Values.unisearcher.ports.http }}
+    monitor-port: {{ .Values.unisearcher.ports.monitor }}
+    unisearcher-main-threads: {{ .Values.unisearcher.unisearcherMainThreads }}
+    unisearcher-fb-threads: {{ .Values.unisearcher.unisearcherFbThreads }}
+    unisearcher-fs-threads: 2
+    unisearcher-bg-threads: 1
+    unisearcher-mon-threads: 1
+    logger-level: {{ .Values.unisearcher.logLevel }}
+    logger-format: {{ .Values.unisearcher.logFormat }}
+    data-update-frequency-sec: {{ .Values.unisearcher.dataUpdateFrequencySec }}
+    sentry-dsn: {{ .Values.sentry.unisearcherDsn | quote }}
     {{- include "search-api-v8.sentry.vars.common" . | nindent 4 }}
   {{- if .Values.onpremise }}
     rtw-lifetime-sec: 0
     dynamic-config-url: '127.0.0.1:1234'
     dynamic-config-enabled: false
   {{- else }}
-    rtw-lifetime-sec: {{ .Values.worker.rtw.lifeTime }}
+    rtw-lifetime-sec: {{ .Values.unisearcher.rtw.lifeTime }}
     dynamic-config-url: 'http://{{ include "search-api-v8.fullname" . }}-config-distributor.search.svc.cluster.local:{{ .Values.service.configDistributor.port }}'
     dynamic-config-enabled: {{ .Values.configDistributor.enabled }}
   {{- end }}{{- /* .Values.onpremise */}}
-    queue-limit: {{ .Values.worker.queueLimit }}
-    graceful-shutdown-interval: {{ .Values.worker.gracefulShutdownInterval }}
+    queue-limit: {{ .Values.unisearcher.queueLimit }}
+    graceful-shutdown-interval: {{ .Values.unisearcher.gracefulShutdownInterval }}
 
   syncer-head.yaml: |
     server:
@@ -575,8 +577,8 @@ data:
     {{- end }}{{- /* empty .Values.indexerServices.externalFilesStorageUrl */}}
       indices:
         enable: true
-        include_project_key_regexp: '{{ .Values.worker.syncer.includeProjectKeyRegexp }}'
-        exclude_project_key_regexp: '{{ .Values.worker.syncer.excludeProjectKeyRegexp }}'
+        include_project_key_regexp: '{{ .Values.unisearcher.syncer.includeProjectKeyRegexp }}'
+        exclude_project_key_regexp: '{{ .Values.unisearcher.syncer.excludeProjectKeyRegexp }}'
         dst: /data/indexes
         dst_data: /data/indexes_data
       rtw:
@@ -946,7 +948,7 @@ data:
                           {{- include "envoy.routeDebug" (dict "prefix" "/debug.proto.DebugService/" "headerName" .Values.ingressRouter.debugHeaders "exactMatch" .Values.ingressRouter.debugRouting.ingressRouter.exactMatch "cluster" "self-ingress-router") | nindent 26 }}
                           {{- include "envoy.routeDebug" (dict "prefix" "/debug.proto.DebugService/" "headerName" .Values.ingressRouter.debugHeaders "exactMatch" .Values.ingressRouter.debugRouting.head.exactMatch "cluster" "search_base_cluster") | nindent 26 }}
                           {{- include "envoy.routeDebug" (dict "prefix" "/debug.proto.DebugService/" "headerName" .Values.ingressRouter.debugHeaders "exactMatch" .Values.ingressRouter.debugRouting.segmentDetector.exactMatch "cluster" "segmentdetector") | nindent 26 }}
-                          {{- include "envoy.routeDebug" (dict "prefix" "/debug.proto.DebugService/" "headerName" .Values.ingressRouter.debugHeaders "exactMatch" .Values.ingressRouter.debugRouting.worker.exactMatch "cluster" "workers") | nindent 26 }}
+                          {{- include "envoy.routeDebug" (dict "prefix" "/debug.proto.DebugService/" "headerName" .Values.ingressRouter.debugHeaders "exactMatch" .Values.ingressRouter.debugRouting.unisearcher.exactMatch "cluster" "unisearchers") | nindent 26 }}
                         {{- end -}}{{- /* and .Values.debugMode (not .Values.onpremise) */}}
                           - match:
                               prefix: "/unisearch.proto.SearchService/"
@@ -972,7 +974,7 @@ data:
         {{- include "envoy.clusterBackendSimple" (dict "root" $ "clusterName" "segmentdetector" "port" .Values.segmentDetector.ports.grpc "addressSuffix" "segment-detector") | nindent 8 }}
       {{- if and .Values.debugMode (not .Values.onpremise) }}
         {{- include "envoy.clusterBackendSimple" (dict "root" $ "clusterName" "self-ingress-router" "port" .Values.ingressRouter.debugRouting.ingressRouter.port "addressSuffix" "ingress-router") | nindent 8 }}
-        {{- include "envoy.clusterBackendSimple" (dict "root" $ "clusterName" "workers" "port" .Values.ingressRouter.debugRouting.worker.port "addressSuffix" "worker") | nindent 8 }}
+        {{- include "envoy.clusterBackendSimple" (dict "root" $ "clusterName" "unisearchers" "port" .Values.ingressRouter.debugRouting.unisearcher.port "addressSuffix" "unisearcher") | nindent 8 }}
       {{- end -}}{{- /* and .Values.debugMode (not .Values.onpremise) */}}
   ingress_router_vars.yaml: |
     server-grpc-port: {{ .Values.ingressRouter.ports.grpc }}

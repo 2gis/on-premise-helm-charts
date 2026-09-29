@@ -20,6 +20,11 @@ spec:
       {{- include "keys.counter.selectorLabels" . | nindent 6 }}
   template:
     metadata:
+      annotations:
+        {{- if .Values.customCAs.bundle }}
+        checksum/config: {{ (include (print $.Template.BasePath "/configmap-deploys.yaml") . | fromYaml).data | toYaml | sha256sum }}
+        {{- end }}
+        checksum/secret: {{ (include (print $.Template.BasePath "/secret-deploys.yaml") . | fromYaml).data | toYaml | sha256sum }}
       labels:
         {{- include "keys.counter.selectorLabels" . | nindent 8 }}
     spec:
