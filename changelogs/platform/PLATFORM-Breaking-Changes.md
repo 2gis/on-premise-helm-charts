@@ -6,6 +6,7 @@
 
 - Renamed `webApiKey` to `catalogApiKey`
 - Renamed `webApiServerUrl` to `catalogApiServerUrl`
+- The value of the `api.protocol` field has been changed to http/https without a colon
 
 ## [2.55.0]
 
