@@ -1,3 +1,49 @@
+## [2.59.0] (2026-09-29)
+#### [Breaking-Changes](PLATFORM-Breaking-Changes.md#2590)
+#### Images
+```
+catalog-api
+	- catalog-importer:1.22.1
+	+ catalog-importer:1.23.0
+mapgl-js-api
+	- mapgl:1.77.0
+	+ mapgl:1.78.1
+platform
+	- platform-ui:1.46.0
+	+ platform-ui:1.50.0
+raster-js-api
+	- raster-js-api:4.1.0
+	+ raster-js-api:4.2.1
+search-api-v8
+	- search-api-v8-controller:8.30.0
+	+ search-api-v8-controller:8.34.0
+	- search-api-v8-data-adapter:8.30.0
+	+ search-api-v8-data-adapter:8.34.0
+	- search-api-v8-files-storage:8.30.0
+	+ search-api-v8-files-storage:8.34.0
+	- search-api-v8-head:8.30.0
+	+ search-api-v8-head:8.34.0
+	- search-api-v8-indexer:8.30.0
+	+ search-api-v8-indexer:8.34.0
+	- search-api-v8-ingress-router:8.30.0
+	+ search-api-v8-ingress-router:8.34.0
+	- search-api-v8-metrics-aggregator:0.1.0
+	+ search-api-v8-metrics-aggregator:0.1.1
+	- search-api-v8-segment-detector:8.30.0
+	+ search-api-v8-segment-detector:8.34.0
+	- search-api-v8-syncer:8.30.0
+	+ search-api-v8-syncer:8.34.0
+	- search-api-v8-worker:8.30.0
+	+ search-api-v8-unisearcher:8.34.0
+staticmaps
+	- staticmaps:1.0.3
+	+ staticmaps:1.0.4
+update-manager
+	+ dgctl:3.7.0
+	+ update-manager:3.7.0
+```
+[Full list of image versions](https://github.com/2gis/on-premise-helm-charts/blob/Platform-2.59.0/changelogs/platform/platform_image_versions.txt)
+
 ## [2.58.0] (2026-09-09)
 
 #### Images
