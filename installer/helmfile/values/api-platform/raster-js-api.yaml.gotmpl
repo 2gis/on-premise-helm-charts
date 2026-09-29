@@ -2,7 +2,7 @@
 
 api:
   publicHost: '{{ $protocol }}://{{ .Values.rasterJsApiIngress }}'
-  protocol: '{{ $protocol }}:'
+  protocol: '{{ $protocol }}'
   tileServerUrl: '{{ $protocol }}://{{ .Values.tilesRasterIngress }}'
   trafficTileServerUrl: '' # необходим отдельный прокси до растровых пробок
   {{- $traffic := ternary (printf "%s://%s" $protocol .Values.trafficProxyMapIngress) "" (has (lower .Values.proxyMode) (list "map" "full")) }}
