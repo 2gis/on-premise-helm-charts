@@ -16,7 +16,15 @@ releases:
     values:
       - {{ .Values.basePath }}/values/dgctl.yaml.gotmpl
       - {{ .Values.basePath }}/values/api-platform/raster-js-api.yaml.gotmpl
-      - {{ .Values.valuesPath }}/values/api-platform/raster-js-api/{{ .Environment.Name }}.yaml.gotmpl
+{{- $vp1 := printf "%s/values/api-platform/raster-js-api/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $vp1 }}
+      - {{ $vp1 }}
+{{- end }}
+{{- $secretsPath := printf "%s/values/api-platform/raster-js-api/%s.secrets.yaml" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $secretsPath }}
+    secrets:
+      - {{ $secretsPath }}
+{{- end }}
     hooks:
     - events: ["postsync"]
       showlogs: true

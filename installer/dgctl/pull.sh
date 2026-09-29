@@ -10,28 +10,51 @@ fi
 CFG=${1}
 LICENSE=$2
 if [ -z "$CFG" ];then
-  echo "Usage: $0 <config_name.yaml>"
+  echo "Usage: $0 <config_name.yaml> [-l]"
   exit 1
 fi
+# Config is env-bundle data: try $1 as given, then $HELMFILE_VALUES/dgctl/<name>
+# (bundle default: $PWD/installer/helmfile/example, same contract as helmfile).
+VALUES_DIR="${HELMFILE_VALUES:-$(pwd)/installer/helmfile/example}"
+if [ ! -f "$CFG" ]; then
+  CFG="$VALUES_DIR/dgctl/$(basename "$CFG")"
+fi
+CFG=$(readlink -f "$CFG")
+[ -f "$CFG" ] || { echo "ERROR: config not found: $1 (tried as given and \$HELMFILE_VALUES/dgctl/)"; exit 1; }
 
 #2gis/dgctl pull --config=/config.yaml --generate-values --apps-to-registry
 #2gis/dgctl license --config=/config.yaml
 
 set -e
-VAL_DIR=auto_values
-mkdir -p $VAL_DIR
+# Platform side for generated values: HELMFILE_BASE wins; default - next to the
+# script itself, so pull.sh runs from any directory (no repo-root assumption).
+SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
+BASE_PATH="${HELMFILE_BASE:-$SCRIPT_DIR/../helmfile}"
+VAL_DIR="$BASE_PATH/../dgctl/auto_values"
+mkdir -p "$VAL_DIR"
+
+if command -v sops >/dev/null 2>&1 && grep -q '^sops:' "$CFG" 2>/dev/null; then
+  echo "==> Config is sops-encrypted, decrypting to a temporary file..."
+  CFG_ORIG="${CFG}"
+  CFG=$(mktemp /tmp/dgctl-config.XXXXXX.yaml)
+  sops -d "$CFG_ORIG" > "$CFG"
+  trap 'rm -f "$CFG"' EXIT
+elif ! command -v sops >/dev/null 2>&1 && grep -q '^sops:' "$CFG" 2>/dev/null; then
+  echo "ERROR: config is sops-encrypted but sops binary not found in PATH"
+  exit 1
+fi
 
 if [ "$LICENSE" != "-l" ];then
 docker run $env_flag --net=host --rm \
-  -v `pwd`/$VAL_DIR:/values \
-  -v `pwd`/$CFG:/config.yaml \
+  -v "$VAL_DIR":/values \
+  -v "$CFG":/config.yaml \
   -u `id -u`:`grep docker /etc/group | cut -d : -f 3` \
   2gis/dgctl:3 pull --config=/config.yaml --generate-values --apps-to-registry
 
 else
 docker run --pull=always $env_flag --net=host --rm \
-  -v `pwd`/$VAL_DIR:/values \
-  -v `pwd`/$CFG:/config.yaml \
+  -v "$VAL_DIR":/values \
+  -v "$CFG":/config.yaml \
   -u `id -u`:`grep docker /etc/group | cut -d : -f 3` \
   2gis/dgctl:3 license --config=/config.yaml --version 2
 fi
@@ -53,7 +76,7 @@ checking_hosts() {
   hosts=$(yq -r ".script.${section_name}[]?" "$CFG" 2>/dev/null)
 
   if [[ -z "$hosts" || "$hosts" == "null" ]]; then
-    echo "No \"script.$section_name\" hosts in $CFG — skipping disk space check"
+    echo "No \"script.$section_name\" hosts in $CFG - skipping disk space check"
     return 0
   fi
 

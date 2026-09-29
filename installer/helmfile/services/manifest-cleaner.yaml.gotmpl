@@ -14,7 +14,15 @@ releases:
       service: manifest-cleaner
     values:
       - {{ .Values.basePath }}/values/manifest-cleaner.yaml.gotmpl
-      - {{ .Values.valuesPath }}/values/manifest-cleaner/{{ .Environment.Name }}.yaml.gotmpl
+{{- $vp1 := printf "%s/values/manifest-cleaner/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $vp1 }}
+      - {{ $vp1 }}
+{{- end }}
+{{- $secretsPath := printf "%s/values/manifest-cleaner/%s.secrets.yaml" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $secretsPath }}
+    secrets:
+      - {{ $secretsPath }}
+{{- end }}
     hooks:
     - events: ["postsync"]
       showlogs: true

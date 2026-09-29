@@ -18,7 +18,15 @@ releases:
       service: elasticsearch
     values:
       - {{ .Values.basePath }}/values/infra/elasticsearch.yaml.gotmpl
-      - {{ .Values.valuesPath }}/values/infra/elasticsearch/{{ .Environment.Name }}.yaml.gotmpl
+{{- $vp1 := printf "%s/values/infra/elasticsearch/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $vp1 }}
+      - {{ $vp1 }}
+{{- end }}
+{{- $secretsPath := printf "%s/values/infra/elasticsearch/%s.secrets.yaml" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $secretsPath }}
+    secrets:
+      - {{ $secretsPath }}
+{{- end }}
     hooks:
 {{- $hooksPath := printf "%s/hooks/infra/elasticsearch/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $hooksPath }}

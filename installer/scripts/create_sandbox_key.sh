@@ -3,14 +3,17 @@
 # Called by the postsync hook in hooks/core/keys/sandbox.yaml.gotmpl.
 #
 # Environment variables:
-#   OP_NAMESPACE  — Kubernetes namespace (default: sandbox)
-#   OP_DOMAIN     — sandbox domain (default: sandbox)
-#   OP_ENV_FILE   — path to environments/sandbox.yaml.gotmpl (for patching the generated key)
+#   OP_NAMESPACE     - Kubernetes namespace (default: sandbox)
+#   OP_DOMAIN        - sandbox domain (default: sandbox)
+#   OP_ENV_FILE      - path to environments/sandbox.yaml.gotmpl (fallback target)
+#   OP_SECRETS_FILE  - path to environments/sandbox.secrets.yaml (preferred target;
+#                      overrides env values at render time, may be sops-encrypted)
 set -euo pipefail
 
 NAMESPACE="${OP_NAMESPACE:-sandbox}"
 DOMAIN="${OP_DOMAIN:-sandbox}"
 ENV_FILE="${OP_ENV_FILE:-}"
+SECRETS_FILE="${OP_SECRETS_FILE:-}"
 
 KEYS_HOST="keys-api.${DOMAIN}"
 KEYS_API_URL="http://${KEYS_HOST}"
@@ -18,6 +21,31 @@ KEYS_API_URL="http://${KEYS_HOST}"
 CURL_RESOLVE="--resolve ${KEYS_HOST}:80:127.0.0.1"
 
 PARTNER_NAME="Sandbox Partner"
+
+# Target file to read/patch the partner key from:
+# environments/<env>.secrets.yaml if present (it overrides env values), else the environments file.
+TARGET=""
+if [ -n "${SECRETS_FILE}" ] && [ -f "${SECRETS_FILE}" ]; then
+  TARGET="${SECRETS_FILE}"
+elif [ -n "${ENV_FILE}" ] && [ -f "${ENV_FILE}" ]; then
+  TARGET="${ENV_FILE}"
+fi
+
+# sops-encrypted target: decrypt to a temp copy, re-encrypt on write-back.
+# Temp file lives next to the target so that .sops.yaml rules apply on re-encrypt.
+ENC=0
+WORK=""
+cleanup() { [ -n "${WORK}" ] && rm -f "${WORK}" >/dev/null 2>&1 || true; }
+trap cleanup EXIT
+if [ -n "${TARGET}" ]; then
+  WORK=$(mktemp "$(dirname "${TARGET}")/.sandbox-key-work-XXXXXX.yaml")
+  if grep -q '^sops:' "${TARGET}" 2>/dev/null; then
+    ENC=1
+    sops -d "${TARGET}" > "${WORK}"
+  else
+    cp "${TARGET}" "${WORK}"
+  fi
+fi
 
 echo "==> Waiting for keys-api pod to be ready..."
 kubectl -n "${NAMESPACE}" wait --for=condition=ready pod -l "app.kubernetes.io/name=keys-api" --timeout=120s 2>/dev/null || {
@@ -61,14 +89,19 @@ keys_get() {
     -H "X-Auth-Token: ${KEYS_API_TOKEN}"
 }
 
-# Current key from the environments file (the `- key:` line, not the license key)
+# Current partner key from the target file:
+# `- key: 'uuid'` (environments gotmpl) or top-level `key: uuid` (env secrets)
 CURRENT_KEY=""
-if [ -n "$ENV_FILE" ] && [ -f "$ENV_FILE" ]; then
-  CURRENT_KEY=$(grep -E "^[[:space:]]*- key: '[a-f0-9-]{36}'" "${ENV_FILE}" 2>/dev/null \
-    | head -1 | sed "s/.*'\(.*\)'.*/\1/")
+if [ -n "${WORK}" ]; then
+  CURRENT_KEY=$(grep -E "^[[:space:]]*- key: '[a-f0-9-]{36}'" "${WORK}" 2>/dev/null \
+    | head -1 | sed "s/.*'\(.*\)'.*/\1/" || true)
+  if [ -z "${CURRENT_KEY}" ]; then
+    CURRENT_KEY=$(grep -E "^key: [a-f0-9-]{36}" "${WORK}" 2>/dev/null \
+      | head -1 | sed 's/^key: //' || true)
+  fi
 fi
 
-# Idempotency: the key from the env file is already in the DB and active — nothing to do
+# Idempotency: the key from the target file is already in the DB and active - nothing to do
 if [ -n "${CURRENT_KEY}" ]; then
   if keys_get "${KEYS_API_URL}/admin/v1/keys" 2>/dev/null \
       | jq -e --arg k "${CURRENT_KEY}" '.result.items[]? | select(.key == $k and .status == "active")' > /dev/null; then
@@ -80,7 +113,7 @@ fi
 
 # Partner: reuse by name, create only if missing
 PARTNER_ID=$(keys_get "${KEYS_API_URL}/admin/v1/partners" 2>/dev/null \
-  | jq -r --arg name "${PARTNER_NAME}" '.result.items[]? | select(.name == $name) | .id' | head -1)
+  | jq -r --arg name "${PARTNER_NAME}" '.result.items[]? | select(.name == $name) | .id' | head -1 || true)
 
 if [ -n "${PARTNER_ID}" ] && [ "${PARTNER_ID}" != "null" ]; then
   echo "==> Partner '${PARTNER_NAME}' already exists (id=${PARTNER_ID})"
@@ -148,7 +181,8 @@ SUBSCRIPTION_JSON=$(cat <<EOF
     {"code": "tsp-api"},
     {"code": "truck-directions-api"},
     {"code": "truck-distance-matrix-api"},
-    {"code": "static-api"}
+    {"code": "static-api"},
+    {"code": "styles-api"}
   ]
 }
 EOF
@@ -172,12 +206,23 @@ if [ -z "$DEMO_KEY" ] || [ "$DEMO_KEY" = "null" ]; then
 fi
 echo "==> Demo key: ${DEMO_KEY:0:8}..."
 
-if [ -n "$ENV_FILE" ] && [ -f "$ENV_FILE" ] && [ "${DEMO_KEY}" != "${CURRENT_KEY}" ]; then
-  echo "==> Patching key in ${ENV_FILE}..."
-  sed -i "s|^\([[:space:]]*- key: \).*|\1'${DEMO_KEY}' # auto-generated|" "${ENV_FILE}"
+if [ -n "${WORK}" ] && [ "${DEMO_KEY}" != "${CURRENT_KEY}" ]; then
+  echo "==> Patching key in ${TARGET}..."
+  sed -i \
+    -e "s|^\([[:space:]]*- key: \).*|\1'${DEMO_KEY}' # auto-generated|" \
+    -e "s|^key: .*|key: '${DEMO_KEY}'|" \
+    "${WORK}"
+  if [ "${ENC}" = "1" ]; then
+    # sops resolves .sops.yaml from CWD (not from the file path) - cd next to
+    # the target so the walk-up finds the example/.sops.yaml rules.
+    ( cd "$(dirname "${TARGET}")" && sops encrypt -i "${WORK}" )
+    cat "${WORK}" > "${TARGET}"
+  else
+    cp "${WORK}" "${TARGET}"
+  fi
   echo "==> Key patched"
 else
-  echo "==> ENV_FILE not set or not found, skipping patch"
+  echo "==> Target file not set or key unchanged, skipping patch"
 fi
 
 echo "==> Done."

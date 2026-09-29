@@ -5,6 +5,7 @@
 # Особенно касается search-api, который при запуске забирает данные из s3 по манифесту, с которым его запустили.
 
 CFG=${1? "Не указан файл конфигурации dgctl"} # Файл конфигурации dgctl
+CFG=$(readlink -f "$CFG")
 
 KEEP_MANIFEST_COUNT=12 # Количесво манифестов оставить.
 
@@ -15,7 +16,7 @@ function manifest_list(){
   for component in $COMPONENTS; do
     echo "Манифесты $component"
     docker run --net=host --rm \
-    -v `pwd`/$CFG:/config.yaml \
+    -v "$CFG":/config.yaml \
     -u `id -u`:`grep docker /etc/group | cut -d : -f 3` \
   2gis/dgctl:3 manifest list --config=/config.yaml --component $component
   done
@@ -26,7 +27,7 @@ function manifest_cleanup(){
   for component in $COMPONENTS; do
     echo "Очистка $component"
     docker run --net=host --rm \
-    -v `pwd`/$CFG:/config.yaml \
+    -v "$CFG":/config.yaml \
     -u `id -u`:`grep docker /etc/group | cut -d : -f 3` \
     2gis/dgctl:3 manifest cleanup --config=/config.yaml --component $component --keep-count $KEEP_MANIFEST_COUNT
   done

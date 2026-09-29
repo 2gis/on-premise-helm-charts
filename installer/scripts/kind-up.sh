@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# Bootstrap sandbox-окружения kind (README «Sandbox-пример (kind)», шаг 2):
+# Bootstrap sandbox-окружения kind (README "Sandbox-пример (kind)", шаг 2):
 # кластер 2gis-on-premise + namespace sandbox + локальный HTTP-registry kind-registry:5000
 # + доверие к нему в нодах (hosts.toml, containerd).
 #
 # Идемпотентен: повторный запуск ничего не пересоздаёт.
-# Не трогает /etc/hosts — после запуска выполните installer/scripts/sandbox-hosts.sh.
+# Не трогает /etc/hosts - после запуска выполните installer/scripts/sandbox-hosts.sh.
 
 set -euo pipefail
 

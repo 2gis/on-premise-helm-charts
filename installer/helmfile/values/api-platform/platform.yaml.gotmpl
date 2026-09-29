@@ -2,6 +2,7 @@
 ui:
   brand: 2gis
   pages: "status,playground,map_styles,license"
+  playgrounds: mapgl,geocoder,directions,static
   status:
     mapgl: "MapGL JS={{ $protocol }}://{{ .Values.mapglIngress }},Tiles API={{ $protocol }}://{{ .Values.tilesMultiIngress }}/healthcheck"
     search: "Catalog API={{ $protocol }}://{{ .Values.catalogIngress }},Search API={{ $protocol }}://{{ .Values.searchIngress }}/v2/status"
@@ -24,6 +25,10 @@ ui:
 
   mapStyles:
     url: "{{ $protocol }}://{{ .Values.stylesIngress }}"
+    key: {{ .Values.key }}
+
+  static:
+    url: "{{ $protocol }}://{{ .Values.staticmapsIngress }}"
     key: {{ .Values.key }}
 
   pro:

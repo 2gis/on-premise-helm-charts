@@ -57,7 +57,7 @@ CHARTS_INDEX_FILE="charts-index.txt"           # Файл с индексом ч
 # Список чартов, их версий и источников
 # Формат: ["chart_name"]="version|source_registry"
 # Если source_registry не указан, используется DEFAULT_SOURCE_REGISTRY
-# Собираем ls installer/helmfile/services/*.yaml | grep -v -E "navi-back|navi-attr|navi-async"| xargs cat | sed 's/{{ *//g; s/ *}}//g' | yq '.releases[] | .name + " | " + .version + " | " + .chart'
+# Собираем ls "${HELMFILE_BASE:-$PWD/installer/helmfile}"/services/*.yaml | grep -v -E "navi-back|navi-attr|navi-async"| xargs cat | sed 's/{{ *//g; s/ *}}//g' | yq '.releases[] | .name + " | " + .version + " | " + .chart'
 declare -A CHARTS=(
     # ["chart1"]="1.0.0|ghcr.io/2gis/charts"
     # ["chart2"]="2.1.0|registry.k8s.io/charts"

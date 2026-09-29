@@ -7,7 +7,7 @@
       NAMESPACE="{{ .Values.namespace }}"
       LICENSE_KEY="{{ .Values.license.key }}"
 
-      # Set S3 public-read policies on data buckets (best effort — mc may not be in the image)
+      # Set S3 public-read policies on data buckets (best effort - mc may not be in the image)
       POD=$(kubectl -n "${NAMESPACE}" get pod -l "app.kubernetes.io/name=minio" -o jsonpath='{.items[0].metadata.name}' 2>/dev/null)
       if [ -n "$POD" ]; then
         for BUCKET in ${NAMESPACE}-styles ${NAMESPACE}-navi-am ${NAMESPACE}-navi-vrp ${NAMESPACE}-navi-async; do
@@ -21,9 +21,9 @@
 
       if [ "${LICENSE_KEY}" = "00000000-0000-0000-0000-000000000000" ] || [ -z "${LICENSE_KEY}" ]; then
         echo "==> License key not set (placeholder). Skipping data loading."
-        echo "==> To load data, set a real license key in environments/sandbox.yaml.gotmpl"
-        echo "    and run: cd installer/dgctl && ./pull.sh dgctl-config-sandbox.yaml"
+        echo "==> To load data, set a real license key in example/dgctl/dgctl-config-sandbox.yaml"
+        echo "    and run: ${HELMFILE_BASE}/../dgctl/pull.sh dgctl-config-sandbox.yaml"
       else
         echo "==> License key detected. To load data run:"
-        echo "    cd installer/dgctl && ./pull.sh dgctl-config-sandbox.yaml"
+        echo "    ${HELMFILE_BASE}/../dgctl/pull.sh dgctl-config-sandbox.yaml"
       fi

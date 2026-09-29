@@ -59,6 +59,42 @@ jobs:
           fi
           echo "Chart versions are consistent with common.yaml.gotmpl"
 
+      # В репозитории секреты хранятся plaintext-каркасом (шифрование — перед деплоем,
+      # см. installer/README.md "Секреты"). CI валидирует полный sops-контур: эфемерный
+      # age-ключ, шифрование каркаса по правилам example/.sops.yaml (sandbox) и по
+      # временной CI-конфигурации (staging), рендер — реальной расшифровкой sops.
+      - name: Encrypt example secrets with an ephemeral age key
+        run: |
+          curl -fsSL -o /usr/local/bin/sops \
+            https://github.com/getsops/sops/releases/download/v3.13.3/sops-v3.13.3.linux.amd64
+          chmod +x /usr/local/bin/sops
+          curl -fsSL https://github.com/FiloSottile/age/releases/download/v1.3.2/age-v1.3.2-linux-amd64.tar.gz | tar xz
+          install age/age age/age-keygen /usr/local/bin/
+          mkdir -p ~/.config/sops/age
+          age-keygen -o ~/.config/sops/age/keys.txt 2>/tmp/age.log
+          PUB_KEY=$(sed -n 's/^# public key: //p' ~/.config/sops/age/keys.txt)
+          EXAMPLE="$GITHUB_WORKSPACE/installer/helmfile/example"
+          # sandbox: правила из example/.sops.yaml (плейсхолдер -> эфемерный ключ)
+          sed -i "s/age1REPLACE-WITH-YOUR-PUBLIC-KEY/$PUB_KEY/g" "$EXAMPLE/.sops.yaml"
+          find "$EXAMPLE" -path '*sandbox*' -name '*.yaml' \
+            -exec sops --config "$EXAMPLE/.sops.yaml" -e -i {} \;
+          # staging: файлов каркаса нет в правилах example/.sops.yaml (plaintext по умолчанию),
+          # для CI шифруем их временной конфигурацией
+          cat > /tmp/sops-staging.yaml <<CFG
+          creation_rules:
+            - path_regex: '.*staging.*secrets\.yaml$'
+              age: $PUB_KEY
+          CFG
+          find "$EXAMPLE" -path '*staging*' -name '*.secrets.yaml' \
+            -exec sops --config /tmp/sops-staging.yaml -e -i {} \;
+          # || true: grep -L в busybox возвращает 1, когда зашифрованы все файлы
+          UNENCRYPTED=$(find "$EXAMPLE" \( -path '*sandbox*' -o -path '*staging*' \) \
+            -name '*.secrets.yaml' -exec grep -L '^sops:' {} +) || true
+          if [ -n "$UNENCRYPTED" ]; then
+            echo "::error::Files not encrypted: $UNENCRYPTED"
+            exit 1
+          fi
+
       - name: Helmfile lint (staging)
         run: |
           HELMFILE_BASE="$GITHUB_WORKSPACE/installer/helmfile" \
@@ -69,6 +105,18 @@ jobs:
           HELMFILE_BASE="$GITHUB_WORKSPACE/installer/helmfile" \
           helmfile -e staging -f installer/helmfile/example/deploy/staging.yaml.gotmpl \
             template --concurrency=1 > installer_artifact
+
+      - name: Helmfile template (sandbox)
+        run: |
+          HELMFILE_BASE="$GITHUB_WORKSPACE/installer/helmfile" \
+          helmfile -e sandbox -f installer/helmfile/example/deploy/sandbox.yaml.gotmpl \
+            template --concurrency=1 --args --skip-schema-validation >> installer_artifact
+
+      - name: Helmfile lint (sandbox)
+        run: |
+          HELMFILE_BASE="$GITHUB_WORKSPACE/installer/helmfile" \
+          helmfile -e sandbox -f installer/helmfile/example/deploy/sandbox.yaml.gotmpl \
+            lint --args --skip-schema-validation
 
       - name: Install kubeconform
         run: |

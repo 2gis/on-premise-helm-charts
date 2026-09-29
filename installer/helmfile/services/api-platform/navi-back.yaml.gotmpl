@@ -7,7 +7,6 @@ templates:
   default:
     namespace: {{ .Values.namespace  }}
     version: {{ .Values.versionPlatform }}
-    missingFileHandler: Warn
     timeout: {{ .Values.timeoutNaviBack }}
     kubeContext: {{ .Values.kubeContext }}
     values:
@@ -25,7 +24,7 @@ templates:
 
 releases:
 
-# Синхронный деплой — управляется через {env}-rules.yaml.gotmpl
+# Синхронный деплой - управляется через {env}-rules.yaml.gotmpl
 
 {{- $path := printf "%s/values/api-platform/navi-rules/%s-rules.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
 {{- $vals := tpl (readFile $path) . | fromYaml -}}
@@ -55,9 +54,23 @@ releases:
       {{- end }}
     values:
       - {{ $.Values.basePath }}/values/api-platform/navi-back.yaml.gotmpl
-      - {{ $.Values.valuesPath }}/values/api-platform/navi-back/{{ $.Environment.Name }}.yaml.gotmpl
-      - {{ $.Values.valuesPath }}/values/api-platform/navi-rules/{{ $.Environment.Name }}-rules.yaml.gotmpl
-      - {{ $.Values.valuesPath }}/values/api-platform/navi-back/{{ $.Environment.Name }}-{{ $service.name }}.yaml.gotmpl
+{{- $vp1 := printf "%s/values/api-platform/navi-back/%s.yaml.gotmpl" $.Values.valuesPath $.Environment.Name -}}
+{{- if isFile $vp1 }}
+      - {{ $vp1 }}
+{{- end }}
+{{- $vp2 := printf "%s/values/api-platform/navi-rules/%s-rules.yaml.gotmpl" $.Values.valuesPath $.Environment.Name -}}
+{{- if isFile $vp2 }}
+      - {{ $vp2 }}
+{{- end }}
+{{- $vp3 := printf "%s/values/api-platform/navi-back/%s-%s.yaml.gotmpl" $.Values.valuesPath $.Environment.Name $service.name -}}
+{{- if isFile $vp3 }}
+      - {{ $vp3 }}
+{{- end }}
+{{- $secretsPath := printf "%s/values/api-platform/navi-back/%s.secrets.yaml" $.Values.valuesPath $.Environment.Name -}}
+{{- if isFile $secretsPath }}
+    secrets:
+      - {{ $secretsPath }}
+{{- end }}
     hooks:
 {{- $hooksPath := printf "%s/hooks/api-platform/navi-back/%s.yaml.gotmpl" $.Values.valuesPath $.Environment.Name -}}
 {{- if isFile $hooksPath }}
@@ -76,9 +89,23 @@ releases:
         value: {{ $service.name }}
     values:
       - {{ $.Values.basePath }}/values/api-platform/navi-attractor.yaml.gotmpl
-      - {{ $.Values.valuesPath }}/values/api-platform/navi-attractor/{{ $.Environment.Name }}.yaml.gotmpl
-      - {{ $.Values.valuesPath }}/values/api-platform/navi-rules/{{ $.Environment.Name }}-rules.yaml.gotmpl
-      - {{ $.Values.valuesPath }}/values/api-platform/navi-attractor/{{ $.Environment.Name }}-{{ $service.name }}.yaml.gotmpl
+{{- $vp4 := printf "%s/values/api-platform/navi-attractor/%s.yaml.gotmpl" $.Values.valuesPath $.Environment.Name -}}
+{{- if isFile $vp4 }}
+      - {{ $vp4 }}
+{{- end }}
+{{- $vp5 := printf "%s/values/api-platform/navi-rules/%s-rules.yaml.gotmpl" $.Values.valuesPath $.Environment.Name -}}
+{{- if isFile $vp5 }}
+      - {{ $vp5 }}
+{{- end }}
+{{- $vp6 := printf "%s/values/api-platform/navi-attractor/%s-%s.yaml.gotmpl" $.Values.valuesPath $.Environment.Name $service.name -}}
+{{- if isFile $vp6 }}
+      - {{ $vp6 }}
+{{- end }}
+{{- $secretsPath := printf "%s/values/api-platform/navi-attractor/%s.secrets.yaml" $.Values.valuesPath $.Environment.Name -}}
+{{- if isFile $secretsPath }}
+    secrets:
+      - {{ $secretsPath }}
+{{- end }}
     hooks:
 {{- $hooksPath := printf "%s/hooks/api-platform/navi-attractor/%s.yaml.gotmpl" $.Values.valuesPath $.Environment.Name -}}
 {{- if isFile $hooksPath }}
@@ -112,7 +139,10 @@ releases:
         value: http://navi-back-{{ $service.name }}/find_platforms
     values:
     - {{ $.Values.basePath }}/values/api-platform/navi-splitter.yaml.gotmpl
-    - {{ $.Values.valuesPath }}/values/api-platform/navi-splitter/{{ $.Environment.Name }}.yaml.gotmpl
+{{- $vp7 := printf "%s/values/api-platform/navi-splitter/%s.yaml.gotmpl" $.Values.valuesPath $.Environment.Name -}}
+{{- if isFile $vp7 }}
+    - {{ $vp7 }}
+{{- end }}
     hooks:
 {{- $hooksPath := printf "%s/hooks/api-platform/navi-splitter/%s.yaml.gotmpl" $.Values.valuesPath $.Environment.Name -}}
 {{- if isFile $hooksPath }}
@@ -121,7 +151,7 @@ releases:
     {{- end }}
 {{- end }}
 
-# Асинхронный деплой (DMA) — управляется через {env}-rules-dma.yaml.gotmpl
+# Асинхронный деплой (DMA) - управляется через {env}-rules-dma.yaml.gotmpl
 # Файл опциональный: если отсутствует, асинхронные релизы не создаются
 
 {{- $dmaPath := printf "%s/values/api-platform/navi-rules/%s-rules-dma.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
@@ -172,7 +202,7 @@ releases:
         value: navi_{{ $.Environment.Name }}_{{ $service.name | replace "-" "_" }}
       {{- if mustHas "ctx" $service.routing }}
       # routing: ["ctx"] всегда требует внешнего аттрактора
-      # attractorFromRule: если задано — используем аттрактор родительского правила, иначе свой
+      # attractorFromRule: если задано - используем аттрактор родительского правила, иначе свой
       {{- $attractorName := index $service "attractorFromRule" | default $service.name }}
       - name: remoteAttractor.host
         value: navi-attr-{{ $attractorName }}
@@ -201,16 +231,30 @@ releases:
         value: navi.{{ $.Environment.Name }}.cancel.topic
     values:
       - {{ $.Values.basePath }}/values/api-platform/navi-back.yaml.gotmpl
-      - {{ $.Values.valuesPath }}/values/api-platform/navi-back/{{ $.Environment.Name }}.yaml.gotmpl
-      - {{ $.Values.valuesPath }}/values/api-platform/navi-back/{{ $.Environment.Name }}-async.yaml.gotmpl
-      - {{ $.Values.valuesPath }}/values/api-platform/navi-back/{{ $.Environment.Name }}-{{ $service.name }}.yaml.gotmpl
+{{- $vp8 := printf "%s/values/api-platform/navi-back/%s.yaml.gotmpl" $.Values.valuesPath $.Environment.Name -}}
+{{- if isFile $vp8 }}
+      - {{ $vp8 }}
+{{- end }}
+{{- $vp9 := printf "%s/values/api-platform/navi-back/%s-async.yaml.gotmpl" $.Values.valuesPath $.Environment.Name -}}
+{{- if isFile $vp9 }}
+      - {{ $vp9 }}
+{{- end }}
+{{- $vp10 := printf "%s/values/api-platform/navi-back/%s-%s.yaml.gotmpl" $.Values.valuesPath $.Environment.Name $service.name -}}
+{{- if isFile $vp10 }}
+      - {{ $vp10 }}
+{{- end }}
+{{- $secretsPath := printf "%s/values/api-platform/navi-back/%s-async.secrets.yaml" $.Values.valuesPath $.Environment.Name -}}
+{{- if isFile $secretsPath }}
+    secrets:
+      - {{ $secretsPath }}
+{{- end }}
     hooks:
 {{- $hooksPath := printf "%s/hooks/api-platform/navi-back/%s-dma.yaml.gotmpl" $.Values.valuesPath $.Environment.Name -}}
 {{- if isFile $hooksPath }}
 {{- readFile $hooksPath | fromYaml | toYaml | nindent 4 }}
 {{- end }}
 
-  # Асинхронный аттрактор (не деплоим для find-platform — он использует аттрактор ctx-правила)
+  # Асинхронный аттрактор (не деплоим для find-platform - он использует аттрактор ctx-правила)
   {{- if not (index $service "attractorFromRule") }}
   - name: navi-attr-{{ $service.name }}
     inherit:
@@ -248,9 +292,23 @@ releases:
         value: navi.{{ $.Environment.Name }}.cancel.topic
     values:
       - {{ $.Values.basePath }}/values/api-platform/navi-attractor.yaml.gotmpl
-      - {{ $.Values.valuesPath }}/values/api-platform/navi-attractor/{{ $.Environment.Name }}.yaml.gotmpl
-      - {{ $.Values.valuesPath }}/values/api-platform/navi-attractor/{{ $.Environment.Name }}-async.yaml.gotmpl
-      - {{ $.Values.valuesPath }}/values/api-platform/navi-attractor/{{ $.Environment.Name }}-{{ $service.name }}.yaml.gotmpl
+{{- $vp11 := printf "%s/values/api-platform/navi-attractor/%s.yaml.gotmpl" $.Values.valuesPath $.Environment.Name -}}
+{{- if isFile $vp11 }}
+      - {{ $vp11 }}
+{{- end }}
+{{- $vp12 := printf "%s/values/api-platform/navi-attractor/%s-async.yaml.gotmpl" $.Values.valuesPath $.Environment.Name -}}
+{{- if isFile $vp12 }}
+      - {{ $vp12 }}
+{{- end }}
+{{- $vp13 := printf "%s/values/api-platform/navi-attractor/%s-%s.yaml.gotmpl" $.Values.valuesPath $.Environment.Name $service.name -}}
+{{- if isFile $vp13 }}
+      - {{ $vp13 }}
+{{- end }}
+{{- $secretsPath := printf "%s/values/api-platform/navi-attractor/%s-async.secrets.yaml" $.Values.valuesPath $.Environment.Name -}}
+{{- if isFile $secretsPath }}
+    secrets:
+      - {{ $secretsPath }}
+{{- end }}
     hooks:
 {{- $hooksPath := printf "%s/hooks/api-platform/navi-attractor/%s-dma.yaml.gotmpl" $.Values.valuesPath $.Environment.Name -}}
 {{- if isFile $hooksPath }}

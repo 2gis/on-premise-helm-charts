@@ -15,7 +15,15 @@ releases:
       group: infra
     values:
       - {{ .Values.basePath }}/values/infra/kibana.yaml.gotmpl
-      - {{ .Values.valuesPath }}/values/infra/kibana/{{ .Environment.Name }}.yaml.gotmpl
+{{- $vp1 := printf "%s/values/infra/kibana/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $vp1 }}
+      - {{ $vp1 }}
+{{- end }}
+{{- $secretsPath := printf "%s/values/infra/kibana/%s.secrets.yaml" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $secretsPath }}
+    secrets:
+      - {{ $secretsPath }}
+{{- end }}
     hooks:
     - events: ["postsync"]
       showlogs: true
