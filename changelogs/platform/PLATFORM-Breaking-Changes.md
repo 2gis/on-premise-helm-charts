@@ -1,5 +1,11 @@
 # Platform Breaking-Changes
 
+## [2.59.0]
+
+### search-api-v8
+
+- Renamed `worker` to `unisearcher`
+
 ## [2.55.0]
 
 ### search-api-v8
