@@ -3,7 +3,7 @@ name: stat-api
 type: application
 description: A Helm chart for Kubernetes to deploy Stat service
 
-version: 2.58.0
+version: 2.59.0
 appVersion: 0.2.5
 
 maintainers:

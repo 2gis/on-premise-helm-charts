@@ -6,8 +6,8 @@ api:
   # trafficTileServerUrl: '' # отдельный прокси до растровых пробок (traffic tiles)
   # trafficTimestampServerUrl: '' # по умолчанию - trafficProxyMapIngress при proxyMode: map|full
   # trafficScoreServerUrl: '' # по умолчанию - trafficProxyMapIngress при proxyMode: map|full
-  # webApiKey: '' # отдельный ключ для Catalog API, если не совпадает с основным
-  webApiKey: '{{ .Values.key }}'
+  # catalogApiKey: '' # отдельный ключ для Catalog API
+  catalogApiKey: '{{ .Values.key }}'
 
 # resources: see chart defaults
 # resources:

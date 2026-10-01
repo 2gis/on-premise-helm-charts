@@ -30,7 +30,9 @@ spec:
         checksum/configbuilder: {{ (include (print $.Template.BasePath "/configmapbuilder.yaml") . | fromYaml).data | toYaml | sha256sum }}
         checksum/configbuilder-runnable: {{ (include (print $.Template.BasePath "/configmapbuilder-runnable.yaml") . | fromYaml).data | toYaml | sha256sum }}
         checksum/confignginx: {{ (include (print $.Template.BasePath "/configmapnginx.yaml") . | fromYaml).data | toYaml | sha256sum }}
+        {{- if .Values.rtr.enabled }}
         checksum/secret: {{ (include (print $.Template.BasePath "/secret.yaml") . | fromYaml).data | toYaml | sha256sum }}
+        {{- end }}
         {{- if .Values.customCAs.bundle }}
         checksum/custom-ca: {{ (include (print $.Template.BasePath "/configmap-ca.yaml") . | fromYaml).data | toYaml | sha256sum }}
         {{- end }}

@@ -1,19 +1,10 @@
-# 2GIS Splitter service
+# 2GIS Navi-Splitter service
 
-Use this Helm chart to deploy Splitter service, which is a part of 2GIS's Navi [On-Premise Navigation services](https://docs.2gis.com/en/on-premise/navigation).
+This Helm chart deploys the **Navi-Splitter service**, a component of the 2GIS [On-Premise](https://docs.2gis.com/en/on-premise-api-platform/overview/summary#navigation).
 
-Read more about the On-Premise solution [here](https://docs.2gis.com/en/on-premise/overview).
-
-See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn about:
-
-- Architecture of the service.
-
-- Installing the service.
-
-    When filling in the keys for `values-splitter.yaml` configuration file, refer to the documentation and the list of keys below.
-
-- Updating the service.
-
+To learn more about configuration, architecture, and requirements, see the official documentation:
+* [On-Premise API Platform Overview](https://docs.2gis.com/en/on-premise-api-platform/overview/summary)
+* [Navigation API Documentation](https://docs.2gis.com/en/on-premise-api-platform/architecture/navigation)
 
 ## Values
 

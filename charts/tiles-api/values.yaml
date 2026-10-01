@@ -18,7 +18,7 @@ imagePullSecrets: []
 # @param dgctlStorage.region AuthenticationRegion property for S3 client. Used in AWS4 request signing, this is an optional property
 # @param dgctlStorage.accessKey S3 access key for accessing the bucket. **Required**
 # @param dgctlStorage.secretKey S3 secret key for accessing the bucket. **Required**
-# @param dgctlStorage.manifest The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json`.<br> This file contains the description of pieces of data that the service requires to operate. **Required**
+# @param dgctlStorage.manifest The path to the [manifest file](https://docs.2gis.com/en/on-premise-api-platform/installation#artifacts). Format: `manifests/api-platform/0000000000.json`.<br> This file contains the description of pieces of data that the service requires to operate. **Required**
 
 dgctlStorage:
   host: ''
@@ -277,7 +277,7 @@ tilegen:
 # @param proxy.image.pullPolicy Kubernetes pull policy for the service's Docker image.
 
 # @extra proxy.access **API Keys service access settings**
-# @param proxy.access.enabled If access to the [API Keys service](https://docs.2gis.com/en/on-premise/keys) is enabled.
+# @param proxy.access.enabled If access to the [API Keys service](https://docs.2gis.com/en/on-premise-api-platform/overview/summary#api-keys-service) is enabled.
 # @param proxy.access.url API Keys endpoint url, ex: http://keys-service-api.svc. **Required**
 # @param proxy.access.syncPeriod Proxy sync period.
 # @param proxy.access.raster.token Service key for raster data in Keys API. Used for key validation. If Keys API is unavailable or token is empty/invalid, tile service will continue to work without key validation (with warning in logs).

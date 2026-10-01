@@ -1,5 +1,17 @@
 # Platform Breaking-Changes
 
+## [2.59.0]
+
+### raster-js-api
+
+- Renamed `webApiKey` to `catalogApiKey`
+- Renamed `webApiServerUrl` to `catalogApiServerUrl`
+- The value of the `api.protocol` field has been changed to http/https without a colon
+
+### search-api-v8
+
+- Renamed `worker` to `unisearcher`
+
 ## [2.55.0]
 
 ### search-api-v8

@@ -1,6 +1,10 @@
-# Platform service
+# 2GIS Platform Manager service
 
-Use this Helm chart to deploy Platform service, which is a part of 2GIS's [On-Premise solution](https://docs.2gis.com/en/on-premise/overview).
+This Helm chart deploys the **Platform Manager service**, a component of the 2GIS [On-Premise](https://docs.2gis.com/en/on-premise-api-platform/overview/summary#platform-manager).
+
+To learn more about configuration, architecture, and requirements, see the official documentation:
+* [On-Premise API Platform Overview](https://docs.2gis.com/en/on-premise-api-platform/overview/summary)
+* [Platform Manager Documentation](https://docs.2gis.com/en/on-premise-api-platform/architecture/platform)
 
 ## Values
 
@@ -13,38 +17,38 @@ Use this Helm chart to deploy Platform service, which is a part of 2GIS's [On-Pr
 
 ### Common settings
 
-| Name                      | Description                                                                                                                                    | Value |
-| ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| `ui.replicas`             | A replica count for a pod.                                                                                                                     | `1`   |
-| `ui.revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment). | `3`   |
-| `ui.nodeSelector`         | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                            | `{}`  |
-| `ui.affinity`             | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).                    | `{}`  |
-| `ui.tolerations`          | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                              | `[]`  |
-| `ui.podAnnotations`       | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                  | `{}`  |
-| `ui.podLabels`            | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                            | `{}`  |
-| `ui.annotations`          | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                      | `{}`  |
-| `ui.labels`               | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                | `{}`  |
+| Name                      | Description                                                                                                                                                               | Value |
+| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `ui.replicas`             | A replica count for a pod.                                                                                                                                                | `1`   |
+| `ui.revisionHistoryLimit` | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment). | `3`   |
+| `ui.nodeSelector`         | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                                       | `{}`  |
+| `ui.affinity`             | Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).                                               | `{}`  |
+| `ui.tolerations`          | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                         | `[]`  |
+| `ui.podAnnotations`       | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                             | `{}`  |
+| `ui.podLabels`            | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                       | `{}`  |
+| `ui.annotations`          | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                 | `{}`  |
+| `ui.labels`               | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                           | `{}`  |
 
 ### Deployment settings
 
 | Name                  | Description                    | Value                         |
 | --------------------- | ------------------------------ | ----------------------------- |
 | `ui.image.repository` | Repository                     | `2gis-on-premise/platform-ui` |
-| `ui.image.tag`        | Tag                            | `1.46.0`                      |
+| `ui.image.tag`        | Tag                            | `1.50.0`                      |
 | `imagePullSecrets`    | Kubernetes image pull secrets. | `[]`                          |
 
 ### UI service settings
 
-| Name                          | Description                                                                                                                                                                                                                                                                                                                         | Value  |
-| ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `ui.appPort`                  | Service port.                                                                                                                                                                                                                                                                                                                       | `3000` |
-| `ui.brand`                    | Branding inside the app. Possible values: `"2gis"` or `"urbi"`.                                                                                                                                                                                                                                                                     | `""`   |
-| `ui.pages`                    | A list of pages available in the application, delimited by commas. Possible values: `"profile"`, `"signup"`, `"status"`, `"playground"`, `"map_styles"`, `"users"`, `"keys"`, `"statistics"`, `"license"`. E.g. "status, playground". The first page in a list is the one a user's going to be redirected to from deactivated ones. | `""`   |
-| `ui.publicPages`              | A list of pages available in the application for unauthenticated users, delimited by commas. Subset of 'ui.pages'. When no values are specified and authentication is enabled, all pages will require authentication.                                                                                                               | `""`   |
-| `ui.playgrounds`              | A list of playgrounds available on the playground page, delimited by commas. Possible values: `"mapgl"` (requires `ui.mapgl.url`), `"geocoder"` (requires `ui.catalog.url`), `"directions"` (requires `ui.navi.url`), "static"` (requires `ui.static.url`).                                                                         | `""`   |
-| `ui.redirectSafeDomains`      | A regular expression used to determine whether a domain is safe for redirection.                                                                                                                                                                                                                                                    | `""`   |
-| `ui.bffSecure`                | A flag that determines whether to enable or disable HTTPS for backend for frontend related cookies. Possible values are: `true` or `false`.                                                                                                                                                                                         | `true` |
-| `ui.enableServiceLimitations` | A flag that enables to view and edit particular key service limitations.                                                                                                                                                                                                                                                            | `true` |
+| Name                          | Description                                                                                                                                                                                                                                                                                                                                           | Value  |
+| ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `ui.appPort`                  | Service port.                                                                                                                                                                                                                                                                                                                                         | `3000` |
+| `ui.brand`                    | Branding inside the app. Possible values: `"2gis"` or `"urbi"`.                                                                                                                                                                                                                                                                                       | `""`   |
+| `ui.pages`                    | A list of pages available in the application, delimited by commas. Possible values: `"profile"`, `"signup"`, `"status"`, `"playground"`, `"map_styles"`, `"users"`, `"keys"`, `"statistics"`, `"license", "update_manager"`. E.g. "status, playground". The first page in a list is the one a user's going to be redirected to from deactivated ones. | `""`   |
+| `ui.publicPages`              | A list of pages available in the application for unauthenticated users, delimited by commas. Subset of 'ui.pages'. When no values are specified and authentication is enabled, all pages will require authentication.                                                                                                                                 | `""`   |
+| `ui.playgrounds`              | A list of playgrounds available on the playground page, delimited by commas. Possible values: `"mapgl"` (requires `ui.mapgl.url`), `"geocoder"` (requires `ui.catalog.url`), `"directions"` (requires `ui.navi.url`), "static"` (requires `ui.static.url`).                                                                                           | `""`   |
+| `ui.redirectSafeDomains`      | A regular expression used to determine whether a domain is safe for redirection.                                                                                                                                                                                                                                                                      | `""`   |
+| `ui.bffSecure`                | A flag that determines whether to enable or disable HTTPS for backend for frontend related cookies. Possible values are: `true` or `false`.                                                                                                                                                                                                           | `true` |
+| `ui.enableServiceLimitations` | A flag that enables to view and edit particular key service limitations.                                                                                                                                                                                                                                                                              | `true` |
 
 ### OIDC
 
@@ -74,18 +78,18 @@ Use this Helm chart to deploy Platform service, which is a part of 2GIS's [On-Pr
 
 ### Platform
 
-| Name                  | Description                                                                                                                                                      | Value |
-| --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| `ui.platform.api.url` | URL to [API Keys service](https://docs.2gis.com/en/on-premise/core/overview#api-keys-service) host. Must be a public address accessible from the user's browser. | `""`  |
+| Name                  | Description                                                                                                                                                                      | Value |
+| --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `ui.platform.api.url` | URL to [API Keys service](https://docs.2gis.com/en/on-premise-api-platform/overview/summary#api-keys-service) host. Must be a public address accessible from the user's browser. | `""`  |
 
 ### MapGL JS API settings
 
-| Name                  | Description                                                                                                                                                                                                                    | Value     |
-| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------- |
-| `ui.mapgl.url`        | URL to [MapGL JS API](https://docs.2gis.com/en/on-premise/api-platform/admin-guide/architecture/maps) host. Must be a public address accessible from the user's browser, as the MapGL script is loaded directly by the client. | `""`      |
-| `ui.mapgl.scriptPath` | URL path to [MapGL JS API](https://docs.2gis.com/en/on-premise/api-platform/admin-guide/architecture/maps) init script relative to `ui.mapgl.url`.                                                                             | `/api.js` |
-| `ui.mapgl.key`        | A key to the [MapGL JS API](https://docs.2gis.com/en/on-premise/api-platform/admin-guide/architecture/maps) service.                                                                                                           | `""`      |
-| `ui.mapgl.initCenter` | Optional default map coordinates. Contains of two numbers in an array: `[lon,lat]` (e.g., `"[55.27,25.2]"` stands for Dubai, `"[37.64,55.74]"` — for Moscow).                                                                  | `""`      |
+| Name                  | Description                                                                                                                                                                                                                             | Value     |
+| --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- |
+| `ui.mapgl.url`        | URL to [MapGL JS API](https://docs.2gis.com/en/on-premise-api-platform/architecture/maps#mapgl-js-api-service) host. Must be a public address accessible from the user's browser, as the MapGL script is loaded directly by the client. | `""`      |
+| `ui.mapgl.scriptPath` | URL path to [MapGL JS API](https://docs.2gis.com/en/on-premise-api-platform/architecture/maps#mapgl-js-api-service) init script relative to `ui.mapgl.url`.                                                                             | `/api.js` |
+| `ui.mapgl.key`        | A key to the [MapGL JS API](https://docs.2gis.com/en/on-premise-api-platform/architecture/maps#mapgl-js-api-service) service.                                                                                                           | `""`      |
+| `ui.mapgl.initCenter` | Optional default map coordinates. Contains of two numbers in an array: `[lon,lat]` (e.g., `"[55.27,25.2]"` stands for Dubai, `"[37.64,55.74]"` — for Moscow).                                                                           | `""`      |
 
 ### Map styles settings
 
@@ -100,6 +104,12 @@ Use this Helm chart to deploy Platform service, which is a part of 2GIS's [On-Pr
 | Name             | Description                                                                                                                                                                                                                              | Value |
 | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
 | `ui.license.url` | URL to License API. Can be an internal Kubernetes service address (e.g., `http://<svc-name>.<namespace>.svc`), since requests to this URL are made server-side by the platform service itself, but a public address can be used as well. | `""`  |
+
+### Update manager settings
+
+| Name                   | Description                                                                                                                                                                                                                                                      | Value |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `ui.updateManager.url` | URL to Update Manager API (Update Manager). Can be an internal Kubernetes service address (e.g., `http://<svc-name>.<namespace>.svc`), since requests to this URL are made server-side by the platform service itself, but a public address can be used as well. | `""`  |
 
 ### Service Pro settings
 
@@ -127,17 +137,17 @@ Use this Helm chart to deploy Platform service, which is a part of 2GIS's [On-Pr
 
 ### Search API settings
 
-| Name             | Description                                                                                                                                                                                                                                                                                                                  | Value |
-| ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| `ui.catalog.url` | URL for [Search API](https://docs.2gis.com/en/on-premise/api-platform/admin-guide/architecture/search). Can be an internal Kubernetes service address (e.g., `http://<svc-name>.<namespace>.svc`), since requests to this URL are made server-side by the platform service itself, but a public address can be used as well. | `""`  |
-| `ui.catalog.key` | Access key to [Search API](https://docs.2gis.com/en/on-premise/api-platform/admin-guide/architecture/search).                                                                                                                                                                                                                | `""`  |
+| Name             | Description                                                                                                                                                                                                                                                                                                                   | Value |
+| ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `ui.catalog.url` | URL for [Search API](https://docs.2gis.com/en/on-premise-api-platform/architecture/search#architecture). Can be an internal Kubernetes service address (e.g., `http://<svc-name>.<namespace>.svc`), since requests to this URL are made server-side by the platform service itself, but a public address can be used as well. | `""`  |
+| `ui.catalog.key` | Access key to [Search API](https://docs.2gis.com/en/on-premise-api-platform/architecture/search#architecture).                                                                                                                                                                                                                | `""`  |
 
 ### Navigation API settings
 
-| Name          | Description                                                                                                                                                                                                                                                                                                                          | Value |
-| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
-| `ui.navi.url` | URL for [Navigation API](https://docs.2gis.com/en/on-premise/api-platform/admin-guide/architecture/navigation). Can be an internal Kubernetes service address (e.g., `http://<svc-name>.<namespace>.svc`), since requests to this URL are made server-side by the platform service itself, but a public address can be used as well. | `""`  |
-| `ui.navi.key` | Access key to [Navigation API](https://docs.2gis.com/en/on-premise/api-platform/admin-guide/architecture/navigation).                                                                                                                                                                                                                | `""`  |
+| Name          | Description                                                                                                                                                                                                                                                                                                                           | Value |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `ui.navi.url` | URL for [Navigation API](https://docs.2gis.com/en/on-premise-api-platform/architecture/navigation#architecture). Can be an internal Kubernetes service address (e.g., `http://<svc-name>.<namespace>.svc`), since requests to this URL are made server-side by the platform service itself, but a public address can be used as well. | `""`  |
+| `ui.navi.key` | Access key to [Navigation API](https://docs.2gis.com/en/on-premise-api-platform/architecture/navigation#architecture).                                                                                                                                                                                                                | `""`  |
 
 ### Static Map settings
 

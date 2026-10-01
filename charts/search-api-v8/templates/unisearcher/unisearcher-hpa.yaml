@@ -1,0 +1,26 @@
+{{- if .Values.unisearcher.hpa.enabled }}
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "search-api-v8.fullname" . }}-unisearcher
+  labels:
+    {{- include "search-api-v8.labels" . | nindent 4 }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "search-api-v8.fullname" . }}-unisearcher
+  minReplicas: {{ .Values.unisearcher.hpa.minReplicas }}
+  maxReplicas: {{ .Values.unisearcher.hpa.maxReplicas }}
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: AverageValue
+          averageValue: {{ .Values.unisearcher.hpa.averageCPUValue }}
+  {{- if .Values.unisearcher.hpa.behavior }}
+  behavior:
+    {{- .Values.unisearcher.hpa.behavior | toYaml | nindent 4 }}
+  {{- end }}{{- /* .Values.unisearcher.hpa.behavior */}}
+{{- end }}{{- /* .Values.unisearcher.hpa.enabled */}}
