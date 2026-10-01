@@ -115,6 +115,8 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
   value: {{ .Values.s3.bucket | quote }}
 - name: MGS_S3_PUBLIC_DOMAIN
   value: {{ .Values.s3.publicDomain | quote }}
+- name: MGS_S3_PUBLIC_SECURE
+  value: {{ .Values.s3.publicSecure | quote }}
 - name: MGS_S3_REGION
   value: {{ .Values.s3.region | quote }}
 - name: MGS_S3_SECURE

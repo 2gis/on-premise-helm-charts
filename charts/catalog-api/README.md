@@ -217,7 +217,7 @@ To learn more about configuration, architecture, and requirements, see the offic
 | Name                        | Description                                                                                   | Value                              |
 | --------------------------- | --------------------------------------------------------------------------------------------- | ---------------------------------- |
 | `importer.image.repository` | Repository                                                                                    | `2gis-on-premise/catalog-importer` |
-| `importer.image.tag`        | Tag                                                                                           | `1.22.1`                           |
+| `importer.image.tag`        | Tag                                                                                           | `1.23.0`                           |
 | `importer.image.pullPolicy` | Image [Pull Policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) | `IfNotPresent`                     |
 
 ### importer.postgres **Database settings**

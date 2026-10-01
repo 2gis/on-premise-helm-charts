@@ -36,7 +36,7 @@ To learn more about configuration, architecture, and requirements, see the offic
 | Name               | Description | Value                   |
 | ------------------ | ----------- | ----------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/mapgl` |
-| `image.tag`        | Tag         | `1.77.0`                |
+| `image.tag`        | Tag         | `1.78.1`                |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`          |
 
 ### Environment variables
