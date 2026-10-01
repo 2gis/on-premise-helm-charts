@@ -46,6 +46,6 @@ jobs:
           args: >-
             --verbose
             --no-progress
-            --exclude '^https?://(.*\.(host|svc)|[a-zA-Z0-9_-]+)(/.*)?$|.*example.*'
+            --exclude '^https?://(.*\.(host|svc)|[a-zA-Z0-9_-]+)(/.*)?$|.*example.*|.*gitlab.*'
             "charts/*/README.md"
           fail: true
