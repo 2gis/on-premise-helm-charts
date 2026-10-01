@@ -1,0 +1,13 @@
+---
+bases:
+- ../common.yaml
+---
+
+repositories:
+- name: 2gis-on-premise
+  url: https://2gis.github.io/on-premise-helm-charts
+
+helmfiles:
+- path: ../services/keys.yaml
+- path: ../services/license.yaml
+- path: ../services/traffic-proxy.yaml
