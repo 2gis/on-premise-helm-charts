@@ -56,7 +56,7 @@ sidecars: []
 
 image:
   repository: 2gis-on-premise/raster-js-api
-  tag: 4.2.1
+  tag: 4.2.2
   pullPolicy: IfNotPresent
 
 
@@ -72,7 +72,7 @@ image:
 
 api:
   publicHost: ''
-  protocol: 'https'
+  protocol: https
   tileServerUrl: ''
   catalogApiServerUrl: ''
   catalogApiKey: ''
