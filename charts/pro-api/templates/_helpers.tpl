@@ -142,6 +142,13 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end -}}
 {{- end -}}
 
+{{- define "pro-api.corsOrigins" -}}
+{{- if eq .Values.api.settings.corsOrigins "*" -}}
+{{- fail ".Values.api.settings.corsOrigins must not be '*'" -}}
+{{- end -}}
+{{- .Values.api.settings.corsOrigins -}}
+{{- end -}}
+
 {{- define "pro-permissions-api.connectionString" -}}
 {{-  printf "Server=%s;Port=%d;Database=%s;UID=%s;Pooling=True;Minimum Pool Size=%d;Maximum Pool Size=%d;Timeout=%d;Connection Idle Lifetime=30;KeepAlive=5;"
 	(.Values.postgres.permissions.rw.host | required "A valid .Values.postgres.permissions.rw.host entry required!")

@@ -174,14 +174,12 @@ spec:
               value: {{ .Values.tasks.settings.httpPort | quote }}
             - name: Common__GrpcPort
               value: {{ .Values.tasks.settings.grpcPort | quote }}
-
             - name: Common__Cluster
               value: {{ .Values.clusters.current | quote }}
             {{- range $i, $c := .Values.clusters.known }}
             - name: Common__KnownClusters__{{ $i }}
               value: {{ $c | quote }}
             {{- end }}
-
             {{- if .Values.tasks.settings.features.assetDataPreparation.enabled }}
             - name: AssetDataPreparation__Segments
               value: {{ .Values.tasks.settings.features.assetDataPreparation.segments | quote }}
@@ -220,13 +218,13 @@ spec:
                   name: {{ include "pro-api.secretName" . }}
             {{- end }}
 
+            {{- if .Values.pagerenderer.settings.enabled }}
             - name: PageRendererApi__Url
-            {{- if .Values.pagerenderer.settings.grpcRoute }}
-              value: https://{{ .Values.pagerenderer.settings.grpcRoute }}:{{ .Values.pagerenderer.settings.grpcRoutePort }}
+            {{- if .Values.pagerenderer.settings.grpcRoute.enabled }}
+              value: https://{{ index .Values.pagerenderer.settings.grpcRoute.hostnames 0 | toString }}:{{ .Values.pagerenderer.settings.grpcRoute.port }}
             {{- else }}
               value: http://{{ include "pro-api.pagerenderer-name" . }}:{{ .Values.pagerenderer.settings.grpcPort }}
             {{- end }}
-            {{- if .Values.pagerenderer.settings.enabled }}
             - name: PageRendererApi__ApiKey
               valueFrom:
                 secretKeyRef:

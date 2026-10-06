@@ -34,6 +34,8 @@ api:
       - path: /
         pathType: Prefix
     tls: []
+    # - hosts:
+    #   - pro-api.example.com
     #   secretName: secret.tls
 
   # @param api.pod.replicaCount A replica count for the pod.
@@ -153,7 +155,7 @@ api:
   # @param api.settings.backgroundJobs.enableUserAssetsImporter If user data importer job is enabled for the service.
   # @param api.settings.backgroundJobs.enableAssetsStreaming If the streaming data processing job is enabled for the service.
   # @param api.settings.layerGeneration.isochroneLayerMaxPointsCount Maximum number of points in a layer for generating isochrones.
-  # @param api.settings.corsOrigins Cors policy: allow any origin if empty. Example: `https://*.host.ae;https://*.host.ru;`
+  # @param api.settings.corsOrigins Cors policy: allow any origin if empty. The `*` value is not supported. Example: `https://*.host.ae;https://*.host.ru;`
   settings:
     licenseKey: ''
     tempPath: /tmp
@@ -216,6 +218,8 @@ permissions:
       - path: /
         pathType: Prefix
     tls: []
+    # - hosts:
+    #   - pro-permissions-api.example.com
     #   secretName: secret.tls
 
   # @param permissions.pod.replicaCount A replica count for the pod.
@@ -294,7 +298,7 @@ permissions:
   # @param permissions.settings.grpcPort Grpc port for interaction via the grpc api
   # @param permissions.settings.allowPermissionsToAnyAsset Allow using '*' resource in asset resource type in Permissions UI.
   # @param permissions.settings.auth.enabled Enables or disables authentication **Required**
- # @param permissions.settings.auth.apiKey Api key for service to service calls. **Required if** `permissions.settings.auth.enabled: true`
+  # @param permissions.settings.auth.apiKey Api key for service to service calls. **Required if** `permissions.settings.auth.enabled: true`
   # @param permissions.settings.auth.uiRequiredRoles Roles required to access Permission UI. The values must match the roles defined in the authProvider configuration. **Required if** `permissions.settings.auth.enabled: true`
   settings:
     host: ''
@@ -307,7 +311,7 @@ permissions:
       enabled: true
       trackStatistics: false
     auth:
-      enabled: false
+      enabled: true
       apiKey: ''
       uiRequiredRoles: []
     backgroundJobs:
@@ -361,6 +365,8 @@ tasks:
       - path: /
         pathType: Prefix
     tls: []
+    # - hosts:
+    #   - pro-tasks-api.example.com
     #   secretName: secret.tls
 
   # @param tasks.pod.apiReplicaCount A replica count for the api pod.
@@ -513,38 +519,33 @@ pagerenderer:
     pullPolicy: IfNotPresent
 
   # @param pagerenderer.pod.replicaCount A replica count for the pod.
+  # @param pagerenderer.pod.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
   # @param pagerenderer.pod.imagePullSecrets Kubernetes image pull secrets.
   # @param pagerenderer.pod.affinity Kubernetes pod [affinity settings](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity).
   # @param pagerenderer.pod.priorityClassName Kubernetes [pod priority](https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/).
   # @param pagerenderer.pod.terminationGracePeriodSeconds Kubernetes [termination grace period](https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/). Should be at least 300 seconds
-  # @param pagerenderer.pod.tolerations[0].effect Tolerations effect.
-  # @param pagerenderer.pod.tolerations[0].key Tolerations key.
-  # @param pagerenderer.pod.tolerations[0].operator Tolerations operator.
-  # @param pagerenderer.pod.tolerations[0].value Tolerations value.
+  # @param pagerenderer.pod.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
   # @param pagerenderer.pod.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
   # @param pagerenderer.pod.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
   # @param pagerenderer.pod.podSecurityContext Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
   # @param pagerenderer.pod.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
   # @param pagerenderer.pod.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
-  # @param pagerenderer.pod.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).
+  # @param pagerenderer.pod.revisionHistoryLimit Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment).
   # @extra pagerenderer.pod.resources **Limits for the application service**
   # @param pagerenderer.pod.resources.requests.cpu A CPU request.
   # @param pagerenderer.pod.resources.requests.memory A memory request.
-  # @skip pagerenderer.pod.resources.requests.aliyun.com/gpu-mem
+  # @param pagerenderer.pod.resources.requests.aliyun.com/gpu-mem A GPU request.
   # @param pagerenderer.pod.resources.limits.cpu A CPU limit.
   # @param pagerenderer.pod.resources.limits.memory A memory limit.
-  # @skip pagerenderer.pod.resources.limits.aliyun.com/gpu-mem
+  # @param pagerenderer.pod.resources.limits.aliyun.com/gpu-mem A GPU memory limit.
   pod:
     replicaCount: 1
+    nodeSelector: {}
     imagePullSecrets: []
     affinity: {}
     priorityClassName: ''
     terminationGracePeriodSeconds: 60
-    tolerations:
-      - effect: NoSchedule
-        key: role
-        operator: Equal
-        value: worker.datascience
+    tolerations: []
     podAnnotations: {}
     podLabels: {}
     podSecurityContext: {}
@@ -599,14 +600,16 @@ pagerenderer:
       memory: 1024Mi
 
   # @param pagerenderer.settings.enabled If Page Renderer API is disabled it will not be deployed to k8s
-  # @param pagerenderer.settings.auth.apiKey Api key for service to service calls.
+  # @param pagerenderer.settings.auth.apiKey Api key for service to service calls. **Required if** `pagerenderer.settings.auth.enabled: true`
   # @param pagerenderer.settings.httpPort Http port for interaction via the rest api
   # @param pagerenderer.settings.grpcPort Grpc port for interaction via the grpc api
-  # @param pagerenderer.settings.grpcRoutePort Port on which the GrpcRoute listens for incoming gRPC traffic
   # @extra pagerenderer.settings.logging Logging settings
   # @param pagerenderer.settings.logging.format Log message format, possible options: 'default' - compact json, 'renderedCompactJson' - rendered json format, 'simple' - plain text
   # @param pagerenderer.settings.logging.targets Collection of logging targets divided by comma. Currently only 'console' and 'database' are supported. Console is used by default (no need to specify).
-  # @param pagerenderer.settings.grpcRoute If set, use GRPCRoute. If empty, connect directly to service.
+  # @param pagerenderer.settings.grpcRoute.enabled If GRPCRoute is enabled.
+  # @param pagerenderer.settings.grpcRoute.hostnames List of hostnames served by route.
+  # @param pagerenderer.settings.grpcRoute.port Destination grpcroute.spec.rules.backendRefs.port number.
+  # @param pagerenderer.settings.grpcRoute.parentRefs List of parent references (gateways) for GRPCRoute.
   # @param pagerenderer.settings.maxParallelRenders Upper bound of simultaneous renders per pod.
   # @param pagerenderer.settings.renderMemoryBudgetMb Memory budget of a single render, MB. A new render starts only if that much memory is still available.
   # @param pagerenderer.settings.memorySafetyFactor Share of the pod memory limit renders may occupy (0..1). The rest is headroom for spikes.
@@ -614,12 +617,15 @@ pagerenderer:
   # @param pagerenderer.settings.releaseWebGlAfterMapScreen Release WebGL contexts once the map screen has been captured. Map textures are not garbage-collected and hold memory until the render ends.
   settings:
     enabled: false
-    grpcRoute: ''
+    grpcRoute:
+      enabled: false
+      hostnames: []
+      port: 443
+      parentRefs: []
     auth:
       apiKey: ''
     httpPort: 8282
     grpcPort: 8283
-    grpcRoutePort: 443
     maxParallelRenders: 3
     renderMemoryBudgetMb: 550
     memorySafetyFactor: 0.85
@@ -828,9 +834,9 @@ postgres:
 
 # @section Auth Provider Configuration
 # @title Auth Provider
-# @param authProvider.enabled Enables or disables the AuthProvider **Required**
-# @param authProvider.host Host address of the authentication provider. Must point to the pro-api-permissions URL. **Required**
-# @param authProvider.schema Authentication scheme to use. Supported values: `Basic`, `Oidc`. **Required**
+# @param authProvider.enabled Enables or disables the AuthProvider. **Required**
+# @param authProvider.host Host address of the authentication provider. Must point to the pro-api-permissions URL. **Required if** `authProvider.enabled: true`
+# @param authProvider.schema Authentication scheme to use. Supported values: `Basic`, `Oidc`. **Required if** `authProvider.enabled: true`
 # @param authProvider.allowedHosts List of allowed hosts for accessing `authProvider`. For allowing all hosts use `['*']`. Example: ['pro-api-permissions.example.com','pro-api-tasks.example.com']
 # @param authProvider.basic.users[0].username Username for basic authentication. **Required if** `authProvider.schema: Basic`
 # @param authProvider.basic.users[0].password Password for basic authentication. **Required if** `authProvider.schema: Basic`
@@ -841,7 +847,7 @@ postgres:
 # @param authProvider.oidc.nameClaim Claim name that contains the user's name. The exact claim name depends on the OIDC provider configuration. **Required if** `authProvider.schema: Oidc`
 # @param authProvider.oidc.roleClaim Claim name that contains the user's roles. The exact claim name depends on the OIDC provider configuration. **Required if** `authProvider.schema: Oidc`
 authProvider:
-  enabled: false
+  enabled: true
   host: ''
   schema: ''
   allowedHosts: []
