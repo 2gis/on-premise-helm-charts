@@ -170,11 +170,11 @@ spec:
             - name: ENV
               value: {{ .Values.api.settings.env | quote }}
             - name: Common__CorsOrigins
-              value: {{ .Values.api.settings.corsOrigins | quote }}
+              value: {{ include "pro-api.corsOrigins" . | quote }}
             - name: Common__FilterByZoneCodes
               value: {{ .Values.api.settings.filterByZoneCodes | quote }}
             - name: Common__DataCenterId
-              value: {{ .Values.api.settings.dataCenterId | quote }}
+              value: {{ .Values.clusters.current | quote }}
             - name: Postgres__ConnectionString
               value: {{ include "pro-api.connectionString" . }}
             - name: Postgres__ConnectionStringReadonly

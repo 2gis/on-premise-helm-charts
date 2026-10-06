@@ -183,7 +183,7 @@ spec:
                   name: {{ include "pro-api.secretName" . }}
             {{- end }}
             - name: Common__DataCenterId
-              value: {{ .Values.api.settings.dataCenterId | quote }}
+              value: {{ .Values.clusters.current | quote }}
             - name: Common__HttpPort
               value: "{{ .Values.permissions.settings.httpPort }}"
             - name: Common__GrpcPort
