@@ -1,4 +1,10 @@
-# 2GIS PRO API Service
+# 2GIS Pro API service
+
+This Helm chart deploys the **Pro API service**, a component of the 2GIS [On-Premise](https://docs.2gis.com/en/on-premise-pro/overview/summary).
+
+To learn more about configuration, architecture, and requirements, see the official documentation:
+* [On-Premise API Platform Overview](https://docs.2gis.com/en/on-premise-api-platform/overview/summary)
+* [2GIS Pro Documentation](https://docs.2gis.com/en/on-premise-pro/overview/summary)
 
 ## Values
 
@@ -35,7 +41,7 @@
 | `api.pod.podSecurityContext`                                | Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)                                                                                                                                          | `{}`                      |
 | `api.pod.annotations`                                       | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                                                                                              | `{}`                      |
 | `api.pod.labels`                                            | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                                                                                                        | `{}`                      |
-| `api.pod.revisionHistoryLimit`                              | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).                                                                                                         | `3`                       |
+| `api.pod.revisionHistoryLimit`                              | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment).                                                                              | `3`                       |
 | `api.pod.resources`                                         | **Limits for the application service**                                                                                                                                                                                                                 |                           |
 | `api.pod.resources.requests.cpu`                            | A CPU request.                                                                                                                                                                                                                                         | `400m`                    |
 | `api.pod.resources.requests.memory`                         | A memory request.                                                                                                                                                                                                                                      | `256Mi`                   |
@@ -168,7 +174,7 @@
 | `tasks.pod.podSecurityContext`                             | Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)                                                                                            | `{}`                            |
 | `tasks.pod.annotations`                                    | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                                                | `{}`                            |
 | `tasks.pod.labels`                                         | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                                                          | `{}`                            |
-| `tasks.pod.revisionHistoryLimit`                           | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).                                                           | `3`                             |
+| `tasks.pod.revisionHistoryLimit`                           | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment).                                | `3`                             |
 | `tasks.pod.resources`                                      | **Limits for the application service**                                                                                                                                                                   |                                 |
 | `tasks.pod.resources.requests.cpu`                         | A CPU request.                                                                                                                                                                                           | `400m`                          |
 | `tasks.pod.resources.requests.memory`                      | A memory request.                                                                                                                                                                                        | `256Mi`                         |
@@ -306,16 +312,16 @@
 
 ### Deployment Artifacts Storage settings
 
-| Name                                 | Description                                                                                                                                                                                                                                                           | Value   |
-| ------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `dgctlStorage.host`                  | S3 endpoint. Format: `host:port`. **Required**                                                                                                                                                                                                                        | `""`    |
-| `dgctlStorage.secure`                | Set to `true` if dgctlStorage.host must be accessed via https. **Required**                                                                                                                                                                                           | `false` |
-| `dgctlStorage.bucket`                | S3 bucket name. **Required**                                                                                                                                                                                                                                          | `""`    |
-| `dgctlStorage.accessKey`             | S3 access key for accessing the bucket. **Required**                                                                                                                                                                                                                  | `""`    |
-| `dgctlStorage.secretKey`             | S3 secret key for accessing the bucket. **Required**                                                                                                                                                                                                                  | `""`    |
-| `dgctlStorage.manifest`              | The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/0000000000.json`.<br> This file contains the description of pieces of data that the service requires to operate. **Required** | `""`    |
-| `dgctlStorage.region`                | AuthenticationRegion property for S3 client. Used in AWS4 request signing, this is an optional property                                                                                                                                                               | `""`    |
-| `dgctlStorage.disablePayloadSigning` | Turns off payload signing, this is an optional property. Should be TRUE for Oracle S3 storage                                                                                                                                                                         | `false` |
+| Name                                 | Description                                                                                                                                                                                                                                                    | Value   |
+| ------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `dgctlStorage.host`                  | S3 endpoint. Format: `host:port`. **Required**                                                                                                                                                                                                                 | `""`    |
+| `dgctlStorage.secure`                | Set to `true` if dgctlStorage.host must be accessed via https. **Required**                                                                                                                                                                                    | `false` |
+| `dgctlStorage.bucket`                | S3 bucket name. **Required**                                                                                                                                                                                                                                   | `""`    |
+| `dgctlStorage.accessKey`             | S3 access key for accessing the bucket. **Required**                                                                                                                                                                                                           | `""`    |
+| `dgctlStorage.secretKey`             | S3 secret key for accessing the bucket. **Required**                                                                                                                                                                                                           | `""`    |
+| `dgctlStorage.manifest`              | The path to the [manifest file](https://docs.2gis.com/en/on-premise-api-platform/installation#artifacts). Format: `manifests/pro/0000000000.json`.<br> This file contains the description of pieces of data that the service requires to operate. **Required** | `""`    |
+| `dgctlStorage.region`                | AuthenticationRegion property for S3 client. Used in AWS4 request signing, this is an optional property                                                                                                                                                        | `""`    |
+| `dgctlStorage.disablePayloadSigning` | Turns off payload signing, this is an optional property. Should be TRUE for Oracle S3 storage                                                                                                                                                                  | `false` |
 
 ### 2GIS PRO Storage configuration
 
@@ -437,17 +443,17 @@
 
 ### Catalog API settings
 
-| Name          | Description                                                                                                  | Value |
-| ------------- | ------------------------------------------------------------------------------------------------------------ | ----- |
-| `catalog.url` | URL for [Catalog API](https://docs.2gis.com/en/on-premise/search). Example: http://catalog-api.svc           | `""`  |
-| `catalog.key` | Client access key for the Catalog API, issued by Keys API. The key must have the **search** feature enabled. | `""`  |
+| Name          | Description                                                                                                                               | Value |
+| ------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `catalog.url` | URL for [Catalog API](https://docs.2gis.com/en/on-premise-api-platform/architecture/search#architecture). Example: http://catalog-api.svc | `""`  |
+| `catalog.key` | Client access key for the Catalog API, issued by Keys API. The key must have the **search** feature enabled.                              | `""`  |
 
 ### Navigation API settings
 
-| Name       | Description                                                                                                        | Value |
-| ---------- | ------------------------------------------------------------------------------------------------------------------ | ----- |
-| `navi.url` | URL for [Navigation API](https://docs.2gis.com/en/on-premise/navigation/overview). Example: http://navi-front.svc  | `""`  |
-| `navi.key` | Client access key for the Navigation API, issued by Keys API. The key must have the **isochrone** feature enabled. | `""`  |
+| Name       | Description                                                                                                                                     | Value |
+| ---------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `navi.url` | URL for [Navigation API](https://docs.2gis.com/en/on-premise-api-platform/architecture/navigation#architecture). Example: http://navi-front.svc | `""`  |
+| `navi.key` | Client access key for the Navigation API, issued by Keys API. The key must have the **isochrone** feature enabled.                              | `""`  |
 
 ### License Service API settings
 
@@ -457,9 +463,9 @@
 
 ### Search API settings
 
-| Name         | Description                                                                                      | Value |
-| ------------ | ------------------------------------------------------------------------------------------------ | ----- |
-| `search.url` | URL for [Search API](https://docs.2gis.com/en/on-premise/search). Example: http://search-api.svc | `""`  |
+| Name         | Description                                                                                                                             | Value |
+| ------------ | --------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| `search.url` | URL for [Search API](https://docs.2gis.com/en/on-premise-api-platform/architecture/search#architecture). Example: http://search-api.svc | `""`  |
 
 
 ## Installing

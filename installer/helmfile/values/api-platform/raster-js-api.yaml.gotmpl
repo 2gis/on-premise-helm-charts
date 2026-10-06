@@ -2,15 +2,15 @@
 
 api:
   publicHost: '{{ $protocol }}://{{ .Values.rasterJsApiIngress }}'
-  protocol: '{{ $protocol }}:'
+  protocol: '{{ $protocol }}'
   tileServerUrl: '{{ $protocol }}://{{ .Values.tilesRasterIngress }}'
   trafficTileServerUrl: '' # необходим отдельный прокси до растровых пробок
   {{- $traffic := ternary (printf "%s://%s" $protocol .Values.trafficProxyMapIngress) "" (has (lower .Values.proxyMode) (list "map" "full")) }}
   trafficTimestampServerUrl: '{{ $traffic }}'
   trafficScoreServerUrl: '{{ $traffic }}'
-  webApiServerUrl: '{{ $protocol }}://{{ .Values.catalogIngress }}'
+  catalogApiServerUrl: '{{ $protocol }}://{{ .Values.catalogIngress }}'
   keyServerUrl: '{{ $protocol }}://{{ .Values.keysApiIngress }}/public/v1/keys/'
-  webApiKey: '{{ .Values.key }}'
+  catalogApiKey: '{{ .Values.key }}'
   key: '{{ .Values.key }}'
 
 ingress:

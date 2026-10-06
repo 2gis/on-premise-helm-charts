@@ -1,8 +1,8 @@
 catalog-api
 	catalog-api:3.684.0
-	catalog-importer:1.22.1
+	catalog-importer:1.23.0
 mapgl-js-api
-	mapgl:1.77.0
+	mapgl:1.78.1
 navi-async-grpc-proxy
 	async-grpc-proxy:1.3.1
 navi-async-matrix
@@ -32,24 +32,24 @@ navi-vrp-solver
 navi-vrp-task-manager
 	navi-vrp-task-manager:1.16.3
 platform
-	platform-ui:1.46.0
+	platform-ui:1.50.0
 raster-js-api
-	raster-js-api:4.1.0
+	raster-js-api:4.2.1
 search-api
 	nginx-alpine:3.1.20
 	search-api:7.110.0
 search-api-v8
-	search-api-v8-controller:8.30.0
-	search-api-v8-data-adapter:8.30.0
+	search-api-v8-controller:8.34.0
+	search-api-v8-data-adapter:8.34.0
 	search-api-v8-envoy:1.38.3
-	search-api-v8-files-storage:8.30.0
-	search-api-v8-head:8.30.0
-	search-api-v8-indexer:8.30.0
-	search-api-v8-ingress-router:8.30.0
-	search-api-v8-metrics-aggregator:0.1.0
-	search-api-v8-segment-detector:8.30.0
-	search-api-v8-syncer:8.30.0
-	search-api-v8-worker:8.30.0
+	search-api-v8-files-storage:8.34.0
+	search-api-v8-head:8.34.0
+	search-api-v8-indexer:8.34.0
+	search-api-v8-ingress-router:8.34.0
+	search-api-v8-metrics-aggregator:0.1.1
+	search-api-v8-segment-detector:8.34.0
+	search-api-v8-syncer:8.34.0
+	search-api-v8-unisearcher:8.34.0
 stat-api
 	stat-api-migrate:0.2.5
 	stat-api:0.2.5
@@ -57,7 +57,7 @@ stat-receiver
 	stat-receiver-api:1.16.10
 	stat-receiver-streams:1.16.12
 staticmaps
-	staticmaps:1.0.3
+	staticmaps:1.0.4
 styles-api
 	styles-api:0.46.0
 tilegen-api
@@ -71,3 +71,6 @@ traffic-proxy
 	navi-front:1.31.3
 twins-api
 	twins-api:1.23.3
+update-manager
+	dgctl:3.7.0
+	update-manager:3.7.0

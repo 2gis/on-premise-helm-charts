@@ -1,0 +1,15 @@
+{{- if .Values.customCAs.bundle }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "update-manager.name" . }}-ca
+  {{- with .Values.api.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  labels:
+    {{- include "update-manager.labels" . | nindent 4 }}
+data:
+  custom-ca.crt: |-
+{{- .Values.customCAs.bundle | nindent 4 }}
+{{- end }}

@@ -1,6 +1,10 @@
 # 2GIS API Styles service
 
-Use this Helm chart to deploy API Styles service, which is a part of 2GIS's [On-Premise solution](https://docs.2gis.com/en/on-premise/overview).
+This Helm chart deploys the **API Styles service**, a component of the 2GIS [On-Premise](https://docs.2gis.com/en/on-premise-api-platform/overview/summary#maps).
+
+To learn more about configuration, architecture, and requirements, see the official documentation:
+* [On-Premise API Platform Overview](https://docs.2gis.com/en/on-premise-api-platform/overview/summary)
+* [Maps API Documentation](https://docs.2gis.com/en/on-premise-api-platform/architecture/maps#styles-api)
 
 ## Values
 
@@ -27,7 +31,7 @@ Use this Helm chart to deploy API Styles service, which is a part of 2GIS's [On-
 | `api.strategy.rollingUpdate.maxUnavailable` | Maximum number of pods that can be created over the desired number of pods when doing [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment). | `0`             |
 | `api.strategy.rollingUpdate.maxSurge`       | Maximum number of pods that can be unavailable during the [rolling update](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-update-deployment) process.                     | `1`             |
 | `api.replicas`                              | A replica count for the pod.                                                                                                                                                                             | `1`             |
-| `api.revisionHistoryLimit`                  | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) a deployment).                                                           | `3`             |
+| `api.revisionHistoryLimit`                  | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment).                                | `3`             |
 
 ### api.resources **Kubernetes [resource management](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) settings**
 
@@ -123,19 +127,20 @@ Use this Helm chart to deploy API Styles service, which is a part of 2GIS's [On-
 
 ### S3 like storage access settings
 
-| Name                 | Description                                                                         | Value   |
-| -------------------- | ----------------------------------------------------------------------------------- | ------- |
-| `s3.host`            | S3 host as `host:port`. **Required**                                                | `""`    |
-| `s3.accessKey`       | S3 access key. **Required**                                                         | `""`    |
-| `s3.secretKey`       | S3 secret key. **Required**                                                         | `""`    |
-| `s3.bucket`          | S3 bucket name, for example 'styles'. **Required**                                  | `""`    |
-| `s3.publicDomain`    | S3 public access domain. Uses https access. **Required**                            | `""`    |
-| `s3.region`          | S3 region name. Default empty.                                                      | `""`    |
-| `s3.secure`          | S3 use secure HTTPS protocol. Default false.                                        | `false` |
-| `s3.verifySsl`       | S3 verifySsl SSL connection. Default false.                                         | `false` |
-| `s3.connectTimeout`  | S3 management client connection timeout. If not specified, the default value is 3s. | `3s`    |
-| `s3.requestTimeout`  | S3 management client request timeout. If not specified, the default value is 30s.   | `5s`    |
-| `s3.responseTimeout` | S3 management client response timeout. If not specified, the default value is 3s.   | `5s`    |
+| Name                 | Description                                                                                                   | Value   |
+| -------------------- | ------------------------------------------------------------------------------------------------------------- | ------- |
+| `s3.host`            | S3 host as `host:port`. **Required**                                                                          | `""`    |
+| `s3.accessKey`       | S3 access key. **Required**                                                                                   | `""`    |
+| `s3.secretKey`       | S3 secret key. **Required**                                                                                   | `""`    |
+| `s3.bucket`          | S3 bucket name, for example 'styles'. **Required**                                                            | `""`    |
+| `s3.publicDomain`    | S3 public access domain. The public URL scheme is controlled by the `s3.publicSecure` parameter. **Required** | `""`    |
+| `s3.publicSecure`    | S3 use secure HTTPS protocol for public URLs. Default true.                                                   | `true`  |
+| `s3.region`          | S3 region name. Default empty.                                                                                | `""`    |
+| `s3.secure`          | S3 use secure HTTPS protocol. Default false.                                                                  | `false` |
+| `s3.verifySsl`       | S3 verifySsl SSL connection. Default false.                                                                   | `false` |
+| `s3.connectTimeout`  | S3 management client connection timeout. If not specified, the default value is 3s.                           | `3s`    |
+| `s3.requestTimeout`  | S3 management client request timeout. If not specified, the default value is 30s.                             | `5s`    |
+| `s3.responseTimeout` | S3 management client response timeout. If not specified, the default value is 3s.                             | `5s`    |
 
 ### API Keys service settings
 
@@ -156,15 +161,15 @@ Use this Helm chart to deploy API Styles service, which is a part of 2GIS's [On-
 
 ### Deployment Artifacts Storage settings
 
-| Name                     | Description                                                                                                                                                                                                                    | Value   |
-| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------- |
-| `dgctlStorage.host`      | S3 endpoint where DataGateway stores deployment artifacts. Format: `host:port`. **Required** if `stylesImport.startOnDeploy` is `true`.                                                                                        | `""`    |
-| `dgctlStorage.secure`    | Use HTTPS for the S3 endpoint.                                                                                                                                                                                                 | `false` |
-| `dgctlStorage.bucket`    | S3 bucket name. **Required** if `stylesImport.startOnDeploy` is `true`.                                                                                                                                                        | `""`    |
-| `dgctlStorage.accessKey` | S3 access key. **Required** if `stylesImport.startOnDeploy` is `true`.                                                                                                                                                         | `""`    |
-| `dgctlStorage.secretKey` | S3 secret key. **Required** if `stylesImport.startOnDeploy` is `true`.                                                                                                                                                         | `""`    |
-| `dgctlStorage.region`    | S3 region name. Optional.                                                                                                                                                                                                      | `""`    |
-| `dgctlStorage.manifest`  | The path to the [manifest file](https://docs.2gis.com/en/on-premise/overview#nav-lvl2@paramCommon_deployment_steps). Format: `manifests/api-platform/0000000000.json`. **Required** if `stylesImport.startOnDeploy` is `true`. | `""`    |
+| Name                     | Description                                                                                                                                                                                                         | Value   |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `dgctlStorage.host`      | S3 endpoint where DataGateway stores deployment artifacts. Format: `host:port`. **Required** if `stylesImport.startOnDeploy` is `true`.                                                                             | `""`    |
+| `dgctlStorage.secure`    | Use HTTPS for the S3 endpoint.                                                                                                                                                                                      | `false` |
+| `dgctlStorage.bucket`    | S3 bucket name. **Required** if `stylesImport.startOnDeploy` is `true`.                                                                                                                                             | `""`    |
+| `dgctlStorage.accessKey` | S3 access key. **Required** if `stylesImport.startOnDeploy` is `true`.                                                                                                                                              | `""`    |
+| `dgctlStorage.secretKey` | S3 secret key. **Required** if `stylesImport.startOnDeploy` is `true`.                                                                                                                                              | `""`    |
+| `dgctlStorage.region`    | S3 region name. Optional.                                                                                                                                                                                           | `""`    |
+| `dgctlStorage.manifest`  | The path to the [manifest file](https://docs.2gis.com/en/on-premise-api-platform/installation#artifacts). Format: `manifests/api-platform/0000000000.json`. **Required** if `stylesImport.startOnDeploy` is `true`. | `""`    |
 
 ### Styles Import settings
 
