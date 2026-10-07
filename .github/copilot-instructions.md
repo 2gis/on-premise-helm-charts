@@ -16,6 +16,12 @@ When performing a code review, respond in **Russian**.
 
 The path-specific files are the review checklist for matching files: flag every violation of them. They summarize the styleguide and are not a replacement for it.
 
+## Scope
+
+- Review the change, not the repository: only report problems the diff introduces, or problems it leaves behind in the lines it touches. A pre-existing problem in code the diff does not touch is out of scope — do not report it, however real it is. Reading that code to judge the change is expected; reporting on it is not.
+- If the change breaks something elsewhere (e.g. a removed values key used by an unchanged template, or a guard change that breaks a Secret reference in another file), that is in scope: anchor the finding at the changed line that causes it and name the affected file in the comment body.
+- If the change is small and sound, say so and leave no findings. A short review is a correct outcome, not a failed one — do not pad it with remarks you would not otherwise raise.
+
 ## Repository Structure
 
 - `charts/` — 33 application Helm charts + `generic-chart` (shared library)
