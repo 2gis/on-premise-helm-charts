@@ -3,11 +3,18 @@
 This repository contains Helm charts for deploying 2GIS On-Premise products on Kubernetes.
 Charts may optionally share a common library chart (`generic-chart`) and follow internal coding standards.
 
-Use `/home/runner/work/on-premise-helm-charts/on-premise-helm-charts/styleguide.md` as the primary source of chart authoring rules. Treat this file as a review checklist and summary, not as a replacement for the styleguide.
-
 ## Review Language
 
 When performing a code review, respond in **Russian**.
+
+## Where the rules live
+
+- `styleguide.md` in the repository root is the primary source of chart authoring rules. If a check is not covered below or in the path-specific files, consult the styleguide.
+- `.github/instructions/values.instructions.md` — rules applied when reviewing `**/values.yaml`
+- `.github/instructions/templates.instructions.md` — rules applied when reviewing `**/templates/**`
+- `.github/instructions/chart-yaml.instructions.md` — rules applied when reviewing `**/Chart.yaml`
+
+The path-specific files are the review checklist for matching files: flag every violation of them. They summarize the styleguide and are not a replacement for it.
 
 ## Repository Structure
 
@@ -21,28 +28,32 @@ When performing a code review, respond in **Russian**.
 
 ## PR Checklist (mirrors `pull_request_template.md`)
 
-When performing a code review, verify:
+The first three items describe pull request metadata (target branch, title, description), not the diff. Verify them from the pull request itself; if the information is not available to you, skip the item instead of commenting on code lines.
 
 - PR targets `develop` branch (except urgent hotfixes, which target `master`)
 - PR title starts with the service name, e.g. `navi-back: add X feature` or `[tiles-api] Upgraded version`
 - PR description includes a **Changelog** section and **Issues** references
-- Breaking changes are documented in the group's `changelogs/<group>/*-Breaking-Changes.md`
-- If `values.yaml` was changed, `README.md` must be regenerated (`make prepare && make charts/<chart-name>`, Linux only)
+- If `values.yaml` was changed, `README.md` must be regenerated (`make prepare && make charts/<chart-name>`, Linux only); CI `check-readme.yaml` enforces this — flag it so the author fixes it before CI fails
 - If a new chart is added, it has `templates/NOTES.txt` and a generated `README.md`
 
 ## Breaking Changes
 
 When performing a code review, verify:
 
-- Any change that removes or renames a parameter, changes a default value in a breaking way, or changes the chart API must be documented in the group's `changelogs/<group>/*-Breaking-Changes.md` (referenced from `Breaking-Changes.md`) and in the PR description
-- Add a deprecation notice in `templates/NOTES.txt` for renamed/removed parameters instead of silently dropping them
+- Any change that removes or renames a parameter, changes a default value in a breaking way, or changes the chart API is listed in the PR description **Changelog** section (per `pull_request_template.md`). Do not ask the author to edit `changelogs/<group>/*-Breaking-Changes.md` manually — release scripts update those files from the PR description. If the PR description lacks the entry, flag it as a blocking issue.
+- For renamed/removed parameters, a deprecation notice is added in `templates/NOTES.txt` instead of silently dropping them (see `templates.instructions.md`).
 
-## What to Flag in Review
+## Severity and comment format
 
-When performing a code review, use the following format for comments:
+Copilot labels each review comment with a severity (High/Medium/Low). Use the built-in severity instead of textual `[CRITICAL]`/`[WARNING]` prefixes:
+
+- **High** — issues that should block the merge: the chart does not render or renders a broken deployment (missing `required` validation, guard mismatches that crash pods, hardcoded cluster-specific values), undocumented breaking changes.
+- **Medium/Low** — naming, style, documentation and consistency issues.
+
+Structure each comment as:
 
 ```
-**[CRITICAL/WARNING] Brief title**
+**Brief title**
 
 Description of the issue.
 
@@ -50,44 +61,3 @@ Description of the issue.
 
 **Suggested fix:** corrected example (if applicable).
 ```
-
-When performing a code review, flag the following:
-
-**CRITICAL (block merge):**
-- Missing `required` validation for mandatory settings that have empty defaults
-- Missing `required` validation for conditionally-mandatory parameters inside their guard block (e.g., a parameter marked `**Required** if schema is "Oidc"` must use `required` inside the `{{- if eq .Values.schema "Oidc" }}` block, not just be referenced bare)
-- `values.yaml` changed but `README.md` not regenerated
-- Breaking change not documented in `changelogs/<group>/*-Breaking-Changes.md`
-- PR targets `master` without being a documented hotfix
-- Missing checksum annotations on ConfigMap/Secret
-- `replicas` field present in Deployment when `hpa.enabled: true`
-- Non-camelCase parameter names or inconsistent naming (e.g., `serviceAccount.create` instead of `serviceAccount.enabled`)
-- `NOTES.txt` missing from a new chart
-- Duplicate `@param` for the same key in `values.yaml`
-
-**WARNING (suggest fix):**
-- Enum parameter missing list of valid values in comment
-- K8s section header missing link to official docs
-- Default city not set to Moscow in examples that reference a city
-- CronJob missing `successfulJobsHistoryLimit` / `failedJobsHistoryLimit`
-- Parameters that never change in typical use not marked with `@skip`
-- Non-empty string default written with quotes (should be without)
-- Empty string default written without quotes (should be `''`)
-- Integer default written as a quoted string (e.g., `port: '5432'` should be `port: 5432`)
-- Information size units are written inconsistently (use consistent Kubernetes-style units such as `Ki`, `Mi`, `Gi`, `Ti`)
-- Service URL parameter description missing the recommended URL format hint (`http://{service-name}.svc`, etc.)
-- Template file name uses camelCase instead of dashed notation
-- Named template not namespaced with chart name
-- Template directive missing whitespace inside braces (`{{.foo}}` instead of `{{ .foo }}`)
-- Standard `app.kubernetes.io/*` labels missing from a resource
-- `namespace:` hardcoded in template metadata
-- Floating image tag used (`latest`, `head`, `canary`)
-- Feature toggle parameter not named `enabled` (e.g., `pdb.create`, `serviceAccount.create`)
-- `db` used instead of `postgres` for PostgreSQL settings block
-- `user` used instead of `username` in postgres block
-- `database` used instead of `name` in postgres block
-- `endpoint` or `url` used instead of `host` in s3 block
-- `servers` or `bootstrapServer` used instead of `bootstrapServers` in kafka block
-- Data import service block not named `importer`
-- Chart declares a `generic-chart` dependency but manually implements standard resources (Deployment, Service, Ingress, HPA, VPA, PDB, ServiceAccount) instead of using `generic-chart.*.tpl` templates
-- Chart without a `generic-chart` dependency flagged for missing the dependency — `generic-chart` is optional; manual template implementation is acceptable

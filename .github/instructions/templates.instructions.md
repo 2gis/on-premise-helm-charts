@@ -19,6 +19,8 @@ excludeAgent: ["coding-agent"]
 - Do not use floating image tags (`latest`, `head`, `canary`); always use a fixed tag or SHA
 - PodTemplate selectors must be explicitly declared in `selector.matchLabels`
 - `generic-chart` library templates for standard resources (Deployment, Service, Ingress, HPA, VPA, PDB) are **optional**; charts may implement templates manually
+  - Do not flag a chart for not declaring the `generic-chart` dependency — it is optional
+  - Flag a chart that declares the `generic-chart` dependency but implements all standard resources manually without using any `generic-chart.*` template (unused dependency)
 - Every chart must have a `templates/NOTES.txt` with post-install instructions. Recommended template:
   ```
   {{ .Chart.Name }} is installed by release "{{ .Release.Name }}" at "{{ .Release.Namespace }}" namespace
@@ -50,6 +52,8 @@ excludeAgent: ["coding-agent"]
   {{- end }}
   ```
   Referencing the value bare inside the block (without `required`) means a user who sets `schema: Oidc` but forgets the field will get an empty env-var instead of a clear error.
+- Every env var referencing `secretKeyRef.key` must point to a key that the Secret template creates under the **same condition**. Compare guards across templates: if `secrets.yaml` creates `permissionsApiKey` only when `permissions.settings.auth.enabled` is true, a Deployment may reference that key only under the same guard — otherwise the chart renders fine but the pod fails with `CreateContainerConfigError`
+- When a PR removes or weakens validation (`required`, `fail`), check every other place the value is used — other templates, the Secret, the `@param` comment and the generated README. A removed guard often turns a render-time error into a runtime pod crash (missing env var or missing Secret key)
 - CronJobs must include `successfulJobsHistoryLimit` and `failedJobsHistoryLimit` (default `3`)
 - ConfigMaps and Secrets must have checksum annotations to trigger pod restarts on config changes:
   ```yaml
