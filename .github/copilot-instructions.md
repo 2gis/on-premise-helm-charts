@@ -24,12 +24,13 @@ The path-specific files are the review checklist for matching files: flag every 
 
 ## Repository Structure
 
-- `charts/` — 33 application Helm charts + `generic-chart` (shared library)
+- `charts/` — application Helm charts, one directory per chart, plus the shared `generic-chart` library
+- `installer/` — helmfile-based installer for the platform. Its `*.secrets.yaml` files are sops plaintext skeletons with empty or placeholder values: the empty skeletons are by design, not a plaintext-secrets finding; a real secret committed in one is
 - `changelogs/` — per-product-group changelogs (`core/`, `platform/`, `pro/`, `citylens/`, `evergis/`)
   - Breaking changes are tracked in `changelogs/<group>/*-Breaking-Changes.md`
   - `Breaking-Changes.md` at the repo root is an index that links to the group files
   - files in this directory are updated only by release scripts and must not be edited manually
-- `.github/workflows/` — CI: `lint.yaml`, `check-readme.yaml`, `release.yaml`, `release-oci.yaml`
+- `.github/workflows/` — CI: chart linting, README regeneration check (`check-readme.yaml`), release flows
 - `CONTRIBUTING.md` — branching model (Gitflow, PRs target `develop`)
 
 ## PR Checklist (mirrors `pull_request_template.md`)
