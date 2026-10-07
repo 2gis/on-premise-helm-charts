@@ -122,11 +122,11 @@ To learn more about configuration, architecture, and requirements, see the offic
 
 ### Tiles service settings
 
-| Name                   | Description                                                                 | Value |
-| ---------------------- | --------------------------------------------------------------------------- | ----- |
-| `tiles.url`            | URL of the Tiles API service, ex: http://tiles-service-api.svc **Required** | `""`  |
-| `tiles.key`            | Tiles access key **Required**                                               | `""`  |
-| `tiles.requestTimeout` | Timeout for requests to the Tiles API.                                      | `5s`  |
+| Name                   | Description                                                                                                                                      | Value |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
+| `tiles.url`            | URL of the Tiles API service, ex: http://tiles-service-api.svc. The tile server must have a tileset with `kind: raster` configured. **Required** | `""`  |
+| `tiles.key`            | Tiles access key **Required**                                                                                                                    | `""`  |
+| `tiles.requestTimeout` | Timeout for requests to the Tiles API.                                                                                                           | `5s`  |
 
 ### Keys service settings
 
