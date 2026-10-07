@@ -16,6 +16,7 @@ Sections in `values.yaml` should appear in this order:
 ## General rules
 
 - All setting names use camelCase starting with a lowercase letter (`accessKey`, `dgctlDockerRegistry`)
+  - Flag snake_case and PascalCase keys: `default_permissions`, `new_user_expiration_days` are violations; the correct names are `defaultPermissions`, `newUserExpirationDays`
 - Every chart must have a `dgctlDockerRegistry` parameter in the "Docker Registry settings" section
 - Mandatory settings (DB host, service URLs) must have an empty string default (`''`) and must be validated with `required` in templates:
   ```yaml
@@ -30,6 +31,8 @@ Sections in `values.yaml` should appear in this order:
   ```
 - Empty string defaults use single quotes: `name: ''`
 - Non-empty string defaults are written without quotes: `repository: 2gis-on-premise/navi-back`
+- Integer defaults are written as plain numbers, not quoted strings: `port: 5432`, not `port: '5432'`
+- If a default value must specify a city, use Moscow
 
 ## @param annotations for README generation
 
