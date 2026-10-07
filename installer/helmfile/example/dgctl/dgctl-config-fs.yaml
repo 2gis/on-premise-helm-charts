@@ -17,6 +17,6 @@ components:
   api-platform:
     version: 2.59.0
   pro:
-    version: 2.5.0
+    version: 2.6.0
   citylens:
     version: 2.3.0

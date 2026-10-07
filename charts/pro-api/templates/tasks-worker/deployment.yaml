@@ -132,6 +132,8 @@ spec:
               value: {{ $.Values.tasks.settings.features.assetDataPreparation.enabled | quote }}
             - name: FeatureManagement__AuditLogging
               value: {{ $.Values.tasks.settings.features.auditLogging.enabled | quote }}
+            - name: FeatureManagement__AssetChangesNotification
+              value: {{ $.Values.tasks.settings.features.assetChangesNotification.enabled | quote }}
             - name: FeatureManagement__CleanCitylensFrames
               value: {{ $.Values.tasks.settings.features.cleanCitylensFrames.enabled | quote }}
             - name: FeatureManagement__RemoveUnusedUserAssetFiles
@@ -241,8 +243,8 @@ spec:
                 secretKeyRef:
                   key: apiKey
                   name: {{ include "pro-api.secretName" . }}
-            - name: Common__DataCenterId
-              value: {{ .Values.api.settings.dataCenterId | quote }}
+            - name: Common__Cluster
+              value: {{ .Values.clusters.current | quote }}
 
             - name: PermissionsApi__Url
               value: {{ include "pro-api.permissions-url" . }}
