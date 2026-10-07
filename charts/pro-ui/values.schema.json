@@ -49,9 +49,6 @@
         "supportDocumentationLink": {
           "type": "string"
         },
-        "immersiveModels": {
-          "type": "string"
-        },
         "healthcheckPath": {
           "type": "string"
         },

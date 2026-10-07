@@ -1,14 +1,12 @@
 ## [UNRELEASED]
 
-## [2026-09-29]
-
 #### Supported versions
 
 | Component    | Version |
 | ------------ | ------- |
 | core         | 2.11.1  |
 | api-platform | 2.59.0  |
-| pro          | 2.5.0   |
+| pro          | 2.6.0   |
 | citylens     | 2.3.0   |
 
 #### Breaking changes
@@ -27,6 +25,20 @@
 - Manifest pinning moved to the environment level: `dgctlManifests` map (core/api-platform/pro/citylens)
   resolved centrally in `values/dgctl.yaml.gotmpl` by release name; per-service `dgctlStorage.manifest`
   overrides are no longer needed (README, "Фиксация/переключение манифестов")
+
+## [2026-10-06]
+
+#### Supported versions
+
+| Component    | Version |
+| ------------ | ------- |
+| core         | 2.11.1  |
+| api-platform | 2.59.0  |
+| pro          | 2.6.0   |
+| citylens     | 2.3.0   |
+
+#### Changes
+- Bumped supported pro version to 2.6.0
 
 ## [2026-09-29]
 

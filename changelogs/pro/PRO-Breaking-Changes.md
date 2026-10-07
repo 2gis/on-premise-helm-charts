@@ -1,5 +1,12 @@
 # PRO Breaking-Changes
 
+## [2.6.0]
+
+### pro-api
+
+- `api.settings.corsOrigins`: The `*` value is not supported.
+- If CORS is configured in the ingress or proxy, make sure `cors-allow-credentials` is enabled and `cors-allow-origin` passes the request origin.
+
 ## [2.5.0]
 
 ### pro-api
