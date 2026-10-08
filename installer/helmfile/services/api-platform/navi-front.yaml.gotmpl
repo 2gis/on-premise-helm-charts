@@ -14,6 +14,11 @@ releases:
       service: navi-front
     values:
       - {{ .Values.basePath }}/values/dgctl.yaml.gotmpl
+      - {{ .Values.basePath }}/values/ingressAnnotations.yaml.gotmpl
+{{- $vpAnn := printf "%s/values/ingressAnnotations/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $vpAnn }}
+      - {{ $vpAnn }}
+{{- end }}
       - {{ .Values.basePath }}/values/api-platform/navi-front.yaml.gotmpl
 {{- $dep := printf "%s/values/api-platform/navi-front/_common.yaml.gotmpl" .Values.valuesPath -}}
 {{- if isFile $dep }}

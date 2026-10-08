@@ -14,6 +14,7 @@ releases:
       group: api-platform
       service: castle
     values:
+      - {{ .Values.basePath }}/../dgctl/auto_values/api-platform/general.yaml
       - {{ .Values.basePath }}/values/dgctl.yaml.gotmpl
       - {{ .Values.basePath }}/values/api-platform/navi-castle.yaml.gotmpl
 {{- $dep := printf "%s/values/api-platform/navi-castle/_common.yaml.gotmpl" .Values.valuesPath -}}

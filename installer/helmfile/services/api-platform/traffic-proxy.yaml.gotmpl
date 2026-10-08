@@ -16,6 +16,11 @@ releases:
       service: traffic-proxy
     values:
       - {{ .Values.basePath }}/values/dgctl.yaml.gotmpl
+      - {{ .Values.basePath }}/values/ingressAnnotations.yaml.gotmpl
+{{- $vpAnnNavi := printf "%s/values/ingressAnnotations/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $vpAnnNavi }}
+      - {{ $vpAnnNavi }}
+{{- end }}
       - {{ .Values.basePath }}/values/api-platform/traffic-proxy-navi.yaml.gotmpl
 {{- $dep := printf "%s/values/api-platform/traffic-proxy/navi/_common.yaml.gotmpl" .Values.valuesPath -}}
 {{- if isFile $dep }}
@@ -58,6 +63,11 @@ releases:
       service: traffic-proxy-map
     values:
       - {{ .Values.basePath }}/values/dgctl.yaml.gotmpl
+      - {{ .Values.basePath }}/values/ingressAnnotations.yaml.gotmpl
+{{- $vpAnnMap := printf "%s/values/ingressAnnotations/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $vpAnnMap }}
+      - {{ $vpAnnMap }}
+{{- end }}
       - {{ .Values.basePath }}/values/api-platform/traffic-proxy-map.yaml.gotmpl
 {{- $dep := printf "%s/values/api-platform/traffic-proxy/map/_common.yaml.gotmpl" .Values.valuesPath -}}
 {{- if isFile $dep }}

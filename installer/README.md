@@ -549,6 +549,10 @@ kubernetes-ready пример API-платформы (infra + core + api-platfor
    - License: при первом запуске pod может не стартовать без валидной лицензии -
      [получите лицензию](https://docs.2gis.com/on-premise-api-platform/installation#get-license)
      и повторите деплой.
+     Также для получения лицензии можно воспользоваться командой:
+     ```bash
+     ./installer/dgctl/pull.sh dgctl-config-sandbox.yaml -l
+     ```
 
 6. **Развёртывание API-платформы** (22 релиза: search, tiles, catalog, navi, styles, mapgl, …):
    ```bash

@@ -2,7 +2,12 @@ dgctlDockerRegistry: {{ .Values.dgctlDockerRegistry }}
 
 dgctlStorage:
   host: {{ .Values.dgctlStorage.host }}
+  {{- $region := index .Values.dgctlStorage "region" }}
+  {{- if kindIs "string" $region }}
+  region: {{ $region | quote }}
+  {{- else }}
   region: 'US'
+  {{- end }}
   bucket: {{ .Values.dgctlStorage.bucket }}
   accessKey: {{ .Values.dgctlStorage.accessKey }}
   secretKey: {{ .Values.dgctlStorage.secretKey }}
