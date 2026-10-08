@@ -21,7 +21,7 @@ To learn more about configuration, architecture, and requirements, see the offic
 | `imagePullSecrets` | Kubernetes image pull secrets.                                                                | `[]`                         |
 | `imagePullPolicy`  | Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) | `IfNotPresent`               |
 | `image.repository` | Styles API service image repository.                                                          | `2gis-on-premise/styles-api` |
-| `image.tag`        | Styles API service image tag.                                                                 | `0.46.0`                     |
+| `image.tag`        | Styles API service image tag.                                                                 | `0.49.0`                     |
 
 ### API service settings
 
