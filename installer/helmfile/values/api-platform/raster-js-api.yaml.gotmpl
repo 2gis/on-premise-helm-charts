@@ -1,7 +1,7 @@
 {{- $protocol := ternary "https" "http" .Values.ingressTls }}
 
 api:
-  publicHost: '{{ $protocol }}://{{ .Values.rasterJsApiIngress }}'
+  publicHost: '{{ .Values.rasterJsApiIngress }}'
   protocol: '{{ $protocol }}'
   tileServerUrl: '{{ $protocol }}://{{ .Values.tilesRasterIngress }}'
   trafficTileServerUrl: '' # необходим отдельный прокси до растровых пробок
