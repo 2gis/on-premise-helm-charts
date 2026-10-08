@@ -88,8 +88,8 @@ usePasswordFiles: true
 # @param image.debug Enable Keycloak image debug mode
 #
 image:
-  repository: 2gis-on-premise/keycloak
-  tag: 26.3.3
+  repository: 2gis-on-premise/platform-id
+  tag: 1.5.0
   # Specify a imagePullPolicy
   # ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   #
