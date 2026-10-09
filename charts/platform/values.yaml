@@ -8,6 +8,30 @@ dgctlDockerRegistry: ''
 imagePullPolicy: IfNotPresent
 imagePullSecrets: []
 
+# @section Security settings
+
+# @param securityContext.runAsUser UID of a non-privileged user that exists in the image. Must be non-zero.
+# @param securityContext.runAsGroup GID of a non-privileged group that exists in the image. Must be non-zero.
+# @param securityContext.fsGroup GID applied to the mounted volumes. Must be non-zero.
+# @param securityContext.readOnlyRootFilesystem If the root filesystem of the container is read-only. The `/tmp` directory is mounted as a writable `emptyDir` volume.
+
+securityContext:
+  runAsUser: 10001
+  runAsGroup: 10001
+  fsGroup: 10001
+  readOnlyRootFilesystem: true
+
+# @param serviceAccount.enabled If a dedicated Kubernetes [service account](https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/) is created.
+# @param serviceAccount.automountServiceAccountToken If the service account API token is mounted into the pod. The service does not use the Kubernetes API, so the token is not mounted by default.
+# @param serviceAccount.annotations Annotations of the service account.
+# @param serviceAccount.name Name of the service account. If empty, the release name is used when `serviceAccount.enabled` is `true`, otherwise `default`.
+
+serviceAccount:
+  enabled: false
+  automountServiceAccountToken: false
+  annotations: {}
+  name: ''
+
 ui:
   # @section Common settings
 
@@ -39,7 +63,7 @@ ui:
 
   image:
     repository: 2gis-on-premise/platform-ui
-    tag: 1.46.0
+    tag: 1.51.0
 
   # @section UI service settings
 

@@ -11,6 +11,19 @@ Use this Helm chart to deploy Platform service, which is a part of 2GIS's [On-Pr
 | `dgctlDockerRegistry` | Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`. | `""`           |
 | `imagePullPolicy`     | Pull Policy                                                                             | `IfNotPresent` |
 
+### Security settings
+
+| Name                                          | Description                                                                                                                                    | Value   |
+| --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `securityContext.runAsUser`                   | UID of a non-privileged user that exists in the image. Must be non-zero.                                                                       | `10001` |
+| `securityContext.runAsGroup`                  | GID of a non-privileged group that exists in the image. Must be non-zero.                                                                      | `10001` |
+| `securityContext.fsGroup`                     | GID applied to the mounted volumes. Must be non-zero.                                                                                          | `10001` |
+| `securityContext.readOnlyRootFilesystem`      | If the root filesystem of the container is read-only. The `/tmp` directory is mounted as a writable `emptyDir` volume.                         | `true`  |
+| `serviceAccount.enabled`                      | If a dedicated Kubernetes [service account](https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/) is created.   | `false` |
+| `serviceAccount.automountServiceAccountToken` | If the service account API token is mounted into the pod. The service does not use the Kubernetes API, so the token is not mounted by default. | `false` |
+| `serviceAccount.annotations`                  | Annotations of the service account.                                                                                                            | `{}`    |
+| `serviceAccount.name`                         | Name of the service account. If empty, the release name is used when `serviceAccount.enabled` is `true`, otherwise `default`.                  | `""`    |
+
 ### Common settings
 
 | Name                      | Description                                                                                                                                    | Value |
@@ -30,7 +43,7 @@ Use this Helm chart to deploy Platform service, which is a part of 2GIS's [On-Pr
 | Name                  | Description                    | Value                         |
 | --------------------- | ------------------------------ | ----------------------------- |
 | `ui.image.repository` | Repository                     | `2gis-on-premise/platform-ui` |
-| `ui.image.tag`        | Tag                            | `1.46.0`                      |
+| `ui.image.tag`        | Tag                            | `1.51.0`                      |
 | `imagePullSecrets`    | Kubernetes image pull secrets. | `[]`                          |
 
 ### UI service settings
