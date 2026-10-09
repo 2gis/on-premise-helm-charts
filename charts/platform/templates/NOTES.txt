@@ -8,3 +8,8 @@ You can check the service using a browser
 {{- else }}
 You should publish the service in your preferred way (ingress, balancer, etc).
 {{ end }}
+
+The chart applies the hardened security defaults: the container is run as the
+user {{ .Values.securityContext.runAsUser }} with a read-only root filesystem, no privilege escalation and all
+the capabilities dropped. If the image requires another user, override
+securityContext.runAsUser, securityContext.runAsGroup and securityContext.fsGroup.
