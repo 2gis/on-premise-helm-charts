@@ -16,7 +16,7 @@ api:
   # @param api.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-api
-    tag: 2.73.0
+    tag: 2.73.0-hotfix-onprem-permissions
     pullPolicy: IfNotPresent
 
   # @param api.ingress.enabled If Ingress is enabled for the service.
@@ -200,7 +200,7 @@ permissions:
   # @param permissions.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-permissions-api
-    tag: 2.73.0
+    tag: 2.73.0-hotfix-onprem-permissions
     pullPolicy: IfNotPresent
 
   # @param permissions.ingress.enabled If Ingress is enabled for the service
@@ -347,7 +347,7 @@ tasks:
   # @param tasks.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-tasks-api
-    tag: 2.73.0
+    tag: 2.73.0-hotfix-onprem-permissions
     pullPolicy: IfNotPresent
 
   # @param tasks.ingress.enabled If Ingress is enabled for the service
@@ -515,7 +515,7 @@ pagerenderer:
   # @param pagerenderer.image.pullPolicy Pull Policy
   image:
     repository: 2gis-on-premise/pro-pagerenderer-api
-    tag: 2.73.0
+    tag: 2.73.0-hotfix-onprem-permissions
     pullPolicy: IfNotPresent
 
   # @param pagerenderer.pod.replicaCount A replica count for the pod.
@@ -669,7 +669,7 @@ pagerenderer:
 assetImporter:
   appName: asset-importer
   repository: 2gis-on-premise/pro-importer
-  tag: 2.73.0
+  tag: 2.73.0-hotfix-onprem-permissions
   schedule: 0 18 * * *
   backoffLimit: 2
   successfulJobsHistoryLimit: 3
