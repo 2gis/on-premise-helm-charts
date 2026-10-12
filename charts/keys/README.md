@@ -202,6 +202,17 @@ To learn more about configuration, architecture, and requirements, see the offic
 | `import.securityContext`    | Kubernetes [container security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) for the service containers. Merged over the chart-wide `securityContext`. | `{}`      |
 | `import.writablePaths`      | Paths mounted as `emptyDir` volumes when the read-only root filesystem is enabled. Overrides the chart-wide `writablePaths`.                                                                  | `[]`      |
 
+### Bootstrap service settings
+
+| Name                           | Description                                                                                                                                                                                   | Value     |
+| ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- |
+| `bootstrap.logLevel`           | Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`. Use `info` or lower so the created API key is printed in the job logs.                              | `info`    |
+| `bootstrap.nodeSelector`       | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                                                           | `{}`      |
+| `bootstrap.tolerations`        | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                                             | `[]`      |
+| `bootstrap.podSecurityContext` | Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) for the service. Merged over the chart-wide `podSecurityContext`.               | `{}`      |
+| `bootstrap.securityContext`    | Kubernetes [container security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) for the service containers. Merged over the chart-wide `securityContext`. | `{}`      |
+| `bootstrap.writablePaths`      | Paths mounted as `emptyDir` volumes when the read-only root filesystem is enabled. Overrides the chart-wide `writablePaths`.                                                                  | `[]`      |
+
 ### Migrate service settings
 
 | Name                          | Description                                                                                                                                                                                   | Value     |

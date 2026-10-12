@@ -473,6 +473,36 @@ import:
   securityContext: {}
   writablePaths: []
 
+# @section Bootstrap service settings
+
+bootstrap:
+
+  # @param bootstrap.logLevel Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`. Use `info` or lower so the created API key is printed in the job logs.
+  logLevel: info
+
+  resources:
+    requests:
+      cpu: 10m
+      memory: 32Mi
+    limits:
+      cpu: 100m
+      memory: 64Mi
+
+  # @param bootstrap.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+
+  nodeSelector: {}
+
+  # @param bootstrap.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+  tolerations: []
+
+  # @param bootstrap.podSecurityContext Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) for the service. Merged over the chart-wide `podSecurityContext`.
+  # @param bootstrap.securityContext Kubernetes [container security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/) for the service containers. Merged over the chart-wide `securityContext`.
+  # @param bootstrap.writablePaths Paths mounted as `emptyDir` volumes when the read-only root filesystem is enabled. Overrides the chart-wide `writablePaths`.
+
+  podSecurityContext: {}
+  securityContext: {}
+  writablePaths: []
+
 # @section Migrate service settings
 
 migrate:

@@ -18,6 +18,11 @@ You can check service using curl
 You can publish api service in your preferred way (ingress, balancer, etc).
 {{ end }}
 
+After install, a default partner, unlimited subscription and API key are created if the keys table is empty.
+Read the key from the bootstrap job logs:
+
+  kubectl logs job/{{ include "keys.bootstrap.name" . }}
+
 The chart applies the hardened security defaults: the containers are run as the user 10001
 with a read-only root filesystem, no privilege escalation and all the capabilities dropped.
 If the image of a service requires another user or a writable path, override the settings:
