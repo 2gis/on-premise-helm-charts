@@ -17,3 +17,8 @@ You can check service using curl
 {{- else }}
 You can publish api service in your preferred way (ingress, balancer, etc).
 {{ end }}
+
+After install, a default partner, unlimited subscription and API key are created if the keys table is empty.
+Read the key from the bootstrap job logs:
+
+  kubectl logs job/{{ include "keys.bootstrap.name" . }}
