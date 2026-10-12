@@ -34,10 +34,6 @@
 {{ include "keys.name" . }}-import
 {{- end }}
 
-{{- define "keys.bootstrap.name" -}}
-{{ include "keys.name" . }}-bootstrap
-{{- end }}
-
 {{- define "keys.admin.name" -}}
 {{ include "keys.name" . }}-admin
 {{- end }}
@@ -128,12 +124,6 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 
-{{- define "keys.bootstrap.labels" -}}
-app.kubernetes.io/name: {{ .Chart.Name }}-bootstrap
-app.kubernetes.io/instance: {{ .Release.Name }}
-app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
-{{- end }}
-
 {{- define "keys.admin.selectorLabels" -}}
 app.kubernetes.io/name: {{ .Chart.Name }}-admin
 app.kubernetes.io/instance: {{ .Release.Name }}
@@ -208,11 +198,6 @@ app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- define "keys.env.migrate" -}}
 - name: KEYS_LOG_LEVEL
   value: {{ .Values.migrate.logLevel | quote }}
-{{- end }}
-
-{{- define "keys.env.bootstrap" -}}
-- name: KEYS_LOG_LEVEL
-  value: {{ .Values.bootstrap.logLevel | quote }}
 {{- end }}
 
 {{- define "keys.env.tasker" -}}
