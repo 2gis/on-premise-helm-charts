@@ -164,11 +164,11 @@ To learn more about configuration, architecture, and requirements, see the offic
 
 ### Bootstrap service settings
 
-| Name                     | Description                                                                                                                                      | Value  |
-| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ | ------ |
-| `bootstrap.logLevel`     | Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`. Use `info` or lower so the created API key is printed. | `info` |
-| `bootstrap.nodeSelector` | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                              | `{}`   |
-| `bootstrap.tolerations`  | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                | `[]`   |
+| Name                     | Description                                                                                                                                                      | Value  |
+| ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `bootstrap.logLevel`     | Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`. Use `info` or lower so the created API key is printed in the job logs. | `info` |
+| `bootstrap.nodeSelector` | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                              | `{}`   |
+| `bootstrap.tolerations`  | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                | `[]`   |
 
 ### Migrate service settings
 
