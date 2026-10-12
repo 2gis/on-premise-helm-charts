@@ -13,6 +13,22 @@ data:
     license:
       retry-period: {{ .retryPeriod }}
       warning-period: {{ .softBlockPeriod }}
+      {{- if eq (include "license.type" $) "4" }}
+      {{- with .internet }}
+      {{- if or .endpoint .updatePeriod .timeout }}
+      internet:
+        {{- with .endpoint }}
+        endpoint: {{ . }}
+        {{- end }}
+        {{- with .updatePeriod }}
+        update-period: {{ . }}
+        {{- end }}
+        {{- with .timeout }}
+        timeout: {{ . }}
+        {{- end }}
+      {{- end }}
+      {{- end }}
+      {{- end }}
     server:
       http-port: {{ .statusPort }}
       https-port: {{ .apiPort }}

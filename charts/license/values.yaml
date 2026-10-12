@@ -2,7 +2,7 @@
 
 # @param dgctlDockerRegistry Docker Registry endpoint where On-Premise services' images reside. Format: `host:port`.
 
-dgctlDockerRegistry: ''
+dgctlDockerRegistry: ""
 
 # @section Deployment Artifacts Storage settings
 
@@ -14,12 +14,12 @@ dgctlDockerRegistry: ''
 # @param dgctlStorage.secretKey S3 secret key for accessing the bucket.
 
 dgctlStorage:
-  host: ''
+  host: ""
   secure: false
-  region: ''
-  bucket: ''
-  accessKey: ''
-  secretKey: ''
+  region: ""
+  bucket: ""
+  accessKey: ""
+  secretKey: ""
 
 # @section Common settings
 
@@ -40,8 +40,8 @@ dgctlStorage:
 
 # @param imagePullSecrets Kubernetes image pull secrets.
 
-nameOverride: ''
-fullnameOverride: ''
+nameOverride: ""
+fullnameOverride: ""
 
 annotations: {}
 labels: {}
@@ -49,7 +49,7 @@ labels: {}
 podAnnotations: {}
 podLabels: {}
 
-serviceAccountOverride: ''
+serviceAccountOverride: ""
 
 nodeSelector: {}
 tolerations: []
@@ -77,7 +77,7 @@ image:
 # @skip license.apiPort
 
 license:
-  type: ''
+  type: ""
   retryPeriod: 30s
   softBlockPeriod: 2w
   statusPort: 8080
@@ -88,6 +88,17 @@ license:
   log:
     level: info
     format: text
+
+  # @extra license.internet **Settings for license type 4. Ignored for other license types**
+  # @param license.internet.apiKey Datagateway API key used to request a license. Required for license type 4.
+  # @param license.internet.endpoint Datagateway endpoint. Format: `scheme://host[:port]`. If empty, the service default is used.
+  # @param license.internet.updatePeriod Duration how often service should request a license from Datagateway. Duration format is any string supported by (time.ParseDuration)[https://pkg.go.dev/time#ParseDuration]. If empty, the service default of `15m` is used.
+  # @param license.internet.timeout Timeout of a single request to Datagateway. If empty, the service default of `30s` is used.
+  internet:
+    apiKey: ""
+    endpoint: ""
+    updatePeriod: ""
+    timeout: ""
 
 # @section Service settings
 
@@ -117,10 +128,10 @@ ingress:
   enabled: false
   className: nginx
   hosts:
-  - host: license.example.com
-    paths:
-    - path: /
-      pathType: Prefix
+    - host: license.example.com
+      paths:
+        - path: /
+          pathType: Prefix
   tls: []
   # - hosts:
   #   - license.example.com
@@ -152,13 +163,13 @@ resources:
 # @param persistence.secretKey S3 secret key for accessing the bucket.
 
 persistence:
-  host: ''
+  host: ""
   secure: false
-  region: ''
-  bucket: ''
-  root: ''
-  accessKey: ''
-  secretKey: ''
+  region: ""
+  bucket: ""
+  root: ""
+  accessKey: ""
+  secretKey: ""
 
 # @section TPM-related settings for license type 2
 
@@ -171,7 +182,7 @@ tpm:
   mountTPMDevice: false
   pvcBind:
     enable: false
-    storageClassName: ''
+    storageClassName: ""
 
 # @section **Custom Certificate Authority**
 
@@ -179,9 +190,9 @@ tpm:
 # @param customCAs.certsPath Custom CA bundle mount directory in the container.
 
 customCAs:
-  bundle: ''
+  bundle: ""
   # bundle: |
   #   -----BEGIN CERTIFICATE-----
   #   ...
   #   -----END CERTIFICATE-----
-  certsPath: ''
+  certsPath: ""

@@ -58,6 +58,11 @@ To learn more about configuration, architecture, and requirements, see the offic
 | `license.softBlockPeriod` | Duration until the license expiration time when license service should respond with 'soft' block status. For this duration additional time units 'd' for days and 'w' for weeks are supported.                 | `2w`   |
 | `license.log.level`       | Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`, `panic`.                                                                                                             | `info` |
 | `license.log.format`      | Log format for the service. Can be: `text`, `json`.                                                                                                                                                            | `text` |
+| `license.internet`        | **Settings for license type 4. Ignored for other license types**                                                                                                                                               |        |
+| `license.internet.apiKey` | Datagateway API key used to request a license. Required for license type 4.                                                                                                                                    | `""`   |
+| `license.internet.endpoint` | Datagateway endpoint. Format: `scheme://host[:port]`. If empty, the service default is used.                                                                                                                 | `""`   |
+| `license.internet.updatePeriod` | Duration how often service should request a license from Datagateway. Duration format is any string supported by (time.ParseDuration)[https://pkg.go.dev/time#ParseDuration]. If empty, the service default of `15m` is used. | `""`   |
+| `license.internet.timeout` | Timeout of a single request to Datagateway. If empty, the service default of `30s` is used.                                                                                                                   | `""`   |
 
 ### Service settings
 

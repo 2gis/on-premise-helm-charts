@@ -65,6 +65,8 @@ StatefulSet replicas count
 1
 {{- else if eq (include "license.type" .) "2" -}}
 2
+{{- else if eq (include "license.type" .) "4" -}}
+1
 {{- end }}
 {{- end }}
 
