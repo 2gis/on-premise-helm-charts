@@ -406,6 +406,11 @@ To learn more about configuration, architecture, and requirements, see the offic
 | `import.resources.requests.memory`             | A memory request.                      | `32Mi`  |
 | `import.resources.limits.cpu`                  | A CPU limit.                           | `100m`  |
 | `import.resources.limits.memory`               | A memory limit.                        | `64Mi`  |
+| `bootstrap.resources`                          | **Limits for the Bootstrap service**   |         |
+| `bootstrap.resources.requests.cpu`             | A CPU request.                         | `10m`   |
+| `bootstrap.resources.requests.memory`          | A memory request.                      | `32Mi`  |
+| `bootstrap.resources.limits.cpu`               | A CPU limit.                           | `100m`  |
+| `bootstrap.resources.limits.memory`            | A memory limit.                        | `64Mi`  |
 | `migrate.resources`                            | **Limits for the Migrate service**     |         |
 | `migrate.resources.requests.cpu`               | A CPU request.                         | `10m`   |
 | `migrate.resources.requests.memory`            | A memory request.                      | `32Mi`  |

@@ -926,6 +926,12 @@ dgctlStorage:
 # @param import.resources.limits.cpu A CPU limit.
 # @param import.resources.limits.memory A memory limit.
 
+# @extra bootstrap.resources **Limits for the Bootstrap service**
+# @param bootstrap.resources.requests.cpu A CPU request.
+# @param bootstrap.resources.requests.memory A memory request.
+# @param bootstrap.resources.limits.cpu A CPU limit.
+# @param bootstrap.resources.limits.memory A memory limit.
+
 # @extra migrate.resources **Limits for the Migrate service**
 # @param migrate.resources.requests.cpu A CPU request.
 # @param migrate.resources.requests.memory A memory request.
