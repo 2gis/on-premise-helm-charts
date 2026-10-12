@@ -1,3 +1,13 @@
+## [2.6.1] (2026-10-12)
+
+#### Images
+```
+pro-api
+	- pro-permissions-api:2.73.0
+	+ pro-permissions-api:2.73.1
+```
+[Full list of image versions](https://github.com/2gis/on-premise-helm-charts/blob/PRO-2.6.1/changelogs/pro/pro_image_versions.txt)
+
 ## [2.6.0] (2026-10-06)
 #### [Breaking-Changes](PRO-Breaking-Changes.md#260)
 #### Images
