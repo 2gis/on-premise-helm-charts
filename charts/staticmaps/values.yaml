@@ -187,7 +187,7 @@ app:
 
 # @section Tiles service settings
 
-# @param tiles.url URL of the Tiles API service, ex: http://tiles-service-api.svc **Required**
+# @param tiles.url URL of the Tiles API service, ex: http://tiles-service-api.svc. The tile server must have a tileset with `kind: raster` configured. **Required**
 # @param tiles.key Tiles access key **Required**
 # @param tiles.requestTimeout Timeout for requests to the Tiles API.
 

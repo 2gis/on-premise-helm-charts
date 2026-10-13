@@ -64,7 +64,7 @@ image:
 
 # @param api.publicHost **required** Host on which the service will be available, e.g. 'maps-raster.ingress.host'.
 # @param api.protocol Protocol to use: `http`, `https`.
-# @param api.tileServerUrl URL of the tile server, e.g. 'https://tiles-api.ingress.host'.
+# @param api.tileServerUrl URL of the tile server, e.g. 'https://tiles-api.ingress.host'. The tile server must have a tileset with `kind: raster` configured.
 # @param api.catalogApiServerUrl URL of the Catalog API service, e.g. 'https://catalog-api.ingress.host'.
 # @param api.catalogApiKey API key for the Catalog API service. Stored in a Kubernetes Secret and mounted into the container via `secretKeyRef`.
 # @param api.key Optional API key that will be included in tile requests. Stored in a Kubernetes Secret and mounted into the container via `secretKeyRef`.
