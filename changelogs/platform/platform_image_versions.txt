@@ -59,7 +59,7 @@ stat-receiver
 staticmaps
 	staticmaps:1.0.4
 styles-api
-	styles-api:0.46.0
+	styles-api:0.49.0
 tilegen-api
 	tilegen-api:1.1.8
 	tilegen-processor:1.1.8
