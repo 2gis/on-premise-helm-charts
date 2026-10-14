@@ -1,0 +1,10 @@
+---
+bases:
+- {{ env "HELMFILE_BASE" | default (printf "%s/installer/helmfile" (env "PWD")) }}/common.yaml.gotmpl
+
+---
+# Ссылка на директорию: postgresql ∥ cassandra ∥ kafka ∥ minio ∥ elasticsearch ∥
+# clickhouse мержатся в один state и деплоятся параллельно. Для минимального
+# профиля перечислите нужные файлы явно (см. example/deploy/sandbox.yaml.gotmpl).
+helmfiles:
+- path: {{ .Values.basePath }}/services/infra/sandbox-infra

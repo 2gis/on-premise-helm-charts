@@ -1,0 +1,12 @@
+---
+bases:
+- {{ env "HELMFILE_BASE" | default (printf "%s/installer/helmfile" (env "PWD")) }}/common.yaml.gotmpl
+
+---
+# Дорожка-цепочка: keys стартует после keycloak. keys-api на старте создаёт
+# OIDC-клиент в keycloak (realm Platform) и падает с 503, пока realm не поднялся —
+# поэтому keycloak должен быть готов раньше. Если OIDC у keys отключён (keycloak
+# не используется), дорожку можно свести к одной ссылке на keys.
+helmfiles:
+- path: {{ .Values.basePath }}/services/core/keycloak.yaml.gotmpl
+- path: {{ .Values.basePath }}/services/core/keys.yaml.gotmpl

@@ -1,0 +1,12 @@
+---
+bases:
+- {{ env "HELMFILE_BASE" | default (printf "%s/installer/helmfile" (env "PWD")) }}/common.yaml.gotmpl
+
+---
+# Дорожка-цепочка navi: back → matrix → front → vrp. navi-front при старте жёстко
+# резолвит имена back-сервисов (nginx upstream), поэтому back должен идти раньше.
+helmfiles:
+- path: {{ .Values.basePath }}/services/api-platform/navi-back.yaml.gotmpl
+- path: {{ .Values.basePath }}/services/api-platform/navi-async-matrix.yaml.gotmpl
+- path: {{ .Values.basePath }}/services/api-platform/navi-front.yaml.gotmpl
+- path: {{ .Values.basePath }}/services/api-platform/navi-vrp.yaml.gotmpl

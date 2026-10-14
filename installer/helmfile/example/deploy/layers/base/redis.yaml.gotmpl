@@ -1,0 +1,8 @@
+---
+bases:
+- {{ env "HELMFILE_BASE" | default (printf "%s/installer/helmfile" (env "PWD")) }}/common.yaml.gotmpl
+
+---
+# Независимая дорожка того же слоя: параллельна infra.yaml.gotmpl
+helmfiles:
+- path: {{ .Values.basePath }}/services/infra/redis.yaml.gotmpl

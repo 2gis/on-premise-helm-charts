@@ -1,0 +1,8 @@
+---
+bases:
+- {{ env "HELMFILE_BASE" | default (printf "%s/installer/helmfile" (env "PWD")) }}/common.yaml.gotmpl
+
+---
+# license независим — отдельная дорожка слоя core
+helmfiles:
+- path: {{ .Values.basePath }}/services/core/license.yaml.gotmpl

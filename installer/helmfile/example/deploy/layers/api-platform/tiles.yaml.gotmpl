@@ -1,0 +1,14 @@
+---
+bases:
+- {{ env "HELMFILE_BASE" | default (printf "%s/installer/helmfile" (env "PWD")) }}/common.yaml.gotmpl
+
+---
+# tiles = два релиза одного сервис-файла (tiles-api multi ∥ tiles-api-raster).
+# Их импортёры пишут в одну Cassandra; чтобы не устраивать пик записи, можно
+# развести их последовательными барьерами через вложенные selectors:
+#   - path: {{ .Values.basePath }}/services/api-platform/tiles.yaml.gotmpl
+#     selectors: [service=tiles-multi]
+#   - path: {{ .Values.basePath }}/services/api-platform/tiles.yaml.gotmpl
+#     selectors: [service=tiles-raster]
+helmfiles:
+- path: {{ .Values.basePath }}/services/api-platform/tiles.yaml.gotmpl

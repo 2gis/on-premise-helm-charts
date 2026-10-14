@@ -1,0 +1,9 @@
+---
+bases:
+- {{ env "HELMFILE_BASE" | default (printf "%s/installer/helmfile" (env "PWD")) }}/common.yaml.gotmpl
+
+---
+# Дорожка-цепочка: raster-js-api стартует после catalog
+helmfiles:
+- path: {{ .Values.basePath }}/services/api-platform/catalog.yaml.gotmpl
+- path: {{ .Values.basePath }}/services/api-platform/raster-js-api.yaml.gotmpl

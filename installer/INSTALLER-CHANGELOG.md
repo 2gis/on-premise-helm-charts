@@ -16,7 +16,8 @@
 #### Changes
 - **Parallel deploys via helmfile layers** — layer directories merge into one state (releases
   run in parallel), sequential tracks and service-directory references order dependencies
-  <!-- TODO: link to the layers/tracks documentation or example (planned in installer/README.md + example/) -->
+  (README, "Порядок и параллельность деплоя (слои и треки)"; пример —
+  `installer/helmfile/example/deploy/layered.yaml.gotmpl` + `.../deploy/layers/`)
 - **Universal per-release `set:` slots** — `values/{group}/{svc}/_common.set.yaml.gotmpl` +
   `<env>.set.yaml.gotmpl`, arbitrary set-entries incl. `file:` → helm `--set-file`
   (README, "Проброс set-записей в релиз")

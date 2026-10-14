@@ -1,0 +1,12 @@
+---
+bases:
+- {{ env "HELMFILE_BASE" | default (printf "%s/installer/helmfile" (env "PWD")) }}/common.yaml.gotmpl
+
+---
+# Дорожка-цепочка: pro-api (presync создаёт Kafka-топики, postsync — pro-token) →
+# pro-ui; citylens использует pro-token, поэтому идёт после pro-api.
+helmfiles:
+- path: {{ .Values.basePath }}/services/pro/pro-api.yaml.gotmpl
+- path: {{ .Values.basePath }}/services/pro/pro-ui.yaml.gotmpl
+- path: {{ .Values.basePath }}/services/citylens/citylens.yaml.gotmpl
+- path: {{ .Values.basePath }}/services/citylens/citylens-routes-ui.yaml.gotmpl

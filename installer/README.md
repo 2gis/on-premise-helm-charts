@@ -325,6 +325,57 @@ helmfile -e <env> -f $HELMFILE_VALUES/deploy/<env>.yaml.gotmpl apply --selector 
 
 Группы: `infra`, `core`, `pro`, `citylens`, `api-platform`.
 
+### Порядок и параллельность деплоя (слои и треки)
+
+`deploy/<env>.yaml.gotmpl` - корневой entrypoint; его `helmfiles:` - упорядоченный
+список шагов: следующий шаг стартует только после полного завершения предыдущего.
+Внутри шага параллельность и порядок задаются двумя приёмами:
+
+- **Ссылка на директорию** (`path: .../services/infra/sandbox-infra`) - все файлы
+  директории мержатся в один state, релизы деплоятся параллельно (пул воркеров
+  `--concurrency=<N>`).
+- **Ссылка на файл** (`path: .../services/core/keys.yaml.gotmpl`) - отдельный state,
+  то есть строгий последовательный барьер.
+
+> `needs` резолвится только внутри одного state; между файлами (даже в одной
+> директории) он не работает. Для межсервисного порядка используйте треки.
+
+Рекомендуемая схема - **слои и треки**. Слой = директория дорожек; слой N+1
+стартует после готовности слоя N; дорожки внутри слоя параллельны. Дорожка -
+ссылка на сервис-файл или последовательная цепочка.
+
+```yaml
+# deploy/<env>.yaml.gotmpl - корень: слои по порядку
+helmfiles:
+- path: {{ .Values.basePath }}/services/infra/traefik.yaml.gotmpl
+- path: {{ .Values.valuesPath }}/deploy/layers/base
+- path: {{ .Values.valuesPath }}/deploy/layers/core
+- path: {{ .Values.valuesPath }}/deploy/layers/api-platform
+- path: {{ .Values.valuesPath }}/deploy/layers/pro-citylens
+```
+
+```yaml
+# deploy/layers/api-platform/catalog-raster.yaml.gotmpl - дорожка-цепочка:
+# raster-js-api стартует после catalog
+helmfiles:
+- path: {{ .Values.basePath }}/services/api-platform/catalog.yaml.gotmpl
+- path: {{ .Values.basePath }}/services/api-platform/raster-js-api.yaml.gotmpl
+```
+
+Готовый пример: `installer/helmfile/example/deploy/layered.yaml.gotmpl` +
+`installer/helmfile/example/deploy/layers/` (запускается как обычно - с `-e <env>`).
+
+Замечания:
+
+- `--concurrency=N` ограничивает ширину пула воркеров **внутри** state (0 - без
+  ограничения); на слабых кластерах снижайте (напр. `--concurrency=4`).
+- Ссылка на директорию тянет **все** её файлы, включая опциональные (например,
+  `services/api-platform/search-api-v8.yaml.gotmpl`); при необходимости
+  перечисляйте файлы явно.
+- Если два релиза одного сервис-файла должны идти последовательно, один и тот же файл можно подключить
+  двумя вложенными ссылками с разными `selectors:` - получатся два последовательных
+  барьера.
+
 ### 1. Базовые сервисы (Core)
 
 Состав группы `core`:

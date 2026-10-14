@@ -1,0 +1,17 @@
+---
+bases:
+- {{ env "HELMFILE_BASE" | default (printf "%s/installer/helmfile" (env "PWD")) }}/common.yaml.gotmpl
+
+---
+# Пример «слоёв и треков» (README, «Порядок и параллельность деплоя»).
+# Корень ссылается на слои подряд: слой N+1 стартует после готовности слоя N,
+# дорожки внутри слоя параллельны (пул воркеров --concurrency).
+# Профиль полный (как staging-пример); плоские варианты — sandbox.yaml.gotmpl /
+# staging.yaml.gotmpl.
+# Запуск: helmfile -e <env> -f .../example/deploy/layered.yaml.gotmpl apply
+helmfiles:
+- path: {{ .Values.basePath }}/services/infra/traefik.yaml.gotmpl
+- path: {{ .Values.valuesPath }}/deploy/layers/base
+- path: {{ .Values.valuesPath }}/deploy/layers/core
+- path: {{ .Values.valuesPath }}/deploy/layers/api-platform
+- path: {{ .Values.valuesPath }}/deploy/layers/pro-citylens

@@ -1,0 +1,8 @@
+---
+bases:
+- {{ env "HELMFILE_BASE" | default (printf "%s/installer/helmfile" (env "PWD")) }}/common.yaml.gotmpl
+
+---
+helmfiles:
+- path: {{ .Values.basePath }}/services/api-platform/platform.yaml.gotmpl
+- path: {{ .Values.basePath }}/services/api-platform/navi-router.yaml.gotmpl
