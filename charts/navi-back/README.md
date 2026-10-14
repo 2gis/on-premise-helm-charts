@@ -1,10 +1,18 @@
 # 2GIS Navi-Back service
 
-This Helm chart deploys the **Navi-Back service**, a component of the 2GIS [On-Premise](https://docs.2gis.com/en/on-premise-api-platform/overview/summary#navigation).
+Use this Helm chart to deploy Navi-Back service, which is a part of 2GIS's [On-Premise Navigation services](https://docs.2gis.com/en/on-premise/navigation).
 
-To learn more about configuration, architecture, and requirements, see the official documentation:
-* [On-Premise API Platform Overview](https://docs.2gis.com/en/on-premise-api-platform/overview/summary)
-* [Navigation API Documentation](https://docs.2gis.com/en/on-premise-api-platform/architecture/navigation)
+Read more about the On-Premise solution [here](https://docs.2gis.com/en/on-premise/overview).
+
+See the [documentation](https://docs.2gis.com/en/on-premise/navigation) to learn about:
+
+- Architecture of the service.
+
+- Installing the service.
+
+    When filling in the keys for `values-back.yaml` configuration file, refer to the documentation and the list of keys below.
+
+- Updating the service.
 
 ## Values
 
@@ -67,7 +75,7 @@ To learn more about configuration, architecture, and requirements, see the offic
 | Name               | Description | Value                       |
 | ------------------ | ----------- | --------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-back` |
-| `image.tag`        | Tag         | `7.61.0.2`                  |
+| `image.tag`        | Tag         | `7.62.0.5`                  |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`              |
 
 ### Navi-Back application settings
@@ -159,6 +167,15 @@ To learn more about configuration, architecture, and requirements, see the offic
 | `naviback.restrictions.updatePeriod`                    | Update period from restrictions server                                                                                                                                                                                                                                       | `60`                                        |
 | `naviback.restrictions.timeoutSeconds`                  | Timeout seconds for restrictions server                                                                                                                                                                                                                                      | `60`                                        |
 | `naviback.restrictions.filename`                        | Filename of the restrictions.                                                                                                                                                                                                                                                |                                             |
+| `naviback.smartRoutes.enabled`                          | Enable smart routes                                                                                                                                                                                                                                                          | `false`                                     |
+| `naviback.smartRoutes.url`                              | URL of smart routes server                                                                                                                                                                                                                                                   | `""`                                        |
+| `naviback.smartRoutes.projects`                         | List of projects to fetch smart routes for                                                                                                                                                                                                                                   | `[]`                                        |
+| `naviback.smartRoutes.timeoutSeconds`                   | Timeout seconds for smart routes service                                                                                                                                                                                                                                     | `5`                                         |
+| `naviback.smartRoutes.fetchPeriodSeconds`               | Period in seconds between smart routes fetches                                                                                                                                                                                                                               | `30`                                        |
+| `naviback.smartRoutes.initialRetryIntervalMs`           | Initial retry interval for smart routes service in milliseconds                                                                                                                                                                                                              | `200`                                       |
+| `naviback.smartRoutes.maxRetryIntervalMs`               | Maximum retry interval for smart routes service in milliseconds                                                                                                                                                                                                              | `3200`                                      |
+| `naviback.smartRoutes.maxRetries`                       | Maximum number of retries                                                                                                                                                                                                                                                    | `5`                                         |
+| `naviback.smartRoutesThreadPoolSize`                    | Number of threads dedicated to smart routes                                                                                                                                                                                                                                  | `0`                                         |
 | `naviback.validation.enabled`                           | Enable validation responses and requests (used for internal tests)                                                                                                                                                                                                           | `false`                                     |
 | `naviback.validation.ctx.schemasFolder`                 | Path to folder with ctx JSON schemas                                                                                                                                                                                                                                         | `/usr/share/2gis/schemas/nsr_schemas`       |
 | `naviback.validation.ctx.requestSchemaName`             | Name of ctx request validation schema                                                                                                                                                                                                                                        | `CTXRequestModel.json`                      |

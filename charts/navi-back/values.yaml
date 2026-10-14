@@ -114,7 +114,7 @@ timezone: UTC
 image:
   repository: 2gis-on-premise/navi-back
   pullPolicy: IfNotPresent
-  tag: 7.61.0.2
+  tag: 7.62.0.5
 
 
 # @section Navi-Back application settings
@@ -238,6 +238,15 @@ image:
 # @param naviback.restrictions.updatePeriod Update period from restrictions server
 # @param naviback.restrictions.timeoutSeconds Timeout seconds for restrictions server
 # @extra naviback.restrictions.filename Filename of the restrictions.
+# @param naviback.smartRoutes.enabled Enable smart routes
+# @param naviback.smartRoutes.url URL of smart routes server
+# @param naviback.smartRoutes.projects List of projects to fetch smart routes for
+# @param naviback.smartRoutes.timeoutSeconds Timeout seconds for smart routes service
+# @param naviback.smartRoutes.fetchPeriodSeconds Period in seconds between smart routes fetches
+# @param naviback.smartRoutes.initialRetryIntervalMs Initial retry interval for smart routes service in milliseconds
+# @param naviback.smartRoutes.maxRetryIntervalMs Maximum retry interval for smart routes service in milliseconds
+# @param naviback.smartRoutes.maxRetries Maximum number of retries
+# @param naviback.smartRoutesThreadPoolSize Number of threads dedicated to smart routes
 # @param naviback.validation.enabled Enable validation responses and requests (used for internal tests)
 # @param naviback.validation.ctx.schemasFolder Path to folder with ctx JSON schemas
 # @param naviback.validation.ctx.requestSchemaName Name of ctx request validation schema
@@ -400,6 +409,16 @@ naviback:
     enabled: false
     updatePeriod: 60
     timeoutSeconds: 60
+  smartRoutes:
+    enabled: false
+    url: ''
+    projects: []
+    timeoutSeconds: 5
+    fetchPeriodSeconds: 30
+    initialRetryIntervalMs: 200
+    maxRetryIntervalMs: 3200
+    maxRetries: 5
+  smartRoutesThreadPoolSize: 0
   validation:
     enabled: false
     ctx:
