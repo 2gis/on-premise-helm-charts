@@ -97,6 +97,17 @@ Elasticsearch, ClickHouse, Cassandra.
    удобно шаблонизировать через `.Environment.Name`); дублировать ключи, которые shared values уже задают
    осмысленно (resources, feature-flags), не следует - иначе обновления платформы не будут доходить до окружения.
 
+   **Проброс set-записей в релиз (опционально).** У каждого релиза есть слот `set:`, наполняемый из двух
+   опциональных файлов: `$HELMFILE_VALUES/values/{group}/{svc}/_common.set.yaml.gotmpl` (общий для
+   окружений) и `values/{group}/{svc}/<env>.set.yaml.gotmpl` (per-env). Содержимое — helmfile set-записи:
+   `- name: <values-путь>` с `value:` / `values:` (список) / `file:` (путь к файлу — транслируется в helm
+   `--set-file`; у helmfile CLI флага --set-file нет). Дубликат `name` между слоями разрешён —
+   приоритет last-wins: `<env>.set` перебивает `_common.set`, CLI `--set` перебивает оба.
+   Пустые слоты → `set: null`, helmfile пропускает.
+   Пример: kafka-сертификаты для async-релизов (`navi-back/_common-async.set.yaml.gotmpl`,
+   `navi-async-matrix/_common.set.yaml.gotmpl` — union для matrix и navi-vrp; сами сертификаты в
+   `$HELMFILE_VALUES/../certs/shared-kafka`, в git не хранятся).
+
 3. Заполните все значения с комментарием `# TODO` в скопированных файлах. Секреты
    (пароли, токены, лицензионный ключ) - в `*.secrets.yaml` файлах. Перед деплоем эти файлы шифруются через sops;
    без шифрования - перенесите значения в открытый values и удалите secrets-файл.

@@ -23,6 +23,15 @@ releases:
 {{- if isFile $vp1 }}
       - {{ $vp1 }}
 {{- end }}
+    set:
+{{- $f := printf "%s/values/api-platform/navi-async-matrix/_common.set.yaml.gotmpl" .Values.valuesPath -}}
+{{- if isFile $f }}
+{{- tpl (readFile $f) . | fromYaml | toYaml | nindent 6 }}
+{{- end }}
+{{- $f2 := printf "%s/values/api-platform/navi-async-matrix/%s.set.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $f2 }}
+{{- tpl (readFile $f2) . | fromYaml | toYaml | nindent 6 }}
+{{- end }}
 {{- $secretsPathSolver := printf "%s/values/api-platform/navi-vrp-solver/%s.secrets.yaml" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $secretsPathSolver }}
     secrets:
@@ -61,6 +70,15 @@ releases:
 {{- $vp2 := printf "%s/values/api-platform/navi-vrp-task-manager/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $vp2 }}
       - {{ $vp2 }}
+{{- end }}
+    set:
+{{- $f := printf "%s/values/api-platform/navi-async-matrix/_common.set.yaml.gotmpl" .Values.valuesPath -}}
+{{- if isFile $f }}
+{{- tpl (readFile $f) . | fromYaml | toYaml | nindent 6 }}
+{{- end }}
+{{- $f2 := printf "%s/values/api-platform/navi-async-matrix/%s.set.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $f2 }}
+{{- tpl (readFile $f2) . | fromYaml | toYaml | nindent 6 }}
 {{- end }}
 {{- $secretsPathTaskManager := printf "%s/values/api-platform/navi-vrp-task-manager/%s.secrets.yaml" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $secretsPathTaskManager }}

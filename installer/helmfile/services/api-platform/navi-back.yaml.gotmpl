@@ -36,6 +36,7 @@ releases:
     chart: {{ $.Values.chartLocation }}/navi-back
     labels:
       group: api-platform
+      family: navi-back
       service: {{ $service.name }}
     set:
       - name: naviback.appRule
@@ -52,6 +53,14 @@ releases:
       - name: naviback.simpleNetwork.emergency
         value: true
       {{- end }}
+{{- $f := printf "%s/values/api-platform/navi-back/_common.set.yaml.gotmpl" $.Values.valuesPath -}}
+{{- if isFile $f }}
+{{- tpl (readFile $f) $ | fromYaml | toYaml | nindent 6 }}
+{{- end }}
+{{- $f2 := printf "%s/values/api-platform/navi-back/%s.set.yaml.gotmpl" $.Values.valuesPath $.Environment.Name -}}
+{{- if isFile $f2 }}
+{{- tpl (readFile $f2) $ | fromYaml | toYaml | nindent 6 }}
+{{- end }}
     values:
       - {{ $.Values.basePath }}/values/api-platform/navi-back.yaml.gotmpl
 {{- $dep := printf "%s/values/api-platform/navi-back/_common.yaml.gotmpl" $.Values.valuesPath -}}
@@ -87,10 +96,19 @@ releases:
     chart: {{ $.Values.chartLocation }}/navi-attractor
     labels:
       group: api-platform
+      family: navi-back
       service: {{ $service.name }}
     set:
       - name: attractor.appRule
         value: {{ $service.name }}
+{{- $f := printf "%s/values/api-platform/navi-back/_common.set.yaml.gotmpl" $.Values.valuesPath -}}
+{{- if isFile $f }}
+{{- tpl (readFile $f) $ | fromYaml | toYaml | nindent 6 }}
+{{- end }}
+{{- $f2 := printf "%s/values/api-platform/navi-back/%s.set.yaml.gotmpl" $.Values.valuesPath $.Environment.Name -}}
+{{- if isFile $f2 }}
+{{- tpl (readFile $f2) $ | fromYaml | toYaml | nindent 6 }}
+{{- end }}
     values:
       - {{ $.Values.basePath }}/values/api-platform/navi-attractor.yaml.gotmpl
 {{- $dep := printf "%s/values/api-platform/navi-attractor/_common.yaml.gotmpl" $.Values.valuesPath -}}
@@ -127,6 +145,7 @@ releases:
     chart: {{ $.Values.chartLocation }}/navi-splitter
     labels:
       group: api-platform
+      family: navi-back
       service: {{ $service.name }}
     set:
       - name: splitter.appRule
@@ -145,6 +164,14 @@ releases:
         value: http://{{ $.Values.releasePrefix }}navi-back-{{ $service.name }}/ctx/3.0
       - name: splitter.findPlatformUrl
         value: http://{{ $.Values.releasePrefix }}navi-back-{{ $service.name }}/find_platforms
+{{- $f := printf "%s/values/api-platform/navi-back/_common.set.yaml.gotmpl" $.Values.valuesPath -}}
+{{- if isFile $f }}
+{{- tpl (readFile $f) $ | fromYaml | toYaml | nindent 6 }}
+{{- end }}
+{{- $f2 := printf "%s/values/api-platform/navi-back/%s.set.yaml.gotmpl" $.Values.valuesPath $.Environment.Name -}}
+{{- if isFile $f2 }}
+{{- tpl (readFile $f2) $ | fromYaml | toYaml | nindent 6 }}
+{{- end }}
     values:
     - {{ $.Values.basePath }}/values/api-platform/navi-splitter.yaml.gotmpl
 {{- $dep := printf "%s/values/api-platform/navi-splitter/_common.yaml.gotmpl" $.Values.valuesPath -}}
@@ -190,6 +217,7 @@ releases:
     chart: {{ $.Values.chartLocation }}/navi-back
     labels:
       group: api-platform
+      family: navi-back
       service: {{ $service.name }}
     set:
       - name: naviback.appRule
@@ -241,6 +269,18 @@ releases:
       {{- end }}
       - name: kafka.distanceMatrix.cancelTopic
         value: navi.{{ $.Environment.Name }}.cancel.topic
+{{- $certsPath := printf "%s/values/api-platform/navi-back/_common-async.set.yaml.gotmpl" $.Values.valuesPath -}}
+{{- if isFile $certsPath }}
+{{- tpl (readFile $certsPath) $ | fromYaml | toYaml | nindent 6 }}
+{{- end }}
+{{- $f := printf "%s/values/api-platform/navi-back/_common.set.yaml.gotmpl" $.Values.valuesPath -}}
+{{- if isFile $f }}
+{{- tpl (readFile $f) $ | fromYaml | toYaml | nindent 6 }}
+{{- end }}
+{{- $f2 := printf "%s/values/api-platform/navi-back/%s.set.yaml.gotmpl" $.Values.valuesPath $.Environment.Name -}}
+{{- if isFile $f2 }}
+{{- tpl (readFile $f2) $ | fromYaml | toYaml | nindent 6 }}
+{{- end }}
     values:
       - {{ $.Values.basePath }}/values/api-platform/navi-back.yaml.gotmpl
 {{- $depAsyncBase := printf "%s/values/api-platform/navi-back/_common.yaml.gotmpl" $.Values.valuesPath -}}
@@ -278,6 +318,7 @@ releases:
     chart: {{ $.Values.chartLocation }}/navi-attractor
     labels:
       group: api-platform
+      family: navi-back
       service: {{ $service.name }}
     set:
       - name: attractor.appRule
@@ -306,6 +347,18 @@ releases:
         value: navi.{{ $.Environment.Name }}.attract.{{ $service.name | replace "-" "_" | replace "async_" "" }}.task.topic
       - name: kafka.distanceMatrix.cancelTopic
         value: navi.{{ $.Environment.Name }}.cancel.topic
+{{- $certsPath := printf "%s/values/api-platform/navi-back/_common-async.set.yaml.gotmpl" $.Values.valuesPath -}}
+{{- if isFile $certsPath }}
+{{- tpl (readFile $certsPath) $ | fromYaml | toYaml | nindent 6 }}
+{{- end }}
+{{- $f := printf "%s/values/api-platform/navi-back/_common.set.yaml.gotmpl" $.Values.valuesPath -}}
+{{- if isFile $f }}
+{{- tpl (readFile $f) $ | fromYaml | toYaml | nindent 6 }}
+{{- end }}
+{{- $f2 := printf "%s/values/api-platform/navi-back/%s.set.yaml.gotmpl" $.Values.valuesPath $.Environment.Name -}}
+{{- if isFile $f2 }}
+{{- tpl (readFile $f2) $ | fromYaml | toYaml | nindent 6 }}
+{{- end }}
     values:
       - {{ $.Values.basePath }}/values/api-platform/navi-attractor.yaml.gotmpl
 {{- $depAttrAsyncBase := printf "%s/values/api-platform/navi-attractor/_common.yaml.gotmpl" $.Values.valuesPath -}}

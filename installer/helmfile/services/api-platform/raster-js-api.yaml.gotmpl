@@ -29,6 +29,15 @@ releases:
 {{- if isFile $vp1 }}
       - {{ $vp1 }}
 {{- end }}
+    set:
+{{- $f := printf "%s/values/api-platform/raster-js-api/_common.set.yaml.gotmpl" .Values.valuesPath -}}
+{{- if isFile $f }}
+{{- tpl (readFile $f) . | fromYaml | toYaml | nindent 6 }}
+{{- end }}
+{{- $f2 := printf "%s/values/api-platform/raster-js-api/%s.set.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $f2 }}
+{{- tpl (readFile $f2) . | fromYaml | toYaml | nindent 6 }}
+{{- end }}
 {{- $secretsPath := printf "%s/values/api-platform/raster-js-api/%s.secrets.yaml" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $secretsPath }}
     secrets:

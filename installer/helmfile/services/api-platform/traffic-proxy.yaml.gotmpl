@@ -30,6 +30,15 @@ releases:
 {{- if isFile $vp1 }}
       - {{ $vp1 }}
 {{- end }}
+    set:
+{{- $f := printf "%s/values/api-platform/traffic-proxy/_common.set.yaml.gotmpl" .Values.valuesPath -}}
+{{- if isFile $f }}
+{{- tpl (readFile $f) . | fromYaml | toYaml | nindent 6 }}
+{{- end }}
+{{- $f2 := printf "%s/values/api-platform/traffic-proxy/%s.set.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $f2 }}
+{{- tpl (readFile $f2) . | fromYaml | toYaml | nindent 6 }}
+{{- end }}
 {{- $secretsPath := printf "%s/values/api-platform/traffic-proxy/map/%s.secrets.yaml" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $secretsPath }}
     secrets:
@@ -78,6 +87,15 @@ releases:
       - {{ $vp2 }}
 {{- end }}
 {{- $secretsPath2 := printf "%s/values/api-platform/traffic-proxy/navi/%s.secrets.yaml" .Values.valuesPath .Environment.Name -}}
+    set:
+{{- $f := printf "%s/values/api-platform/traffic-proxy/_common.set.yaml.gotmpl" .Values.valuesPath -}}
+{{- if isFile $f }}
+{{- tpl (readFile $f) . | fromYaml | toYaml | nindent 6 }}
+{{- end }}
+{{- $f2 := printf "%s/values/api-platform/traffic-proxy/%s.set.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $f2 }}
+{{- tpl (readFile $f2) . | fromYaml | toYaml | nindent 6 }}
+{{- end }}
 {{- if isFile $secretsPath2 }}
     secrets:
       - {{ $secretsPath2 }}

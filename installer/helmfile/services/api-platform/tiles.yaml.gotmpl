@@ -40,6 +40,15 @@ releases:
 {{- if isFile $vp3 }}
       - {{ $vp3 }}
 {{- end }}
+    set:
+{{- $f := printf "%s/values/api-platform/tiles/_common.set.yaml.gotmpl" .Values.valuesPath -}}
+{{- if isFile $f }}
+{{- tpl (readFile $f) . | fromYaml | toYaml | nindent 6 }}
+{{- end }}
+{{- $f2 := printf "%s/values/api-platform/tiles/%s.set.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $f2 }}
+{{- tpl (readFile $f2) . | fromYaml | toYaml | nindent 6 }}
+{{- end }}
 {{- $secretsPathMulti := printf "%s/values/api-platform/tiles/%s.secrets.yaml" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $secretsPathMulti }}
     secrets:
@@ -95,6 +104,15 @@ releases:
 {{- $vp6 := printf "%s/values/api-platform/tiles/raster/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $vp6 }}
       - {{ $vp6 }}
+{{- end }}
+    set:
+{{- $f := printf "%s/values/api-platform/tiles/_common.set.yaml.gotmpl" .Values.valuesPath -}}
+{{- if isFile $f }}
+{{- tpl (readFile $f) . | fromYaml | toYaml | nindent 6 }}
+{{- end }}
+{{- $f2 := printf "%s/values/api-platform/tiles/%s.set.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $f2 }}
+{{- tpl (readFile $f2) . | fromYaml | toYaml | nindent 6 }}
 {{- end }}
 {{- $secretsPathRaster := printf "%s/values/api-platform/tiles/%s.secrets.yaml" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $secretsPathRaster }}

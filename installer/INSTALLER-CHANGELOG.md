@@ -14,17 +14,17 @@
   the `environments:/values:` wrapper is no longer supported (migration: unwrap the file)
 
 #### Changes
-- Environment block is generated for the selected environment (`-e`): a new environment is added by
-  creating `$HELMFILE_VALUES/environments/<env>.yaml(.gotmpl)`, no helmfile edits; a missing env file
-  fails with the expected path
-- Shared environment layer (optional): `environments/_common.yaml.gotmpl` (below env-file priority)
-  and `environments/_common.secrets.yaml` (sops)
-- Per-service shared values slot: `values/{group}/{svc}/_common.yaml.gotmpl` is loaded for every release
-  of the service before the env file, if present (opt-out by absence); also wired into multi-release
-  services (tiles multi/raster, navi-back async chains)
-- Manifest pinning moved to the environment level: `dgctlManifests` map (core/api-platform/pro/citylens)
-  resolved centrally in `values/dgctl.yaml.gotmpl` by release name; per-service `dgctlStorage.manifest`
-  overrides are no longer needed (README, "Фиксация/переключение манифестов")
+- **Parallel deploys via helmfile layers** — layer directories merge into one state (releases
+  run in parallel), sequential tracks and service-directory references order dependencies
+  <!-- TODO: link to the layers/tracks documentation or example (planned in installer/README.md + example/) -->
+- **Universal per-release `set:` slots** — `values/{group}/{svc}/_common.set.yaml.gotmpl` +
+  `<env>.set.yaml.gotmpl`, arbitrary set-entries incl. `file:` → helm `--set-file`
+  (README, "Проброс set-записей в релиз")
+- Environments are file-driven: a new environment = a new `$HELMFILE_VALUES/environments/<env>.yaml(.gotmpl)`,
+  no helmfile edits (missing env file fails with the expected path)
+- Optional shared layers: `environments/_common.yaml.gotmpl`, `values/{group}/{svc}/_common.yaml.gotmpl`
+- Manifest pinning via `dgctlManifests` in the env file, resolved centrally in `values/dgctl.yaml.gotmpl`
+- navi-back releases carry a `family: navi-back` label (whole-family selector)
 
 ## [2026-10-12]
 

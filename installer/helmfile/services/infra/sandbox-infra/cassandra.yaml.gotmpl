@@ -27,6 +27,15 @@ releases:
 {{- if isFile $vp1 }}
       - {{ $vp1 }}
 {{- end }}
+    set:
+{{- $f := printf "%s/values/infra/cassandra/_common.set.yaml.gotmpl" .Values.valuesPath -}}
+{{- if isFile $f }}
+{{- tpl (readFile $f) . | fromYaml | toYaml | nindent 6 }}
+{{- end }}
+{{- $f2 := printf "%s/values/infra/cassandra/%s.set.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- if isFile $f2 }}
+{{- tpl (readFile $f2) . | fromYaml | toYaml | nindent 6 }}
+{{- end }}
 {{- $secretsPath := printf "%s/values/infra/cassandra/%s.secrets.yaml" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $secretsPath }}
     secrets:
