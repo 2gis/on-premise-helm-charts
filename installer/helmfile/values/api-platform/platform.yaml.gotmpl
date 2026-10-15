@@ -1,7 +1,7 @@
 {{- $protocol := ternary "https" "http" .Values.ingressTls }}
 ui:
   brand: 2gis
-  pages: "status,playground,map_styles,license"
+  pages: "status,playground,map_styles,license,update_manager"
   playgrounds: mapgl,geocoder,directions,static
   status:
     mapgl: "MapGL JS={{ $protocol }}://{{ .Values.mapglIngress }},Tiles API={{ $protocol }}://{{ .Values.tilesMultiIngress }}/healthcheck"
@@ -26,6 +26,9 @@ ui:
   mapStyles:
     url: "{{ $protocol }}://{{ .Values.stylesIngress }}"
     key: {{ .Values.key }}
+
+  updateManager:
+    url: http://update-manager
 
   static:
     url: "{{ $protocol }}://{{ .Values.staticmapsIngress }}"
