@@ -27,7 +27,10 @@ To learn more about configuration, architecture, and requirements, see the offic
 | `podLabels`                       | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                         | `{}`   |
 | `annotations`                     | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                   | `{}`   |
 | `labels`                          | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                             | `{}`   |
-| `podSecurityContext`              | Kubernetes [pod security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).              | `{}`   |
+| `podSecurityContext.runAsNonRoot` | Indicates that the container must run as a non-root user.                                                                   | `true`  |
+| `podSecurityContext.runAsUser`    | The User ID (UID) to run the entrypoint of the container process.                                                           | `10001` |
+| `podSecurityContext.runAsGroup`   | The primary Group ID (GID) for all processes in the container.                                                              | `10001` |
+| `podSecurityContext.fsGroup`      | A special supplemental group ID applied to all volumes mounted by the pod.                                                  | `10001` |
 | `securityContext`                 | Kubernetes [security context](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/).                  | `{}`   |
 | `nodeSelector`                    | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).         | `{}`   |
 | `tolerations`                     | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.           | `[]`   |
