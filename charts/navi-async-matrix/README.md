@@ -6,6 +6,7 @@ To learn more about configuration, architecture, and requirements, see the offic
 * [On-Premise API Platform Overview](https://docs.2gis.com/en/on-premise-api-platform/overview/summary)
 * [Navigation API Documentation](https://docs.2gis.com/en/on-premise-api-platform/architecture/navigation#async-distance-matrix-api)
 
+
 ## Values
 
 ### Docker Registry settings
@@ -58,7 +59,7 @@ To learn more about configuration, architecture, and requirements, see the offic
 | Name               | Description | Value                               |
 | ------------------ | ----------- | ----------------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-async-matrix` |
-| `image.tag`        | Tag         | `1.23.0`                            |
+| `image.tag`        | Tag         | `1.24.1`                            |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`                      |
 
 ### Service account settings
