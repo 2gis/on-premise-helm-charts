@@ -1189,9 +1189,11 @@ keycloakConfigCli:
 # and imported by Keycloak at startup. Disable to skip the import.
 #
 # @param realmImport.enabled Whether to enable the startup realm import (--import-realm)
+# @param realmImport.existingConfigmap Name of an existing ConfigMap with realm JSON files to mount at data/import instead of the built-in realms
 #
 realmImport:
   enabled: true
+  existingConfigmap: ""
 
 # Default init Containers
 #

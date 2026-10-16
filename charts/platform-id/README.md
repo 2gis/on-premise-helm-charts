@@ -14,10 +14,10 @@ This is modified [bitnami keycloak chart](https://github.com/bitnami/charts/tree
 
 Changes:
 
-* Added realms configuration via [.json files](./realms)
-* Added default user creation in configured realms
-* Added init container with extra themes
-* Removed bitmami`s warnings about insecure images
+* Uses the platform-id image (themes are built in) instead of the bitnami keycloak image
+* Realms are provisioned from [.json files](./realms) at container startup via `--import-realm` (seed-once: a realm is imported only if it does not exist yet); a custom realm set can be supplied via `realmImport.existingConfigmap`
+* Added default user creation in configured realms (`defaultUser` values, disabled by default)
+* Removed bitnami's warnings about insecure images
 * Changed some default values
 
 ## Values
@@ -349,6 +349,7 @@ Changes:
 | Name                                                                                       | Description                                                                                                                                                                                                                                                                                                                        | Value            |
 | ------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
 | `realmImport.enabled`                                                                      | Whether to enable the startup realm import (--import-realm)                                                                                                                                                                                                                                                                        | `true`           |
+| `realmImport.existingConfigmap`                                                            | Name of an existing ConfigMap with realm JSON files to mount at data/import instead of the built-in realms                                                                                                                                                                                                                         | `""`             |
 | `defaultInitContainers.prepareWriteDirs.enabled`                                           | Enable init container that copies writable directories to an empty dir                                                                                                                                                                                                                                                             | `true`           |
 | `defaultInitContainers.prepareWriteDirs.containerSecurityContext.enabled`                  | Enabled "prepare-write-dirs" init-containers' Security Context                                                                                                                                                                                                                                                                     | `true`           |
 | `defaultInitContainers.prepareWriteDirs.containerSecurityContext.seLinuxOptions`           | Set SELinux options in "prepare-write-dirs" init-containers                                                                                                                                                                                                                                                                        | `{}`             |

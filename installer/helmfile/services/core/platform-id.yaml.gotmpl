@@ -4,14 +4,14 @@ bases:
 
 ---
 releases:
-  - name: keycloak
-    chart: {{ .Values.chartLocation }}/keycloak
+  - name: platform-id
+    chart: {{ .Values.chartLocation }}/platform-id
     version: {{ .Values.versionCore }}
     namespace: {{ .Values.namespace  }}
     kubeContext: {{ .Values.kubeContext }}
     labels:
       group: core
-      service: keycloak
+      service: platform-id
     values:
       - {{ .Values.basePath }}/values/dgctl.yaml.gotmpl
       - {{ .Values.basePath }}/values/ingressAnnotations.yaml.gotmpl
@@ -19,12 +19,12 @@ releases:
 {{- if isFile $vp1 }}
       - {{ $vp1 }}
 {{- end }}
-      - {{ .Values.basePath }}/values/core/keycloak.yaml.gotmpl
-{{- $vp2 := printf "%s/values/core/keycloak/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+      - {{ .Values.basePath }}/values/core/platform-id.yaml.gotmpl
+{{- $vp2 := printf "%s/values/core/platform-id/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $vp2 }}
       - {{ $vp2 }}
 {{- end }}
-{{- $secretsPath := printf "%s/values/core/keycloak/%s.secrets.yaml" .Values.valuesPath .Environment.Name -}}
+{{- $secretsPath := printf "%s/values/core/platform-id/%s.secrets.yaml" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $secretsPath }}
     secrets:
       - {{ $secretsPath }}
@@ -39,7 +39,7 @@ releases:
         - "{{ .Values.namespace }}"
         - "{{`{{ .Release.Name }}`}}"
         - '{{`{{ if .Event.Error }}failure{{ end }}`}}'
-{{- $hooksPath := printf "%s/hooks/core/keycloak/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- $hooksPath := printf "%s/hooks/core/platform-id/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $hooksPath }}
 {{- readFile $hooksPath | fromYaml | toYaml | nindent 4 }}
 {{- end }}

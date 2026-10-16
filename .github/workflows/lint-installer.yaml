@@ -42,7 +42,7 @@ jobs:
             if [ "$chart" = "gis-platform" ]; then continue; fi
             actual=$(grep -m1 '^version:' "$chart_path" | awk '{print $2}')
             case "$chart" in
-              keys|license|keycloak)       expected="$VERSION_CORE" ;;
+              keys|license|platform-id)       expected="$VERSION_CORE" ;;
               pro-api|pro-ui)              expected="$VERSION_PRO" ;;
               citylens|citylens-routes-ui) expected="$VERSION_CITYLENS" ;;
               *)                           expected="$VERSION_PLATFORM" ;;

@@ -16,11 +16,11 @@ ingress:
   {{- else }}
     {}
   {{- end }}
-  hostname: {{ .Values.keycloakIngress }}
+  hostname: {{ .Values.platformIdIngress }}
   {{- if .Values.ingressTls }}
   extraTls:
   - hosts:
-    - {{ .Values.keycloakIngress }}
+    - {{ .Values.platformIdIngress }}
     secretName: {{ .Values.tlsSecret }}
   {{- end }}
 
@@ -39,24 +39,6 @@ resources:
   requests:
     cpu: 100m
     memory: 2Gi
-
-keycloakConfigCli:
-  resources:
-    requests:
-      cpu: 500m
-      memory: 256Mi
-    limits:
-      cpu: 1
-      memory: 512Mi
-
-keycloakThemes:
-  resources:
-    requests:
-      cpu: 100m
-      memory: 100M
-    limits:
-      cpu: 200m
-      memory: 200M
 
 defaultInitContainers:
   prepareWriteDirs:

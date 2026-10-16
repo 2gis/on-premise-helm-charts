@@ -328,7 +328,7 @@ spec:
         {{- if .Values.realmImport.enabled }}
         - name: realm-import
           configMap:
-            name: {{ printf "%s-realm-import" (include "common.names.fullname" .) }}
+            name: {{ default (printf "%s-realm-import" (include "common.names.fullname" .)) .Values.realmImport.existingConfigmap }}
         {{- end }}
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" .) | nindent 8 }}
