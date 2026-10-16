@@ -38,6 +38,7 @@ To learn more about configuration, architecture, and requirements, see the offic
 
 | Name                                          | Description                                                                                                                                                                                              | Value           |
 | --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
+| `admin.enabled`                               | Enable the Keys administration UI. For key administration, use the Platform Manager functionality.                                                                                                       | `true`          |
 | `admin.replicas`                              | A replica count for the pod.                                                                                                                                                                             | `1`             |
 | `admin.revisionHistoryLimit`                  | Revision history limit (used for [rolling back](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-to-a-previous-revision) a deployment).                                | `3`             |
 | `admin.strategy.type`                         | Type of Kubernetes deployment. Can be `Recreate` or `RollingUpdate`.                                                                                                                                     | `RollingUpdate` |
@@ -156,25 +157,38 @@ To learn more about configuration, architecture, and requirements, see the offic
 
 ### Import service settings
 
-| Name                  | Description                                                                                                         | Value     |
-| --------------------- | ------------------------------------------------------------------------------------------------------------------- | --------- |
-| `import.logLevel`     | Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.                           | `warning` |
-| `import.nodeSelector` | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector). | `{}`      |
-| `import.tolerations`  | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.   | `[]`      |
+| Name                    | Description                                                                                                         | Value     |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------- | --------- |
+| `import.logLevel`       | Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.                           | `warning` |
+| `import.annotations`    | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).           | `{}`      |
+| `import.labels`         | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                     | `{}`      |
+| `import.podAnnotations` | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).       | `{}`      |
+| `import.podLabels`      | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                 | `{}`      |
+| `import.nodeSelector`   | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector). | `{}`      |
+| `import.tolerations`    | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.   | `[]`      |
 
 ### Bootstrap service settings
 
-| Name                     | Description                                                                                                                                                      | Value  |
-| ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `bootstrap.logLevel`     | Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`. Use `info` or lower so the created API key is printed in the job logs. | `info` |
-| `bootstrap.nodeSelector` | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                              | `{}`   |
-| `bootstrap.tolerations`  | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                | `[]`   |
+| Name                       | Description                                                                                                                                                      | Value   |
+| -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `bootstrap.enabled`        | Enable the bootstrap job that creates the default partner, subscription, and API key during the first deployment.                                                | `false` |
+| `bootstrap.logLevel`       | Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`. Use `info` or lower so the created API key is printed in the job logs. | `info`  |
+| `bootstrap.annotations`    | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                        | `{}`    |
+| `bootstrap.labels`         | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                  | `{}`    |
+| `bootstrap.podAnnotations` | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                    | `{}`    |
+| `bootstrap.podLabels`      | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                              | `{}`    |
+| `bootstrap.nodeSelector`   | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                              | `{}`    |
+| `bootstrap.tolerations`    | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                | `[]`    |
 
 ### Migrate service settings
 
 | Name                          | Description                                                                                                         | Value     |
 | ----------------------------- | ------------------------------------------------------------------------------------------------------------------- | --------- |
 | `migrate.logLevel`            | Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.                           | `warning` |
+| `migrate.annotations`         | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).           | `{}`      |
+| `migrate.labels`              | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                     | `{}`      |
+| `migrate.podAnnotations`      | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).       | `{}`      |
+| `migrate.podLabels`           | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                 | `{}`      |
 | `migrate.initialDelaySeconds` | Delay in seconds at the service startup.                                                                            | `0`       |
 | `migrate.nodeSelector`        | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector). | `{}`      |
 | `migrate.tolerations`         | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.   | `[]`      |
@@ -225,6 +239,10 @@ To learn more about configuration, architecture, and requirements, see the offic
 | `dispatcher.cleaner.cron.successfulJobsHistoryLimit` | Specifies the number of successful finished jobs to keep. See [jobs history limits](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#jobs-history-limits).                           | `3`             |
 | `dispatcher.cleaner.cron.failedJobsHistoryLimit`     | Specifies the number of failed finished jobs to keep. See [jobs history limits](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#jobs-history-limits).                               | `3`             |
 | `dispatcher.cleaner.cron.suspend`                    | You can suspend execution of Jobs for a CronJob, by setting the field to true. See [schedule suspension](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#schedule-suspension).      | `false`         |
+| `dispatcher.cleaner.annotations`                     | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                                                | `{}`            |
+| `dispatcher.cleaner.labels`                          | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                                                          | `{}`            |
+| `dispatcher.cleaner.podAnnotations`                  | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                                                            | `{}`            |
+| `dispatcher.cleaner.podLabels`                       | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                                                      | `{}`            |
 | `dispatcher.cleaner.nodeSelector`                    | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                                                                      | `{}`            |
 
 ### Counter settings

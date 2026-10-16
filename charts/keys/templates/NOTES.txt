@@ -1,5 +1,12 @@
 Keys service is released as "{{ .Release.Name }}" at "{{ .Release.Namespace }}" namespace.
 
+{{- if .Values.admin.enabled }}
+#################################################################################
+######   WARNING: The Keys administration UI has been deprecated!          #####
+######            Use Platform Manager to work with keys.                  #####
+#################################################################################
+{{- end }}
+
 {{ if .Values.admin.ingress.enabled }}
 You can check admin using browser
 {{- range $host := .Values.admin.ingress.hosts }}

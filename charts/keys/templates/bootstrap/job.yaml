@@ -1,15 +1,22 @@
+{{- if .Values.bootstrap.enabled }}
 apiVersion: batch/v1
 kind: Job
 metadata:
   name: {{ include "keys.bootstrap.name" . }}
   labels:
     {{- include "keys.bootstrap.labels" . | nindent 4 }}
+    {{- with .Values.bootstrap.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
   annotations:
-    "helm.sh/hook": post-install,post-upgrade
-    # hook-succeeded is omitted on purpose so the pod stays and the API key
-    # can be read from `kubectl logs job/<release>-bootstrap`.
+    "helm.sh/hook": post-install
     "helm.sh/hook-delete-policy": before-hook-creation
     "helm.sh/hook-weight": "10"
+    # hook-succeeded is omitted on purpose so the pod stays and the API key
+    # can be read from `kubectl logs job/<release>-bootstrap`.
+    {{- with .Values.bootstrap.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
 spec:
   backoffLimit: 0
   template:
@@ -17,6 +24,13 @@ spec:
       name: {{ include "keys.bootstrap.name" . }}
       labels:
         {{- include "keys.bootstrap.labels" . | nindent 8 }}
+        {{- with .Values.bootstrap.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- with .Values.bootstrap.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
     spec:
       restartPolicy: Never
       {{- with include "keys.psql.initTLS" . }}
@@ -59,4 +73,5 @@ spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
+{{- end }}
       {{- end }}

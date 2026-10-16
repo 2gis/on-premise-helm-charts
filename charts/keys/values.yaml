@@ -39,6 +39,9 @@ backend:
 # @section Admin service settings
 
 admin:
+  # @param admin.enabled Enable the Keys administration UI. For key administration, use the Platform Manager functionality.
+  enabled: true
+
   image:
     repository: 2gis-on-premise/keys-ui
     tag: 1.9.1
@@ -357,6 +360,15 @@ import:
   # @param import.logLevel Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.
   logLevel: warning
 
+  # @param import.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param import.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+  # @param import.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param import.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+  annotations: {}
+  labels: {}
+  podAnnotations: {}
+  podLabels: {}
+
   resources:
     requests:
       cpu: 10m
@@ -376,8 +388,20 @@ import:
 
 bootstrap:
 
+  # @param bootstrap.enabled Enable the bootstrap job that creates the default partner, subscription, and API key during the first deployment.
+  enabled: false
+
   # @param bootstrap.logLevel Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`. Use `info` or lower so the created API key is printed in the job logs.
   logLevel: info
+
+  # @param bootstrap.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param bootstrap.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+  # @param bootstrap.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param bootstrap.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+  annotations: {}
+  labels: {}
+  podAnnotations: {}
+  podLabels: {}
 
   resources:
     requests:
@@ -400,6 +424,15 @@ migrate:
 
   # @param migrate.logLevel Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.
   logLevel: warning
+
+  # @param migrate.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param migrate.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+  # @param migrate.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param migrate.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+  annotations: {}
+  labels: {}
+  podAnnotations: {}
+  podLabels: {}
 
   # @param migrate.initialDelaySeconds Delay in seconds at the service startup.
 
@@ -571,6 +604,15 @@ dispatcher:
       successfulJobsHistoryLimit: 3
       failedJobsHistoryLimit: 3
       suspend: false
+
+    # @param dispatcher.cleaner.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+    # @param dispatcher.cleaner.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+    # @param dispatcher.cleaner.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+    # @param dispatcher.cleaner.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+    annotations: {}
+    labels: {}
+    podAnnotations: {}
+    podLabels: {}
 
     # @param dispatcher.cleaner.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
 

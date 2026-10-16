@@ -78,3 +78,9 @@ kafka:
     topic: 'stat.{{ .Environment.Name }}.type.401'
     groupId: '{{ .Environment.Name }}-keys-counter'
     clientId: '{{ .Environment.Name }}-keys-counter'
+
+bootstrap:
+  enabled: true
+
+admin:
+  enabled: false
