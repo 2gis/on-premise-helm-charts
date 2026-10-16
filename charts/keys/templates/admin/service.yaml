@@ -1,3 +1,4 @@
+{{- if .Values.admin.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -19,3 +20,4 @@ spec:
       targetPort: http
   selector:
     {{- include "keys.admin.selectorLabels" . | nindent 4 }}
+{{- end }}

@@ -1,5 +1,12 @@
 Keys service is released as "{{ .Release.Name }}" at "{{ .Release.Namespace }}" namespace.
 
+{{- if .Values.admin.enabled }}
+#################################################################################
+######   WARNING: The Keys administration UI has been deprecated!          #####
+######            Use Platform Manager to work with keys.                  #####
+#################################################################################
+{{- end }}
+
 {{ if .Values.admin.ingress.enabled }}
 You can check admin using browser
 {{- range $host := .Values.admin.ingress.hosts }}
@@ -17,3 +24,8 @@ You can check service using curl
 {{- else }}
 You can publish api service in your preferred way (ingress, balancer, etc).
 {{ end }}
+
+After install, a default partner, unlimited subscription and API key are created if the keys table is empty.
+Read the key from the bootstrap job logs:
+
+  kubectl logs job/{{ include "keys.bootstrap.name" . }}

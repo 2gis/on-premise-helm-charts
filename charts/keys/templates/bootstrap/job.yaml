@@ -1,0 +1,77 @@
+{{- if .Values.bootstrap.enabled }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "keys.bootstrap.name" . }}
+  labels:
+    {{- include "keys.bootstrap.labels" . | nindent 4 }}
+    {{- with .Values.bootstrap.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-delete-policy": before-hook-creation
+    "helm.sh/hook-weight": "10"
+    # hook-succeeded is omitted on purpose so the pod stays and the API key
+    # can be read from `kubectl logs job/<release>-bootstrap`.
+    {{- with .Values.bootstrap.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  backoffLimit: 0
+  template:
+    metadata:
+      name: {{ include "keys.bootstrap.name" . }}
+      labels:
+        {{- include "keys.bootstrap.labels" . | nindent 8 }}
+        {{- with .Values.bootstrap.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- with .Values.bootstrap.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    spec:
+      restartPolicy: Never
+      {{- with include "keys.psql.initTLS" . }}
+      initContainers:
+      {{- . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: bootstrap
+          image: {{ required "A valid .Values.dgctlDockerRegistry entry required" .Values.dgctlDockerRegistry }}/{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}
+          imagePullPolicy: {{ .Values.imagePullPolicy }}
+          command: [ "keysctl", "bootstrap", "--log-format", "text" ]
+          resources:
+            {{- toYaml .Values.bootstrap.resources | nindent 12 }}
+          env:
+            {{- include "keys.env.bootstrap" . | nindent 12 }}
+            {{- include "keys.env.featureFlags" . | nindent 12 }}
+            {{- include "keys.env.db.deploys" . | nindent 12 }}
+            {{- include "keys.env.auditEnvMetadata" . | nindent 12 }}
+            {{- if .Values.customCAs.bundle }}
+            {{- include "keys.env.custom.ca.path" . | nindent 12 }}
+            {{- end }}
+          volumeMounts:
+          {{- if .Values.customCAs.bundle }}
+          {{- include "keys.custom.ca.volumeMounts" . | nindent 12 }}
+          {{- end }}
+          {{- include "keys.psql.volumeMount" . | nindent 12 }}
+      volumes:
+      {{- if .Values.customCAs.bundle }}
+      {{- include "keys.custom.ca.deploys.volumes" . | nindent 8 }}
+      {{- end }}
+      {{- include "keys.psql.volume" . | nindent 8 }}
+      {{- with .Values.bootstrap.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.bootstrap.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+{{- end }}
+      {{- end }}
