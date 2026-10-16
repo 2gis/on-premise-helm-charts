@@ -9,6 +9,7 @@ releases:
     version: {{ .Values.versionCore }}
     namespace: {{ .Values.namespace  }}
     kubeContext: {{ .Values.kubeContext }}
+    timeout: 900
     labels:
       group: core
       service: platform-id

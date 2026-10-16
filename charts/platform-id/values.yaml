@@ -375,11 +375,11 @@ readinessProbe:
 # @param startupProbe.successThreshold Success threshold for startupProbe
 #
 startupProbe:
-  enabled: false
+  enabled: true
   initialDelaySeconds: 30
   periodSeconds: 5
   timeoutSeconds: 1
-  failureThreshold: 10
+  failureThreshold: 60
   successThreshold: 1
 # @param customLivenessProbe Custom Liveness probes for Keycloak
 #
