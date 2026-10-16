@@ -88,8 +88,8 @@ usePasswordFiles: true
 # @param image.debug Enable Keycloak image debug mode
 #
 image:
-  repository: 2gis-on-premise/keycloak
-  tag: 26.3.3
+  repository: 2gis-on-premise/platform-id
+  tag: 1.5.0
   # Specify a imagePullPolicy
   # ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   #
@@ -375,11 +375,11 @@ readinessProbe:
 # @param startupProbe.successThreshold Success threshold for startupProbe
 #
 startupProbe:
-  enabled: false
+  enabled: true
   initialDelaySeconds: 30
   periodSeconds: 5
   timeoutSeconds: 1
-  failureThreshold: 10
+  failureThreshold: 60
   successThreshold: 1
 # @param customLivenessProbe Custom Liveness probes for Keycloak
 #
@@ -985,9 +985,10 @@ metrics:
 keycloakConfigCli:
   # @param keycloakConfigCli.enabled Whether to enable keycloak-config-cli job
   #
-  enabled: true
+  enabled: false
   # Bitnami keycloak-config-cli image
   # ref: https://hub.docker.com/r/bitnami/keycloak-config-cli/tags/
+  # @param keycloakConfigCli.image.registry keycloak-config-cli container image registry
   # @param keycloakConfigCli.image.repository keycloak-config-cli container image repository
   # @param keycloakConfigCli.image.tag keycloak-config-cli container image tag
   # @param keycloakConfigCli.image.digest keycloak-config-cli container image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
@@ -995,7 +996,8 @@ keycloakConfigCli:
   # @param keycloakConfigCli.image.pullSecrets keycloak-config-cli container image pull secrets
   #
   image:
-    repository: 2gis-on-premise/keycloak-config-cli
+    registry: docker.io
+    repository: bitnami/keycloak-config-cli
     tag: 6.4.0-debian-12-r11
     digest: ""
     # Specify a imagePullPolicy
@@ -1031,7 +1033,7 @@ keycloakConfigCli:
   # @param keycloakConfigCli.resourcesPreset Set container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if keycloakConfigCli.resources is set (keycloakConfigCli.resources is recommended for production).
   # More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
   #
-  resourcesPreset: "nano"
+  resourcesPreset: "small"
   # @param keycloakConfigCli.resources Set container requests and limits for different resources like CPU or memory (essential for production workloads)
   # Example:
   # resources:
@@ -1153,11 +1155,6 @@ keycloakConfigCli:
   #         containerPort: 1234
   #
   sidecars: []
-  # @param keycloakConfigCli.configurationDir keycloak-config-cli dir with realms configuration
-  # NOTE: have more priority than keycloakConfigCli.configuration value
-  # Example:
-  # configuration: "configs"
-  configurationDir: "realms"
   # @param keycloakConfigCli.configuration keycloak-config-cli realms configuration
   # NOTE: nil keys will be considered files to import locally
   # Example:
@@ -1185,68 +1182,18 @@ keycloakConfigCli:
     enabled: false
     seconds: 600
 
-# @section keycloak-themes parameters
+# @section Realm import parameters
 
-# Configuration for themes
+# Configuration for the startup realm import (--import-realm).
+# The realm JSON files from the realms/ directory are rendered into a ConfigMap
+# and imported by Keycloak at startup. Disable to skip the import.
 #
-keycloakThemes:
-  # @param keycloakThemes.enabled Whether to enable import themes
-  #
+# @param realmImport.enabled Whether to enable the startup realm import (--import-realm)
+# @param realmImport.existingConfigmap Name of an existing ConfigMap with realm JSON files to mount at data/import instead of the built-in realms
+#
+realmImport:
   enabled: true
-  # Bitnami keycloak-themes image
-  # ref: https://hub.docker.com/r/bitnami/keycloak-config-cli/tags/
-  # @param keycloakThemes.image.repository keycloak-themes container image repository
-  # @param keycloakThemes.image.tag keycloak-themes container image tag
-  # @param keycloakThemes.image.pullPolicy keycloak-themes container image pull policy
-  image:
-    repository: 2gis-on-premise/keycloak-themes
-    tag: 0.0.9
-    pullPolicy: IfNotPresent
-  # @param keycloakThemes.resources Set Keycloak themes init container requests and limits for different resources like CPU or memory (essential for production workloads)
-  # E.g:
-  # resources:
-  #   requests:
-  #     cpu: 50m
-  #     memory: 32Mi
-  #   limits:
-  #     cpu: 100m
-  #     memory: 64Mi
-  #
-  resources: {}
-  # Keycloak themes init container resource requests and limits
-  # ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
-  # @param keycloakThemes.resourcesPreset Set Keycloak themes init container resources according to one common preset (allowed values: none, nano, micro, small, medium, large, xlarge, 2xlarge). This is ignored if defaultInitContainers.prepareWriteDirs.resources is set (defaultInitContainers.prepareWriteDirs.resources is recommended for production).
-  # More information: https://github.com/bitnami/charts/blob/main/bitnami/common/templates/_resources.tpl#L15
-  #
-  resourcesPreset: "nano"
-  # Configure themes init-container Security Context
-  # ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  # @param keycloakThemes.containerSecurityContext.enabled Enabled themes init-containers' Security Context
-  # @param keycloakThemes.containerSecurityContext.seLinuxOptions [object,nullable] Set SELinux options in themes init-containers
-  # @param keycloakThemes.containerSecurityContext.runAsUser Set runAsUser in themes init-containers' Security Context
-  # @param keycloakThemes.containerSecurityContext.runAsGroup Set runAsGroup in themes init-containers' Security Context
-  # @param keycloakThemes.containerSecurityContext.runAsNonRoot Set runAsNonRoot in themes init-containers' Security Context
-  # @param keycloakThemes.containerSecurityContext.privileged Set privileged in themes init-containers' Security Context
-  # @param keycloakThemes.containerSecurityContext.readOnlyRootFilesystem Set readOnlyRootFilesystem in themes init-containers' Security Context
-  # @param keycloakThemes.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation in themes init-containers' Security Context
-  # @param keycloakThemes.containerSecurityContext.capabilities.drop List of capabilities to be dropped in themes init-containers
-  # @param keycloakThemes.containerSecurityContext.seccompProfile.type Set seccomp profile in themes init-containers
-  #
-  containerSecurityContext:
-    enabled: true
-    seLinuxOptions: {}
-    runAsUser: 1001
-    runAsGroup: 1001
-    runAsNonRoot: true
-    privileged: false
-    readOnlyRootFilesystem: true
-    allowPrivilegeEscalation: false
-    capabilities:
-      drop: ["ALL"]
-    seccompProfile:
-      type: "RuntimeDefault"
-
-# @section Default init container parameters
+  existingConfigmap: ""
 
 # Default init Containers
 #

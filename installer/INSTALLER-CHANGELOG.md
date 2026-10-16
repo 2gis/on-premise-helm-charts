@@ -1,3 +1,19 @@
+## [UNRELEASED]
+
+#### Supported versions
+
+| Component    | Version |
+| ------------ | ------- |
+| core         | 2.12.0  |
+| api-platform | 2.59.0  |
+| pro          | 2.6.1   |
+| citylens     | 2.3.0   |
+
+#### Changes
+- Keycloak service replaced by Platform ID — details in [Core Breaking-Changes 2.12.0](../changelogs/core/CORE-Breaking-Changes.md#2120)
+- Installer values key `keycloakIngress` renamed to `platformIdIngress` — update environment values that override it (an old override would be silently ignored)
+- Installer values: removed `keycloakThemes` and `keycloakConfigCli` resource sections
+
 ## [2026-10-12]
 
 #### Supported versions
