@@ -80,7 +80,7 @@ jobs:
           GROUP_CHARTS["PRO"]="pro-api pro-ui"
           GROUP_CHARTS["Citylens"]="citylens citylens-routes-ui"
           GROUP_CHARTS["Evergis"]="gis-platform"
-          GROUP_CHARTS["Core"]="keys license platform-id"
+          GROUP_CHARTS["Core"]="keys license platform-id platform styles-api update-manager"
 
           # Универсальная зависимость
           UNIVERSAL_DEPENDENCY="generic-chart"

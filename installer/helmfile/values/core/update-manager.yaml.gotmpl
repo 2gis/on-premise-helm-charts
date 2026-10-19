@@ -1,0 +1,84 @@
+api:
+  logLevel: warning
+  datagateway:
+    apiKey: {{ .Values.key }}
+  keys:
+    url: http://keys-api
+  components:
+    core:
+      version: {{ .Values.versionCore }}
+      charts:
+        keys:
+          releases:
+            - name: 'Keys API'
+              releaseName: keys
+              services:
+                - keys
+    api-platform:
+      version: {{ .Values.versionPlatform }}
+      charts:
+        tiles-api:
+          enabled: true
+          releases:
+            - name: 'Map Tiles API'
+              releaseName: tiles-api
+              services:
+                - tiles-api-mapbox
+                - tiles-api-mobile-sdk
+                - tiles-api-vector
+            - name: 'Raster Tiles API'
+              releaseName: tiles-api-raster
+              services:
+                - tiles-api-raster
+        search-api:
+          enabled: true
+          releases:
+            - name: 'Search API'
+              releaseName: search-api
+              services:
+                - search
+        catalog-api:
+          enabled: true
+          releases:
+            - name: 'Catalog API'
+              releaseName: catalog-api
+              services:
+                - catalog
+        navi-castle:
+          enabled: true
+          releases:
+            - name: 'Navigation API'
+              releaseName: navi-castle
+              services:
+                - navi
+    pro:
+      version: {{ .Values.versionPro }}
+      charts:
+        pro-ui:
+          enabled: true
+          releases:
+            - name: 'Pro UI'
+              releaseName: pro-ui
+              services:
+                - pro-ui
+        pro-api:
+          enabled: true
+          releases:
+            - name: 'Pro API'
+              releaseName: pro-api
+              services:
+                - pro
+    citylens:
+      version: {{ .Values.versionCitylens }}
+      charts:
+        citylens:
+          enabled: true
+          releases:
+            - name: 'CityLens API'
+              releaseName: citylens
+              services:
+                - citylens
+
+postgres:
+  name: update_manager
+  username: update_manager

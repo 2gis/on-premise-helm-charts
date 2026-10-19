@@ -9,9 +9,10 @@ helmfiles:
 - path: {{ .Values.basePath }}/services/core/keys.yaml.gotmpl
 - path: {{ .Values.basePath }}/services/api-platform/stat-receiver.yaml.gotmpl
 - path: {{ .Values.basePath }}/services/api-platform/stat-api.yaml.gotmpl
-- path: {{ .Values.basePath }}/services/api-platform/platform.yaml.gotmpl
+- path: {{ .Values.basePath }}/services/core/platform.yaml.gotmpl
 - path: {{ .Values.basePath }}/services/api-platform/traffic-proxy.yaml.gotmpl
-- path: {{ .Values.basePath }}/services/api-platform/styles.yaml.gotmpl
+- path: {{ .Values.basePath }}/services/core/styles.yaml.gotmpl
+- path: {{ .Values.basePath }}/services/core/update-manager.yaml.gotmpl
 - path: {{ .Values.basePath }}/services/api-platform/mapgl.yaml.gotmpl
 - path: {{ .Values.basePath }}/services/api-platform/search.yaml.gotmpl
 # Search API v8 (опционально): альтернативный бэкенд для Catalog API.

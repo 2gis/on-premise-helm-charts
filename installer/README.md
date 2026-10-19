@@ -122,7 +122,7 @@ Elasticsearch, ClickHouse, Cassandra.
    > ```
    > Env-values стоят позже auto_values в списке `values:` релиза и перебивают его
    > (helmfile merge: позже в списке = приоритет). Карта сервисов по компонентам:
-   > core - keys, license; api-platform - catalog, search, search-api-v8, tiles, styles;
+   > core - keys, license, platform-id, platform, styles-api, update-manager; api-platform - catalog, search, search-api-v8, tiles;
    > citylens - citylens, citylens-routes-ui; pro - pro-api, pro-ui.
 
    **Изолированный контур.** Если хост не имеет одновременного доступа к публичной сети, реестру Docker и S3-хранилищу, используйте двуххостовую схему: загрузите артефакты через `dgctl pull` на хосте с доступом в интернет (с `storage.type: fs`), перенесите директорию на внутренний хост и выполните `dgctl restore`. Подробнее: [Fetch Installation Artifacts](https://docs.2gis.com/on-premise-api-platform/installation#fetch-artifacts).
@@ -290,6 +290,9 @@ helmfile -e <env> -f $HELMFILE_VALUES/deploy/<env>.yaml.gotmpl apply --selector 
 | License | Управление лицензиями 2GIS | S3 | - |
 | Keys | Управление API-ключами | PostgreSQL, S3, Redis (опц.), Kafka (опц.) | Platform ID (опц.) |
 | Platform ID | Аутентификация пользователей (OIDC) | PostgreSQL | - |
+| Platform Manager | Веб-интерфейс и API-платформа | PostgreSQL, S3, Redis | Platform ID (OIDC) |
+| Styles API | Хранение и отдача стилей карт | S3 | - |
+| Update Manager | Управление обновлениями манифестов | PostgreSQL, S3 | Keys |
 
 Установите группу `core` (keys и platform-id не зависят от лицензии):
 
