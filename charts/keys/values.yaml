@@ -398,10 +398,12 @@ bootstrap:
   # @param bootstrap.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
   # @param bootstrap.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
   # @param bootstrap.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+  # @param bootstrap.ttlSecondsAfterFinished Time in seconds to retain the finished bootstrap Job before automatic cleanup.
   annotations: {}
   labels: {}
   podAnnotations: {}
   podLabels: {}
+  ttlSecondsAfterFinished: 86400
 
   resources:
     requests:

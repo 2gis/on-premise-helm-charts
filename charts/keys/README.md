@@ -169,16 +169,17 @@ To learn more about configuration, architecture, and requirements, see the offic
 
 ### Bootstrap service settings
 
-| Name                       | Description                                                                                                                                                      | Value   |
-| -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `bootstrap.enabled`        | Enable the bootstrap job that creates the default partner, subscription, and API key during the first deployment.                                                | `false` |
-| `bootstrap.logLevel`       | Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`. Use `info` or lower so the created API key is printed in the job logs. | `info`  |
-| `bootstrap.annotations`    | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                        | `{}`    |
-| `bootstrap.labels`         | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                  | `{}`    |
-| `bootstrap.podAnnotations` | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                    | `{}`    |
-| `bootstrap.podLabels`      | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                              | `{}`    |
-| `bootstrap.nodeSelector`   | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                              | `{}`    |
-| `bootstrap.tolerations`    | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                | `[]`    |
+| Name                                | Description                                                                                                                                                      | Value   |
+| ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `bootstrap.enabled`                 | Enable the bootstrap job that creates the default partner, subscription, and API key during the first deployment.                                                | `false` |
+| `bootstrap.logLevel`                | Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`. Use `info` or lower so the created API key is printed in the job logs. | `info`  |
+| `bootstrap.annotations`             | Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                        | `{}`    |
+| `bootstrap.labels`                  | Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                                  | `{}`    |
+| `bootstrap.podAnnotations`          | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).                                                    | `{}`    |
+| `bootstrap.podLabels`               | Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).                                                              | `{}`    |
+| `bootstrap.ttlSecondsAfterFinished` | Time in seconds to retain the finished bootstrap Job before automatic cleanup.                                                                                   | `86400` |
+| `bootstrap.nodeSelector`            | Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).                                              | `{}`    |
+| `bootstrap.tolerations`             | Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.                                                | `[]`    |
 
 ### Migrate service settings
 
