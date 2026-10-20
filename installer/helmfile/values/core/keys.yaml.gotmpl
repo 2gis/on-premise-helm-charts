@@ -23,6 +23,7 @@ api:
     {{- end }}
 
 admin:
+  enabled: false
   logLevel: warning   # Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.
   resources:
     limits:
@@ -81,6 +82,3 @@ kafka:
 
 bootstrap:
   enabled: true
-
-admin:
-  enabled: false
