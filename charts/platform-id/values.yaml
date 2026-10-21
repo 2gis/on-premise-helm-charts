@@ -1315,3 +1315,8 @@ defaultUser:
   password: ''
   firstName: ''
   lastName: ''
+
+# @section Platform realm client secret
+# @param platformClient.secret Secret of the platform-client client in the Platform realm. Must match ui.oauth.clientSecret of the platform chart.
+platformClient:
+  secret: ''

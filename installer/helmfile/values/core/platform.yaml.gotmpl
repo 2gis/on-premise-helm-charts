@@ -1,7 +1,16 @@
 {{- $protocol := ternary "https" "http" .Values.ingressTls }}
 ui:
   brand: 2gis
-  pages: "status,playground,map_styles,license,update_manager"
+  pages: "profile,signup,users,keys,license"
+  oauth:
+    wellknownUrl: {{ $protocol }}://{{ .Values.platformIdIngress }}/realms/Platform/.well-known/openid-configuration
+    clientId: platform-client
+    clientSecret: ''
+    scope: ''
+    codeUrl: {{ $protocol }}://{{ .Values.platformIngress }}/api/auth/code
+    safeHosts: '.*'
+    secure: {{ .Values.ingressTls }}
+  bffSecure: {{ .Values.ingressTls }}
   playgrounds: mapgl,geocoder,directions,static
   status:
     mapgl: "MapGL JS={{ $protocol }}://{{ .Values.mapglIngress }},Tiles API={{ $protocol }}://{{ .Values.tilesMultiIngress }}/healthcheck"

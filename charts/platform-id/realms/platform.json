@@ -13,6 +13,9 @@
       "enabled": true,
       "description": "Platform application client",
       "clientAuthenticatorType": "client-secret",
+{{- if .Values.platformClient.secret }}
+      "secret": "{{ .Values.platformClient.secret }}",
+{{- end }}
       "redirectUris": ["*"],
       "webOrigins": ["*"],
       "standardFlowEnabled": true,

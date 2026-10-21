@@ -17,6 +17,7 @@ Changes:
 * Uses the platform-id image (themes are built in) instead of the bitnami keycloak image
 * Realms are provisioned from [.json files](./realms) at container startup via `--import-realm` (seed-once: a realm is imported only if it does not exist yet); a custom realm set can be supplied via `realmImport.existingConfigmap`
 * Added default user creation in configured realms (`defaultUser` values, disabled by default)
+* Added `platformClient.secret` to set a static secret for the platform-client client in the Platform realm (optional, empty by default)
 * Removed bitnami's warnings about insecure images
 * Changed some default values
 
@@ -398,3 +399,9 @@ Changes:
 | `defaultUser.password`  | Default user password                       | `""`    |
 | `defaultUser.firstName` | Default user first name                     | `""`    |
 | `defaultUser.lastName`  | Default user last name                      | `""`    |
+
+### Platform realm client secret
+
+| Name                    | Description                                                                                                         | Value |
+| ----------------------- | ------------------------------------------------------------------------------------------------------------------- | ----- |
+| `platformClient.secret` | Secret of the platform-client client in the Platform realm. Must match ui.oauth.clientSecret of the platform chart. | `""`  |
