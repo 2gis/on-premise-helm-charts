@@ -41,6 +41,9 @@ spec:
         {{- if and .Values.configuration (not .Values.existingConfigmap) }}
         checksum/configuration: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
         {{- end }}
+        {{- if and .Values.realmImport.enabled (not .Values.realmImport.existingConfigmap) }}
+        checksum/realm-import: {{ include (print $.Template.BasePath "/realm-import-configmap.yaml") . | sha256sum }}
+        {{- end }}
         {{- if .Values.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" .) | nindent 8 }}
         {{- end }}
