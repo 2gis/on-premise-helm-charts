@@ -27,12 +27,12 @@ ui:
     url: "{{ $protocol }}://{{ .Values.stylesIngress }}"
     key: {{ .Values.key }}
 
+  updateManager:
+    url: http://update-manager
+
   static:
     url: "{{ $protocol }}://{{ .Values.staticmapsIngress }}"
     key: {{ .Values.key }}
-
-  updateManager:
-    url: http://update-manager
 
   pro:
     entryPageUrl: {{ $protocol }}://{{ .Values.proUiIngress }}
