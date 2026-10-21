@@ -9,10 +9,17 @@
 | pro          | 2.6.1   |
 | citylens     | 2.3.0   |
 
+#### Breaking changes
+- Installer values key `keycloakIngress` renamed to `platformIdIngress` — update environment values that override it (an old override would be silently ignored).
+- Core group extended: `--selector group=core` now installs 6 releases (license, platform-id, keys, platform,
+  styles-api, update-manager) instead of 2 — check selectors, namespaces and resource quotas in automation.
+- Keys admin ingress is no longer deployed (`keysAdminIngress` value removed) — manage keys via Platform Manager.
+
 #### Changes
-- Keycloak service replaced by Platform ID — details in [Core Breaking-Changes 2.12.0](../changelogs/core/CORE-Breaking-Changes.md#2120)
-- Installer values key `keycloakIngress` renamed to `platformIdIngress` — update environment values that override it (an old override would be silently ignored)
-- Installer values: removed `keycloakThemes` and `keycloakConfigCli` resource sections
+- **Keycloak replaced by Platform ID** — details in [Core Breaking-Changes 2.12.0](../changelogs/core/CORE-Breaking-Changes.md#2120).
+- **Mandatory OIDC**: installer defaults ship OIDC enabled for keys (`api.oidc`) and OAuth for Platform Manager
+  (`ui.oauth`) pointing to the platform-id realm `Platform`. For a third-party SSO provider, reconfigure
+  `api.oidc.url` and `ui.oauth.wellknownUrl`/`clientId`/`clientSecret` and disable the platform-id release.
 
 ## [2026-10-12]
 

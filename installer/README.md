@@ -502,7 +502,7 @@ kubernetes-ready пример API-платформы (infra + core + api-platfor
        > Про фиксацию/переключение манифестов (закрепить конкретный набор или откатиться) -
        > см. шаг 4 раздела [Подготовка конфигурации](#подготовка-конфигурации).
 
-5. **Развёртывание core** (License, Platform ID, Keys) - образы из `kind-registry:5000`:
+5. **Развёртывание core** (License, Platform ID, Keys, Platform Manager) - образы из `kind-registry:5000`:
    ```bash
    helmfile -e sandbox -f installer/helmfile/example/deploy/sandbox.yaml.gotmpl sync \
      --selector group=core
@@ -513,7 +513,7 @@ kubernetes-ready пример API-платформы (infra + core + api-platfor
      [получите лицензию](https://docs.2gis.com/on-premise-api-platform/installation#get-license)
      и повторите деплой.
 
-6. **Развёртывание API-платформы** (22 релиза: search, tiles, catalog, navi, styles, mapgl, …):
+6. **Развёртывание API-платформы** (search, tiles, catalog, navi, mapgl, …):
    ```bash
    helmfile -e sandbox -f installer/helmfile/example/deploy/sandbox.yaml.gotmpl apply \
      --selector group=api-platform \
