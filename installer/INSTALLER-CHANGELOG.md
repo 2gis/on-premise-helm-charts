@@ -1,4 +1,4 @@
-## [UNRELEASED]
+## [2026-10-22]
 
 #### Supported versions
 
@@ -20,6 +20,7 @@
 - **Mandatory OIDC**: installer defaults ship OIDC enabled for keys (`api.oidc`) and OAuth for Platform Manager
   (`ui.oauth`) pointing to the platform-id realm `Platform`. For a third-party SSO provider, reconfigure
   `api.oidc.url` and `ui.oauth.wellknownUrl`/`clientId`/`clientSecret` and disable the platform-id release.
+- Bumped supported core version to 2.12.0
 
 ## [2026-10-12]
 

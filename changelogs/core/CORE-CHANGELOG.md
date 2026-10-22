@@ -1,3 +1,26 @@
+## [2.12.0] (2026-10-22)
+#### [Breaking-Changes](CORE-Breaking-Changes.md#2120)
+#### Images
+```
+keycloak
+	- keycloak-config-cli:6.4.0-debian-12-r11
+	- keycloak-themes:0.0.9
+	- keycloak:26.3.3
+keys
+	- keys-backend:1.180.1
+	+ keys-backend:1.182.0
+platform
+	+ platform-ui:1.50.0
+platform-id
+	+ platform-id:1.5.0
+styles-api
+	+ styles-api:0.49.0
+update-manager
+	+ dgctl:3.7.0
+	+ update-manager:3.7.0
+```
+[Full list of image versions](https://github.com/2gis/on-premise-helm-charts/blob/Core-2.12.0/changelogs/core/core_image_versions.txt)
+
 ## [2.11.1] (2026-09-17)
 
 #### Images
