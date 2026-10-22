@@ -90,6 +90,12 @@
     }
   ],
   "roles": {
+    "realm": [
+      {
+        "name": "permAdmin",
+        "description": "Роль для входа в Permissions UI (Tasks UI) через AuthProdiver"
+      }
+    ],
     "client": {
       "pro-client": [
         {
@@ -193,6 +199,23 @@
             "claim.name": "realm_access.roles",
             "jsonType.label": "String",
             "multivalued": "true"
+          }
+        },
+        {
+          "name": "groups",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-realm-role-mapper",
+          "consentRequired": false,
+          "config": {
+            "introspection.token.claim": "true",
+            "multivalued": "true",
+            "userinfo.token.claim": "true",
+            "user.attribute": "foo",
+            "id.token.claim": "true",
+            "lightweight.claim": "false",
+            "access.token.claim": "true",
+            "claim.name": "roles",
+            "jsonType.label": "String"
           }
         }
       ]
