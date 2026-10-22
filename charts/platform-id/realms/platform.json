@@ -14,7 +14,7 @@
       "description": "Platform application client",
       "clientAuthenticatorType": "client-secret",
 {{- if .Values.platformClient.secret }}
-      "secret": "{{ .Values.platformClient.secret }}",
+      "secret": {{ .Values.platformClient.secret | toJson }},
 {{- end }}
       "redirectUris": ["*"],
       "webOrigins": ["*"],
