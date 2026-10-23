@@ -15,6 +15,11 @@
 - Existing realms keep their current login theme; fresh installations get the SPA theme `platform-id-2gis`
   (login by email).
 
+### keys
+
+- New `bootstrap.enabled` flag (default: `false`). When enabled, a bootstrap Job creates the default partner, an unlimited subscription, and an API key during the first deployment if the keys table is empty. The created API key is printed in the Job logs — set `bootstrap.logLevel` to `info` or lower and read it via `kubectl logs job/<bootstrap-job>`. The finished Job is retained for `bootstrap.ttlSecondsAfterFinished` seconds (default: `86400`) before automatic cleanup.
+- The Keys administration UI is deprecated. Use Platform Manager to work with keys. The new `admin.enabled` flag (default: `true`) allows disabling the UI.
+
 ## [2.8.0]
 
 ### keys
