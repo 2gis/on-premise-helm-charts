@@ -4,10 +4,16 @@ metadata:
   name: {{ include "keys.import.name" . }}
   labels:
     {{- include "keys.import.labels" . | nindent 4 }}
+    {{- with .Values.import.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
   annotations:
     "helm.sh/hook": pre-install,pre-upgrade
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
     "helm.sh/hook-weight": "10"
+    {{- with .Values.import.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
 spec:
   backoffLimit: 0
   template:
@@ -15,6 +21,13 @@ spec:
       name: {{ include "keys.import.name" . }}
       labels:
         {{- include "keys.import.labels" . | nindent 8 }}
+        {{- with .Values.import.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- with .Values.import.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
     spec:
       restartPolicy: Never
       {{- with include "keys.psql.initTLS" . }}
@@ -30,6 +43,7 @@ spec:
             {{- toYaml .Values.import.resources | nindent 12 }}
           env:
             {{- include "keys.env.import" . | nindent 12 }}
+            {{- include "keys.env.featureFlags" . | nindent 12 }}
             {{- include "keys.env.db.jobs" . | nindent 12 }}
             {{- include "keys.env.predef" . | nindent 12 }}
             {{- include "keys.env.dgctlStorage" . | nindent 12 }}

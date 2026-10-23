@@ -7,10 +7,10 @@ releases:
   - name: platform
     chart: {{ .Values.chartLocation }}/platform
     namespace: {{ .Values.namespace  }}
-    version: {{ .Values.versionPlatform }}
+    version: {{ .Values.versionCore }}
     kubeContext: {{ .Values.kubeContext }}
     labels:
-      group: api-platform
+      group: core
       service: platform
     values:
       - {{ .Values.basePath }}/values/dgctl.yaml.gotmpl
@@ -19,12 +19,12 @@ releases:
 {{- if isFile $vp1 }}
       - {{ $vp1 }}
 {{- end }}
-      - {{ .Values.basePath }}/values/api-platform/platform.yaml.gotmpl
-{{- $vp2 := printf "%s/values/api-platform/platform/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+      - {{ .Values.basePath }}/values/core/platform.yaml.gotmpl
+{{- $vp2 := printf "%s/values/core/platform/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $vp2 }}
       - {{ $vp2 }}
 {{- end }}
-{{- $secretsPath := printf "%s/values/api-platform/platform/%s.secrets.yaml" .Values.valuesPath .Environment.Name -}}
+{{- $secretsPath := printf "%s/values/core/platform/%s.secrets.yaml" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $secretsPath }}
     secrets:
       - {{ $secretsPath }}
@@ -39,7 +39,7 @@ releases:
         - "{{ .Values.namespace }}"
         - "{{`{{ .Release.Name }}`}}"
         - '{{`{{ if .Event.Error }}failure{{ end }}`}}'
-{{- $hooksPath := printf "%s/hooks/api-platform/platform/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- $hooksPath := printf "%s/hooks/core/platform/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $hooksPath }}
 {{- readFile $hooksPath | fromYaml | toYaml | nindent 4 }}
 {{- end }}

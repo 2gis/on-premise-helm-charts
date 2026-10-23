@@ -1,14 +1,18 @@
 api:
   replicas: 1
-  oidc:
-    enabled: false # TODO для citylens и platform
-    enableSinglePartnerMode: true # TODO
-    enableExternalProvider: true # TODO
-    url: https://{{ .Values.keycloakIngress }}/realms/Platform # TODO
-    issuerUrl: '' # TODO
-    retryCount: 3
-    timeout: 3s
-    defaultPartner:
-      id: 1 # TODO
-      name: 'Test Default Partner' # TODO
-      role: admin # TODO
+  # OIDC включён по умолчанию в `installer/helmfile/values/core/keys.yaml.gotmpl` (platform-id).
+  # Для стороннего OIDC-провайдера (SSO) раскомментируйте и настройте блок ниже,
+  # затем отключите релиз platform-id в `example/deploy/staging.yaml.gotmpl`
+  # и обновите `ui.oauth.wellknownUrl` в values платформы.
+  # oidc:
+  #   enabled: true
+  #   enableSinglePartnerMode: true
+  #   enableExternalProvider: true
+  #   url: https://<sso-provider-host>/realms/<realm> # TODO: URL вашего OIDC-провайдера
+  #   issuerUrl: ''
+  #   retryCount: 3
+  #   timeout: 3s
+  #   defaultPartner:
+  #     id: 1
+  #     name: 'Partner Name'
+  #     role: admin
