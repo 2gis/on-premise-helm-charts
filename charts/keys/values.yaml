@@ -34,11 +34,14 @@ featureFlags:
 backend:
   image:
     repository: 2gis-on-premise/keys-backend
-    tag: 1.180.1
+    tag: 1.182.0
 
 # @section Admin service settings
 
 admin:
+  # @param admin.enabled Enable the Keys administration UI. For key administration, use the Platform Manager functionality.
+  enabled: true
+
   image:
     repository: 2gis-on-premise/keys-ui
     tag: 1.9.1
@@ -357,6 +360,15 @@ import:
   # @param import.logLevel Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.
   logLevel: warning
 
+  # @param import.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param import.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+  # @param import.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param import.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+  annotations: {}
+  labels: {}
+  podAnnotations: {}
+  podLabels: {}
+
   resources:
     requests:
       cpu: 10m
@@ -372,12 +384,57 @@ import:
   # @param import.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
   tolerations: []
 
+# @section Bootstrap service settings
+
+bootstrap:
+
+  # @param bootstrap.enabled Enable the bootstrap job that creates the default partner, subscription, and API key during the first deployment.
+  enabled: false
+
+  # @param bootstrap.logLevel Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`. Use `info` or lower so the created API key is printed in the job logs.
+  logLevel: info
+
+  # @param bootstrap.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param bootstrap.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+  # @param bootstrap.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param bootstrap.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+  # @param bootstrap.ttlSecondsAfterFinished Time in seconds to retain the finished bootstrap Job before automatic cleanup.
+  annotations: {}
+  labels: {}
+  podAnnotations: {}
+  podLabels: {}
+  ttlSecondsAfterFinished: 86400
+
+  resources:
+    requests:
+      cpu: 10m
+      memory: 32Mi
+    limits:
+      cpu: 100m
+      memory: 64Mi
+
+  # @param bootstrap.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
+
+  nodeSelector: {}
+
+  # @param bootstrap.tolerations Kubernetes [tolerations](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/) settings.
+  tolerations: []
+
 # @section Migrate service settings
 
 migrate:
 
   # @param migrate.logLevel Log level for the service. Can be: `trace`, `debug`, `info`, `warning`, `error`, `fatal`.
   logLevel: warning
+
+  # @param migrate.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param migrate.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+  # @param migrate.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+  # @param migrate.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+  annotations: {}
+  labels: {}
+  podAnnotations: {}
+  podLabels: {}
 
   # @param migrate.initialDelaySeconds Delay in seconds at the service startup.
 
@@ -549,6 +606,15 @@ dispatcher:
       successfulJobsHistoryLimit: 3
       failedJobsHistoryLimit: 3
       suspend: false
+
+    # @param dispatcher.cleaner.annotations Kubernetes [annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+    # @param dispatcher.cleaner.labels Kubernetes [labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+    # @param dispatcher.cleaner.podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/).
+    # @param dispatcher.cleaner.podLabels Kubernetes [pod labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/).
+    annotations: {}
+    labels: {}
+    podAnnotations: {}
+    podLabels: {}
 
     # @param dispatcher.cleaner.nodeSelector Kubernetes [node selectors](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector).
 
@@ -903,6 +969,12 @@ dgctlStorage:
 # @param import.resources.requests.memory A memory request.
 # @param import.resources.limits.cpu A CPU limit.
 # @param import.resources.limits.memory A memory limit.
+
+# @extra bootstrap.resources **Limits for the Bootstrap service**
+# @param bootstrap.resources.requests.cpu A CPU request.
+# @param bootstrap.resources.requests.memory A memory request.
+# @param bootstrap.resources.limits.cpu A CPU limit.
+# @param bootstrap.resources.limits.memory A memory limit.
 
 # @extra migrate.resources **Limits for the Migrate service**
 # @param migrate.resources.requests.cpu A CPU request.
