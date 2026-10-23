@@ -237,8 +237,9 @@ image:
 # @param naviback.restrictions.url URL of real time restrictions server. More priority than naviback.castleUrl
 # @param naviback.restrictions.updatePeriod Update period from restrictions server
 # @param naviback.restrictions.timeoutSeconds Timeout seconds for restrictions server
+# @param naviback.restrictions.indexName Restrictions index name. Possible values: `restrictions_index` and `default`. Use `default` to get custom restrictions from the Restrictions API service
 # @extra naviback.restrictions.filename Filename of the restrictions.
-# @param naviback.smartRoutes.enabled Enable smart routes
+# @param naviback.smartRoutes.enabled Enable smart routes. Leave with defaults, FOR FUTURE RELEASE
 # @param naviback.smartRoutes.url URL of smart routes server
 # @param naviback.smartRoutes.projects List of projects to fetch smart routes for
 # @param naviback.smartRoutes.timeoutSeconds Timeout seconds for smart routes service
@@ -365,7 +366,7 @@ naviback:
       enabled: false
       proxy: false
     smatrix:
-      enabled: false
+      enabled: true
       proxy: false
     snImport:
       enabled: false
@@ -409,6 +410,7 @@ naviback:
     enabled: false
     updatePeriod: 60
     timeoutSeconds: 60
+    indexName: restrictions_index
   smartRoutes:
     enabled: false
     url: ''

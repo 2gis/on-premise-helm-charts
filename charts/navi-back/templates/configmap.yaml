@@ -370,7 +370,7 @@ data:
         },
         {{- if .Values.naviback.restrictions.enabled }}
         "restrictions": {
-          "index_name": "restrictions_index",
+          "index_name": {{ .Values.naviback.restrictions.indexName | quote }},
           "update_period": 0,
           "nodes": [
             "{{ include "config.setRestrictionUrl" $ }}/"
