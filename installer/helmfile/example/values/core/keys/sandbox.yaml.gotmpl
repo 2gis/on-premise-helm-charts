@@ -1,17 +1,7 @@
-# Keys override for the `sandbox` (kind) environment - in-cluster PostgreSQL, Kafka, Redis, Keycloak OIDC.
+# Keys override for the `sandbox` (kind) environment - in-cluster PostgreSQL, Kafka, Redis.
+# OIDC settings are inherited from the default values (mandatory OIDC via platform-id).
 api:
   replicas: 1
-  oidc:
-    enabled: true
-    enableSinglePartnerMode: true
-    enableExternalProvider: true
-    url: http://{{ .Values.keycloakIngress }}/realms/Platform
-    retryCount: 3
-    timeout: 3s
-    defaultPartner:
-      id: 1
-      name: 'Test Default Partner'
-      role: admin
   resources:
     requests:
       cpu: 10m
@@ -19,15 +9,6 @@ api:
     limits:
       cpu: 100m
       memory: 128Mi
-
-admin:
-  resources:
-    requests:
-      cpu: 10m
-      memory: 140Mi
-    limits:
-      cpu: 100m
-      memory: 192Mi
 
 serviceApi:
   resources:
