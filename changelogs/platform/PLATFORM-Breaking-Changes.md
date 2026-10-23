@@ -1,5 +1,11 @@
 # Platform Breaking-Changes
 
+## [2.60.0]
+
+### navi-back
+
+- Added `naviback.restrictions.indexName`. Possible values are `restrictions_index` and `default`. Use `default` to get custom restrictions from the Restrictions API service.
+
 ## [2.59.0]
 
 ### raster-js-api
