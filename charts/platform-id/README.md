@@ -399,9 +399,3 @@ Changes:
 | `defaultUser.password`  | Default user password                       | `""`    |
 | `defaultUser.firstName` | Default user first name                     | `""`    |
 | `defaultUser.lastName`  | Default user last name                      | `""`    |
-
-### Platform realm client secret
-
-| Name                    | Description                                                                                                         | Value |
-| ----------------------- | ------------------------------------------------------------------------------------------------------------------- | ----- |
-| `platformClient.secret` | Secret of the platform-client client in the Platform realm. Must match ui.oauth.clientSecret of the platform chart. | `""`  |
