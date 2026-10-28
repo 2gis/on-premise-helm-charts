@@ -1,5 +1,20 @@
 # Core Breaking-Changes
 
+## [2.12.0]
+
+### platform-id
+
+- Keycloak service replaced by Platform ID: chart and helm release `keycloak` renamed to `platform-id`.
+- The `keycloak-config-cli` job is replaced with the native startup import (`kc.sh start --import-realm`).
+  Realms are provisioned from the chart (`charts/platform-id/realms/`) on the FIRST deployment only (seed-once).
+  On upgrade, realm configuration changes from the chart are NO LONGER applied to existing realms —
+  apply changes via the admin API / admin console.
+- Images `keycloak`, `keycloak-config-cli`, `keycloak-themes` are no longer required — a single `platform-id` image is used.
+- The `keycloakThemes` values section is removed. The `keycloakConfigCli.enabled` parameter now controls the
+  vanilla config-cli job with an empty configuration.
+- Existing realms keep their current login theme; fresh installations get the SPA theme `platform-id-2gis`
+  (login by email).
+
 ## [2.8.0]
 
 ### keys

@@ -41,6 +41,9 @@ spec:
         {{- if and .Values.configuration (not .Values.existingConfigmap) }}
         checksum/configuration: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
         {{- end }}
+        {{- if and .Values.realmImport.enabled (not .Values.realmImport.existingConfigmap) }}
+        checksum/realm-import: {{ include (print $.Template.BasePath "/realm-import-configmap.yaml") . | sha256sum }}
+        {{- end }}
         {{- if .Values.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" .) | nindent 8 }}
         {{- end }}
@@ -91,28 +94,6 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
       {{- end }}
       initContainers:
-      {{- if .Values.keycloakThemes.enabled }}
-        - name: theme-provider
-          image: {{ template "keycloak.keycloakThemes.image" . }}
-          imagePullPolicy: {{ .Values.keycloakThemes.image.pullPolicy}}
-          {{- if .Values.keycloakThemes.containerSecurityContext.enabled }}
-          securityContext: {{- include "common.compatibility.renderSecurityContext" (dict "secContext" .Values.keycloakThemes.containerSecurityContext "context" .) | nindent 12 }}
-          {{- end }}
-          command:
-            - sh
-          args:
-            - -c
-            - cp -R /themes/* /opt/bitnami/keycloak/themes/
-          volumeMounts:
-            - name: empty-dir
-              mountPath: /opt/bitnami/keycloak/themes
-              subPath: app-themes-dir
-          {{- if .Values.keycloakThemes.resources }}
-          resources: {{- toYaml .Values.keycloakThemes.resources | nindent 12 }}
-          {{- else if ne .Values.keycloakThemes.resourcesPreset "none" }}
-          resources: {{- include "common.resources.preset" (dict "type" .Values.keycloakThemes.resourcesPreset) | nindent 12 }}
-          {{- end }}
-      {{- end }}
       {{- if or .Values.defaultInitContainers.prepareWriteDirs.enabled .Values.initContainers }}
         {{- if .Values.defaultInitContainers.prepareWriteDirs.enabled }}
           {{- include "keycloak.defaultInitContainers.prepareWriteDirs" . | nindent 8 }}
@@ -291,6 +272,11 @@ spec:
             - name: custom-init-scripts
               mountPath: /docker-entrypoint-initdb.d
             {{- end }}
+            {{- if .Values.realmImport.enabled }}
+            - name: realm-import
+              mountPath: /opt/bitnami/keycloak/data/import
+              readOnly: true
+            {{- end }}
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" .) | nindent 12 }}
             {{- end }}
@@ -341,6 +327,11 @@ spec:
         - name: custom-init-scripts
           configMap:
             name: {{ include "keycloak.initdbScripts.configmapName" . }}
+        {{- end }}
+        {{- if .Values.realmImport.enabled }}
+        - name: realm-import
+          configMap:
+            name: {{ default (printf "%s-realm-import" (include "common.names.fullname" .)) .Values.realmImport.existingConfigmap }}
         {{- end }}
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" .) | nindent 8 }}
