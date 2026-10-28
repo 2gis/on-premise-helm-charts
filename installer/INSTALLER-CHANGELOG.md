@@ -1,3 +1,54 @@
+## [UNRELEASED]
+
+#### Supported versions
+
+| Component    | Version |
+| ------------ | ------- |
+| core         | 2.12.0  |
+| api-platform | 2.59.0  |
+| pro          | 2.6.1   |
+| citylens     | 2.3.0   |
+
+#### Breaking changes
+- Installer values key `keycloakIngress` renamed to `platformIdIngress` — update environment values that override it (an old override would be silently ignored).
+- Core group extended: `--selector group=core` now installs 6 releases (license, platform-id, keys, platform,
+  styles-api, update-manager) instead of 2 — check selectors, namespaces and resource quotas in automation.
+- Keys admin ingress is no longer deployed (`keysAdminIngress` value removed) — manage keys via Platform Manager.
+
+#### Changes
+- **Keycloak replaced by Platform ID** — details in [Core Breaking-Changes 2.12.0](../changelogs/core/CORE-Breaking-Changes.md#2120).
+- **Mandatory OIDC**: installer defaults ship OIDC enabled for keys (`api.oidc`) and OAuth for Platform Manager
+  (`ui.oauth`) pointing to the platform-id realm `Platform`. For a third-party SSO provider, reconfigure
+  `api.oidc.url` and `ui.oauth.wellknownUrl`/`clientId`/`clientSecret` and disable the platform-id release.
+
+## [2026-10-12]
+
+#### Supported versions
+
+| Component    | Version |
+| ------------ | ------- |
+| core         | 2.11.1  |
+| api-platform | 2.59.0  |
+| pro          | 2.6.1   |
+| citylens     | 2.3.0   |
+
+#### Changes
+- Bumped supported pro version to 2.6.1
+
+## [2026-10-06]
+
+#### Supported versions
+
+| Component    | Version |
+| ------------ | ------- |
+| core         | 2.11.1  |
+| api-platform | 2.59.0  |
+| pro          | 2.6.0   |
+| citylens     | 2.3.0   |
+
+#### Changes
+- Bumped supported pro version to 2.6.0
+
 ## [2026-09-29]
 
 #### Supported versions

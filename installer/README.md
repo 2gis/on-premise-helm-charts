@@ -24,7 +24,7 @@
 
 ## Внешние зависимости
 
-Для работы сервисов требуются внешние зависимости: PostgreSQL, Kafka, Redis, S3, Keycloak,
+Для работы сервисов требуются внешние зависимости: PostgreSQL, Kafka, Redis, S3, Platform ID (OIDC),
 Elasticsearch, ClickHouse, Cassandra.
 
 Способы размещения внешних зависимостей:
@@ -44,7 +44,7 @@ Elasticsearch, ClickHouse, Cassandra.
 |-----------|-----------|--------|
 | Core | `versionCore` | 2.11.1 |
 | API Platform | `versionPlatform` | 2.59.0 |
-| Pro | `versionPro` | 2.5.0 |
+| Pro | `versionPro` | 2.6.1 |
 | Citylens | `versionCitylens` | 2.3.0 |
 
 **Обязательные компоненты:** Core + API Platform
@@ -122,7 +122,7 @@ Elasticsearch, ClickHouse, Cassandra.
    > ```
    > Env-values стоят позже auto_values в списке `values:` релиза и перебивают его
    > (helmfile merge: позже в списке = приоритет). Карта сервисов по компонентам:
-   > core - keys, license; api-platform - catalog, search, search-api-v8, tiles, styles;
+   > core - keys, license, platform-id, platform, styles-api, update-manager; api-platform - catalog, search, search-api-v8, tiles;
    > citylens - citylens, citylens-routes-ui; pro - pro-api, pro-ui.
 
    **Изолированный контур.** Если хост не имеет одновременного доступа к публичной сети, реестру Docker и S3-хранилищу, используйте двуххостовую схему: загрузите артефакты через `dgctl pull` на хосте с доступом в интернет (с `storage.type: fs`), перенесите директорию на внутренний хост и выполните `dgctl restore`. Подробнее: [Fetch Installation Artifacts](https://docs.2gis.com/on-premise-api-platform/installation#fetch-artifacts).
@@ -261,7 +261,7 @@ export HELM_SECRETS_BACKEND=vals   # vals >= 0.22.0 в PATH; для Vault - VAUL
 ## Развёртывание
 
 > **Важно.** Перед установкой убедитесь, что все внешние зависимости развёрнуты и доступны
-> (PostgreSQL, S3, Kafka, Redis, Elasticsearch, ClickHouse, Cassandra, Keycloak) либо развёрните группу `infra`
+> (PostgreSQL, S3, Kafka, Redis, Elasticsearch, ClickHouse, Cassandra, Platform ID (OIDC)) либо развёрните группу `infra`
 > встроенными чартами `services/infra/` (для тестовых окружений).
 
 ### Фильтрация по сервисам и группам
@@ -288,10 +288,13 @@ helmfile -e <env> -f $HELMFILE_VALUES/deploy/<env>.yaml.gotmpl apply --selector 
 | Сервис | Описание | Инфраструктура | Сервисы |
 |---|---|---|---|
 | License | Управление лицензиями 2GIS | S3 | - |
-| Keys | Управление API-ключами | PostgreSQL, S3, Redis (опц.), Kafka (опц.) | Keycloak (опц.) |
-| Keycloak | Аутентификация пользователей (OIDC) | PostgreSQL | - |
+| Keys | Управление API-ключами | PostgreSQL, S3, Redis (опц.), Kafka (опц.) | Platform ID (опц.) |
+| Platform ID | Аутентификация пользователей (OIDC) | PostgreSQL | - |
+| Platform Manager | Веб-интерфейс и API-платформа | PostgreSQL, S3, Redis | Platform ID (OIDC) |
+| Styles API | Хранение и отдача стилей карт | S3 | - |
+| Update Manager | Управление обновлениями манифестов | PostgreSQL, S3 | Keys |
 
-Установите группу `core` (keys и keycloak не зависят от лицензии):
+Установите группу `core` (keys и platform-id не зависят от лицензии):
 
 ```bash
 helmfile -e <env> -f $HELMFILE_VALUES/deploy/<env>.yaml.gotmpl apply --selector group=core
@@ -317,7 +320,7 @@ helmfile -e <env> -f $HELMFILE_VALUES/deploy/<env>.yaml.gotmpl apply --selector 
 
 **API-ключи.** После установки добавьте администратора и создайте API-ключ. Следуйте документации: [Keys](https://docs.2gis.com/on-premise-api-platform/installation#fetch-service-keys).
 
-**Keycloak.** Войдите в Keycloak admin console и перегенерируйте client secrets для каждого realm. Обновите их в env-specific values сервисов.
+**Platform ID.** Войдите в Platform ID admin console и перегенерируйте client secrets для каждого realm. Обновите их в env-specific values сервисов.
 
 ### 2. API-платформа
 
@@ -344,7 +347,7 @@ helmfile -e <env> -f $HELMFILE_VALUES/deploy/<env>.yaml.gotmpl apply --selector 
 | Navi Async Matrix | Асинхронная матрица расстояний | PostgreSQL, Kafka, S3 | Navi-Castle, Keys API |
 | Navi VRP Solver + VRP Task Manager | Решение задачи маршрутизации транспорта | PostgreSQL, Kafka, S3 | Navi-Castle, Navi-Front, Keys API |
 | Navi Restrictions | Ограничения проезда | PostgreSQL | Navi-Castle, Navi-Back |
-| Platform Manager | Веб-интерфейс управления платформой | - | Keycloak (OIDC), Keys API, License |
+| Platform Manager | Веб-интерфейс управления платформой | - | Platform ID (OIDC), Keys API, License |
 
 ```bash
 helmfile -e <env> -f $HELMFILE_VALUES/deploy/<env>.yaml.gotmpl apply --selector group=api-platform
@@ -384,7 +387,7 @@ helmfile -e <env> -f $HELMFILE_VALUES/deploy/<env>.yaml.gotmpl apply --selector 
 - [Traffic Proxy](https://docs.2gis.com/on-premise-api-platform/installation#test-traffic-proxy)
 - [Менеджер Платформы](https://docs.2gis.com/on-premise-api-platform/installation#test-pm)
 
-**Менеджер Платформы.** После установки настройте аутентификацию пользователей через Keycloak (OIDC). В Keycloak создайте client для Platform Manager и укажите client secret в env-specific values. Подробнее: [настройка аутентификации](https://docs.2gis.com/on-premise-api-platform/installation#install-pm).
+**Менеджер Платформы.** После установки настройте аутентификацию пользователей через Platform ID (OIDC). В Platform ID создайте client для Platform Manager и укажите client secret в env-specific values. Подробнее: [настройка аутентификации](https://docs.2gis.com/on-premise-api-platform/installation#install-pm).
 
 **Мобильный SDK.** Мобильные SDK (iOS, Android, Flutter) являются клиентскими библиотеками и не развёртываются в Kubernetes. Для их подключения используйте `vendor-config.json` с адресами ваших On-Premise сервисов.
 
@@ -394,7 +397,7 @@ helmfile -e <env> -f $HELMFILE_VALUES/deploy/<env>.yaml.gotmpl apply --selector 
 
 | Сервис | Описание | Инфраструктура | Сервисы |
 |---|---|---|---|
-| Pro API | Бэкенд 2ГИС Про (API, Permissions, Tasks) | PostgreSQL, S3, Elasticsearch, Kafka, Redis | Catalog API, Navi-Front, Search API, License, Keycloak (опц.) |
+| Pro API | Бэкенд 2ГИС Про (API, Permissions, Tasks) | PostgreSQL, S3, Elasticsearch, Kafka, Redis | Catalog API, Navi-Front, Search API, License, Platform ID (опц.) |
 | Pro UI | Веб-интерфейс 2ГИС Про | S3 | Pro API, MapGL JS API |
 
 ```bash
@@ -411,8 +414,8 @@ helmfile -e <env> -f $HELMFILE_VALUES/deploy/<env>.yaml.gotmpl apply --selector 
 
 | Сервис | Описание | Инфраструктура | Сервисы |
 |---|---|---|---|
-| CityLens API + Routes API | API Ситискан (съёмка, треки, планирование маршрутов) | PostgreSQL + PostGIS, S3, Kafka | MapGL JS API, Tiles API, Pro API, Navi-Front, Keys API, Keycloak (опц.) |
-| CityLens Routes UI | Веб-интерфейс планирования маршрутов Ситискан | - | CityLens Routes API, Catalog API, MapGL JS API, Keycloak (OIDC) |
+| CityLens API + Routes API | API Ситискан (съёмка, треки, планирование маршрутов) | PostgreSQL + PostGIS, S3, Kafka | MapGL JS API, Tiles API, Pro API, Navi-Front, Keys API, Platform ID (опц.) |
+| CityLens Routes UI | Веб-интерфейс планирования маршрутов Ситискан | - | CityLens Routes API, Catalog API, MapGL JS API, Platform ID (OIDC) |
 
 ```bash
 helmfile -e <env> -f $HELMFILE_VALUES/deploy/<env>.yaml.gotmpl apply --selector group=citylens
@@ -499,19 +502,19 @@ kubernetes-ready пример API-платформы (infra + core + api-platfor
        > Про фиксацию/переключение манифестов (закрепить конкретный набор или откатиться) -
        > см. шаг 4 раздела [Подготовка конфигурации](#подготовка-конфигурации).
 
-5. **Развёртывание core** (License, Keycloak, Keys) - образы из `kind-registry:5000`:
+5. **Развёртывание core** (License, Platform ID, Keys, Platform Manager) - образы из `kind-registry:5000`:
    ```bash
    helmfile -e sandbox -f installer/helmfile/example/deploy/sandbox.yaml.gotmpl sync \
      --selector group=core
    ```
-   - Keycloak: realms импортируются автоматически через `keycloakConfigCli` (чарт - `charts/keycloak/realms/`);
+   - Platform ID: realms импортируются автоматически при старте контейнера, `--import-realm` (чарт - `charts/platform-id/realms/`);
    - Keys: bootstrap Job создаёт дефолтного партнёра, подписку и API-ключ, а `postsync`-хук
      (`installer/scripts/create_sandbox_key.sh`) забирает ключ из логов Job и сохраняет его в sandbox values;
    - License: при первом запуске pod может не стартовать без валидной лицензии -
      [получите лицензию](https://docs.2gis.com/on-premise-api-platform/installation#get-license)
      и повторите деплой.
 
-6. **Развёртывание API-платформы** (22 релиза: search, tiles, catalog, navi, styles, mapgl, …):
+6. **Развёртывание API-платформы** (search, tiles, catalog, navi, mapgl, …):
    ```bash
    helmfile -e sandbox -f installer/helmfile/example/deploy/sandbox.yaml.gotmpl apply \
      --selector group=api-platform \
