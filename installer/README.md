@@ -508,7 +508,8 @@ kubernetes-ready пример API-платформы (infra + core + api-platfor
      --selector group=core
    ```
    - Platform ID: realms импортируются автоматически при старте контейнера, `--import-realm` (чарт - `charts/platform-id/realms/`);
-   - Keys: API-ключ создаётся автоматически `postsync`-хуком (`installer/scripts/create_sandbox_key.sh`);
+   - Keys: bootstrap Job создаёт дефолтного партнёра, подписку и API-ключ, а `postsync`-хук
+     (`installer/scripts/create_sandbox_key.sh`) забирает ключ из логов Job и сохраняет его в sandbox values;
    - License: при первом запуске pod может не стартовать без валидной лицензии -
      [получите лицензию](https://docs.2gis.com/on-premise-api-platform/installation#get-license)
      и повторите деплой.
