@@ -28,7 +28,7 @@ values:
     basePath: {{ .Values.basePath }}
   - versionCore: 2.11.1
     versionPlatform: 2.59.0
-    versionPro: 2.6.0
+    versionPro: 2.6.1
     versionCitylens: 2.3.0
     kubeContext: default
     # chartLocation: ../../../on-premise-helm-charts/charts
@@ -41,7 +41,6 @@ values:
 
   - licenseIngress: license.{{ .Values.domain }}
     keysApiIngress: keys-api.{{ .Values.domain }}
-    keysAdminIngress: keys-admin.{{ .Values.domain }}
     catalogIngress: catalog-api.{{ .Values.domain }}
     searchIngress: search-api.{{ .Values.domain }}
     searchIngressV8: search-api-v8.{{ .Values.domain }}
@@ -60,7 +59,7 @@ values:
     naviRouterIngress: navi-router.{{ .Values.domain }}
     naviVrpSolverIngress: navi-vrp-solver.{{ .Values.domain }}
     naviVrpTaskManagerIngress: navi-vrp-task-manager.{{ .Values.domain }}
-    keycloakIngress: keycloak.{{ .Values.domain }}
+    platformIdIngress: platform-id.{{ .Values.domain }}
     proPermissionsIngress: pro-api-permissions.{{ .Values.domain }}
     proApiIngress: pro-api.{{ .Values.domain }}
     proUiIngress: pro-ui.{{ .Values.domain }}

@@ -58,7 +58,7 @@ jobs:
           PRO_CHARTS=("pro-api" "pro-ui")
           CITYLENS_CHARTS=("citylens" "citylens-routes-ui")
           EVERGIS_CHARTS=("gis-platform")
-          CORE_CHARTS=("keys" "license" "keycloak")
+          CORE_CHARTS=("keys" "license" "platform-id" "platform" "styles-api" "update-manager")
 
           # Универсальная зависимость
           UNIVERSAL_DEPENDENCY="generic-chart"

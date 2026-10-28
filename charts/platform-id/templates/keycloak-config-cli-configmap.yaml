@@ -3,7 +3,7 @@ Copyright Broadcom, Inc. All Rights Reserved.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if and .Values.keycloakConfigCli.enabled (or .Values.keycloakConfigCli.configurationDir .Values.keycloakConfigCli.configuration) (not .Values.keycloakConfigCli.existingConfigmap) -}}
+{{- if and .Values.keycloakConfigCli.enabled .Values.keycloakConfigCli.configuration (not .Values.keycloakConfigCli.existingConfigmap) -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -16,19 +16,12 @@ metadata:
   annotations: {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" .) | nindent 4 }}
   {{- end }}
 data:
-  {{- if .Values.keycloakConfigCli.configurationDir }}
-  {{- range $name, $bytes := $.Files.Glob (printf "%s/*" .Values.keycloakConfigCli.configurationDir ) }}
-  {{ $name | base }}: |-
-    {{- tpl ($.Files.Get $name) $ | nindent 4 }}
-  {{- end }}
-  {{- else }}
   {{- range $fileName, $fileContent := .Values.keycloakConfigCli.configuration }}
   {{- if $fileContent }}
   {{ $fileName }}: |
     {{- include "common.tplvalues.render" (dict "value" $fileContent "context" $) | nindent 4 }}
   {{- else }}
     {{- ($.Files.Glob $fileName).AsConfig | nindent 2 }}
-  {{- end }}
   {{- end }}
   {{- end }}
 {{- end }}
