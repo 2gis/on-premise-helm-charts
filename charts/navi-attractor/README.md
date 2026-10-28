@@ -67,7 +67,7 @@ To learn more about configuration, architecture, and requirements, see the offic
 | ------------------ | ----------- | -------------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-attractor` |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`                   |
-| `image.tag`        | Tag         | `7.62.0.5`                       |
+| `image.tag`        | Tag         | `7.62.0.8`                       |
 
 ### Service account settings
 

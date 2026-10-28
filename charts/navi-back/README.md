@@ -67,7 +67,7 @@ To learn more about configuration, architecture, and requirements, see the offic
 | Name               | Description | Value                       |
 | ------------------ | ----------- | --------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-back` |
-| `image.tag`        | Tag         | `7.62.0.5`                  |
+| `image.tag`        | Tag         | `7.62.0.8`                  |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`              |
 
 ### Navi-Back application settings
