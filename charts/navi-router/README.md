@@ -38,7 +38,7 @@ To learn more about configuration, architecture, and requirements, see the offic
 | Name               | Description | Value                         |
 | ------------------ | ----------- | ----------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-router` |
-| `image.tag`        | Tag         | `6.44.0.6`                    |
+| `image.tag`        | Tag         | `6.44.0.8`                    |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`                |
 
 ### Navi-Router service settings
