@@ -161,15 +161,15 @@ To learn more about configuration, architecture, and requirements, see the offic
 
 ### Deployment Artifacts Storage settings
 
-| Name                     | Description                                                                                                                                                                                                         | Value   |
-| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `dgctlStorage.host`      | S3 endpoint where DataGateway stores deployment artifacts. Format: `host:port`. **Required** if `stylesImport.startOnDeploy` is `true`.                                                                             | `""`    |
-| `dgctlStorage.secure`    | Use HTTPS for the S3 endpoint.                                                                                                                                                                                      | `false` |
-| `dgctlStorage.bucket`    | S3 bucket name. **Required** if `stylesImport.startOnDeploy` is `true`.                                                                                                                                             | `""`    |
-| `dgctlStorage.accessKey` | S3 access key. **Required** if `stylesImport.startOnDeploy` is `true`.                                                                                                                                              | `""`    |
-| `dgctlStorage.secretKey` | S3 secret key. **Required** if `stylesImport.startOnDeploy` is `true`.                                                                                                                                              | `""`    |
-| `dgctlStorage.region`    | S3 region name. Optional.                                                                                                                                                                                           | `""`    |
-| `dgctlStorage.manifest`  | The path to the [manifest file](https://docs.2gis.com/en/on-premise-api-platform/installation#artifacts). Format: `manifests/api-platform/0000000000.json`. **Required** if `stylesImport.startOnDeploy` is `true`. | `""`    |
+| Name                     | Description                                                                                                                                                                                                 | Value   |
+| ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `dgctlStorage.host`      | S3 endpoint where DataGateway stores deployment artifacts. Format: `host:port`. **Required** if `stylesImport.startOnDeploy` is `true`.                                                                     | `""`    |
+| `dgctlStorage.secure`    | Use HTTPS for the S3 endpoint.                                                                                                                                                                              | `false` |
+| `dgctlStorage.bucket`    | S3 bucket name. **Required** if `stylesImport.startOnDeploy` is `true`.                                                                                                                                     | `""`    |
+| `dgctlStorage.accessKey` | S3 access key. **Required** if `stylesImport.startOnDeploy` is `true`.                                                                                                                                      | `""`    |
+| `dgctlStorage.secretKey` | S3 secret key. **Required** if `stylesImport.startOnDeploy` is `true`.                                                                                                                                      | `""`    |
+| `dgctlStorage.region`    | S3 region name. Optional.                                                                                                                                                                                   | `""`    |
+| `dgctlStorage.manifest`  | The path to the [manifest file](https://docs.2gis.com/en/on-premise-api-platform/installation#artifacts). Format: `manifests/core/0000000000.json`. **Required** if `stylesImport.startOnDeploy` is `true`. | `""`    |
 
 ### Styles Import settings
 
