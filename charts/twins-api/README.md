@@ -19,7 +19,7 @@ To learn more about configuration, architecture, and requirements, see the offic
 | ------------------ | --------------------------------------------------------------------------------------------- | --------------------------- |
 | `imagePullSecrets` | Kubernetes image pull secrets.                                                                | `[]`                        |
 | `image.repository` | Twins API service image repository.                                                           | `2gis-on-premise/twins-api` |
-| `image.tag`        | Twins API service image tag.                                                                  | `1.23.3`                    |
+| `image.tag`        | Twins API service image tag.                                                                  | `1.23.6`                    |
 | `image.pullPolicy` | Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) | `IfNotPresent`              |
 
 ### Deployment Artifacts Storage settings

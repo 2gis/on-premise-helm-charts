@@ -2,16 +2,16 @@ catalog-api
 	catalog-api:3.684.0
 	catalog-importer:1.23.0
 mapgl-js-api
-	mapgl:1.78.1
+	mapgl:1.80.0
 navi-async-grpc-proxy
 	async-grpc-proxy:1.3.1
 navi-async-matrix
-	navi-async-matrix:1.23.0
+	navi-async-matrix:1.24.1
 	navi-merger-async-matrix:1.23.0
 navi-attractor
-	navi-attractor:7.61.0.2
+	navi-attractor:7.62.0.8
 navi-back
-	navi-back:7.61.0.2
+	navi-back:7.62.0.8
 	navi-envoy:1.38.3
 navi-castle
 	navi-castle:1.13.2
@@ -22,34 +22,32 @@ navi-restrictions
 	navi-restrictions-api:1.0.3
 	navi-restrictions-syncer:1.0.2
 navi-router
-	navi-router:6.43.3.2
+	navi-router:6.44.0.8
 navi-splitter
 	navi-envoy:1.38.3
 	navi-metrics-aggregator:1.0.0
-	navi-splitter:1.18.0
+	navi-splitter:1.19.0
 navi-vrp-solver
 	navi-vrp-solver:1.16.3
 navi-vrp-task-manager
 	navi-vrp-task-manager:1.16.3
-platform
-	platform-ui:1.50.0
 raster-js-api
-	raster-js-api:4.2.1
+	raster-js-api:4.2.2
 search-api
 	nginx-alpine:3.1.20
 	search-api:7.110.0
 search-api-v8
-	search-api-v8-controller:8.34.0
-	search-api-v8-data-adapter:8.34.0
+	search-api-v8-controller:8.37.0
+	search-api-v8-data-adapter:8.37.0
 	search-api-v8-envoy:1.38.3
-	search-api-v8-files-storage:8.34.0
-	search-api-v8-head:8.34.0
-	search-api-v8-indexer:8.34.0
-	search-api-v8-ingress-router:8.34.0
+	search-api-v8-files-storage:8.37.0
+	search-api-v8-head:8.37.0
+	search-api-v8-indexer:8.37.0
+	search-api-v8-ingress-router:8.37.0
 	search-api-v8-metrics-aggregator:0.1.1
-	search-api-v8-segment-detector:8.34.0
-	search-api-v8-syncer:8.34.0
-	search-api-v8-unisearcher:8.34.0
+	search-api-v8-segment-detector:8.37.0
+	search-api-v8-syncer:8.37.0
+	search-api-v8-unisearcher:8.37.0
 stat-api
 	stat-api-migrate:0.2.5
 	stat-api:0.2.5
@@ -57,20 +55,15 @@ stat-receiver
 	stat-receiver-api:1.16.10
 	stat-receiver-streams:1.16.12
 staticmaps
-	staticmaps:1.0.4
-styles-api
-	styles-api:0.46.0
+	staticmaps:1.0.5
 tilegen-api
 	tilegen-api:1.1.8
 	tilegen-processor:1.1.8
 tiles-api
-	tiles-api-importer:4.91.0
-	tiles-api-proxy:4.91.0
-	tiles-api:4.91.0
+	tiles-api-importer:4.91.6
+	tiles-api-proxy:4.91.6
+	tiles-api:4.91.6
 traffic-proxy
 	navi-front:1.31.3
 twins-api
-	twins-api:1.23.3
-update-manager
-	dgctl:3.7.0
-	update-manager:3.7.0
+	twins-api:1.23.6

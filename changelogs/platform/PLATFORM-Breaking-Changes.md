@@ -1,5 +1,15 @@
 # Platform Breaking-Changes
 
+## [2.60.0]
+
+### Release composition
+
+- The `platform`, `styles-api`, and `update-manager` charts are no longer part of the Platform release — they moved to the Core group (Release Core 2.12.0). Upgrade Core to 2.12.0 together with Platform 2.60.0.
+
+### navi-back
+
+- Added `naviback.restrictions.indexName`. Possible values are `restrictions_index` and `default`. Use `default` to get custom restrictions from the Restrictions API service.
+
 ## [2.59.0]
 
 ### raster-js-api

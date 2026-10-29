@@ -70,7 +70,7 @@ To learn more about configuration, architecture, and requirements, see the offic
 | Name               | Description  | Value                        |
 | ------------------ | ------------ | ---------------------------- |
 | `image.repository` | Repository.  | `2gis-on-premise/staticmaps` |
-| `image.tag`        | Tag.         | `1.0.4`                      |
+| `image.tag`        | Tag.         | `1.0.5`                      |
 | `image.pullPolicy` | Pull Policy. | `IfNotPresent`               |
 
 ### Service settings
@@ -114,6 +114,9 @@ To learn more about configuration, architecture, and requirements, see the offic
 | `app.markers.fetchTimeout` | Timeout for fetching markers from external sources.                                                                                 | `3s`                                         |
 | `app.markers.cacheDir`     | Path to the directory for caching markers.                                                                                          | `/cache`                                     |
 | `app.markers.cacheExpire`  | Duration for which cached markers are considered valid.                                                                             | `2h`                                         |
+| `app.tilesets`             | **Tilesets settings**                                                                                                               |                                              |
+| `app.tilesets.sd`          | Standard definition tileset name. Defaults to `raster` when unset or empty.                                                         | `raster`                                     |
+| `app.tilesets.hd`          | High definition tileset name. HD tiles are not used in On-Premise. Defaults to `raster` when unset or empty.                        | `""`                                         |
 | `app.access`               | **API Keys service access settings**                                                                                                |                                              |
 | `app.access.enabled`       | If access to the [API Keys service](https://docs.2gis.com/en/on-premise-api-platform/overview/summary#api-keys-service) is enabled. | `false`                                      |
 | `app.access.stat`          | **Statistics receiver settings**                                                                                                    |                                              |
@@ -122,11 +125,11 @@ To learn more about configuration, architecture, and requirements, see the offic
 
 ### Tiles service settings
 
-| Name                   | Description                                                                 | Value |
-| ---------------------- | --------------------------------------------------------------------------- | ----- |
-| `tiles.url`            | URL of the Tiles API service, ex: http://tiles-service-api.svc **Required** | `""`  |
-| `tiles.key`            | Tiles access key **Required**                                               | `""`  |
-| `tiles.requestTimeout` | Timeout for requests to the Tiles API.                                      | `5s`  |
+| Name                   | Description                                                                                                                                      | Value |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
+| `tiles.url`            | URL of the Tiles API service, ex: http://tiles-service-api.svc. The tile server must have a tileset with `kind: raster` configured. **Required** | `""`  |
+| `tiles.key`            | Tiles access key **Required**                                                                                                                    | `""`  |
+| `tiles.requestTimeout` | Timeout for requests to the Tiles API.                                                                                                           | `5s`  |
 
 ### Keys service settings
 
