@@ -6965,6 +6965,20 @@ entries:
     version: 1.7.5
   keys:
   - apiVersion: v2
+    appVersion: 1.182.0
+    created: "2026-10-29T08:24:13.212441273Z"
+    description: A Helm chart for Kubernetes to deploy API Keys service
+    digest: b1dfb6e620cb199088f7cb741e2124db71ee5a2acca7b123f32f23491ca3996f
+    maintainers:
+    - email: on-premise@2gis.com
+      name: 2gis
+      url: https://github.com/2gis
+    name: keys
+    type: application
+    urls:
+    - https://github.com/2gis/on-premise-helm-charts/releases/download/keys-2.12.0/keys-2.12.0.tgz
+    version: 2.12.0
+  - apiVersion: v2
     appVersion: 1.180.1
     created: "2026-09-17T13:38:26.773159383Z"
     description: A Helm chart for Kubernetes to deploy API Keys service
@@ -8365,6 +8379,20 @@ entries:
     - https://github.com/2gis/on-premise-helm-charts/releases/download/keys-0.1.2/keys-0.1.2.tgz
     version: 0.1.2
   license:
+  - apiVersion: v2
+    appVersion: 2.6.1
+    created: "2026-10-29T08:24:13.428685514Z"
+    description: A Helm chart for Kubernetes to deploy License service
+    digest: bf46646dc3a2ad932aba2bcb78294795022d38ec076a9f2e6af6cc003a8ad66b
+    maintainers:
+    - email: on-premise@2gis.com
+      name: 2gis
+      url: https://github.com/2gis
+    name: license
+    type: application
+    urls:
+    - https://github.com/2gis/on-premise-helm-charts/releases/download/license-2.12.0/license-2.12.0.tgz
+    version: 2.12.0
   - apiVersion: v2
     appVersion: 2.6.1
     created: "2026-09-17T13:38:26.954892838Z"
@@ -25041,6 +25069,20 @@ entries:
     - https://github.com/2gis/on-premise-helm-charts/releases/download/platform-2.44.0/platform-2.44.0.tgz
     version: 2.44.0
   - apiVersion: v2
+    appVersion: 1.50.0
+    created: "2026-10-29T08:24:13.581542073Z"
+    description: A Helm chart for Kubernetes to deploy Platform
+    digest: 663a72d437c9777b24787b5f98bf97e5e465d081398e9862a59f3e4ed638f46f
+    maintainers:
+    - email: on-premise@2gis.com
+      name: 2gis
+      url: https://github.com/2gis
+    name: platform
+    type: application
+    urls:
+    - https://github.com/2gis/on-premise-helm-charts/releases/download/platform-2.12.0/platform-2.12.0.tgz
+    version: 2.12.0
+  - apiVersion: v2
     appVersion: 1.2.0
     created: "2025-08-26T09:31:35.373558424Z"
     description: A Helm chart for Kubernetes to deploy Platform
@@ -25600,6 +25642,31 @@ entries:
     urls:
     - https://github.com/2gis/on-premise-helm-charts/releases/download/platform-1.9.1/platform-1.9.1.tgz
     version: 1.9.1
+  platform-id:
+  - apiVersion: v2
+    appVersion: 1.5.0
+    created: "2026-10-29T08:24:13.752206557Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: oci://registry-1.docker.io/bitnamicharts
+      version: 16.x.x
+    - name: common
+      repository: oci://registry-1.docker.io/bitnamicharts
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: A Helm chart for Kubernetes to deploy Platform-ID
+    digest: bc1ba19a1d3178d8d5ebe564982b1a4d818cf13232eddcb132a9e77adb4d4f90
+    maintainers:
+    - email: on-premise@2gis.com
+      name: 2gis
+      url: https://github.com/2gis
+    name: platform-id
+    type: application
+    urls:
+    - https://github.com/2gis/on-premise-helm-charts/releases/download/platform-id-2.12.0/platform-id-2.12.0.tgz
+    version: 2.12.0
   pro-api:
   - apiVersion: v2
     appVersion: 2.73.0
@@ -31083,6 +31150,20 @@ entries:
     - https://github.com/2gis/on-premise-helm-charts/releases/download/styles-api-2.44.0/styles-api-2.44.0.tgz
     version: 2.44.0
   - apiVersion: v2
+    appVersion: 0.50.1
+    created: "2026-10-29T08:24:13.905526035Z"
+    description: A Helm chart for Kubernetes to deploy API Styles service
+    digest: 0057b7ffb4e354b6cfc5efbdae2c69e84772ffde39557538443547d41905eb2e
+    maintainers:
+    - email: on-premise@2gis.com
+      name: 2gis
+      url: https://github.com/2gis
+    name: styles-api
+    type: application
+    urls:
+    - https://github.com/2gis/on-premise-helm-charts/releases/download/styles-api-2.12.0/styles-api-2.12.0.tgz
+    version: 2.12.0
+  - apiVersion: v2
     appVersion: 0.38.0
     created: "2025-08-26T09:31:36.325477645Z"
     description: A Helm chart for Kubernetes to deploy API Styles service
@@ -35276,6 +35357,20 @@ entries:
     urls:
     - https://github.com/2gis/on-premise-helm-charts/releases/download/update-manager-2.59.0/update-manager-2.59.0.tgz
     version: 2.59.0
+  - apiVersion: v2
+    appVersion: 3.7.0
+    created: "2026-10-29T08:24:14.105237137Z"
+    description: A Helm chart for Kubernetes to deploy Update Manager
+    digest: 0f4869bddf75b94432072fdc817b9d50259528053c4a8cb0c84600afbbb6b57a
+    maintainers:
+    - email: on-premise@2gis.com
+      name: 2gis
+      url: https://github.com/2gis
+    name: update-manager
+    type: application
+    urls:
+    - https://github.com/2gis/on-premise-helm-charts/releases/download/update-manager-2.12.0/update-manager-2.12.0.tgz
+    version: 2.12.0
   zookeeper:
   - annotations:
       category: Infrastructure
@@ -35305,4 +35400,4 @@ entries:
     urls:
     - https://github.com/2gis/on-premise-helm-charts/releases/download/zookeeper-1.5.2/zookeeper-1.5.2.tgz
     version: 1.5.2
-generated: "2026-10-12T12:04:50.521556203Z"
+generated: "2026-10-29T08:24:14.108617059Z"
