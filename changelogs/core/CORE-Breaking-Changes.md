@@ -2,6 +2,11 @@
 
 ## [2.12.0]
 
+### Release composition
+
+- The Core release now includes the `platform`, `styles-api`, and `update-manager` charts (previously shipped with the Platform releases; removed from the Platform release in 2.60.0). Update Core together with Platform 2.60.0.
+- The `keycloak` chart is removed and replaced by `platform-id` (see below).
+
 ### keys
 
 - New `bootstrap.enabled` flag (default: `false`). When enabled, a bootstrap Job creates the default partner, an unlimited subscription, and an API key during the first deployment if the keys table is empty. The created API key is printed in the Job logs — set `bootstrap.logLevel` to `info` or lower and read it via `kubectl logs job/<bootstrap-job>`. The finished Job is retained for `bootstrap.ttlSecondsAfterFinished` seconds (default: `86400`) before automatic cleanup.

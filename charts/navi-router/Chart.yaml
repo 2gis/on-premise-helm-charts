@@ -5,8 +5,8 @@ type: application
 keywords:
 - navi
 - router
-version: 2.59.0
-appVersion: 6.43.3.2
+version: 2.60.0
+appVersion: 6.44.0.8
 dependencies:
 - name: generic-chart
   version: '*'
