@@ -162,8 +162,8 @@ resources:
 # @param app.markers.cacheExpire Duration for which cached markers are considered valid.
 
 # @extra app.tilesets **Tilesets settings**
-# @extra app.tilesets.sd Standard definition tileset name. Defaults to `raster` when unset or empty.
-# @extra app.tilesets.hd High definition tileset name. Defaults to `raster` when unset or empty.
+# @param app.tilesets.sd Standard definition tileset name. Defaults to `raster` when unset or empty.
+# @param app.tilesets.hd High definition tileset name. HD tiles are not used in On-Premise. Defaults to `raster` when unset or empty.
 
 # @extra app.access **API Keys service access settings**
 # @param app.access.enabled If access to the [API Keys service](https://docs.2gis.com/en/on-premise-api-platform/overview/summary#api-keys-service) is enabled.
@@ -183,6 +183,9 @@ app:
     fetchTimeout: 3s
     cacheDir: '/cache'
     cacheExpire: 2h
+  tilesets:
+    sd: raster
+    hd: ''
   access:
     enabled: false
     stat:
