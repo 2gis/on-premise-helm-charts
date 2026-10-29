@@ -95,7 +95,7 @@ strategy:
 
 image:
   repository: 2gis-on-premise/staticmaps
-  tag: 1.0.4
+  tag: 1.0.5
   pullPolicy: IfNotPresent
 
 # @section Service settings
@@ -161,6 +161,10 @@ resources:
 # @param app.markers.cacheDir Path to the directory for caching markers.
 # @param app.markers.cacheExpire Duration for which cached markers are considered valid.
 
+# @extra app.tilesets **Tilesets settings**
+# @param app.tilesets.sd Standard definition tileset name. Defaults to `raster` when unset or empty.
+# @param app.tilesets.hd High definition tileset name. HD tiles are not used in On-Premise. Defaults to `raster` when unset or empty.
+
 # @extra app.access **API Keys service access settings**
 # @param app.access.enabled If access to the [API Keys service](https://docs.2gis.com/en/on-premise-api-platform/overview/summary#api-keys-service) is enabled.
 
@@ -179,6 +183,9 @@ app:
     fetchTimeout: 3s
     cacheDir: '/cache'
     cacheExpire: 2h
+  tilesets:
+    sd: raster
+    hd: ''
   access:
     enabled: false
     stat:
