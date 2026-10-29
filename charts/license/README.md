@@ -46,7 +46,7 @@ To learn more about configuration, architecture, and requirements, see the offic
 | Name               | Description  | Value                     |
 | ------------------ | ------------ | ------------------------- |
 | `image.repository` | Repository.  | `2gis-on-premise/license` |
-| `image.tag`        | Tag.         | `2.6.1`                   |
+| `image.tag`        | Tag.         | `3.0.0`                   |
 | `image.pullPolicy` | Pull Policy. | `IfNotPresent`            |
 
 ### License service application settings
