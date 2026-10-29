@@ -27,7 +27,7 @@ spec:
         app.kubernetes.io/component: keycloak-config-cli
         app.kubernetes.io/part-of: keycloak
       annotations:
-        {{- if and (or .Values.keycloakConfigCli.configurationDir .Values.keycloakConfigCli.configuration) (not .Values.keycloakConfigCli.existingConfigmap) }}
+        {{- if and .Values.keycloakConfigCli.configuration (not .Values.keycloakConfigCli.existingConfigmap) }}
         checksum/configuration: {{ include (print $.Template.BasePath "/keycloak-config-cli-configmap.yaml") . | sha256sum }}
         {{- end }}
         {{- if .Values.keycloakConfigCli.podAnnotations }}
@@ -84,7 +84,7 @@ spec:
                 secretKeyRef:
                   name: {{ include "keycloak.secretName" . }}
                   key: {{ include "keycloak.secretKey" . }}
-            {{- if or .Values.keycloakConfigCli.configurationDir .Values.keycloakConfigCli.configuration .Values.keycloakConfigCli.existingConfigmap }}
+            {{- if or .Values.keycloakConfigCli.configuration .Values.keycloakConfigCli.existingConfigmap }}
             - name: IMPORT_FILES_LOCATIONS
               value: /config/*
             {{- end }}
@@ -108,12 +108,12 @@ spec:
                 name: {{ tpl .Values.keycloakConfigCli.extraEnvVarsSecret . }}
             {{- end }}
           {{- end }}
-          {{- if or .Values.keycloakConfigCli.configurationDir .Values.keycloakConfigCli.configuration .Values.keycloakConfigCli.existingConfigmap .Values.keycloakConfigCli.extraVolumeMounts }}
+          {{- if or .Values.keycloakConfigCli.configuration .Values.keycloakConfigCli.existingConfigmap .Values.keycloakConfigCli.extraVolumeMounts }}
           volumeMounts:
             - name: empty-dir
               mountPath: /tmp
               subPath: tmp-dir
-            {{- if or .Values.keycloakConfigCli.configurationDir .Values.keycloakConfigCli.configuration .Values.keycloakConfigCli.existingConfigmap }}
+            {{- if or .Values.keycloakConfigCli.configuration .Values.keycloakConfigCli.existingConfigmap }}
             - name: config-volume
               mountPath: /config
             {{- end }}
@@ -132,7 +132,7 @@ spec:
       volumes:
         - name: empty-dir
           emptyDir: {}
-        {{- if or .Values.keycloakConfigCli.configurationDir .Values.keycloakConfigCli.configuration .Values.keycloakConfigCli.existingConfigmap }}
+        {{- if or .Values.keycloakConfigCli.configuration .Values.keycloakConfigCli.existingConfigmap }}
         - name: config-volume
           configMap:
             name: {{ include "keycloak.keycloakConfigCli.configmapName" . }}

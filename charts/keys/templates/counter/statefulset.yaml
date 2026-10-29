@@ -8,6 +8,9 @@ metadata:
   name: {{ include "keys.counter.name" . }}
   labels:
     {{- include "keys.counter.labels" . | nindent 4 }}
+    {{- with .Values.counter.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
   {{- with .Values.counter.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
@@ -25,8 +28,14 @@ spec:
         checksum/config: {{ (include (print $.Template.BasePath "/configmap-deploys.yaml") . | fromYaml).data | toYaml | sha256sum }}
         {{- end }}
         checksum/secret: {{ (include (print $.Template.BasePath "/secret-deploys.yaml") . | fromYaml).data | toYaml | sha256sum }}
+        {{- with .Values.counter.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
       labels:
         {{- include "keys.counter.selectorLabels" . | nindent 8 }}
+        {{- with .Values.counter.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
     spec:
       {{- with include "keys.initTLS" . }}
       initContainers:

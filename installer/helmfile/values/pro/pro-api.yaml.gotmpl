@@ -38,7 +38,7 @@ api:
       enableAssetsStreaming: true
     # ограничение по сессиям
     auth:
-      url: {{ $protocol }}://{{ .Values.keycloakIngress }}
+      url: {{ $protocol }}://{{ .Values.platformIdIngress }}
       apiKey: {{ .Values.key }}
       type: openid10
       userInfoEndpoint: realms/Pro/protocol/openid-connect/userinfo

@@ -4,28 +4,28 @@ bases:
 
 ---
 releases:
-  - name: styles-api
-    chart: {{ .Values.chartLocation }}/styles-api
+  - name: platform-id
+    chart: {{ .Values.chartLocation }}/platform-id
+    version: {{ .Values.versionCore }}
     namespace: {{ .Values.namespace  }}
-    version: {{ .Values.versionPlatform }}
     kubeContext: {{ .Values.kubeContext }}
+    timeout: 900
     labels:
-      group: api-platform
-      service: styles
+      group: core
+      service: platform-id
     values:
-      - {{ .Values.basePath }}/../dgctl/auto_values/api-platform/general.yaml
       - {{ .Values.basePath }}/values/dgctl.yaml.gotmpl
       - {{ .Values.basePath }}/values/ingressAnnotations.yaml.gotmpl
 {{- $vp1 := printf "%s/values/ingressAnnotations/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $vp1 }}
       - {{ $vp1 }}
 {{- end }}
-      - {{ .Values.basePath }}/values/api-platform/styles.yaml.gotmpl
-{{- $vp2 := printf "%s/values/api-platform/styles/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+      - {{ .Values.basePath }}/values/core/platform-id.yaml.gotmpl
+{{- $vp2 := printf "%s/values/core/platform-id/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $vp2 }}
       - {{ $vp2 }}
 {{- end }}
-{{- $secretsPath := printf "%s/values/api-platform/styles/%s.secrets.yaml" .Values.valuesPath .Environment.Name -}}
+{{- $secretsPath := printf "%s/values/core/platform-id/%s.secrets.yaml" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $secretsPath }}
     secrets:
       - {{ $secretsPath }}
@@ -40,7 +40,7 @@ releases:
         - "{{ .Values.namespace }}"
         - "{{`{{ .Release.Name }}`}}"
         - '{{`{{ if .Event.Error }}failure{{ end }}`}}'
-{{- $hooksPath := printf "%s/hooks/api-platform/styles/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
+{{- $hooksPath := printf "%s/hooks/core/platform-id/%s.yaml.gotmpl" .Values.valuesPath .Environment.Name -}}
 {{- if isFile $hooksPath }}
 {{- readFile $hooksPath | fromYaml | toYaml | nindent 4 }}
 {{- end }}
