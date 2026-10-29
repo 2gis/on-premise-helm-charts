@@ -17,8 +17,9 @@ data:
       attributionDir: "{{ .attributionDir }}"
       tilesUrl: {{ required "Valid .Values.tiles.url required!" $.Values.tiles.url }}
       tilesets:
-        sd: "{{ required "Valid .Values.app.tilesets.sd required!" .tilesets.sd }}"
-        hd: "{{ required "Valid .Values.app.tilesets.hd required!" .tilesets.hd }}"
+        {{- $tilesets := .tilesets | default dict }}
+        sd: {{ index $tilesets "sd" | default "raster" | quote }}
+        hd: {{ index $tilesets "hd" | default "raster" | quote }}
     markers:
       localDir: "{{ .markers.localDir }}"
       fetchTimeout: "{{ .markers.fetchTimeout }}"
