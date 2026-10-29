@@ -89,6 +89,17 @@ license:
     level: info
     format: text
 
+  # @extra license.internet **Settings for license type 4. Ignored for other license types**
+  # @param license.internet.apiKey Datagateway API key used to request a license. Required for license type 4.
+  # @param license.internet.endpoint Datagateway endpoint. Format: `scheme://host[:port]`. If empty, the service default is used.
+  # @param license.internet.updatePeriod Duration how often service should request a license from Datagateway. Duration format is any string supported by (time.ParseDuration)[https://pkg.go.dev/time#ParseDuration]. If empty, the service default of `15m` is used.
+  # @param license.internet.timeout Timeout of a single request to Datagateway. If empty, the service default of `30s` is used.
+  internet:
+    apiKey: ''
+    endpoint: ''
+    updatePeriod: ''
+    timeout: ''
+
 # @section Service settings
 
 # @param service.type Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).
@@ -117,10 +128,10 @@ ingress:
   enabled: false
   className: nginx
   hosts:
-  - host: license.example.com
-    paths:
-    - path: /
-      pathType: Prefix
+    - host: license.example.com
+      paths:
+        - path: /
+          pathType: Prefix
   tls: []
   # - hosts:
   #   - license.example.com

@@ -116,6 +116,13 @@ spec:
                 secretKeyRef:
                   name: {{ include "license.fullname" $ }}
                   key: persistenceS3SecretKey
+            {{- if eq (include "license.type" $) "4" }}
+            - name: DATAGATEWAY_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "license.fullname" $ }}
+                  key: datagatewayApiKey
+            {{- end }}
             - name: LOG_LEVEL
               value: {{ $.Values.license.log.level }}
             - name: LOG_FORMAT
