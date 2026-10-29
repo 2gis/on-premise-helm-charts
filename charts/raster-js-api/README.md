@@ -43,7 +43,7 @@ To learn more about configuration, architecture, and requirements, see the offic
 | Name               | Description | Value                           |
 | ------------------ | ----------- | ------------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/raster-js-api` |
-| `image.tag`        | Tag         | `4.2.1`                         |
+| `image.tag`        | Tag         | `4.2.2`                         |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`                  |
 
 ### API settings
