@@ -1,3 +1,70 @@
+## [2.60.0] (2026-10-29)
+#### [Breaking-Changes](PLATFORM-Breaking-Changes.md#2600)
+#### Images
+```
+mapgl-js-api
+	- mapgl:1.78.1
+	+ mapgl:1.80.0
+navi-async-matrix
+	- navi-async-matrix:1.23.0
+	+ navi-async-matrix:1.24.1
+navi-attractor
+	- navi-attractor:7.61.0.2
+	+ navi-attractor:7.62.0.8
+navi-back
+	- navi-back:7.61.0.2
+	+ navi-back:7.62.0.8
+navi-router
+	- navi-router:6.43.3.2
+	+ navi-router:6.44.0.8
+navi-splitter
+	- navi-splitter:1.18.0
+	+ navi-splitter:1.19.0
+platform
+	- platform-ui:1.50.0
+raster-js-api
+	- raster-js-api:4.2.1
+	+ raster-js-api:4.2.2
+search-api-v8
+	- search-api-v8-controller:8.34.0
+	+ search-api-v8-controller:8.37.0
+	- search-api-v8-data-adapter:8.34.0
+	+ search-api-v8-data-adapter:8.37.0
+	- search-api-v8-files-storage:8.34.0
+	+ search-api-v8-files-storage:8.37.0
+	- search-api-v8-head:8.34.0
+	+ search-api-v8-head:8.37.0
+	- search-api-v8-indexer:8.34.0
+	+ search-api-v8-indexer:8.37.0
+	- search-api-v8-ingress-router:8.34.0
+	+ search-api-v8-ingress-router:8.37.0
+	- search-api-v8-segment-detector:8.34.0
+	+ search-api-v8-segment-detector:8.37.0
+	- search-api-v8-syncer:8.34.0
+	+ search-api-v8-syncer:8.37.0
+	- search-api-v8-unisearcher:8.34.0
+	+ search-api-v8-unisearcher:8.37.0
+staticmaps
+	- staticmaps:1.0.4
+	+ staticmaps:1.0.5
+styles-api
+	- styles-api:0.46.0
+tiles-api
+	- tiles-api-importer:4.91.0
+	+ tiles-api-importer:4.91.6
+	- tiles-api-proxy:4.91.0
+	+ tiles-api-proxy:4.91.6
+	- tiles-api:4.91.0
+	+ tiles-api:4.91.6
+twins-api
+	- twins-api:1.23.3
+	+ twins-api:1.23.6
+update-manager
+	- dgctl:3.7.0
+	- update-manager:3.7.0
+```
+[Full list of image versions](https://github.com/2gis/on-premise-helm-charts/blob/Platform-2.60.0/changelogs/platform/platform_image_versions.txt)
+
 ## [2.59.0] (2026-09-29)
 #### [Breaking-Changes](PLATFORM-Breaking-Changes.md#2590)
 #### Images
