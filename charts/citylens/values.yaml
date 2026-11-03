@@ -837,8 +837,8 @@ jobs:
 # @param kafka.bootstrapServer A Kafka broker endpoint. **Required**
 # @param kafka.username A Kafka username for connection. **Required**
 # @param kafka.password A Kafka password for connection. **Required**
-# @param kafka.securityProtocol Protocol used to communicate with brokers. Currently supported: SASL_PLAINTEXT.
-# @param kafka.saslMechanism Authentication mechanism. Valid values are: PLAIN, SCRAM-SHA-256, SCRAM-SHA-512.
+# @param kafka.securityProtocol Protocol used to communicate with brokers. Valid values are: PLAINTEXT, SASL_PLAINTEXT.
+# @param kafka.saslMechanism Authentication mechanism. Valid values are: PLAIN, SCRAM-SHA-256, SCRAM-SHA-512. Required for SASL_PLAINTEXT protocol.
 # @param kafka.produceTimeoutSeconds Timeout for producer.
 # @param kafka.topics.frames List of topics for Frames saver worker. **Required**
 # @param kafka.topics.tracks List of topics for Tracks metadata worker. **Required**
