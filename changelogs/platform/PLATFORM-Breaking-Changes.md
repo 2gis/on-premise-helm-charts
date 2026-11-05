@@ -6,6 +6,10 @@
 
 - The `platform`, `styles-api`, and `update-manager` charts are no longer part of the Platform release — they moved to the Core group (Release Core 2.12.0). Upgrade Core to 2.12.0 together with Platform 2.60.0.
 
+### tiles-api
+
+- If CORS is configured in the ingress or proxy, allow the `X-Session-ID` request header tile requests. Add it to `nginx.ingress.kubernetes.io/cors-allow-headers` for nginx or `accessControlAllowHeaders` for Traefik, including any custom overrides. Otherwise, browsers block tile requests even if the preflight response returns HTTP 204.
+
 ### navi-back
 
 - Added `naviback.restrictions.indexName`. Possible values are `restrictions_index` and `default`. Use `default` to get custom restrictions from the Restrictions API service.
