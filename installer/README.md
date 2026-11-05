@@ -683,6 +683,8 @@ environments:
 - `corsGet` - настройка, выделенная под s3 (где разрешён только `GET`)
 - `vpn` - настройка, разрешающая доступ только из указанных IP-диапазонов
 
+При настройке CORS на ingress или внешнем proxy разрешите заголовок `X-Session-ID` для запросов MapGL к Tiles API. В nginx добавьте его в `nginx.ingress.kubernetes.io/cors-allow-headers`, в Traefik — в `accessControlAllowHeaders`. Сохраните его и в environment-specific overrides этих списков.
+
 Для изменения состава навешиваемых аннотаций переопределите в шаблоне сервиса:
 
 ```yaml
@@ -693,7 +695,7 @@ environments:
 ```
   annotations:
     nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
-    nginx.ingress.kubernetes.io/cors-allow-headers: DNT,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization,x-share-token,X-Company-Id
+    nginx.ingress.kubernetes.io/cors-allow-headers: DNT,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization,x-share-token,X-Company-Id,X-Session-ID
     nginx.ingress.kubernetes.io/cors-allow-methods: GET, PUT, POST, DELETE, PATCH, OPTIONS
     nginx.ingress.kubernetes.io/cors-allow-origin: '*'
     nginx.ingress.kubernetes.io/enable-cors: "true"
