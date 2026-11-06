@@ -4,7 +4,7 @@ type: application
 description: A Helm chart for Kubernetes to deploy Catalog APIs
 
 version: 2.60.0
-appVersion: 3.684.0
+appVersion: 3.685.0
 
 maintainers:
 - name: 2gis
