@@ -77,8 +77,6 @@ types:
 # @extra cassandra.credentials **Credentials for accessing Apache Cassandra**
 # @param cassandra.credentials.user User name to connect to the database. **Required**
 # @param cassandra.credentials.password User password to connect to the database. **Required**
-# @param cassandra.credentials.jmxUser JMX user name to be used by the Kubernetes Importer Job's cleaner process.
-# @param cassandra.credentials.jmxPassword JMX password to be used by the Kubernetes Importer Job's cleaner process.
 
 # @extra cassandra.tls **TLS configuration for accessing Apache Cassandra**
 # @param cassandra.tls.enabled If Apache Cassandra uses TLS for client connections.
@@ -99,8 +97,6 @@ cassandra:
   credentials:
     user: cassandra
     password: cassandra
-    jmxUser: cassandra
-    jmxPassword: cassandra
   tls:
     enabled: false
     enableHostVerification: true
@@ -192,7 +188,7 @@ tilegen:
   # @param tilegen.image.pullPolicy Kubernetes pull policy for the service's Docker image.
   image:
     repository: 2gis-on-premise/tiles-api-importer
-    tag: 4.91.6
+    tag: 4.92.0
     pullPolicy: IfNotPresent
 
   labels: {}
@@ -297,7 +293,7 @@ proxy:
 
   image:
     repository: 2gis-on-premise/tiles-api-proxy
-    tag: 4.91.6
+    tag: 4.92.0
     pullPolicy: IfNotPresent
 
   containerPort: 5000
@@ -362,7 +358,7 @@ api:
 
   image:
     repository: 2gis-on-premise/tiles-api
-    tag: 4.91.6
+    tag: 4.92.0
     pullPolicy: IfNotPresent
 
   # @extra api.cqlRetryPolicy **Cassandra retry policy settings**
@@ -536,7 +532,7 @@ importer:
 
   image:
     repository: 2gis-on-premise/tiles-api-importer
-    tag: 4.91.6
+    tag: 4.92.0
     pullPolicy: IfNotPresent
 
 
@@ -554,7 +550,6 @@ importer:
 
   # @extra importer.cleaner **Cassandra keyspace lifecycle management and Cleaner settings**
   # @param importer.forceImport If enabled, then the Importer job will delete existing keyspace and do import, otherwise import will be skipped.
-  # @param importer.clearSnapshots If enabled, then the Importer job will delete keyspace's snapshot as well when deleting a keyspace.<br>It executes the `nodetool clearsnapshot` command over JMX to do so, and therefore requires JMS to be enabled on the Cassandra side, and `cassandra.credentials.jmxUser`/`cassandra.credentials.jmxPassword` values to be set.
   # @param importer.cassandraHostsClockTimeCheckLimit Maximum difference over cassandra hosts clock time.
 
   # @param importer.retryInterval Period of time between tries to spawn worker job.
@@ -570,7 +565,6 @@ importer:
   # @param importer.cleaner.resources.limits.memory A memory limit.
 
   forceImport: false
-  clearSnapshots: false
   cassandraHostsClockTimeCheckLimit: 1s
 
   retryInterval: 5s

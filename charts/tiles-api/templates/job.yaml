@@ -126,16 +126,6 @@ spec:
                 secretKeyRef:
                   name: {{ include "tiles.fullname" $ }}-import
                   key: cassandraPassword
-            - name: CASSANDRA_JMX_USER
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "tiles.fullname" $ }}-import
-                  key: cassandraJmxUser
-            - name: CASSANDRA_JMX_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "tiles.fullname" $ }}-import
-                  key: cassandraJmxPassword
             {{- if $.Values.customCAs.bundle }}
             - name: SSL_CERT_DIR
               value: {{ include "tiles.customCA.mountPath" $ }}
