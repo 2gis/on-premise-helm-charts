@@ -1,6 +1,11 @@
 {{- define "generic-chart.job_spec.tpl" -}}
 {{ $ctx := .ctx }}
 {{ $job := .job }}
+{{- $podCtx := omit $ctx "Values" }}
+{{- $podValues := mergeOverwrite (deepCopy $ctx.Values) (pick $job "serviceAccount") }}
+{{- $_ := set $podValues "podLabels" (deepCopy (default (dict) $job.podLabels)) }}
+{{- $_ := set $podValues "podAnnotations" (deepCopy (default (dict) $job.podAnnotations)) }}
+{{- $_ := set $podCtx "Values" $podValues }}
 spec:
   {{- if "activeDeadlineSeconds" | hasKey $job }}
   activeDeadlineSeconds: {{ ($job).activeDeadlineSeconds }}
@@ -27,7 +32,7 @@ spec:
   parallelism: {{ ($job).parallelism }}
   {{- end }}
   template:
-    {{- include "generic-chart.pod_spec.tpl" $ctx | nindent 4 }}
+    {{- include "generic-chart.pod_spec.tpl" $podCtx | nindent 4 }}
       {{- with ($job).restartPolicy }}
       restartPolicy: {{ . }}
       {{- end }}{{- /* restartPolicy */}}

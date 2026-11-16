@@ -43,7 +43,7 @@ Elasticsearch, ClickHouse, Cassandra.
 | Компонент | Переменная | Версия |
 |-----------|-----------|--------|
 | Core | `versionCore` | 2.12.0 |
-| API Platform | `versionPlatform` | 2.60.0 |
+| API Platform | `versionPlatform` | 2.61.0 |
 | Pro | `versionPro` | 2.6.1 |
 | Citylens | `versionCitylens` | 2.3.0 |
 
@@ -693,7 +693,7 @@ environments:
 ```
   annotations:
     nginx.ingress.kubernetes.io/cors-allow-credentials: "true"
-    nginx.ingress.kubernetes.io/cors-allow-headers: DNT,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization,x-share-token,X-Company-Id
+    nginx.ingress.kubernetes.io/cors-allow-headers: DNT,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Range,Authorization,x-share-token,X-Company-Id,X-Session-ID
     nginx.ingress.kubernetes.io/cors-allow-methods: GET, PUT, POST, DELETE, PATCH, OPTIONS
     nginx.ingress.kubernetes.io/cors-allow-origin: '*'
     nginx.ingress.kubernetes.io/enable-cors: "true"
