@@ -27,6 +27,11 @@ spec:
     {{- $_ := required "service.ports[].name is required" $port.name }}
     {{- $_ := required "service.ports[].port is required" $port.port }}
     {{- $_ := required "service.ports[].targetPort is required" $port.targetPort }}
+    {{- if $port.nodePort | default false }}
+      {{- if not (contains "NodePort" (($.Values.service).type | default "ClusterIP")) }}
+        {{- fail "For nodePort need set `service.type` to `NodePort`" }}
+      {{- end }}
+    {{- end }}
     {{- toYaml (list $port) | nindent 4 }}
     {{- end }}
     {{- else }}

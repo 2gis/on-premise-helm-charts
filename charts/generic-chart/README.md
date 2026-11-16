@@ -193,19 +193,19 @@ Chart is tested using [pipeline](https://gitlab.2gis.ru/traffic/cicd-pipelines/-
 
 ### [Service](https://kubernetes.io/docs/concepts/services-networking/service/) settings
 
-| Name                  | Description                                                                                                                                        | Value       |
-| --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
-| `service.labels`      | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/). Undergoes template rendering               | `{}`        |
-| `service.annotations` | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/). Undergoes template rendering     | `{}`        |
-| `service.type`        | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).                     | `ClusterIP` |
-| `service.clusterIP`   | Controls Service cluster IP allocation. Cannot be changed after resource creation.                                                                 | `""`        |
-| `service.port`        | Service port.                                                                                                                                      | `80`        |
-| `service.nodePort`    | Node port if type NodePort.                                                                                                                        | `nil`       |
-| `service.name`        | Name of the single Service port, including its protocol prefix.                                                                                    | `http`      |
-| `service.targetPort`  | Named or numeric backend port for the single Service port.                                                                                         | `http`      |
-| `service.protocol`    | Transport protocol for the single Service port: TCP, UDP, SCTP.                                                                                    | `TCP`       |
-| `service.appProtocol` | Application protocol for the single Service port. Set to an empty string to omit it and use the port name for protocol selection.                  | `http`      |
-| `service.ports`       | Complete Service port maps (name, port, targetPort, optional protocol, appProtocol, nodePort). A non-empty list replaces the single-port settings. | `[]`        |
+| Name                  | Description                                                                                                                                                                                         | Value       |
+| --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `service.labels`      | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/). Undergoes template rendering                                                                | `{}`        |
+| `service.annotations` | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/). Undergoes template rendering                                                      | `{}`        |
+| `service.type`        | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).                                                                      | `ClusterIP` |
+| `service.clusterIP`   | Controls Service cluster IP allocation. Cannot be changed after resource creation.                                                                                                                  | `""`        |
+| `service.port`        | Service port.                                                                                                                                                                                       | `80`        |
+| `service.nodePort`    | Node port if type NodePort.                                                                                                                                                                         | `nil`       |
+| `service.name`        | Name of the single Service port, including its protocol prefix.                                                                                                                                     | `http`      |
+| `service.targetPort`  | Named or numeric backend port for the single Service port.                                                                                                                                          | `http`      |
+| `service.protocol`    | Transport protocol for the single Service port: TCP, UDP, SCTP.                                                                                                                                     | `TCP`       |
+| `service.appProtocol` | Application protocol for the single Service port. Set to an empty string to omit it and use the port name for protocol selection.                                                                   | `http`      |
+| `service.ports`       | Complete Service port maps (name, port, targetPort, optional protocol, appProtocol, nodePort). A non-empty list replaces the single-port settings. Setting nodePort requires service.type NodePort. | `[]`        |
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 

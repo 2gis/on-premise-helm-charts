@@ -143,7 +143,7 @@ pdb:
 # @param service.targetPort Named or numeric backend port for the single Service port.
 # @param service.protocol Transport protocol for the single Service port: TCP, UDP, SCTP.
 # @param service.appProtocol Application protocol for the single Service port. Set to an empty string to omit it and use the port name for protocol selection.
-# @param service.ports Complete Service port maps (name, port, targetPort, optional protocol, appProtocol, nodePort). A non-empty list replaces the single-port settings.
+# @param service.ports Complete Service port maps (name, port, targetPort, optional protocol, appProtocol, nodePort). A non-empty list replaces the single-port settings. Setting nodePort requires service.type NodePort.
 
 service:
   labels: {}
