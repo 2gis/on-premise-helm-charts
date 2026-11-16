@@ -10,7 +10,7 @@ metadata:
     {{- toYaml . | nindent 8 }}
   {{- end }}{{- /* podAnnotations */}}
   labels:
-  
+
     {{- include "generic-chart.podLabels" . | nindent 8 }}
 spec:
   {{- with .Values.imagePullSecrets }}

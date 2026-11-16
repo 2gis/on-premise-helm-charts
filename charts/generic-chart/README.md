@@ -251,8 +251,8 @@ Chart is tested using [pipeline](https://gitlab.2gis.ru/traffic/cicd-pipelines/-
 | `job.completionMode`          | Completion mode (NonIndexed or Indexed).                                                                                                                           | `""`  |
 | `job.parallelism`             | Number of pods running at any instant.                                                                                                                             | `""`  |
 | `job.restartPolicy`           | Kubernetes pod [restart policy](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy)                                                  | `""`  |
-| `job.podLabels`               | Labels for this Job's Pod, without inheriting root podLabels. Selector labels take precedence. | `{}` |
-| `job.podAnnotations`          | Annotations for this Job's Pod, without inheriting root podAnnotations. | `{}` |
+| `job.podLabels`               | Labels for this Job's Pod, without inheriting root podLabels. Selector labels take precedence.                                                                     | `{}`  |
+| `job.podAnnotations`          | Annotations for this Job's Pod, without inheriting root podAnnotations.                                                                                            | `{}`  |
 | `job.serviceAccount`          | ServiceAccount settings merged with the root settings for this Job's Pod. Account creation requires a separate serviceaccount template call with the same context. | `{}`  |
 
 ### Network Policy configuration
