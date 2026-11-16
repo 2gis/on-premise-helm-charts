@@ -21,9 +21,9 @@ To learn more about configuration, architecture, and requirements, see the offic
 | `imagePullSecrets`         | Kubernetes image pull secrets. | `[]`                               |
 | `imagePullPolicy`          | Pull policy.                   | `IfNotPresent`                     |
 | `api.image.repository`     | API service image repository.  | `2gis-on-premise/stat-api`         |
-| `api.image.tag`            | API service image tag.         | `0.2.5`                            |
+| `api.image.tag`            | API service image tag.         | `0.2.7`                            |
 | `migrate.image.repository` | Migrate tool image repository. | `2gis-on-premise/stat-api-migrate` |
-| `migrate.image.tag`        | Migrate tool image tag.        | `0.2.5`                            |
+| `migrate.image.tag`        | Migrate tool image tag.        | `0.2.7`                            |
 
 ### Kubernetes [Service Account](https://kubernetes.io/docs/concepts/security/service-accounts/) settings
 
