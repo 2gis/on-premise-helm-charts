@@ -16,6 +16,7 @@ containerNameOverride: ''
 # @param revisionHistoryLimit Number of replica sets to keep for deployment rollbacks
 # @param strategy Deployment [strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy). Undergoes template rendering
 # @param podAnnotations Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
+# @param podLabels Additional Pod labels. Selector labels take precedence and cannot be overridden.
 # @param imagePullSecrets Kubernetes image pull secrets
 # @param podSecurityContext.runAsNonRoot Indicates that the container must run as a non-root user
 # @param podSecurityContext.runAsUser The User ID (UID) to run the entrypoint of the container process
@@ -46,6 +47,7 @@ replicaCount: 1
 revisionHistoryLimit: 1
 strategy: {}
 podAnnotations: {}
+podLabels: {}
 imagePullSecrets: []
 podSecurityContext:
   runAsNonRoot: true
@@ -137,6 +139,11 @@ pdb:
 # @param service.clusterIP Controls Service cluster IP allocation. Cannot be changed after resource creation.
 # @param service.port Service port.
 # @param service.nodePort Node port if type NodePort.
+# @param service.name Name of the single Service port, including its protocol prefix.
+# @param service.targetPort Named or numeric backend port for the single Service port.
+# @param service.protocol Transport protocol for the single Service port: TCP, UDP, SCTP.
+# @param service.appProtocol Application protocol for the single Service port. Set to an empty string to omit it and use the port name for protocol selection.
+# @param service.ports Complete Service port maps (name, port, targetPort, optional protocol, appProtocol, nodePort). A non-empty list replaces the single-port settings.
 
 service:
   labels: {}
@@ -145,6 +152,11 @@ service:
   clusterIP: ''
   port: 80
   nodePort:
+  name: http
+  targetPort: http
+  protocol: TCP
+  appProtocol: http
+  ports: []
 
 
 # @section Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
@@ -212,6 +224,9 @@ cronJob:
 # @param job.completionMode Completion mode (NonIndexed or Indexed).
 # @param job.parallelism Number of pods running at any instant.
 # @param job.restartPolicy Kubernetes pod [restart policy](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy)
+# @param job.podLabels Labels for this Job's Pod, without inheriting root podLabels. Selector labels take precedence.
+# @param job.podAnnotations Annotations for this Job's Pod, without inheriting root podAnnotations.
+# @param job.serviceAccount ServiceAccount settings merged with the root settings for this Job's Pod. Account creation requires a separate serviceaccount template call with the same context.
 
 job:
   activeDeadlineSeconds: ''
@@ -223,6 +238,9 @@ job:
   completionMode: ''
   parallelism: ''
   restartPolicy: ''
+  podLabels: {}
+  podAnnotations: {}
+  serviceAccount: {}
 
 # @section Network Policy configuration
 
