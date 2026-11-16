@@ -38,6 +38,73 @@ For other templates re-use named definitions as follows:
 
 Below are supported parameters.
 
+### Pod metadata and ServiceAccount
+
+Root `podLabels` and `podAnnotations` apply to the base Deployment and StatefulSet
+Pod templates, not Job/CronJob Pods. Selector labels always take precedence over custom
+Pod labels; selectors and resource names are unchanged.
+
+`serviceAccount.create: false` with `serviceAccount.name` selects an existing
+account. Creating an account requires an explicit call to
+`generic-chart.serviceaccount.tpl`; importing the library does not create it.
+
+Job helpers accept `(dict "ctx" $ "job" .Values.job)`; CronJob helpers additionally
+accept `"cronJob" .Values.cronJob`. The supplied `job` defines independent
+`podLabels` and `podAnnotations`: root Pod metadata is never inherited, including
+when the local fields are absent or empty. Standard selector labels are still added.
+The local `serviceAccount` map is merged with the root ServiceAccount settings,
+without mutating the root context. A local ServiceAccount name does not
+create an account automatically; use an existing account or render its
+ServiceAccount separately with the same effective values.
+
+For component-level settings, pass a context whose `Values` contains that
+component's effective configuration. Library defaults are not automatically
+imported into the caller's root values.
+
+### Service protocol selection
+
+Existing single-port defaults remain HTTP: `service.port: 80`,
+`service.targetPort: http`, `service.name: http`, `service.protocol: TCP` and
+`service.appProtocol: http`. To expose gRPC explicitly:
+
+```yaml
+service:
+  port: 50051
+  targetPort: grpc
+  name: grpc-api
+  appProtocol: grpc
+```
+
+Set `service.appProtocol: ""` to omit the field and let Istio use the port name.
+Changing `name` alone does not override the default `appProtocol: http`.
+For HTTPS/TLS or opaque TCP, explicitly use the matching application protocol.
+TLS protocol selection does not terminate TLS.
+
+For multiple ports, supply complete `service.ports` maps:
+
+```yaml
+service:
+  ports:
+    - name: http-api
+      port: 80
+      targetPort: http
+      appProtocol: http
+    - name: grpc-api
+      port: 50051
+      targetPort: grpc
+      appProtocol: grpc
+```
+
+A non-empty `service.ports` replaces all single-port settings, including
+`service.nodePort`. Include `nodePort` in each map when needed. The port name,
+number and targetPort are required; omitted `appProtocol` stays omitted.
+Transport `protocol` defaults to TCP in Kubernetes.
+
+Existing `generic-chart.merge` overrides retain their precedence. Lists such as
+`ports` and `containers` are replaced rather than merged by element name.
+Adding the dependency alone does not migrate application templates, names,
+selectors, RBAC or Gateway routes.
+
 ## Test chart
 
 Test chart based on generic-chart is located in resources.
