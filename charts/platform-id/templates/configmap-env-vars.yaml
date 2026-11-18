@@ -80,6 +80,10 @@ data:
   {{- if .Values.adminRealm }}
   KC_SPI_ADMIN_REALM: {{ .Values.adminRealm | quote }}
   {{- end }}
-  {{- if .Values.extraStartupArgs }}
-  KEYCLOAK_EXTRA_ARGS: {{ .Values.extraStartupArgs | quote }}
+  {{- $extraArgs := .Values.extraStartupArgs }}
+  {{- if .Values.realmImport.enabled }}
+  {{- $extraArgs = trim (printf "%s --import-realm" (trim $extraArgs)) }}
+  {{- end }}
+  {{- if $extraArgs }}
+  KEYCLOAK_EXTRA_ARGS: {{ $extraArgs | quote }}
   {{- end }}

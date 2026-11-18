@@ -1,9 +1,14 @@
-keycloak
-	keycloak-config-cli:6.4.0-debian-12-r11
-	keycloak-themes:0.0.9
-	keycloak:26.3.3
 keys
-	keys-backend:1.180.1
+	keys-backend:1.182.0
 	keys-ui:1.9.1
 license
 	license:2.6.1
+platform
+	platform-ui:1.50.0
+platform-id
+	platform-id:1.5.0
+styles-api
+	styles-api:0.50.1
+update-manager
+	dgctl:3.7.0
+	update-manager:3.7.0

@@ -68,9 +68,6 @@ spec:
             - name: http-syncer
               containerPort: {{ .Values.syncer.ports.http }}
               protocol: TCP
-            - name: http-metrics
-              containerPort: {{ .Values.unisearcher.ports.monitor }}
-              protocol: TCP
           {{- if .Values.unisearcher.livenessProbe.enabled }}
           livenessProbe:
             {{- include "common.tplvalues.render" (dict "value" (omit .Values.unisearcher.livenessProbe "enabled") "context" $) | nindent 12 }}

@@ -58,7 +58,7 @@ To learn more about configuration, architecture, and requirements, see the offic
 | Name               | Description | Value                               |
 | ------------------ | ----------- | ----------------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-async-matrix` |
-| `image.tag`        | Tag         | `1.23.0`                            |
+| `image.tag`        | Tag         | `1.24.1`                            |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`                      |
 
 ### Service account settings

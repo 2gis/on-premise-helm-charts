@@ -43,20 +43,21 @@ To learn more about configuration, architecture, and requirements, see the offic
 | Name               | Description | Value                           |
 | ------------------ | ----------- | ------------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/raster-js-api` |
-| `image.tag`        | Tag         | `4.2.1`                         |
+| `image.tag`        | Tag         | `4.2.2`                         |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`                  |
 
 ### API settings
 
-| Name                      | Description                                                                                                                               | Value   |
-| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `api.publicHost`          | **required** Host on which the service will be available, e.g. 'maps-raster.ingress.host'.                                                | `""`    |
-| `api.protocol`            | Protocol to use: `http`, `https`.                                                                                                         | `https` |
-| `api.tileServerUrl`       | URL of the tile server, e.g. 'https://tiles-api.ingress.host'.                                                                            | `""`    |
-| `api.catalogApiServerUrl` | URL of the Catalog API service, e.g. 'https://catalog-api.ingress.host'.                                                                  | `""`    |
-| `api.catalogApiKey`       | API key for the Catalog API service. Stored in a Kubernetes Secret and mounted into the container via `secretKeyRef`.                     | `""`    |
-| `api.key`                 | Optional API key that will be included in tile requests. Stored in a Kubernetes Secret and mounted into the container via `secretKeyRef`. | `""`    |
-| `api.keyServerUrl`        | Keys-api service URL, e.g. 'https://keys-api.ingress.host/public/v1/keys/'                                                                | `""`    |
+| Name                      | Description                                                                                                                               | Value    |
+| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| `api.publicHost`          | **required** Host on which the service will be available, e.g. 'maps-raster.ingress.host'.                                                | `""`     |
+| `api.protocol`            | Protocol to use: `http`, `https`.                                                                                                         | `https`  |
+| `api.tileServerUrl`       | URL of the tile server, e.g. 'https://tiles-api.ingress.host'. The tile server must have a tileset with `kind: raster` configured.        | `""`     |
+| `api.tileSet`             | Tileset of the Tiles API service to use, e.g. 'raster'.                                                                                   | `raster` |
+| `api.catalogApiServerUrl` | URL of the Catalog API service, e.g. 'https://catalog-api.ingress.host'.                                                                  | `""`     |
+| `api.catalogApiKey`       | API key for the Catalog API service. Stored in a Kubernetes Secret and mounted into the container via `secretKeyRef`.                     | `""`     |
+| `api.key`                 | Optional API key that will be included in tile requests. Stored in a Kubernetes Secret and mounted into the container via `secretKeyRef`. | `""`     |
+| `api.keyServerUrl`        | Keys-api service URL, e.g. 'https://keys-api.ingress.host/public/v1/keys/'                                                                | `""`     |
 
 ### Strategy settings
 

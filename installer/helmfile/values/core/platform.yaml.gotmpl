@@ -1,14 +1,23 @@
 {{- $protocol := ternary "https" "http" .Values.ingressTls }}
 ui:
   brand: 2gis
-  pages: "status,playground,map_styles,license"
+  pages: "profile,signup,users,keys,license"
+  oauth:
+    wellknownUrl: {{ $protocol }}://{{ .Values.platformIdIngress }}/realms/Platform/.well-known/openid-configuration
+    clientId: platform-client
+    clientSecret: ''
+    scope: ''
+    codeUrl: {{ $protocol }}://{{ .Values.platformIngress }}/api/auth/code
+    safeHosts: '.*'
+    secure: {{ .Values.ingressTls }}
+  bffSecure: {{ .Values.ingressTls }}
   playgrounds: mapgl,geocoder,directions,static
   status:
     mapgl: "MapGL JS={{ $protocol }}://{{ .Values.mapglIngress }},Tiles API={{ $protocol }}://{{ .Values.tilesMultiIngress }}/healthcheck"
     search: "Catalog API={{ $protocol }}://{{ .Values.catalogIngress }},Search API={{ $protocol }}://{{ .Values.searchIngress }}/v2/status"
     navi: "Castle={{ $protocol }}://{{ .Values.naviCastleIngress }}/cities.conf,Routing={{ $protocol }}://{{ .Values.naviFrontIngress }}/healthcheck"
     pro: "PRO UI={{ $protocol }}://{{ .Values.proUiIngress }}/api/healthcheck/app,PRO API={{ $protocol }}://{{ .Values.proApiIngress }}/health/live,PRO Permissions API={{ $protocol }}://{{ .Values.proPermissionsIngress }}"
-    keys: "Keys UI={{ $protocol }}://{{ .Values.keysAdminIngress }},Keys API=http://keys-api/healthcheck,Keys Service API=http://keys-service-api/healthcheck"
+    keys: "Keys API=http://keys-api/healthcheck,Keys Service API=http://keys-service-api/healthcheck"
     mapStyles: "{{ $protocol }}://{{ .Values.stylesIngress }}/healthcheck"
 
   mapgl:
@@ -26,6 +35,9 @@ ui:
   mapStyles:
     url: "{{ $protocol }}://{{ .Values.stylesIngress }}"
     key: {{ .Values.key }}
+
+  updateManager:
+    url: http://update-manager
 
   static:
     url: "{{ $protocol }}://{{ .Values.staticmapsIngress }}"

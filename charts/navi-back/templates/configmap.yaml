@@ -370,7 +370,7 @@ data:
         },
         {{- if .Values.naviback.restrictions.enabled }}
         "restrictions": {
-          "index_name": "restrictions_index",
+          "index_name": {{ .Values.naviback.restrictions.indexName | quote }},
           "update_period": 0,
           "nodes": [
             "{{ include "config.setRestrictionUrl" $ }}/"
@@ -378,6 +378,17 @@ data:
           "timeout_seconds": {{ .Values.naviback.restrictions.timeoutSeconds | int }}
         },
         {{- end }}{{- /* if .Values.naviback.restrictions.enabled */}}
+        {{- if .Values.naviback.smartRoutes.enabled }}
+        "smart_routes": {
+          "url": {{ .Values.naviback.smartRoutes.url | quote }},
+          "projects": {{ .Values.naviback.smartRoutes.projects | mustToJson }},
+          "timeout_seconds": {{ .Values.naviback.smartRoutes.timeoutSeconds | int }},
+          "fetch_period_seconds": {{ .Values.naviback.smartRoutes.fetchPeriodSeconds | int }},
+          "initial_retry_interval_ms": {{ .Values.naviback.smartRoutes.initialRetryIntervalMs | int }},
+          "max_retry_interval_ms": {{ .Values.naviback.smartRoutes.maxRetryIntervalMs | int }},
+          "max_retries": {{ .Values.naviback.smartRoutes.maxRetries | int }}
+        },
+        {{- end }}{{- /* if .Values.naviback.smartRoutes.enabled */}}
         {{- if .Values.naviback.indices.entrances.enabled }}
         "entrances": {
           "index_name": "default",
@@ -762,6 +773,7 @@ data:
           "simple_network_build_thread_pool_size": {{ include "config.setCpuNumber" . }},
           {{- end }}
           "update_projects_limit": 2,
+          "smart_routes_thread_pool_size": {{ .Values.naviback.smartRoutesThreadPoolSize | int }},
           "carrouting_page_cache_size": 8192,
           "carrouting_tile_cache_size": 8192,
           "carrouting_bit_tile_cache_size": 2048,

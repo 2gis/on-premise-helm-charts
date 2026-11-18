@@ -27,7 +27,7 @@ dashboardDomain: {{ $protocol }}://{{ .Values.citylensIngress }}
 web:
   auth:
     enabled: true
-    authServerUrl: {{ $protocol }}://{{ .Values.keycloakIngress }}
+    authServerUrl: {{ $protocol }}://{{ .Values.platformIdIngress }}
     verifySsl: true
   ingress:
     className: {{ .Values.ingressClassName }}
@@ -58,7 +58,7 @@ api:
   routesApiBaseUrl: http://citylens-routes-api
   auth:
     enabled: true
-    authServerUrl: {{ $protocol }}://{{ .Values.keycloakIngress }}
+    authServerUrl: {{ $protocol }}://{{ .Values.platformIdIngress }}
     verifySsl: true
   ingress:
     className: {{ .Values.ingressClassName }}

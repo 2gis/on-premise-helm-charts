@@ -7,6 +7,31 @@
 - Before upgrading, update the Platform services to the [Platform:2.61.0](../platform/PLATFORM-CHANGELOG.md) release.
 - To obtain new licenses or update existing ones, use `dgctl` version `3.8.0` or higher.
 
+## [2.12.0]
+
+### Release composition
+
+- The Core release now includes the `platform`, `styles-api`, and `update-manager` charts (previously shipped with the Platform releases; removed from the Platform release in 2.60.0). Update Core together with Platform 2.60.0.
+- The `keycloak` chart is removed and replaced by `platform-id` (see below).
+
+### keys
+
+- New `bootstrap.enabled` flag (default: `false`). When enabled, a bootstrap Job creates the default partner, an unlimited subscription, and an API key during the first deployment if the keys table is empty. The created API key is printed in the Job logs — set `bootstrap.logLevel` to `info` or lower and read it via `kubectl logs job/<bootstrap-job>`. The finished Job is retained for `bootstrap.ttlSecondsAfterFinished` seconds (default: `86400`) before automatic cleanup.
+- The Keys administration UI is deprecated. Use Platform Manager to work with keys. The new `admin.enabled` flag (default: `true`) allows disabling the UI.
+
+### platform-id
+
+- Keycloak service replaced by Platform ID: chart and helm release `keycloak` renamed to `platform-id`.
+- The `keycloak-config-cli` job is replaced with the native startup import (`kc.sh start --import-realm`).
+  Realms are provisioned from the chart (`charts/platform-id/realms/`) on the FIRST deployment only (seed-once).
+  On upgrade, realm configuration changes from the chart are NO LONGER applied to existing realms —
+  apply changes via the admin API / admin console.
+- Images `keycloak`, `keycloak-config-cli`, `keycloak-themes` are no longer required — a single `platform-id` image is used.
+- The `keycloakThemes` values section is removed. The `keycloakConfigCli.enabled` parameter now controls the
+  vanilla config-cli job with an empty configuration.
+- Existing realms keep their current login theme; fresh installations get the SPA theme `platform-id-2gis`
+  (login by email).
+
 ## [2.8.0]
 
 ### keys

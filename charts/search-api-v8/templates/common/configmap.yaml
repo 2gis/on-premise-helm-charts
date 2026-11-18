@@ -1018,6 +1018,13 @@ data:
     debug-mode-enabled: {{ .Values.debugMode }}
     debug-service-url: '127.0.0.1:{{ .Values.ingressRouter.envoy.ports.grpc }}'
     testsuite-enabled: false
+  {{- if .Values.onpremise }}
+    dynamic-config-url: '127.0.0.1:1234'
+    dynamic-config-enabled: false
+  {{- else }}
+    dynamic-config-url: 'http://{{ include "search-api-v8.fullname" . }}-config-distributor.search.svc.cluster.local:{{ .Values.service.configDistributor.port }}'
+    dynamic-config-enabled: {{ .Values.configDistributor.enabled }}
+  {{- end }}{{- /* .Values.onpremise */}}
     graceful-shutdown-interval: {{ .Values.ingressRouter.gracefulShutdownInterval }}
   {{- end }}{{- /* .Values.ingressRouter.enabled  */}}
 
@@ -1035,6 +1042,13 @@ data:
     sentry-dsn: {{ .Values.sentry.segmentDetectorDsn | quote }}
     {{- include "search-api-v8.sentry.vars.common" . | nindent 4 }}
     segment-detector-mon-threads: {{ .Values.segmentDetector.segmentDetectorMonThreads }}
+  {{- if .Values.onpremise }}
+    dynamic-config-url: '127.0.0.1:1234'
+    dynamic-config-enabled: false
+  {{- else }}
+    dynamic-config-url: 'http://{{ include "search-api-v8.fullname" . }}-config-distributor.search.svc.cluster.local:{{ .Values.service.configDistributor.port }}'
+    dynamic-config-enabled: {{ .Values.configDistributor.enabled }}
+  {{- end }}{{- /* .Values.onpremise */}}
     graceful-shutdown-interval: {{ .Values.segmentDetector.gracefulShutdownInterval }}
   {{- end }}{{- /* .Values.segmentDetector.enabled  */}}
 

@@ -118,7 +118,7 @@ unisearcher:
   image:
     repository: 2gis-on-premise/search-api-v8-unisearcher
     pullPolicy: IfNotPresent
-    tag: 8.34.0
+    tag: 8.37.0
   ports:
     http: 8092
     grpc: 8091
@@ -138,10 +138,10 @@ unisearcher:
   resources:
     requests:
       cpu: 1400m
-      memory: 5500Mi
+      memory: 7Gi
     limits:
       cpu: 6000m
-      memory: 7500Mi
+      memory: 9Gi
   livenessProbe:
     enabled: true
     httpGet:
@@ -308,7 +308,7 @@ head:
     image:
       repository: 2gis-on-premise/search-api-v8-head
       pullPolicy: IfNotPresent
-      tag: 8.34.0
+      tag: 8.37.0
     ports:
       grpc: 9010
       http: 9090
@@ -317,10 +317,10 @@ head:
     resources:
       requests:
         cpu: 900m
-        memory: 5500Mi
+        memory: 7Gi
       limits:
         cpu: 2000m
-        memory: 8Gi
+        memory: 9Gi
     logLevel: info
     logFormat: json
     livenessProbe:
@@ -675,7 +675,7 @@ filesStorage:
   image:
     repository: 2gis-on-premise/search-api-v8-files-storage
     pullPolicy: IfNotPresent
-    tag: 8.34.0
+    tag: 8.37.0
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -774,7 +774,7 @@ dataAdapter:
   image:
     repository: 2gis-on-premise/search-api-v8-data-adapter
     pullPolicy: IfNotPresent
-    tag: 8.34.0
+    tag: 8.37.0
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -867,7 +867,7 @@ portal:
   image:
     repository: 2gis-on-premise/search-api-v8-portal
     pullPolicy: IfNotPresent
-    tag: 8.34.0
+    tag: 8.37.0
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -969,7 +969,7 @@ controller:
   image:
     repository: 2gis-on-premise/search-api-v8-controller
     pullPolicy: IfNotPresent
-    tag: 8.34.0
+    tag: 8.37.0
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -1101,7 +1101,7 @@ indexer:
   image:
     repository: 2gis-on-premise/search-api-v8-indexer
     pullPolicy: IfNotPresent
-    tag: 8.34.0
+    tag: 8.37.0
   podSecurityContext: {}
   imagePullSecrets: []
   nodeSelector: {}
@@ -1206,7 +1206,7 @@ syncer:
   image:
     repository: 2gis-on-premise/search-api-v8-syncer
     pullPolicy: IfNotPresent
-    tag: 8.34.0
+    tag: 8.37.0
   securityContext: {}
   resources:
     requests:
@@ -1540,7 +1540,7 @@ ingressRouter:
   image:
     repository: 2gis-on-premise/search-api-v8-ingress-router
     pullPolicy: IfNotPresent
-    tag: 8.34.0
+    tag: 8.37.0
   imagePullSecrets: []
   matchLabels: {}
   podLabels: {}
@@ -1703,7 +1703,7 @@ segmentDetector:
   image:
     repository: 2gis-on-premise/search-api-v8-segment-detector
     pullPolicy: IfNotPresent
-    tag: 8.34.0
+    tag: 8.37.0
   imagePullSecrets: []
   segmentDetectorGrpcThreads: 2
   dataUpdateFrequencySec: 60

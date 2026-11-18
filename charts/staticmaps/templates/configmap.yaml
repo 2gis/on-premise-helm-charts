@@ -16,6 +16,10 @@ data:
       fetchTimeout: "{{ $.Values.tiles.requestTimeout }}"
       attributionDir: "{{ .attributionDir }}"
       tilesUrl: {{ required "Valid .Values.tiles.url required!" $.Values.tiles.url }}
+      tilesets:
+        {{- $tilesets := .tilesets | default dict }}
+        sd: {{ index $tilesets "sd" | default "raster" | quote }}
+        hd: {{ index $tilesets "hd" | default "raster" | quote }}
     markers:
       localDir: "{{ .markers.localDir }}"
       fetchTimeout: "{{ .markers.fetchTimeout }}"

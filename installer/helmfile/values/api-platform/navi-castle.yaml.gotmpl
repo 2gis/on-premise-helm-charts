@@ -27,9 +27,6 @@ init:
     restriction: false # enable if navi-restrictions service deployed
     restrictionImport: false
 
-dgctlStorage:
-  manifest: manifests/api-platform/latest.json
-
 ingress:
   enabled: true
   className: {{ .Values.ingressClassName }}

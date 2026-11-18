@@ -14,14 +14,7 @@ Return the proper Keycloak image name
 Return the proper keycloak-config-cli image name
 */}}
 {{- define "keycloak.keycloakConfigCli.image" -}}
-{{ .Values.dgctlDockerRegistry }}/{{ .Values.keycloakConfigCli.image.repository }}:{{ .Values.keycloakConfigCli.image.tag }}
-{{- end -}}
-
-{{/*
-Return the proper keycloak-themes image name
-*/}}
-{{- define "keycloak.keycloakThemes.image" -}}
-{{ .Values.dgctlDockerRegistry }}/{{ .Values.keycloakThemes.image.repository }}:{{ .Values.keycloakThemes.image.tag }}
+{{ include "common.images.image" (dict "imageRoot" .Values.keycloakConfigCli.image "global" .Values.global) }}
 {{- end -}}
 
 {{/*

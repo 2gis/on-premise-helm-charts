@@ -42,7 +42,7 @@ To learn more about configuration, architecture, and requirements, see the offic
 | Name               | Description | Value                           |
 | ------------------ | ----------- | ------------------------------- |
 | `image.repository` | Repository  | `2gis-on-premise/navi-splitter` |
-| `image.tag`        | Tag         | `1.18.0`                        |
+| `image.tag`        | Tag         | `1.19.0`                        |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`                  |
 
 ### Splitter application settings
