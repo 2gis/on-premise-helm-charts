@@ -42,7 +42,7 @@ Elasticsearch, ClickHouse, Cassandra.
 
 | Компонент | Переменная | Версия |
 |-----------|-----------|--------|
-| Core | `versionCore` | 2.12.0 |
+| Core | `versionCore` | 2.13.0 |
 | API Platform | `versionPlatform` | 2.61.0 |
 | Pro | `versionPro` | 2.6.1 |
 | Citylens | `versionCitylens` | 2.3.0 |
