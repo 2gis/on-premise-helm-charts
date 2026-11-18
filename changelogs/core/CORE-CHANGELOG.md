@@ -1,3 +1,19 @@
+## [2.13.0] (2026-11-18)
+#### [Breaking-Changes](CORE-Breaking-Changes.md#2130)
+#### Images
+```
+keys
+	- keys-ui:1.9.1
+	+ keys-ui:1.11.2
+license
+	- license:2.6.1
+	+ license:3.0.0
+platform
+	- platform-ui:1.50.0
+	+ platform-ui:1.51.0
+```
+[Full list of image versions](https://github.com/2gis/on-premise-helm-charts/blob/Core-2.13.0/changelogs/core/core_image_versions.txt)
+
 ## [2.12.0] (2026-10-28)
 #### [Breaking-Changes](CORE-Breaking-Changes.md#2120)
 #### Images

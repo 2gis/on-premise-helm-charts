@@ -1,5 +1,12 @@
 # Core Breaking-Changes
 
+## [2.13.0]
+
+### license
+
+- Before upgrading, update the Platform services to the [Platform:2.61.0](../platform/PLATFORM-CHANGELOG.md) release.
+- To obtain new licenses or update existing ones, use `dgctl` version `3.8.0` or higher.
+
 ## [2.12.0]
 
 ### Release composition

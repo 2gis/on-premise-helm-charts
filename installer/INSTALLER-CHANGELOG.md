@@ -1,3 +1,31 @@
+## [2026-11-18]
+
+#### Supported versions
+
+| Component    | Version |
+| ------------ | ------- |
+| core         | 2.13.0  |
+| api-platform | 2.61.0  |
+| pro          | 2.6.1   |
+| citylens     | 2.3.0   |
+
+#### Changes
+- Bumped supported core version to 2.13.0
+
+## [2026-11-16]
+
+#### Supported versions
+
+| Component    | Version |
+| ------------ | ------- |
+| core         | 2.12.0  |
+| api-platform | 2.61.0  |
+| pro          | 2.6.1   |
+| citylens     | 2.3.0   |
+
+#### Changes
+- Bumped supported api-platform version to 2.61.0
+
 ## [2026-10-29]
 
 #### Supported versions

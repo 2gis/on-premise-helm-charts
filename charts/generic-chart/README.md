@@ -38,6 +38,73 @@ For other templates re-use named definitions as follows:
 
 Below are supported parameters.
 
+### Pod metadata and ServiceAccount
+
+Root `podLabels` and `podAnnotations` apply to the base Deployment and StatefulSet
+Pod templates, not Job/CronJob Pods. Selector labels always take precedence over custom
+Pod labels; selectors and resource names are unchanged.
+
+`serviceAccount.create: false` with `serviceAccount.name` selects an existing
+account. Creating an account requires an explicit call to
+`generic-chart.serviceaccount.tpl`; importing the library does not create it.
+
+Job helpers accept `(dict "ctx" $ "job" .Values.job)`; CronJob helpers additionally
+accept `"cronJob" .Values.cronJob`. The supplied `job` defines independent
+`podLabels` and `podAnnotations`: root Pod metadata is never inherited, including
+when the local fields are absent or empty. Standard selector labels are still added.
+The local `serviceAccount` map is merged with the root ServiceAccount settings,
+without mutating the root context. A local ServiceAccount name does not
+create an account automatically; use an existing account or render its
+ServiceAccount separately with the same effective values.
+
+For component-level settings, pass a context whose `Values` contains that
+component's effective configuration. Library defaults are not automatically
+imported into the caller's root values.
+
+### Service protocol selection
+
+Existing single-port defaults remain HTTP: `service.port: 80`,
+`service.targetPort: http`, `service.name: http`, `service.protocol: TCP` and
+`service.appProtocol: http`. To expose gRPC explicitly:
+
+```yaml
+service:
+  port: 50051
+  targetPort: grpc
+  name: grpc-api
+  appProtocol: grpc
+```
+
+Set `service.appProtocol: ""` to omit the field and let Istio use the port name.
+Changing `name` alone does not override the default `appProtocol: http`.
+For HTTPS/TLS or opaque TCP, explicitly use the matching application protocol.
+TLS protocol selection does not terminate TLS.
+
+For multiple ports, supply complete `service.ports` maps:
+
+```yaml
+service:
+  ports:
+    - name: http-api
+      port: 80
+      targetPort: http
+      appProtocol: http
+    - name: grpc-api
+      port: 50051
+      targetPort: grpc
+      appProtocol: grpc
+```
+
+A non-empty `service.ports` replaces all single-port settings, including
+`service.nodePort`. Include `nodePort` in each map when needed. The port name,
+number and targetPort are required; omitted `appProtocol` stays omitted.
+Transport `protocol` defaults to TCP in Kubernetes.
+
+Existing `generic-chart.merge` overrides retain their precedence. Lists such as
+`ports` and `containers` are replaced rather than merged by element name.
+Adding the dependency alone does not migrate application templates, names,
+selectors, RBAC or Gateway routes.
+
 ## Test chart
 
 Test chart based on generic-chart is located in resources.
@@ -64,6 +131,7 @@ Chart is tested using [pipeline](https://gitlab.2gis.ru/traffic/cicd-pipelines/-
 | `revisionHistoryLimit`                              | Number of replica sets to keep for deployment rollbacks                                                                                      | `1`              |
 | `strategy`                                          | Deployment [strategy](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy). Undergoes template rendering          | `{}`             |
 | `podAnnotations`                                    | Kubernetes [pod annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)                                 | `{}`             |
+| `podLabels`                                         | Additional Pod labels. Selector labels take precedence and cannot be overridden.                                                             | `{}`             |
 | `imagePullSecrets`                                  | Kubernetes image pull secrets                                                                                                                | `[]`             |
 | `podSecurityContext.runAsNonRoot`                   | Indicates that the container must run as a non-root user                                                                                     | `true`           |
 | `podSecurityContext.runAsUser`                      | The User ID (UID) to run the entrypoint of the container process                                                                             | `10001`          |
@@ -125,14 +193,19 @@ Chart is tested using [pipeline](https://gitlab.2gis.ru/traffic/cicd-pipelines/-
 
 ### [Service](https://kubernetes.io/docs/concepts/services-networking/service/) settings
 
-| Name                  | Description                                                                                                                                    | Value       |
-| --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
-| `service.labels`      | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/). Undergoes template rendering           | `{}`        |
-| `service.annotations` | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/). Undergoes template rendering | `{}`        |
-| `service.type`        | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).                 | `ClusterIP` |
-| `service.clusterIP`   | Controls Service cluster IP allocation. Cannot be changed after resource creation.                                                             | `""`        |
-| `service.port`        | Service port.                                                                                                                                  | `80`        |
-| `service.nodePort`    | Node port if type NodePort.                                                                                                                    | `nil`       |
+| Name                  | Description                                                                                                                                                                                         | Value       |
+| --------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `service.labels`      | Kubernetes [service labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/). Undergoes template rendering                                                                | `{}`        |
+| `service.annotations` | Kubernetes [service annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/). Undergoes template rendering                                                      | `{}`        |
+| `service.type`        | Kubernetes [service type](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types).                                                                      | `ClusterIP` |
+| `service.clusterIP`   | Controls Service cluster IP allocation. Cannot be changed after resource creation.                                                                                                                  | `""`        |
+| `service.port`        | Service port.                                                                                                                                                                                       | `80`        |
+| `service.nodePort`    | Node port if type NodePort.                                                                                                                                                                         | `nil`       |
+| `service.name`        | Name of the single Service port, including its protocol prefix.                                                                                                                                     | `http`      |
+| `service.targetPort`  | Named or numeric backend port for the single Service port.                                                                                                                                          | `http`      |
+| `service.protocol`    | Transport protocol for the single Service port: TCP, UDP, SCTP.                                                                                                                                     | `TCP`       |
+| `service.appProtocol` | Application protocol for the single Service port. Set to an empty string to omit it and use the port name for protocol selection.                                                                   | `http`      |
+| `service.ports`       | Complete Service port maps (name, port, targetPort, optional protocol, appProtocol, nodePort). A non-empty list replaces the single-port settings. Setting nodePort requires service.type NodePort. | `[]`        |
 
 ### Kubernetes [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/) settings
 
@@ -167,17 +240,20 @@ Chart is tested using [pipeline](https://gitlab.2gis.ru/traffic/cicd-pipelines/-
 
 ### [Job](https://kubernetes.io/docs/concepts/workloads/controllers/job/) settings
 
-| Name                          | Description                                                                                                       | Value |
-| ----------------------------- | ----------------------------------------------------------------------------------------------------------------- | ----- |
-| `job.activeDeadlineSeconds`   | Number of seconds active deadline.                                                                                | `""`  |
-| `job.ttlSecondsAfterFinished` | A time-to-live mechanism to clean up old Jobs that have finished execution.                                       | `""`  |
-| `job.backoffLimit`            | Number of retries before considering a Job as failed.                                                             | `""`  |
-| `job.backoffLimitPerIndex`    | Maximal number of pod failures per index.                                                                         | `""`  |
-| `job.podFailurePolicy`        | Pod failure policy.                                                                                               | `""`  |
-| `job.completions`             | Number of successful pods for completion Job.                                                                     | `""`  |
-| `job.completionMode`          | Completion mode (NonIndexed or Indexed).                                                                          | `""`  |
-| `job.parallelism`             | Number of pods running at any instant.                                                                            | `""`  |
-| `job.restartPolicy`           | Kubernetes pod [restart policy](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy) | `""`  |
+| Name                          | Description                                                                                                                                                        | Value |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----- |
+| `job.activeDeadlineSeconds`   | Number of seconds active deadline.                                                                                                                                 | `""`  |
+| `job.ttlSecondsAfterFinished` | A time-to-live mechanism to clean up old Jobs that have finished execution.                                                                                        | `""`  |
+| `job.backoffLimit`            | Number of retries before considering a Job as failed.                                                                                                              | `""`  |
+| `job.backoffLimitPerIndex`    | Maximal number of pod failures per index.                                                                                                                          | `""`  |
+| `job.podFailurePolicy`        | Pod failure policy.                                                                                                                                                | `""`  |
+| `job.completions`             | Number of successful pods for completion Job.                                                                                                                      | `""`  |
+| `job.completionMode`          | Completion mode (NonIndexed or Indexed).                                                                                                                           | `""`  |
+| `job.parallelism`             | Number of pods running at any instant.                                                                                                                             | `""`  |
+| `job.restartPolicy`           | Kubernetes pod [restart policy](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy)                                                  | `""`  |
+| `job.podLabels`               | Labels for this Job's Pod, without inheriting root podLabels. Selector labels take precedence.                                                                     | `{}`  |
+| `job.podAnnotations`          | Annotations for this Job's Pod, without inheriting root podAnnotations.                                                                                            | `{}`  |
+| `job.serviceAccount`          | ServiceAccount settings merged with the root settings for this Job's Pod. Account creation requires a separate serviceaccount template call with the same context. | `{}`  |
 
 ### Network Policy configuration
 

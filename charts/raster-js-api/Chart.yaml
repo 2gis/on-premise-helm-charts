@@ -4,7 +4,7 @@ description: 2GIS Raster Maps API (MapsAPI 2.0, Leaflet-based) chart for On-Prem
 
 type: application
 
-version: 2.60.0
+version: 2.61.0
 appVersion: 4.2.2
 
 dependencies:
