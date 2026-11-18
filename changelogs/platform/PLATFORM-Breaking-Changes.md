@@ -1,5 +1,19 @@
 # Platform Breaking-Changes
 
+## [2.62.0]
+
+### tiles-api
+
+- The importer no longer uses JMX access to Cassandra. If the JMX user was
+  created specifically for the importer, it can be removed, and the JMX port
+  can be disabled on the Cassandra side.
+- Snapshots created when deleting keyspaces are no longer cleaned up during
+  the import process. With `auto_snapshot: true` (Cassandra default) and no
+  TTL, snapshots will accumulate on disk. Configure `auto_snapshot_ttl`, set
+  `auto_snapshot: false`, or delete snapshots manually.
+- The `cassandra.credentials.jmxUser`, `cassandra.credentials.jmxPassword` and
+  `importer.clearSnapshots` values were removed from the chart.
+
 ## [2.60.0]
 
 ### Release composition
