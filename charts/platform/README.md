@@ -34,7 +34,7 @@ To learn more about configuration, architecture, and requirements, see the offic
 | Name                  | Description                    | Value                         |
 | --------------------- | ------------------------------ | ----------------------------- |
 | `ui.image.repository` | Repository                     | `2gis-on-premise/platform-ui` |
-| `ui.image.tag`        | Tag                            | `1.50.0`                      |
+| `ui.image.tag`        | Tag                            | `1.51.0`                      |
 | `imagePullSecrets`    | Kubernetes image pull secrets. | `[]`                          |
 
 ### UI service settings
