@@ -224,8 +224,8 @@ cronJob:
 # @param job.completionMode Completion mode (NonIndexed or Indexed).
 # @param job.parallelism Number of pods running at any instant.
 # @param job.restartPolicy Kubernetes pod [restart policy](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy)
-# @param job.podLabels Labels for this Job's Pod, without inheriting root podLabels. Selector labels take precedence.
-# @param job.podAnnotations Annotations for this Job's Pod, without inheriting root podAnnotations.
+# @param job.podLabels Labels for this Job's Pod. Falls back to root podLabels when empty. Selector labels take precedence.
+# @param job.podAnnotations Annotations for this Job's Pod. Falls back to root podAnnotations when empty.
 # @param job.serviceAccount ServiceAccount settings merged with the root settings for this Job's Pod. Account creation requires a separate serviceaccount template call with the same context.
 
 job:
