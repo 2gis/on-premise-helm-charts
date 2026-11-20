@@ -20,7 +20,7 @@ Use this Helm chart to deploy Update Manager service, which is a part of
 | `imagePullSecrets` | Kubernetes image pull secrets. | `[]`                             |
 | `imagePullPolicy`  | Pull policy.                   | `IfNotPresent`                   |
 | `image.repository` | Service image repository.      | `2gis-on-premise/update-manager` |
-| `image.tag`        | Service image tag.             | `3.7.0`                          |
+| `image.tag`        | Service image tag.             | `3.10.1`                         |
 
 ### API service settings
 
@@ -32,7 +32,7 @@ Use this Helm chart to deploy Update Manager service, which is a part of
 | `api.datagateway.url`                       | URL of the DataGateway instance.                                                                                                                                                                         | `https://datagateway.api.2gis.com` |
 | `api.datagateway.apiKey`                    | API key for the DataGateway instance. **Required**                                                                                                                                                       | `""`                               |
 | `api.dgctl.image.repository`                | DGCTL image repository.                                                                                                                                                                                  | `2gis-on-premise/dgctl`            |
-| `api.dgctl.image.tag`                       | DGCTL image tag.                                                                                                                                                                                         | `3.7.0`                            |
+| `api.dgctl.image.tag`                       | DGCTL image tag.                                                                                                                                                                                         | `3.10.1`                           |
 | `api.dgctl.image.pullPolicy`                | Pull policy for the DGCTL image used in download jobs.                                                                                                                                                   | `IfNotPresent`                     |
 | `api.job.activeDeadline`                    | Active deadline for the created jobs.                                                                                                                                                                    | `2h`                               |
 | `api.job.backoffLimit`                      | Backoff limit for the created jobs.                                                                                                                                                                      | `3`                                |
