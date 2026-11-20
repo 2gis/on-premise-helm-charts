@@ -47,7 +47,7 @@ To learn more about configuration, architecture, and requirements, see the offic
 | Name                   | Description                                                                                   | Value                        |
 | ---------------------- | --------------------------------------------------------------------------------------------- | ---------------------------- |
 | `api.image.repository` | Repository                                                                                    | `2gis-on-premise/search-api` |
-| `api.image.tag`        | Tag                                                                                           | `7.110.0`                    |
+| `api.image.tag`        | Tag                                                                                           | `7.113.0`                    |
 | `api.image.pullPolicy` | Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) | `IfNotPresent`               |
 
 ### API settings
@@ -66,7 +66,7 @@ To learn more about configuration, architecture, and requirements, see the offic
 | Name                     | Description                                                                                   | Value                          |
 | ------------------------ | --------------------------------------------------------------------------------------------- | ------------------------------ |
 | `nginx.image.repository` | Docker Repository                                                                             | `2gis-on-premise/nginx-alpine` |
-| `nginx.image.tag`        | Docker image tag                                                                              | `3.1.20`                       |
+| `nginx.image.tag`        | Docker image tag                                                                              | `3.1.35`                       |
 | `nginx.image.pullPolicy` | Image [pull policy](https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy) | `IfNotPresent`                 |
 | `nginx.httpPort`         | HTTP port on which NGINX will be listening                                                    | `8080`                         |
 
