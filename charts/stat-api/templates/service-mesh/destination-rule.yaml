@@ -1,0 +1,14 @@
+{{- if .Values.serviceMesh.enabled }}
+{{- $name := include "stat-api.componentname" (dict "global" $ "component" "api") }}
+apiVersion: networking.istio.io/v1
+kind: DestinationRule
+metadata:
+  name: {{ $name }}
+  labels:
+    {{- include "stat-api.labels" (dict "global" $ "component" "api") | nindent 4 }}
+spec:
+  host: {{ printf "%s.%s.svc.cluster.local" $name .Release.Namespace }}
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+{{- end }}

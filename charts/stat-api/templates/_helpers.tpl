@@ -113,22 +113,27 @@ Initialize ClickHouse TLS certificates in an init container.
 Copies TLS certificates from mounted secrets to the container filesystem.
 */}}
 {{- define "stat-api.clickhouse.initTLS" -}}
+{{- $global := required "Global cursor is required in dict!" (get . "global") -}}
 {{- if and
-  .Values.clickhouse.tls.enabled
+  $global.Values.clickhouse.tls.enabled
   (or
-    .Values.clickhouse.tls.serverCA
-    (and .Values.clickhouse.tls.clientCert .Values.clickhouse.tls.clientKey)
+    $global.Values.clickhouse.tls.serverCA
+    (and $global.Values.clickhouse.tls.clientCert $global.Values.clickhouse.tls.clientKey)
   ) -}}
 - name: copy-certs
-  image: "{{ include "stat-api.image" (dict "global" . "component" "api") }}"
+  image: "{{ include "stat-api.image" (dict "global" $global "component" "api") }}"
+  {{- with include "stat-api.securityContext" . }}
+  securityContext:
+  {{- . | nindent 4 }}
+  {{- end }}
   command:
     - /bin/sh
     - -c
     - |-
-      {{- if .Values.clickhouse.tls.serverCA }}
+      {{- if $global.Values.clickhouse.tls.serverCA }}
       cp /clickhouse-tls/server-ca.crt /etc/ssl/clickhouse/
       {{- end }}
-      {{- if and .Values.clickhouse.tls.clientCert .Values.clickhouse.tls.clientKey }}
+      {{- if and $global.Values.clickhouse.tls.clientCert $global.Values.clickhouse.tls.clientKey }}
       cp /clickhouse-tls/client.crt /etc/ssl/clickhouse/
       cp /clickhouse-tls/client.key /etc/ssl/clickhouse/
       chmod 0400 /etc/ssl/clickhouse/client.key
@@ -145,6 +150,9 @@ Copies TLS certificates from mounted secrets to the container filesystem.
       mountPath: /clickhouse-tls
     - name: clickhouse-tls
       mountPath: /etc/ssl/clickhouse
+    {{- with include "stat-api.writable.volumeMounts" . }}
+    {{- . | nindent 4 }}
+    {{- end }}
 {{- end -}}
 {{- end -}}
 
@@ -178,6 +186,7 @@ Defines both the secret volume and empty directory for processed certificates.
 - name: clickhouse-tls-raw
   secret:
     secretName: {{ include "stat-api.componentname" (dict "global" $ "component" "clickhouse-tls") }}
+    defaultMode: {{ .Values.volumeDefaultMode }}
     items:
       {{- if .Values.clickhouse.tls.serverCA }}
       - key: server-ca.crt
@@ -228,6 +237,7 @@ Volume definition for custom CA certificates.
 - name: custom-ca
   configMap:
     name: {{ include "stat-api.componentname" (dict "global" $ "component" "custom-ca") }}
+    defaultMode: {{ .Values.volumeDefaultMode }}
 {{- end -}}
 
 {{/*
@@ -335,4 +345,187 @@ Return the appropriate API version for Horizontal Pod Autoscaler.
 {{- else -}}
 {{- print "autoscaling/v2" -}}
 {{- end -}}
+{{- end -}}
+
+{{/*
+Security settings.
+All the helpers below expect a dict as a context: `(dict "global" $ "component" "api")`,
+where the service-level settings are merged over the chart-wide ones.
+*/}}
+
+{{- define "stat-api.component.values" -}}
+{{- $global := required "Global cursor is required in dict!" (get . "global") -}}
+{{- $values := dict -}}
+{{- with get . "component" -}}
+{{- $values = default (dict) (index $global.Values .) -}}
+{{- end -}}
+{{- toYaml $values -}}
+{{- end -}}
+
+{{- define "stat-api.podSecurityContext.settings" -}}
+{{- $global := required "Global cursor is required in dict!" (get . "global") -}}
+{{- $chart := default (dict) $global.Values.podSecurityContext -}}
+{{- $component := default (dict) (include "stat-api.component.values" . | fromYaml).podSecurityContext -}}
+{{- $settings := mergeOverwrite (deepCopy $chart) $component -}}
+{{- if (default true $settings.enabled) -}}
+{{- toYaml (omit $settings "enabled") -}}
+{{- end -}}
+{{- end -}}
+
+{{- define "stat-api.podSecurityContext" -}}
+{{- with fromYaml (include "stat-api.podSecurityContext.settings" .) -}}
+{{- toYaml . -}}
+{{- end -}}
+{{- end -}}
+
+{{- define "stat-api.securityContext.settings" -}}
+{{- $global := required "Global cursor is required in dict!" (get . "global") -}}
+{{- $chart := default (dict) $global.Values.securityContext -}}
+{{- $component := default (dict) (include "stat-api.component.values" . | fromYaml).securityContext -}}
+{{- $settings := mergeOverwrite (deepCopy $chart) $component -}}
+{{- if (default true $settings.enabled) -}}
+{{- toYaml (omit $settings "enabled") -}}
+{{- end -}}
+{{- end -}}
+
+{{- define "stat-api.securityContext" -}}
+{{- with fromYaml (include "stat-api.securityContext.settings" .) -}}
+{{- toYaml . -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Writable directories mounted as `emptyDir` volumes for the containers
+running with the read-only root filesystem.
+*/}}
+{{- define "stat-api.writable.paths" -}}
+{{- $global := required "Global cursor is required in dict!" (get . "global") -}}
+{{- $settings := fromYaml (include "stat-api.securityContext.settings" .) -}}
+{{- if $settings.readOnlyRootFilesystem -}}
+{{- $component := include "stat-api.component.values" . | fromYaml -}}
+{{- toYaml (default $global.Values.writablePaths $component.writablePaths | default (list)) -}}
+{{- else -}}
+[]
+{{- end -}}
+{{- end -}}
+
+{{- define "stat-api.writable.volumeMounts" -}}
+{{- range $index, $path := (include "stat-api.writable.paths" . | fromYamlArray) }}
+- name: writable-{{ $index }}
+  mountPath: {{ $path | quote }}
+{{- end }}
+{{- end -}}
+
+{{- define "stat-api.writable.volumes" -}}
+{{- range $index, $path := (include "stat-api.writable.paths" . | fromYamlArray) }}
+- name: writable-{{ $index }}
+  emptyDir: {}
+{{- end }}
+{{- end -}}
+
+{{/*
+Pod annotations, including the Istio sidecar injection control.
+The sidecar is never injected into the Jobs: the injected proxy does not stop
+on its own and the job would never be completed.
+*/}}
+{{- define "stat-api.podAnnotations" -}}
+{{- $global := required "Global cursor is required in dict!" (get . "global") -}}
+{{- $annotations := default (dict) (include "stat-api.component.values" . | fromYaml).podAnnotations -}}
+{{- if $global.Values.serviceMesh.enabled -}}
+{{- $inject := "false" -}}
+{{- if and $global.Values.serviceMesh.sidecarInject (not (get . "job")) -}}
+{{- $inject = "true" -}}
+{{- end -}}
+{{- $annotations = merge (deepCopy $annotations) (dict "sidecar.istio.io/inject" $inject) -}}
+{{- end -}}
+{{- with $annotations -}}
+{{- toYaml . -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Ingress settings.
+All the helpers below expect a dict as a context:
+`(dict "global" $ "ingress" .Values.api.ingress "name" "api" "secretName" "<secret>")`.
+*/}}
+
+{{- define "stat-api.ingress.checks" -}}
+{{- $ingress := .ingress -}}
+{{- if and $ingress.tls (not $ingress.sslPassthrough) -}}
+{{- fail (printf "Set .Values.%s.ingress.sslPassthrough to true: the TLS traffic must be passed to the service without being decrypted by the Ingress" .name) -}}
+{{- end -}}
+{{- range $ingress.hosts -}}
+{{- if contains "*" (.host | toString) -}}
+{{- fail (printf "A wildcard hostname %s is not allowed in .Values.%s.ingress.hosts: use the exact hostnames" .host $.name) -}}
+{{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{- define "stat-api.ingress.annotations" -}}
+{{- $annotations := default (dict) .ingress.annotations -}}
+{{- if .ingress.sslPassthrough -}}
+{{- $annotations = merge (deepCopy $annotations) (dict
+  "nginx.ingress.kubernetes.io/ssl-passthrough" "true"
+  "nginx.ingress.kubernetes.io/backend-protocol" "HTTPS"
+) -}}
+{{- end -}}
+{{- with $annotations -}}
+{{- toYaml . -}}
+{{- end -}}
+{{- end -}}
+
+{{- define "stat-api.ingress.tls" -}}
+{{- if .ingress.tls -}}
+{{- toYaml .ingress.tls -}}
+{{- else if .global.Values.certManager.enabled -}}
+{{- $hosts := list -}}
+{{- range .ingress.hosts -}}
+{{- $hosts = append $hosts .host -}}
+{{- end -}}
+{{- list (dict "hosts" $hosts "secretName" .secretName) | toYaml -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Backend of an Ingress rule. When the Service Mesh is enabled, the traffic is sent to the
+ingress gateway of the release namespace instead of the service itself.
+*/}}
+{{- define "stat-api.ingress.backend" -}}
+{{- $mesh := .global.Values.serviceMesh -}}
+{{- if and $mesh.enabled $mesh.ingressGateway.enabled -}}
+service:
+  name: {{ $mesh.ingressGateway.serviceName }}
+  port:
+    number: {{ $mesh.ingressGateway.port }}
+{{- else -}}
+service:
+  name: {{ .name }}
+  port:
+    number: {{ .port }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Service Mesh settings.
+*/}}
+
+{{- define "stat-api.serviceMesh.gateway.name" -}}
+{{ include "stat-api.componentname" (dict "global" . "component" "ingress") }}
+{{- end -}}
+
+{{- define "stat-api.serviceMesh.egressGateway.name" -}}
+{{ include "stat-api.componentname" (dict "global" . "component" "egress") }}
+{{- end -}}
+
+{{/*
+Hostnames served by the ingress gateway of the release.
+*/}}
+{{- define "stat-api.serviceMesh.hostnames" -}}
+{{- $hosts := list -}}
+{{- if .Values.api.ingress.enabled -}}
+{{- range .Values.api.ingress.hosts -}}
+{{- $hosts = append $hosts .host -}}
+{{- end -}}
+{{- end -}}
+{{- toYaml ($hosts | uniq) -}}
 {{- end -}}
