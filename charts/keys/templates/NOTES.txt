@@ -31,3 +31,12 @@ Read the key from the bootstrap job logs:
 
   kubectl logs -n {{ .Release.Namespace | quote }} job/{{ include "keys.bootstrap.name" . }}
 {{- end }}
+
+The chart applies the hardened security defaults: the containers are run as the user 10001
+with a read-only root filesystem, no privilege escalation and all the capabilities dropped.
+If the image of a service requires another user or a writable path, override the settings:
+
+  securityContext.runAsUser, podSecurityContext.runAsUser, podSecurityContext.fsGroup
+  writablePaths, ex: --set writablePaths={/tmp,/var/cache}
+
+The same parameters are available for every service of the chart, ex: api.securityContext.

@@ -34,6 +34,10 @@ spec:
         {{- toYaml . | nindent 8 }}
         {{- end }}
     spec:
+      securityContext:
+        {{- include "platform.podSecurityContext" . | nindent 8 }}
+      serviceAccountName: {{ include "platform.serviceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.serviceAccount.automountServiceAccountToken }}
       containers:
         - name: {{ include "platform.ui.name" . }}
         {{ if eq .Values.dgctlDockerRegistry "local" }}
@@ -53,6 +57,10 @@ spec:
             timeoutSeconds: 30
           resources:
             {{- toYaml .Values.ui.resources | nindent 12 }}
+          securityContext:
+            {{- include "platform.containerSecurityContext" . | nindent 12 }}
+          volumeMounts:
+            {{- include "platform.tmp.volumeMount" . | nindent 12 }}
           env:
             {{- if .Values.ui.oauth.clientSecret }}
             - name: OAUTH_CLIENT_SECRET
@@ -217,6 +225,8 @@ spec:
             - name: BANNERS_CONFIG_PATH
               value: {{ .Values.ui.infoBanners.configPath | quote }}
             {{- end }}
+      volumes:
+        {{- include "platform.tmp.volume" . | nindent 8 }}
       {{- with .Values.ui.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

@@ -1,0 +1,101 @@
+{{- if .Values.serviceMesh.enabled }}
+{{- $ctx := . }}
+{{- $passthrough := eq .Values.serviceMesh.ingressGateway.tls.mode "PASSTHROUGH" }}
+{{- if .Values.serviceMesh.ingressGateway.enabled }}
+{{- range $service := include "keys.serviceMesh.services" . | fromYamlArray }}
+{{- if $service.hosts }}
+---
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: {{ $service.name }}
+  labels:
+    {{- include "keys.labels" $ctx | nindent 4 }}
+spec:
+  hosts:
+    {{- range $service.hosts }}
+    - {{ . | quote }}
+    {{- end }}
+  gateways:
+    - {{ include "keys.serviceMesh.gateway.name" $ctx }}
+  {{- if $passthrough }}
+  tls:
+    - match:
+        - port: {{ $ctx.Values.serviceMesh.ingressGateway.port }}
+          sniHosts:
+            {{- range $service.hosts }}
+            - {{ . | quote }}
+            {{- end }}
+      route:
+        - destination:
+            host: {{ printf "%s.%s.svc.cluster.local" $service.name $ctx.Release.Namespace }}
+            port:
+              number: {{ $service.port }}
+  {{- else }}
+  http:
+    - route:
+        - destination:
+            host: {{ printf "%s.%s.svc.cluster.local" $service.name $ctx.Release.Namespace }}
+            port:
+              number: {{ $service.port }}
+  {{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- if and .Values.serviceMesh.egressGateway.enabled .Values.serviceMesh.egressGateway.hosts }}
+{{- range $host := .Values.serviceMesh.egressGateway.hosts }}
+---
+apiVersion: networking.istio.io/v1
+kind: ServiceEntry
+metadata:
+  name: {{ printf "%s-%s" (include "keys.name" $ctx) ($host | replace "." "-") | trunc 63 | trimSuffix "-" }}
+  labels:
+    {{- include "keys.labels" $ctx | nindent 4 }}
+spec:
+  hosts:
+    - {{ $host | quote }}
+  ports:
+    - number: {{ $ctx.Values.serviceMesh.egressGateway.port }}
+      name: tls
+      protocol: TLS
+  resolution: DNS
+  location: MESH_EXTERNAL
+---
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: {{ printf "%s-egress-%s" (include "keys.name" $ctx) ($host | replace "." "-") | trunc 63 | trimSuffix "-" }}
+  labels:
+    {{- include "keys.labels" $ctx | nindent 4 }}
+spec:
+  hosts:
+    - {{ $host | quote }}
+  gateways:
+    - mesh
+    - {{ include "keys.serviceMesh.egressGateway.name" $ctx }}
+  tls:
+    - match:
+        - gateways:
+            - mesh
+          port: {{ $ctx.Values.serviceMesh.egressGateway.port }}
+          sniHosts:
+            - {{ $host | quote }}
+      route:
+        - destination:
+            host: {{ printf "istio-egressgateway.%s.svc.cluster.local" $ctx.Release.Namespace }}
+            port:
+              number: {{ $ctx.Values.serviceMesh.egressGateway.port }}
+    - match:
+        - gateways:
+            - {{ include "keys.serviceMesh.egressGateway.name" $ctx }}
+          port: {{ $ctx.Values.serviceMesh.egressGateway.port }}
+          sniHosts:
+            - {{ $host | quote }}
+      route:
+        - destination:
+            host: {{ $host | quote }}
+            port:
+              number: {{ $ctx.Values.serviceMesh.egressGateway.port }}
+{{- end }}
+{{- end }}
+{{- end }}
