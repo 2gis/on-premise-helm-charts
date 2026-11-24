@@ -38,73 +38,6 @@ For other templates re-use named definitions as follows:
 
 Below are supported parameters.
 
-### Pod metadata and ServiceAccount
-
-Root `podLabels` and `podAnnotations` apply to the base Deployment and StatefulSet
-Pod templates, not Job/CronJob Pods. Selector labels always take precedence over custom
-Pod labels; selectors and resource names are unchanged.
-
-`serviceAccount.create: false` with `serviceAccount.name` selects an existing
-account. Creating an account requires an explicit call to
-`generic-chart.serviceaccount.tpl`; importing the library does not create it.
-
-Job helpers accept `(dict "ctx" $ "job" .Values.job)`; CronJob helpers additionally
-accept `"cronJob" .Values.cronJob`. The supplied `job` defines independent
-`podLabels` and `podAnnotations`: root Pod metadata is never inherited, including
-when the local fields are absent or empty. Standard selector labels are still added.
-The local `serviceAccount` map is merged with the root ServiceAccount settings,
-without mutating the root context. A local ServiceAccount name does not
-create an account automatically; use an existing account or render its
-ServiceAccount separately with the same effective values.
-
-For component-level settings, pass a context whose `Values` contains that
-component's effective configuration. Library defaults are not automatically
-imported into the caller's root values.
-
-### Service protocol selection
-
-Existing single-port defaults remain HTTP: `service.port: 80`,
-`service.targetPort: http`, `service.name: http`, `service.protocol: TCP` and
-`service.appProtocol: http`. To expose gRPC explicitly:
-
-```yaml
-service:
-  port: 50051
-  targetPort: grpc
-  name: grpc-api
-  appProtocol: grpc
-```
-
-Set `service.appProtocol: ""` to omit the field and let Istio use the port name.
-Changing `name` alone does not override the default `appProtocol: http`.
-For HTTPS/TLS or opaque TCP, explicitly use the matching application protocol.
-TLS protocol selection does not terminate TLS.
-
-For multiple ports, supply complete `service.ports` maps:
-
-```yaml
-service:
-  ports:
-    - name: http-api
-      port: 80
-      targetPort: http
-      appProtocol: http
-    - name: grpc-api
-      port: 50051
-      targetPort: grpc
-      appProtocol: grpc
-```
-
-A non-empty `service.ports` replaces all single-port settings, including
-`service.nodePort`. Include `nodePort` in each map when needed. The port name,
-number and targetPort are required; omitted `appProtocol` stays omitted.
-Transport `protocol` defaults to TCP in Kubernetes.
-
-Existing `generic-chart.merge` overrides retain their precedence. Lists such as
-`ports` and `containers` are replaced rather than merged by element name.
-Adding the dependency alone does not migrate application templates, names,
-selectors, RBAC or Gateway routes.
-
 ## Test chart
 
 Test chart based on generic-chart is located in resources.
@@ -251,19 +184,20 @@ Chart is tested using [pipeline](https://gitlab.2gis.ru/traffic/cicd-pipelines/-
 | `job.completionMode`          | Completion mode (NonIndexed or Indexed).                                                                                                                           | `""`  |
 | `job.parallelism`             | Number of pods running at any instant.                                                                                                                             | `""`  |
 | `job.restartPolicy`           | Kubernetes pod [restart policy](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy)                                                  | `""`  |
-| `job.podLabels`               | Labels for this Job's Pod, without inheriting root podLabels. Selector labels take precedence.                                                                     | `{}`  |
-| `job.podAnnotations`          | Annotations for this Job's Pod, without inheriting root podAnnotations.                                                                                            | `{}`  |
+| `job.podLabels`               | Labels for this Job's Pod. Falls back to root podLabels when empty. Selector labels take precedence.                                                               | `{}`  |
+| `job.podAnnotations`          | Annotations for this Job's Pod. Falls back to root podAnnotations when empty.                                                                                      | `{}`  |
 | `job.serviceAccount`          | ServiceAccount settings merged with the root settings for this Job's Pod. Account creation requires a separate serviceaccount template call with the same context. | `{}`  |
 
 ### Network Policy configuration
 
-| Name                                               | Description                                                  | Value   |
-| -------------------------------------------------- | ------------------------------------------------------------ | ------- |
-| `networkPolicy.ingress.enabled`                    | Enable creation of NetworkPolicy resources for ingress rules | `false` |
-| `networkPolicy.ingress.explicitNamespacesSelector` | Explict namespace selector for default rule ingress          | `{}`    |
-| `networkPolicy.ingress.additionalRules`            | Array of additional ingress rules                            | `[]`    |
-| `networkPolicy.egress.enabled`                     | Enable creation of NetworkPolicy resources for egress rules  | `false` |
-| `networkPolicy.egress.config`                      | Array of egress rules                                        | `[]`    |
+| Name                                               | Description                                                                                                                                                                                           | Value   |
+| -------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `networkPolicy.ingress.enabled`                    | Add ingress allow rules for authorized clients. When false, the rendered policy has no ingress allow rules.                                                                                           | `false` |
+| `networkPolicy.ingress.ports`                      | NetworkPolicy ingress port maps (`port`, optional `protocol` and `endPort`). Use Pod port names or numbers. If absent or empty, falls back to `service.port`.                                         | `[]`    |
+| `networkPolicy.ingress.explicitNamespacesSelector` | Namespace selector combined with the default `<fullname>-client` Pod selector. If empty, clients must be in the release namespace.                                                                    | `{}`    |
+| `networkPolicy.ingress.additionalRules`            | Additional peers in the ingress `from` list (`podSelector`, `namespaceSelector`, or `ipBlock`). All peers can access the configured ingress ports. Selecting hostNetwork Pods depends on CNI support. | `[]`    |
+| `networkPolicy.egress.enabled`                     | Restrict outgoing traffic. An empty config denies all outgoing traffic, including DNS. Ingress isolation also applies because the template omits policyTypes.                                         | `false` |
+| `networkPolicy.egress.config`                      | Complete NetworkPolicy egress rules.                                                                                                                                                                  | `[]`    |
 
 ### [HTTPRoute](https://gateway-api.sigs.k8s.io/reference/api-types/httproute/) configuration
 

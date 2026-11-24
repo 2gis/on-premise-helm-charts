@@ -224,8 +224,8 @@ cronJob:
 # @param job.completionMode Completion mode (NonIndexed or Indexed).
 # @param job.parallelism Number of pods running at any instant.
 # @param job.restartPolicy Kubernetes pod [restart policy](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy)
-# @param job.podLabels Labels for this Job's Pod, without inheriting root podLabels. Selector labels take precedence.
-# @param job.podAnnotations Annotations for this Job's Pod, without inheriting root podAnnotations.
+# @param job.podLabels Labels for this Job's Pod. Falls back to root podLabels when empty. Selector labels take precedence.
+# @param job.podAnnotations Annotations for this Job's Pod. Falls back to root podAnnotations when empty.
 # @param job.serviceAccount ServiceAccount settings merged with the root settings for this Job's Pod. Account creation requires a separate serviceaccount template call with the same context.
 
 job:
@@ -244,15 +244,17 @@ job:
 
 # @section Network Policy configuration
 
-# @param networkPolicy.ingress.enabled Enable creation of NetworkPolicy resources for ingress rules
-# @param networkPolicy.ingress.explicitNamespacesSelector Explict namespace selector for default rule ingress
-# @param networkPolicy.ingress.additionalRules Array of additional ingress rules
-# @param networkPolicy.egress.enabled Enable creation of NetworkPolicy resources for egress rules
-# @param networkPolicy.egress.config Array of egress rules
+# @param networkPolicy.ingress.enabled Add ingress allow rules for authorized clients. When false, the rendered policy has no ingress allow rules.
+# @param networkPolicy.ingress.ports NetworkPolicy ingress port maps (`port`, optional `protocol` and `endPort`). Use Pod port names or numbers. If absent or empty, falls back to `service.port`.
+# @param networkPolicy.ingress.explicitNamespacesSelector Namespace selector combined with the default `<fullname>-client` Pod selector. If empty, clients must be in the release namespace.
+# @param networkPolicy.ingress.additionalRules Additional peers in the ingress `from` list (`podSelector`, `namespaceSelector`, or `ipBlock`). All peers can access the configured ingress ports. Selecting hostNetwork Pods depends on CNI support.
+# @param networkPolicy.egress.enabled Restrict outgoing traffic. An empty config denies all outgoing traffic, including DNS. Ingress isolation also applies because the template omits policyTypes.
+# @param networkPolicy.egress.config Complete NetworkPolicy egress rules.
 
 networkPolicy:
   ingress:
     enabled: false
+    ports: []
     explicitNamespacesSelector: {}
     additionalRules: []
   egress:
