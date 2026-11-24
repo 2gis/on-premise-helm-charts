@@ -21,7 +21,11 @@ spec:
   {{- if (.ingress).enabled }}
   ingress:
     - ports:
+      {{- with .ingress.ports }}
+      {{- toYaml . | nindent 6 }}
+      {{- else }}
       - port: {{ $ctx.Values.service.port }}
+      {{- end }}
       from:
         # From authorized Pods (having the correct label)
         - podSelector:
