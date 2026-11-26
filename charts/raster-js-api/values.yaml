@@ -220,6 +220,23 @@ pdb:
   maxUnavailable: 1
 
 
+# @section Kubernetes [NetworkPolicy](https://kubernetes.io/docs/concepts/services-networking/network-policies/) settings
+
+# @param networkPolicy.ingress.enabled Restrict incoming traffic to Service target ports. Allows client Pods labeled `<fullname>-client: "true"` and configured additional peers. No policy is created when both directions are disabled.
+# @param networkPolicy.ingress.explicitNamespacesSelector Namespace selector combined with the default client Pod selector. If empty, only clients in the release namespace are allowed.
+# @param networkPolicy.ingress.additionalRules Additional peers allowed to access all Service target ports. Defaults to ingress-nginx controller Pods in the release namespace; adjust for your cluster. Selecting hostNetwork Pods depends on CNI support. These are entries in `from`, not complete ingress rules.
+# @param networkPolicy.egress.enabled Restrict outgoing traffic using `networkPolicy.egress.config`. An empty list denies all outgoing traffic, including DNS. With only egress enabled, this policy does not restrict incoming traffic.
+# @param networkPolicy.egress.config Complete NetworkPolicy egress rules. Include DNS and any required destinations when egress restrictions are enabled.
+
+networkPolicy:
+  ingress:
+    enabled: false
+    explicitNamespacesSelector: {}
+  egress:
+    enabled: false
+    config: []
+
+
 # @section customCAs **Custom Certificate Authority**
 
 # @param customCAs.bundle Custom CA [text representation of the X.509 PEM public-key certificate](https://www.rfc-editor.org/rfc/rfc7468#section-5.1)
