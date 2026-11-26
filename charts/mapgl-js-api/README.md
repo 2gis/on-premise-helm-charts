@@ -34,9 +34,9 @@ To learn more about configuration, architecture, and requirements, see the offic
 ### Deployment settings
 
 | Name               | Description | Value                   |
-| ------------------ | ----------- | ----------------------- |
+| ------------------ | ----------- |-------------------------|
 | `image.repository` | Repository  | `2gis-on-premise/mapgl` |
-| `image.tag`        | Tag         | `1.80.0`                |
+| `image.tag`        | Tag         | `1.82.0`                |
 | `image.pullPolicy` | Pull Policy | `IfNotPresent`          |
 
 ### Environment variables
