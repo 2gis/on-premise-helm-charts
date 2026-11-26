@@ -86,15 +86,15 @@ spec:
               protocol: TCP
           resources:
             {{- toYaml .Values.segmentDetector.resources | nindent 12 }}
-          {{- if .Values.customCAs.bundle }}
-            {{- include "search-api-v8.custom.ca.volumeMounts" . | nindent 12 }}
-          {{- end }}{{- /* .Values.customCAs.bundle */}}
           volumeMounts:
             - name: segment-detector-data
               mountPath: /data
             - name: segment-detector-config
               mountPath: /app/segment_detector_vars.yaml
               subPath: segment_detector_vars.yaml
+          {{- if .Values.customCAs.bundle }}
+            {{- include "search-api-v8.custom.ca.volumeMounts" . | nindent 12 }}
+          {{- end }}{{- /* .Values.customCAs.bundle */}}
           {{- if .Values.segmentDetector.livenessProbe.enabled }}
           livenessProbe:
             {{- include "common.tplvalues.render" (dict "value" (omit .Values.segmentDetector.livenessProbe "enabled") "context" $) | nindent 12 -}}
