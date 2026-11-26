@@ -47,6 +47,12 @@ app.kubernetes.io/name: {{ include "generic-chart.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
 
+{{- define "generic-chart.podLabels" -}}
+{{- $labels := deepCopy (default (dict) .Values.podLabels) -}}
+{{- $selectors := include "generic-chart.selectorLabels" . | fromYaml -}}
+{{- toYaml (mergeOverwrite $labels $selectors) -}}
+{{- end }}
+
 {{/*
 Create the name of the service account to use
 */}}

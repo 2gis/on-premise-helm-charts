@@ -1,3 +1,15 @@
+## [2.61.0] (2026-11-16)
+
+#### Images
+```
+catalog-api
+	- catalog-api:3.684.0
+	+ catalog-api:3.699.0
+	- catalog-importer:1.23.0
+	+ catalog-importer:1.24.0
+```
+[Full list of image versions](https://github.com/2gis/on-premise-helm-charts/blob/Platform-2.61.0/changelogs/platform/platform_image_versions.txt)
+
 ## [2.60.0] (2026-10-29)
 #### [Breaking-Changes](PLATFORM-Breaking-Changes.md#2600)
 #### Images
